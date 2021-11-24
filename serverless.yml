@@ -1,0 +1,42 @@
+service: graph-api
+
+plugins:
+  - serverless-offline
+  - serverless-dotenv-plugin
+  - serverless-plugin-typescript
+provider:
+  name: aws
+  runtime: nodejs14.x
+  profile: default
+  lambdaHashingVersion: 20201221
+  timeout: 30
+
+functions:
+  rateHandler:
+    name: Collector
+    handler: src/collector/index.run
+    events:
+      - schedule: rate(1 minute)
+  graphql:
+    name: Graphql
+    handler: src/graphql/index.graphqlHandler
+    events:
+      - http:
+          path: graphql
+          method: post
+          cors: true
+      - http:
+          path: graphql
+          method: get
+          cors: true
+
+custom:
+  serverlessPluginTypescript:
+    tsConfigFileLocation: './tsconfig.serverless.json'
+  serverless-offline:
+    httpPort: 4000
+
+package:
+  patterns:
+    - 'src/graphql/rds-combined-ca-bundle.pem'
+    - 'src/collector/rds-combined-ca-bundle.pem'

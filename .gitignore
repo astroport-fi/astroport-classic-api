@@ -1,0 +1,11 @@
+.DS_Store
+.env
+.serverless
+/.build
+/.data
+/.overlay
+/coverage
+/lib
+/node_modules
+/npm-debug.log
+/mongodb_data

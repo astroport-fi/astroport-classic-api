@@ -1,0 +1,5 @@
+.build/**
+*.graphql.ts
+coverage/**
+node_modules/**
+src/common/generatedGraphqlTypes.ts
