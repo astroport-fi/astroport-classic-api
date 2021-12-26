@@ -1,4 +1,4 @@
-# Astroport Api
+# Astroport API
 
 ## Development
 
