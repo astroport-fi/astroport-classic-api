@@ -6,16 +6,13 @@ import { getLatestBlock, getTxBlock } from '../lib/terra';
 import { TERRA_CHAIN_ID } from '../constants';
 import { getBlock, updateBlock } from '../services';
 
-import { priceIndexer } from './indexer/priceIndexer';
-import { runIndexers } from './blockIndexer';
+import { runIndexers } from './chainIndexer';
 
 const chainId = TERRA_CHAIN_ID;
 
 const waitFor = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 export async function chainCollect(): Promise<void> {
-  let { height: lastChainHeight } = await getLatestBlock();
-
   if (chainId == null) {
     return;
   }
@@ -35,7 +32,7 @@ export async function chainCollect(): Promise<void> {
     await runIndexers(block);
 
     await updateBlock(chainId, { hiveHeight: height });
-    // console.log(`collected ${height} `);
+    console.log(`collected ${height} `);
     await waitFor(200);
   }
 }

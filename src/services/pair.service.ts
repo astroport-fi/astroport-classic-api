@@ -11,6 +11,10 @@ export async function getPair(contractAddress: string): Promise<any> {
 }
 
 export async function createPair(options: any): Promise<any> {
-  const pair = await Pair.create(options);
-  return pair;
+  try {
+    const pair = await Pair.create(options);
+    return pair;
+  } catch (e) {
+    console.log(e);
+  }
 }

@@ -21,19 +21,27 @@ export async function createToken(tokenAddr: string): Promise<any> {
       decimals: 6,
     };
 
-    const token = await Token.create(options);
-    return token;
+    try {
+      const token = await Token.create(options);
+      return token;
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   const response = await getTokenInfo(tokenAddr);
 
   let options = {
     tokenAddr: tokenAddr,
-    symbol: response.symbol,
-    decimals: response.decimals,
+    symbol: response?.symbol || tokenAddr,
+    decimals: response?.decimals || 0,
     icon: '',
   };
 
-  const token = await Token.create(options);
-  return token;
+  try {
+    const token = await Token.create(options);
+    return token;
+  } catch (e) {
+    console.log(e);
+  }
 }

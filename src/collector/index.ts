@@ -19,7 +19,7 @@ bluebird.config({
 global.Promise = bluebird as any;
 
 export async function run(
-  event: APIGatewayProxyEvent,
+  _: APIGatewayProxyEvent,
   context: APIGatewayAuthorizerResultContext
 ): Promise<APIGatewayProxyResult> {
   if (TERRA_MANTLE == null || TERRA_LCD == null || TERRA_CHAIN_ID == null) {

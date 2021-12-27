@@ -1,4 +1,4 @@
-service: graph-api
+service: astroport-graph-api
 
 plugins:
   - serverless-offline
@@ -7,9 +7,7 @@ plugins:
 provider:
   name: aws
   runtime: nodejs14.x
-  profile: astroport
   lambdaHashingVersion: 20201221
-  timeout: 30
 
 functions:
   collector:
@@ -35,8 +33,3 @@ custom:
     tsConfigFileLocation: './tsconfig.serverless.json'
   serverless-offline:
     httpPort: 4000
-
-package:
-  patterns:
-    - 'src/graphql/rds-combined-ca-bundle.pem'
-    - 'src/collector/rds-combined-ca-bundle.pem'

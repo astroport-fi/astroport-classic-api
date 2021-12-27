@@ -3,7 +3,7 @@ import { createPair } from '../../services/pair.service';
 import { createPairIndexer } from './createPairIndex';
 
 const createPairLF = createCreatePairLogFinders(
-  'terra1ulgw0td86nvs4wtpsc80thv6xelk76ut7a7apj'
+  'terra1xkuxfhxa2jmjercq3ryplnj65huhlxl5mv3d6x'
 );
 
 export async function runIndexers(txs: any): Promise<void> {
