@@ -28,6 +28,7 @@ export const typeDefs = /* GraphQL */ `
     contractAddr: String
     token1: String
     token2: String
+    type: String
     prices: [Price]
     createdAt: DateTime
   }
