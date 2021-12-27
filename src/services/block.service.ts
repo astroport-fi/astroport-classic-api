@@ -1,5 +1,5 @@
-import { START_BLOCK_HEIGHT } from '../constants';
-import { Block } from '../models';
+import { START_BLOCK_HEIGHT } from "../constants";
+import { Block } from "../models";
 
 export async function getBlock(chainId: string): Promise<any> {
   const block = await Block.findOne({ chainId });
@@ -8,7 +8,6 @@ export async function getBlock(chainId: string): Promise<any> {
     const newBlock = new Block({
       chainId,
       dailyHeight: START_BLOCK_HEIGHT,
-      hourlyHeight: START_BLOCK_HEIGHT,
       hiveHeight: START_BLOCK_HEIGHT,
     });
 
@@ -21,7 +20,6 @@ export async function updateBlock(
   chainId: string,
   object: {
     dailyHeight?: number;
-    hourlyHeight?: number;
     hiveHeight?: number;
   }
 ): Promise<any> {
