@@ -1,13 +1,23 @@
 service: astroport-graph-api
 
+variablesResolutionMode: 20210326
+
 plugins:
   - serverless-offline
-  - serverless-dotenv-plugin
+  # - serverless-dotenv-plugin
   - serverless-plugin-typescript
+
 provider:
   name: aws
   runtime: nodejs14.x
   lambdaHashingVersion: 20201221
+  stage: dev
+  environment:
+    DECIMALS: ${self:custom.environment.DECIMALS}
+    TERRA_LCD: ${self:custom.environment.TERRA_LCD}
+    TERRA_MANTLE: ${self:custom.environment.TERRA_MANTLE}
+    TERRA_CHAIN_ID: ${self:custom.environment.TERRA_CHAIN_ID}
+    MONGODB_URL: ${self:custom.environment.MONGODB_URL}
 
 functions:
   collector:
@@ -29,6 +39,7 @@ functions:
           cors: true
 
 custom:
+  environment: ${file(env.yml):${self:provider.stage}, file(env.yml):default}
   serverlessPluginTypescript:
     tsConfigFileLocation: './tsconfig.serverless.json'
   serverless-offline:

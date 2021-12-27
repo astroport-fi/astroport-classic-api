@@ -27,6 +27,12 @@ const pairSchema: Schema<PairDocument> = new Schema(
       required: true,
       trim: true,
     },
+    type: {
+      type: Schema.Types.String,
+      required: true,
+      trim: true,
+      default: 'xyk',
+    },
   },
   {
     timestamps: true,

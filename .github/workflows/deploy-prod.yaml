@@ -12,8 +12,8 @@
 name: Deploy Prod
 on:
   push:
-    tags: # Deploy tag (e.g. v1.0) to production
-      - 'v**'
+    branches:
+      - master
 jobs:
   deploy-prod:
     runs-on: ubuntu-latest
@@ -26,11 +26,11 @@ jobs:
         run: npm install -g serverless
       - name: Serverless AWS authentication
         run: sls config credentials --provider aws --key ${{ secrets.AWS_KEY }} --secret ${{ secrets.AWS_SECRET }}
-      # - name: Create env file
-      #   run: | # cp sample.env.yml env.yml
-      #     cat > env.yml << EOF
-      #     ${{ secrets.ENV }}
-      #     EOF
+      - name: Create env file
+        run: | # cp sample.env.yml env.yml
+          cat > env.yml << EOF
+          ${{ secrets.ENV }}
+          EOF
       - name: Install NPM dependencies
         run: npm install
       # Optional

@@ -1,10 +1,13 @@
 import { createCreatePairLogFinders } from '../logFinder';
-import { createPair } from '../../services/pair.service';
 import { createPairIndexer } from './createPairIndex';
+import { TERRA_CHAIN_ID } from '../../constants';
 
-const createPairLF = createCreatePairLogFinders(
-  'terra1xkuxfhxa2jmjercq3ryplnj65huhlxl5mv3d6x'
-);
+const factory =
+  TERRA_CHAIN_ID == 'bombay-12'
+    ? 'terra1xkuxfhxa2jmjercq3ryplnj65huhlxl5mv3d6x'
+    : 'terra1fnywlw4edny3vw44x04xd67uzkdqluymgreu7g';
+
+const createPairLF = createCreatePairLogFinders(factory);
 
 export async function runIndexers(txs: any): Promise<void> {
   for (const tx of txs) {
