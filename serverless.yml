@@ -21,12 +21,10 @@ provider:
 
 functions:
   collector:
-    name: Collector
     handler: src/collector/index.run
     events:
       - schedule: rate(1 minute)
   graphql:
-    name: Graphql
     handler: src/graphql/index.run
     events:
       - http:
