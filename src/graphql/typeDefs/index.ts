@@ -26,6 +26,7 @@ export const typeDefs = /* GraphQL */ `
 
   type Pair {
     contractAddr: String
+    liquidityToken: String
     token1: String
     token2: String
     type: String
