@@ -1,7 +1,7 @@
 import { ApolloServer } from 'apollo-server-lambda';
-import mongoose from 'mongoose';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { DateTimeResolver } from 'graphql-scalars';
+import mongoose from 'mongoose';
 
 import { MONGODB_URL } from '../constants';
 import { typeDefs } from './typeDefs';
@@ -28,9 +28,8 @@ const apolloServer = new ApolloServer({
       try {
         console.log('connecting to mongo');
 
-        let options: mongoose.ConnectOptions = {}
-        options.sslCA = `${__dirname}/rds-combined-ca-bundle.pem`;
-
+        let options: mongoose.ConnectOptions = {};
+        4;
         db = await mongoose.connect(MONGODB_URL, options);
       } catch (e) {
         console.log('--->error while connecting via graphql context (db)', e);
@@ -41,4 +40,4 @@ const apolloServer = new ApolloServer({
   },
 });
 
-export const graphqlHandler = apolloServer.createHandler();
+export const run = apolloServer.createHandler();

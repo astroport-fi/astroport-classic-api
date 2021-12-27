@@ -19,10 +19,6 @@ const blockSchema: Schema<BlockDocument> = new Schema(
       type: Schema.Types.Number,
       required: true,
     },
-    hourlyHeight: {
-      type: Schema.Types.Number,
-      required: true,
-    },
   },
   {
     timestamps: true,

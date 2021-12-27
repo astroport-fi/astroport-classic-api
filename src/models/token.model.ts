@@ -1,10 +1,10 @@
 import { Schema, model } from 'mongoose';
 
-import { Pair as PairDocument } from '../types/pair.type';
+import { Token as TokenDocument } from '../types/token.type';
 
-const pairSchema: Schema<PairDocument> = new Schema(
+const tokenSchema: Schema<TokenDocument> = new Schema(
   {
-    contractAddr: {
+    tokenAddr: {
       type: Schema.Types.String,
       required: true,
       trim: true,
@@ -12,17 +12,17 @@ const pairSchema: Schema<PairDocument> = new Schema(
       index: true,
       lowercase: true,
     },
-    liquidityToken: {
-      type: Schema.Types.String,
+    decimals: {
+      type: Schema.Types.Number,
       required: true,
       trim: true,
     },
-    token1: {
+    icon: {
       type: Schema.Types.String,
-      required: true,
+      required: false,
       trim: true,
     },
-    token2: {
+    symbol: {
       type: Schema.Types.String,
       required: true,
       trim: true,
@@ -33,4 +33,4 @@ const pairSchema: Schema<PairDocument> = new Schema(
   }
 );
 
-export const Pair = model('Pair', pairSchema);
+export const Token = model('Token', tokenSchema);

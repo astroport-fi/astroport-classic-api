@@ -1,5 +1,3 @@
-import { gql } from 'apollo-server';
-
 export const typeDefs = /* GraphQL */ `
   scalar DateTime
   # Comments in GraphQL strings (such as this one) start with the hash (#) symbol.
@@ -11,18 +9,23 @@ export const typeDefs = /* GraphQL */ `
     createdAt: DateTime
   }
 
-  type Tvl {
-    value: Float
+  type Airdrop {
+    amount: Float
+    claimed: Boolean
+    proofs: [String]
     createdAt: DateTime
   }
 
-  type Vault {
-    apy: Float
+  type Token {
+    tokenAddr: String
+    symbol: String
+    icon: String
+    decimals: Int
     createdAt: DateTime
   }
 
   type Pair {
-    contractAddress: String
+    contractAddr: String
     token1: String
     token2: String
     prices: [Price]
@@ -33,8 +36,8 @@ export const typeDefs = /* GraphQL */ `
   # clients can execute, along with the return type for each. In this
   # case, the "books" query returns an array of zero or more Books (defined above).
   type Query {
-    pair(contractAddress: ID!): Pair
-    tvl: [Tvl]
-    vault: Vault
+    pair(contractAddr: ID!): Pair
+    pairs: [Pair]
+    tokens: [Token]
   }
 `;

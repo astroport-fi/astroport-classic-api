@@ -21,7 +21,9 @@
   "dependencies": {
     "@arthuryeti/terra": "^0.1.5",
     "@graphql-tools/schema": "^8.3.0",
+    "@terra-money/log-finder": "^1.1.6",
     "@terra-money/terra.js": "^1.8.5",
+    "@types/aws-lambda": "^8.10.85",
     "apollo-server": "^3.4.0",
     "apollo-server-lambda": "^3.4.0",
     "bignumber.js": "^9.0.1",

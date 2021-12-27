@@ -1,5 +1,9 @@
 import { num } from '../lib/num';
 
+export const isNative = (token: string): boolean => {
+  return token.slice(0, 6) !== 'terra1';
+};
+
 export const isNativeToken = (token: any): boolean => {
   if ('native_token' in token) {
     return true;

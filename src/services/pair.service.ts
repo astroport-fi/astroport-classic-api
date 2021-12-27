@@ -9,3 +9,8 @@ export async function getPair(contractAddress: string): Promise<any> {
   const pair = await Pair.findOne({ contractAddress });
   return pair;
 }
+
+export async function createPair(options: any): Promise<any> {
+  const pair = await Pair.create(options);
+  return pair;
+}

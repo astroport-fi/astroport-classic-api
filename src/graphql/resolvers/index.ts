@@ -1,4 +1,9 @@
-import { getPair, getPricesByPairId, getTvl, getVault } from '../../services';
+import {
+  getPair,
+  getPairs,
+  getPricesByPairId,
+  getTokens,
+} from '../../services';
 
 export const resolvers = {
   Pair: {
@@ -9,17 +14,17 @@ export const resolvers = {
   },
 
   Query: {
-    pair: async (_: any, { contractAddress }: any) => {
-      const pair = await getPair(contractAddress);
+    pair: async (_: any, { contractAddr }: any) => {
+      const pair = await getPair(contractAddr);
       return pair;
     },
-    tvl: async () => {
-      const tvl = await getTvl();
-      return tvl;
+    pairs: async () => {
+      const pairs = await getPairs();
+      return pairs;
     },
-    vault: async () => {
-      const vault = await getVault();
-      return vault;
+    tokens: async () => {
+      const tokens = await getTokens();
+      return tokens;
     },
   },
 };

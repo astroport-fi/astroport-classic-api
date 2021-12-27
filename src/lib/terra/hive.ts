@@ -55,6 +55,61 @@ export const getPool = async (
   }
 };
 
+export async function getTokenInfo(tokenAddr: string) {
+  try {
+    const response = await hive.request(
+      gql`
+        query ($tokenAddr: String!) {
+          wasm {
+            contractQuery(
+              contractAddress: $tokenAddr
+              query: { token_info: {} }
+            )
+          }
+        }
+      `,
+      { tokenAddr }
+    );
+
+    return response.wasm.contractQuery;
+  } catch (e) {
+    return null;
+  }
+}
+
+export async function getTxBlock(height: number) {
+  try {
+    const response = await hive.request(
+      gql`
+        query ($height: Float!) {
+          tx {
+            byHeight(height: $height) {
+              timestamp
+              height
+              txhash
+              logs {
+                msg_index
+                events {
+                  type
+                  attributes {
+                    key
+                    value
+                  }
+                }
+              }
+            }
+          }
+        }
+      `,
+      { height }
+    );
+
+    return response?.tx?.byHeight;
+  } catch (e) {
+    return null;
+  }
+}
+
 export async function getLatestBlock(): Promise<{
   height: number;
   time: string;

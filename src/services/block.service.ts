@@ -22,6 +22,7 @@ export async function updateBlock(
   object: {
     dailyHeight?: number;
     hourlyHeight?: number;
+    hiveHeight?: number;
   }
 ): Promise<any> {
   const block = await Block.findOneAndUpdate({ chainId }, object);

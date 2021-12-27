@@ -7,19 +7,19 @@ plugins:
 provider:
   name: aws
   runtime: nodejs14.x
-  profile: default
+  profile: astroport
   lambdaHashingVersion: 20201221
   timeout: 30
 
 functions:
-  rateHandler:
+  collector:
     name: Collector
     handler: src/collector/index.run
     events:
       - schedule: rate(1 minute)
   graphql:
     name: Graphql
-    handler: src/graphql/index.graphqlHandler
+    handler: src/graphql/index.run
     events:
       - http:
           path: graphql
