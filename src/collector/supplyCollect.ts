@@ -4,14 +4,16 @@ dayjs.extend(utc);
 
 import { getTokenSupply } from '../lib/terra';
 
-export async function hourlyCollect(): Promise<void> {
-  let {
+/**
+ * Retrieve ASTRO token supply stats every minute
+ */
+
+export async function supplyCollect(): Promise<void> {
+  const {
     multisig: multisig,
-    builder_unlock_contract: builder_unlock_contract} = await getTokenSupply();
+    builder_unlock_contract: builder_unlock_contract } = await getTokenSupply();
 
   if (multisig == null || builder_unlock_contract == null) {
     return;
   }
-
-
 }

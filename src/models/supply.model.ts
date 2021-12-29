@@ -1,42 +1,23 @@
 import { Schema, model } from 'mongoose';
+import { Supply as SupplyDocument } from '../types/supply.type';
 
-import { Pair as PairDocument } from '../types/pair.type';
-
-const supplySchema: Schema<PairDocument> = new Schema(
+const supplySchema: Schema<SupplyDocument> = new Schema(
   {
-    contractAddr: {
-      type: Schema.Types.String,
+    circulatingSupply: {
+      type: Schema.Types.Number,
       required: true,
-      trim: true,
-      unique: true,
-      index: true,
-      lowercase: true,
-    },
-    liquidityToken: {
-      type: Schema.Types.String,
+      trim: true, },
+    dayVolumeUsd: {
+      type: Schema.Types.Number,
       required: true,
-      trim: true,
-    },
-    token1: {
-      type: Schema.Types.String,
+      trim: true, },
+    priceInUst: {
+      type: Schema.Types.Number,
       required: true,
-      trim: true,
-    },
-    token2: {
-      type: Schema.Types.String,
+      trim: true, },
+    totalValueLockedUST: {
+      type: Schema.Types.Number,
       required: true,
-      trim: true,
-    },
-    type: {
-      type: Schema.Types.String,
-      required: true,
-      trim: true,
-      default: 'xyk',
-    },
-  },
-  {
-    timestamps: true,
-  }
-);
+      trim: true, }});
 
 export const Supply = model('Supply', supplySchema);
