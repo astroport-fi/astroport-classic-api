@@ -8,8 +8,9 @@ import { getBlock, updateBlock } from '../services';
 
 import { runIndexers } from './chainIndexer';
 
-const chainId = TERRA_CHAIN_ID;
 
+
+const chainId = TERRA_CHAIN_ID;
 const waitFor = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 export async function chainCollect(): Promise<void> {

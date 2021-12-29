@@ -164,3 +164,29 @@ export async function getChainBlock(height: number): Promise<{
     time: response?.tendermint?.blockInfo?.block?.header?.time,
   };
 }
+
+// Retrieve the latest ASTRO balances from the astroport multisig
+// and builder unlock contract
+// TODO factor out constants
+export async function getTokenSupply(): Promise<{
+  multisig: number;
+  builder_unlock_contract: number;
+}> {
+  const response = await hive.request(
+    gql`
+      query {
+        wasm {
+          multisig: contractQuery(
+            contractAddress: "terra1xj49zyqrwpv5k928jwfpfy2ha668nwdgkwlrg3"
+            query: {
+              balance: { address: "terra1c7m6j8ya58a2fkkptn8fgudx8sqjqvc8azq0ex" }})
+          builder_unlock_contract: contractQuery(
+            contractAddress: "terra1xj49zyqrwpv5k928jwfpfy2ha668nwdgkwlrg3"
+            query: {
+              balance: { address: "terra1fh27l8h4s0tfx9ykqxq5efq4xx88f06x6clwmr" }})}}`);
+
+  return {
+    multisig: response?.wasm?.astro_multisig?.balance,
+    builder_unlock_contract: response?.wasm?.builder_unlock_contract?.balance
+  }
+}
