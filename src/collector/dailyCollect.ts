@@ -21,7 +21,7 @@ const asyncForEach = async (array: any, callback: any) => {
 };
 
 export async function dailyCollect(): Promise<void> {
-  let { height: lastChainHeight } = await getLatestBlock();
+  const { height: lastChainHeight } = await getLatestBlock();
 
   if (chainId == null) {
     return;
