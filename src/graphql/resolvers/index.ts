@@ -14,13 +14,6 @@ export const resolvers = {
     },
   },
 
-  // Supply: {
-  //   supply: async() => {
-  //     const supply = await getSupply();
-  //     return supply;
-  //   },
-  // },
-
   Query: {
     pair: async (_: any, { contractAddr }: any) => {
       const pair = await getPair(contractAddr);
