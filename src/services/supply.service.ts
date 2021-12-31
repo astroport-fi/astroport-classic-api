@@ -4,7 +4,9 @@ import { Supply } from "../models/supply.model";
  * Return the latest supply stats
  */
 export async function getSupply(): Promise<any> {
-  const supply = await Supply.find(); // TODO
+  // TODO need to double check query is performant
+  const supply = await Supply.findOne({}).sort({timestamp: 'desc'}).exec();
+
   return supply;
 }
 
@@ -24,9 +26,9 @@ export async function insertSupply(
       metadata:
         {
           circulatingSupply: circulatingSupply,
-          priceInUst: dayVolumeUsd,
-          totalValueLockedUst: priceInUst,
-          dayVolumeUst: totalValueLockedUST,
+          priceInUst: priceInUst,
+          totalValueLockedUst: totalValueLockedUST,
+          dayVolumeUst: dayVolumeUsd
         }
     });
   return supply;

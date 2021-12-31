@@ -2,14 +2,22 @@ import {
   getPair,
   getPairs,
   getPricesByPairId,
-  getTokens,
-} from '../../services';
+  getSupply,
+  getTokens
+} from "../../services";
 
 export const resolvers = {
   Pair: {
     prices: async ({ _id }: any) => {
       const prices = await getPricesByPairId(_id);
       return prices;
+    },
+  },
+
+  Supply: {
+    supply: async() => {
+      const supply = await getSupply();
+      return supply;
     },
   },
 
