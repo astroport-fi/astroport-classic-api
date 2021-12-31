@@ -2,13 +2,11 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 
-import { getLatestBlock, getTxBlock } from '../lib/terra';
+import { getTxBlock } from '../lib/terra';
 import { TERRA_CHAIN_ID } from '../constants';
 import { getBlock, updateBlock } from '../services';
 
 import { runIndexers } from './chainIndexer';
-
-
 
 const chainId = TERRA_CHAIN_ID;
 const waitFor = (ms: number) => new Promise((r) => setTimeout(r, ms));

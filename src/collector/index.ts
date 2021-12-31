@@ -34,9 +34,9 @@ export async function run(
   await initLCD(TERRA_LCD, TERRA_CHAIN_ID);
   try {
     // await heightCollect();
-    // await dailyCollect(); // daily
-    await supplyCollect(); // every minute
-    await chainCollect(); // every block
+    // await dailyCollect();
+    await supplyCollect();
+    await chainCollect();
   } catch (e) {
     throw new Error(e);
   }

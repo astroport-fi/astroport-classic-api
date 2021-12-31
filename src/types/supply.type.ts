@@ -1,6 +1,7 @@
+// TODO unused
 export type Supply = {
   circulatingSupply: number;
   priceInUst: number;
-  totalValueLockedUST: number;
-  dayVolumeUsd: number;
+  totalValueLockedUst: number;
+  dayVolumeUst: number;
 };
