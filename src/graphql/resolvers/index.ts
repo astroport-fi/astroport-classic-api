@@ -14,12 +14,12 @@ export const resolvers = {
     },
   },
 
-  Supply: {
-    supply: async() => {
-      const supply = await getSupply();
-      return supply;
-    },
-  },
+  // Supply: {
+  //   supply: async() => {
+  //     const supply = await getSupply();
+  //     return supply;
+  //   },
+  // },
 
   Query: {
     pair: async (_: any, { contractAddr }: any) => {
@@ -29,6 +29,10 @@ export const resolvers = {
     pairs: async () => {
       const pairs = await getPairs();
       return pairs;
+    },
+    supply: async() => {
+      const supply = await getSupply();
+      return supply;
     },
     tokens: async () => {
       const tokens = await getTokens();
