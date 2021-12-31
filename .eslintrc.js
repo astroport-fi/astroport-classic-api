@@ -15,7 +15,7 @@
 // const schema = buildASTSchema(parse(typeDefinition));
 
 module.exports = {
-  extends: ['@ohardy/eslint-config-typescript'],
+  extends: ['eslint-config-typescript'],
   parserOptions: {
     project: './tsconfig.eslint.json',
   },

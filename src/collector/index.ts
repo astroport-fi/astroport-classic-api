@@ -11,6 +11,7 @@ import { TERRA_MANTLE, TERRA_CHAIN_ID, TERRA_LCD } from '../constants';
 import { dailyCollect } from './dailyCollect';
 import { heightCollect } from './heightCollect';
 import { chainCollect } from './chainCollect';
+import { supplyCollect } from './supplyCollect';
 
 bluebird.config({
   longStackTraces: true,
@@ -34,6 +35,7 @@ export async function run(
   try {
     // await heightCollect();
     // await dailyCollect();
+    await supplyCollect();
     await chainCollect();
   } catch (e) {
     throw new Error(e);
