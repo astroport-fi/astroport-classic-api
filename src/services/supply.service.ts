@@ -8,7 +8,6 @@ export async function getSupply(): Promise<SupplyType> {
   const supply = await Supply.findOne({}).sort({timestamp: 'desc'}).exec();
 
   if(!supply) {
-    console.log("promise rejected inside getSupply()")
     return Promise.reject()
   }
 
@@ -16,10 +15,10 @@ export async function getSupply(): Promise<SupplyType> {
   console.log("supply: " + supply)
 
   return {
-    circulatingSupply: supply?.circulatingSupply,
-    priceInUst: supply?.priceInUst,
-    totalValueLockedUst: supply?.totalValueLockedUst,
-    dayVolumeUst: supply?.dayVolumeUst
+    circulatingSupply: supply?.metadata?.circulatingSupply,
+    priceInUst: supply?.metadata?.priceInUst,
+    totalValueLockedUst: supply?.metadata?.totalValueLockedUst,
+    dayVolumeUst: supply?.metadata?.dayVolumeUst
   };
 }
 
