@@ -20,8 +20,8 @@ export async function insertSupply(
   timestamp: number,
   circulatingSupply?: number,
   priceInUst?: number,
-  dayVolumeUsd?: number,
-  totalValueLockedUST?: number,
+  // dayVolumeUsd?: number,
+  // totalValueLockedUST?: number,
 ): Promise<any> {
   const supply = await Supply.create(
     {
@@ -30,8 +30,8 @@ export async function insertSupply(
         {
           circulatingSupply: circulatingSupply,
           priceInUst: priceInUst,
-          totalValueLockedUst: totalValueLockedUST,
-          dayVolumeUst: dayVolumeUsd
+          // totalValueLockedUst: totalValueLockedUST,
+          // dayVolumeUst: dayVolumeUsd
         }
     });
   return supply;

@@ -168,37 +168,21 @@ export async function getChainBlock(height: number): Promise<{
 // retrieve the latest ASTRO balances from the astroport multisig and
 // retrieve astro/ust pool balances
 // and builder unlock contract
-// TODO factor out constants
-export async function getTokenSupply(): Promise<{
-  multisig: number;
-  builder_unlock_contract: number;
-  pool_astro_amount: number;
-  pool_ust_amount: number;
-}> {
-
-
-  const contract1 = "terra1xj49zyqrwpv5k928jwfpfy2ha668nwdgkwlrg3"
-  const contract2 = "terra1c7m6j8ya58a2fkkptn8fgudx8sqjqvc8azq0ex"
+export async function getContractStore<T>(address: string, query: JSON): Promise<T | undefined> {
 
   const response = await hive.request(
     gql`
-      query {
+      query ($address: String!, $query: JSON!) {
         wasm {
-          contractQuery(
-            contractAddress: "terra1xj49zyqrwpv5k928jwfpfy2ha668nwdgkwlrg3"
-            query: {
-              balance: { address: "terra1c7m6j8ya58a2fkkptn8fgudx8sqjqvc8azq0ex" }
-            }
-          )
+          contractQuery(contractAddress: $address, query: $query) 
         }
       }
-    `
+    `,
+    {
+        address,
+        query,
+    }
   );
 
-  return {
-    multisig: response?.wasm?.astro_multisig?.balance,
-    builder_unlock_contract: response?.wasm?.builder_unlock_contract?.balance,
-    pool_astro_amount: response?.wasm?.astro_pool_contract?.assets[0]?.amount,
-    pool_ust_amount: response?.wasm?.astro_pool_contract?.assets[1]?.amount,
-  };
+  return response.wasm.contractQuery
 }
