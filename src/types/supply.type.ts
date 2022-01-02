@@ -1,7 +1,9 @@
-// TODO unused
 export type Supply = {
-  circulatingSupply: number;
-  priceInUst: number;
-  totalValueLockedUst: number;
-  dayVolumeUst: number;
+  timestamp: Date
+  metadata: {
+    circulatingSupply: number;
+    priceInUst: number;
+    totalValueLockedUst: number;
+    dayVolumeUst: number;
+  }
 };

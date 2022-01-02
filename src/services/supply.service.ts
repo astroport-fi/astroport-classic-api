@@ -8,7 +8,6 @@ export async function getSupply(): Promise<any> {
   const supply = await Supply.findOne({}).sort({timestamp: 'desc'}).exec();
   console.log("getSupply in supply.service.ts")
   console.log(supply);
-  console.log(supply.circulatingSupply);
   return supply;
 }
 
