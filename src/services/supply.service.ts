@@ -4,10 +4,9 @@ import { Supply } from "../models/supply.model";
  * Return the latest supply stats
  */
 export async function getSupply(): Promise<any> {
-  // TODO need to double check query is performant
+  console.log("getting supply in getSupply() in supply.service.ts")
   const supply = await Supply.findOne({}).sort({timestamp: 'desc'}).exec();
-  console.log("getSupply in supply.service.ts")
-  console.log(supply);
+  console.log("supply: " + supply);
   return supply;
 }
 
