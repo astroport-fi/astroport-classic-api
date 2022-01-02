@@ -13,6 +13,7 @@ export async function getSupply(): Promise<SupplyType> {
   }
 
   console.log("returning inside getSupply")
+  console.log("supply: " + supply)
 
   return {
     circulatingSupply: supply?.circulatingSupply,

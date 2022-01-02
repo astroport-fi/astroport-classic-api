@@ -25,6 +25,9 @@ export const resolvers = {
     },
     supply: async() => {
       const supply = await getSupply();
+      console.log("supply inside resolvers/index.ts: " + supply)
+      console.log("circ supply: " + supply.circulatingSupply)
+
       return supply;
     },
     tokens: async () => {
