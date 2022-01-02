@@ -33,10 +33,10 @@ export const typeDefs = /* GraphQL */ `
   }
   
   type Supply {
-    circulatingSupply: Int
-    priceInUst: Int
-    totalValueLockedUst: Int
-    dayVolumeUst: Int
+    circulatingSupply: Float
+    priceInUst: Float
+    totalValueLockedUst: Float
+    dayVolumeUst: Float
   }
 
   # The "Query" type lists all of the available queries that
