@@ -2,8 +2,9 @@ import {
   getPair,
   getPairs,
   getPricesByPairId,
-  getTokens,
-} from '../../services';
+  getSupply,
+  getTokens
+} from "../../services";
 
 export const resolvers = {
   Pair: {
@@ -21,6 +22,13 @@ export const resolvers = {
     pairs: async () => {
       const pairs = await getPairs();
       return pairs;
+    },
+    supply: async() => {
+      const supply = await getSupply();
+      console.log("supply inside resolvers/index.ts: " + supply)
+      console.log("circ supply: " + supply.circulatingSupply)
+
+      return supply;
     },
     tokens: async () => {
       const tokens = await getTokens();

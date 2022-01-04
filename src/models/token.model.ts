@@ -1,5 +1,4 @@
 import { Schema, model } from 'mongoose';
-
 import { Token as TokenDocument } from '../types/token.type';
 
 const tokenSchema: Schema<TokenDocument> = new Schema(

@@ -17,7 +17,7 @@ export async function getHeightsFromDate(
     return;
   }
 
-  let heighs = [];
+  let heights = [];
 
   for (let i = 1; i <= 10; i++) {
     const height = await getHeightByDate(
@@ -29,8 +29,8 @@ export async function getHeightsFromDate(
       continue;
     }
 
-    heighs.push(height.value);
+    heights.push(height.value);
   }
 
-  return Promise.all(heighs);
+  return Promise.all(heights);
 }

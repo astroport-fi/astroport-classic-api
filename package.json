@@ -2,7 +2,7 @@
   "name": "astroport-api",
   "version": "1.0.0",
   "main": "src/index.js",
-  "author": "Arthur Itey <itey.arthur@gmail.com>",
+  "author": "Arthur Itey",
   "private": true,
   "engines": {
     "node": ">=12.3.1",
@@ -16,7 +16,7 @@
     "database:init": "mongo --port 27050 tools/init-mongodb-rs.js",
     "eslint": "eslint --quiet --max-warnings 0 --ext .tsx --ext .ts --ext .js --ext .jsx .",
     "prettier": "prettier --list-different '**/*.{ts,tsx,js,jsx,json,css,md}'",
-    "test": "mocha -r ts-node/register test/**/*.ts",
+    "test": "mocha --timeout 10000 -r ts-node/register test/**/*.ts",
     "typescript": "tsc --noEmit"
   },
   "dependencies": {

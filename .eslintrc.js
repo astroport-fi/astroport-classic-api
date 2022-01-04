@@ -47,16 +47,15 @@ module.exports = {
       files: ['*.graphql'],
       parser: '@graphql-eslint/eslint-plugin',
       plugins: ['@graphql-eslint'],
-      parserOptions: {
-        schema: './schema-public.graphql',
-      },
+      // parserOptions: {
+      //   schema: './schema-public.graphql',
+      // },
       rules: {
         '@graphql-eslint/no-unreachable-types': ['error'],
       },
     },
   ],
 
-  // plugins: ['@graphql-eslint'],
   rules: {
     // 'graphql/template-strings': [
     //   'error',

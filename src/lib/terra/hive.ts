@@ -1,4 +1,4 @@
-import { GraphQLClient, gql } from 'graphql-request';
+import { GraphQLClient, gql } from "graphql-request";
 
 export let hive: GraphQLClient;
 
@@ -165,37 +165,21 @@ export async function getChainBlock(height: number): Promise<{
   };
 }
 
-// retrieve the latest ASTRO balances from the astroport multisig and
-// retrieve astro/ust pool balances
-// and builder unlock contract
-// TODO factor out constants
-export async function getTokenSupply(): Promise<{
-  multisig: number;
-  builder_unlock_contract: number;
-  pool_astro_amount: number;
-  pool_ust_amount: number;
-}> {
+export async function getContractStore<T>(address: string, query: JSON): Promise<T | undefined> {
+
   const response = await hive.request(
     gql`
-      query {
+      query ($address: String!, $query: JSON!) {
         wasm {
-          astro_multisig: contractQuery(
-            contractAddress: "terra1xj49zyqrwpv5k928jwfpfy2ha668nwdgkwlrg3"
-            query: {
-              balance: { address: "terra1c7m6j8ya58a2fkkptn8fgudx8sqjqvc8azq0ex" }})
-          astro_builder_unlock_contract: contractQuery(
-            contractAddress: "terra1xj49zyqrwpv5k928jwfpfy2ha668nwdgkwlrg3"
-            query: {
-              balance: { address: "terra1fh27l8h4s0tfx9ykqxq5efq4xx88f06x6clwmr" }})
-          astro_pool_contract: contractQuery(
-            contractAddress: "terra1l7xu2rl3c7qmtx3r5sd2tz25glf6jh8ul7aag7"
-            query: {
-              pool: { address: "terra1fh27l8h4s0tfx9ykqxq5efq4xx88f06x6clwmr" }})}}`);
+          contractQuery(contractAddress: $address, query: $query) 
+        }
+      }
+    `,
+    {
+        address,
+        query,
+    }
+  );
 
-  return {
-    multisig: response?.wasm?.astro_multisig?.balance,
-    builder_unlock_contract: response?.wasm?.builder_unlock_contract?.balance,
-    pool_astro_amount: response?.wasm?.astro_pool_contract?.assets[0]?.amount,
-    pool_ust_amount: response?.wasm?.astro_pool_contract?.assets[1]?.amount
-  }
+  return response.wasm.contractQuery
 }

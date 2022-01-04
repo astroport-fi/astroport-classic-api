@@ -1,8 +1,6 @@
 export const typeDefs = /* GraphQL */ `
   scalar DateTime
-  # Comments in GraphQL strings (such as this one) start with the hash (#) symbol.
 
-  # This "Book" type defines the queryable fields for every book in our data source.
   type Price {
     token1: Float
     token2: Float
@@ -33,13 +31,20 @@ export const typeDefs = /* GraphQL */ `
     prices: [Price]
     createdAt: DateTime
   }
+  
+  type Supply {
+    circulatingSupply: Float
+    priceInUst: Float
+    totalValueLockedUst: Float
+    dayVolumeUst: Float
+  }
 
-  # The "Query" type is special: it lists all of the available queries that
-  # clients can execute, along with the return type for each. In this
-  # case, the "books" query returns an array of zero or more Books (defined above).
+  # The "Query" type lists all of the available queries that
+  # clients can execute, along with the return type for each.
   type Query {
     pair(contractAddr: ID!): Pair
     pairs: [Pair]
+    supply: Supply
     tokens: [Token]
   }
 `;
