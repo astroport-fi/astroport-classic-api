@@ -2,7 +2,7 @@
   "name": "astroport-api",
   "version": "1.0.0",
   "main": "src/index.js",
-  "author": "Arthur Itey <itey.arthur@gmail.com>",
+  "author": "Arthur Itey",
   "private": true,
   "engines": {
     "node": ">=12.3.1",

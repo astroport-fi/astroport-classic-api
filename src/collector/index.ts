@@ -38,7 +38,7 @@ export async function run(
     await supplyCollect();
     await chainCollect();
   } catch (e) {
-    throw new Error(e);
+    throw new Error("Error while running indexer: " + e);
   }
 
   return {

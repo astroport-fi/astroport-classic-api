@@ -1,11 +1,11 @@
 import assert from "assert";
 import { getContractStore, getLatestBlock, initHive } from "../../../src/lib/terra";
-import { ASTRO_BUILDER_UNLOCK_CONTRACT, ASTRO_MULTISIG, ASTRO_TOKEN, ASTRO_UST_PAIR } from "../../../src/constants";
+import { BUILDER_UNLOCK, MULTISIG, ASTRO_TOKEN, ASTRO_UST_PAIR } from "../../../src/constants";
 import { supplyCollect } from "../../../src/collector/supplyCollect";
 import { connectToDatabase } from "../../../src/modules/db";
 
-const builder_unlock_contract = ASTRO_BUILDER_UNLOCK_CONTRACT!
-const multisig = ASTRO_MULTISIG!
+const builder_unlock_contract = BUILDER_UNLOCK!
+const multisig = MULTISIG!
 const astro_token = ASTRO_TOKEN!
 const astro_ust_pair = ASTRO_UST_PAIR!
 
