@@ -12,6 +12,7 @@ import { ASTRO_TOKEN, ASTRO_UST_PAIR, VESTING_ADDRESS,
  */
 
 const INITIAL_TOKEN_SUPPLY = 1000000000; // 1 billion
+const DIGITS = 1000000;
 
 export async function supplyCollect(): Promise<void> {
   // get circ supply
@@ -41,7 +42,7 @@ export async function supplyCollect(): Promise<void> {
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  const circulatingSupply = INITIAL_TOKEN_SUPPLY - multisigResponse?.balance - builderBalance?.balance - vesting?.result;
+  const circulatingSupply = (INITIAL_TOKEN_SUPPLY - multisigResponse?.balance - builderBalance?.balance - vesting?.result) / DIGITS;
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const astroPrice = astroPool.assets[1].amount / astroPool.assets[0].amount;
