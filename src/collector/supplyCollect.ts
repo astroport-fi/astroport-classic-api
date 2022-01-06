@@ -11,8 +11,8 @@ import { ASTRO_TOKEN, ASTRO_UST_PAIR, VESTING_ADDRESS,
  * Retrieve ASTRO token supply stats every minute
  */
 
-const INITIAL_TOKEN_SUPPLY = 1000000000; // 1 billion
 const DIGITS = 1000000;
+const INITIAL_TOKEN_SUPPLY = 1000000000 * DIGITS; // 1 billion
 
 export async function supplyCollect(): Promise<void> {
   // get circ supply
