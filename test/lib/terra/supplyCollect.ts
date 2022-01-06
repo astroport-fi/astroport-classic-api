@@ -1,6 +1,12 @@
 import assert from "assert";
-import { getContractStore, getLatestBlock, initHive, initMantle } from "../../../src/lib/terra";
-import { BUILDER_UNLOCK, MULTISIG, ASTRO_TOKEN, ASTRO_UST_PAIR } from "../../../src/constants";
+import {
+  getContractAddressStore,
+  getContractStore,
+  getLatestBlock,
+  initHive,
+  initMantle
+} from "../../../src/lib/terra";
+import { BUILDER_UNLOCK, MULTISIG, ASTRO_TOKEN, ASTRO_UST_PAIR, VESTING_ADDRESS } from "../../../src/constants";
 import { supplyCollect } from "../../../src/collector/supplyCollect";
 import { connectToDatabase } from "../../../src/modules/db";
 
@@ -17,7 +23,14 @@ describe('Hive tests', function() {
       await initHive("https://hive.terra.dev/graphql");
       await initMantle("https://mantle.terra.dev/graphql")
 
-      await supplyCollect()
+      const vesting = await getContractAddressStore(
+        "terra1xj49zyqrwpv5k928jwfpfy2ha668nwdgkwlrg3",
+        '{"balance": { "address": "terra1hncazf652xa0gpcwupxfj6k4kl4k4qg64yzjyf" }}');
+
+
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      console.log(JSON.parse(vesting.Result)?.balance);
     });
   });
 });
