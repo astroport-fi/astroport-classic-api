@@ -1,8 +1,9 @@
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import { getContractStore } from "../lib/terra";
+import { getContractAddressStore, getContractStore } from "../lib/terra";
 import { insertSupply } from '../services';
-import { ASTRO_TOKEN, ASTRO_UST_PAIR, BUILDER_UNLOCK, MULTISIG } from "../constants";
+import { ASTRO_TOKEN, ASTRO_UST_PAIR, VESTING_ADDRESS,
+  BUILDER_UNLOCK, MULTISIG, GENERATOR_ADDRESS } from "../constants";
 
 dayjs.extend(utc);
 
@@ -10,11 +11,10 @@ dayjs.extend(utc);
  * Retrieve ASTRO token supply stats every minute
  */
 
-const INITIAL_TOKEN_SUPPLY = 1000000000 * 1000000; // 1 billion + 6 digits
+const DIGITS = 1000000;
+const INITIAL_TOKEN_SUPPLY = 1000000000 * DIGITS; // 1 billion
 
 export async function supplyCollect(): Promise<void> {
-  console.log(process.env)
-
   // get circ supply
   const multisigResponse = await getContractStore(
     ASTRO_TOKEN,
@@ -24,6 +24,17 @@ export async function supplyCollect(): Promise<void> {
     ASTRO_TOKEN,
     JSON.parse('{"balance": { "address": "' + BUILDER_UNLOCK + '" }}'));
 
+  // get vestingAddress
+  const vesting = await getContractAddressStore(
+    ASTRO_TOKEN,
+    '{"balance": { "address": "' + VESTING_ADDRESS + '" }}');
+
+  // TODO generator contract - test when it has tokens
+  // GENERATOR_ADDRESS
+  // const vesting = await getContractAddressStore(
+  //   ASTRO_TOKEN,
+  //   '{"balance": { "address": "' + GENERATOR_ADDRESS + '" }}');
+
   // get astro pool balance
   const astroPool = await getContractStore(
     ASTRO_UST_PAIR,
@@ -31,7 +42,7 @@ export async function supplyCollect(): Promise<void> {
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  const circulatingSupply = INITIAL_TOKEN_SUPPLY - multisigResponse?.balance - builderBalance?.balance;
+  const circulatingSupply = (INITIAL_TOKEN_SUPPLY - multisigResponse?.balance - builderBalance?.balance - JSON.parse(vesting.Result)?.balance) / DIGITS;
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const astroPrice = astroPool.assets[1].amount / astroPool.assets[0].amount;
