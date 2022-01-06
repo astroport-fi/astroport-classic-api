@@ -5,9 +5,9 @@ import {
   APIGatewayAuthorizerResultContext,
 } from 'aws-lambda';
 
-import { initHive, initLCD } from '../lib/terra';
+import { initHive, initMantle, initLCD } from '../lib/terra';
 import { connectToDatabase } from '../modules/db';
-import { TERRA_MANTLE, TERRA_CHAIN_ID, TERRA_LCD } from '../constants';
+import { TERRA_MANTLE, TERRA_CHAIN_ID, TERRA_LCD, TERRA_HIVE } from "../constants";
 import { dailyCollect } from './dailyCollect';
 import { heightCollect } from './heightCollect';
 import { chainCollect } from './chainCollect';
@@ -23,14 +23,13 @@ export async function run(
   _: APIGatewayProxyEvent,
   context: APIGatewayAuthorizerResultContext
 ): Promise<APIGatewayProxyResult> {
-  if (TERRA_MANTLE == null || TERRA_LCD == null || TERRA_CHAIN_ID == null) {
-    throw new Error('Constants are missing');
-  }
+
 
   context.callbackWaitsForEmptyEventLoop = false;
 
   await connectToDatabase();
-  await initHive(TERRA_MANTLE);
+  await initHive(TERRA_HIVE);
+  await initMantle(TERRA_MANTLE);
   await initLCD(TERRA_LCD, TERRA_CHAIN_ID);
   try {
     // await heightCollect();

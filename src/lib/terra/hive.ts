@@ -165,9 +165,6 @@ export async function getChainBlock(height: number): Promise<{
   };
 }
 
-// retrieve the latest ASTRO balances from the astroport multisig and
-// retrieve astro/ust pool balances
-// and builder unlock contract
 export async function getContractStore<T>(address: string, query: JSON): Promise<T | undefined> {
 
   const response = await hive.request(
