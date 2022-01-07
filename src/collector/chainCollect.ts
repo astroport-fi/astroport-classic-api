@@ -26,7 +26,10 @@ export async function chainCollect(): Promise<void> {
 
   for (let height = lastHeight + 1; height <= lastHeight + 1000; height++) {
     const block = await getTxBlock(height);
-    if (!block) return;
+    if (!block) {
+      console.log("Block " + height + " not found")
+      return;
+    }
 
     await runIndexers(block);
 
