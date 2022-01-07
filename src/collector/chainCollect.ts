@@ -24,7 +24,7 @@ export async function chainCollect(): Promise<void> {
 
   const lastHeight = collectedBlock.hiveHeight;
 
-  for (let height = lastHeight + 1; height <= lastHeight + 50; height++) {
+  for (let height = lastHeight + 1; height <= lastHeight + 1000; height++) {
     const block = await getTxBlock(height);
     if (!block) return;
 

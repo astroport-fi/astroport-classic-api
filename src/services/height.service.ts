@@ -26,7 +26,7 @@ export async function getHeight({
 }): Promise<any> {
   const height = await Height.find({
     chainId,
-    value: { $gte: value - 50, $lt: value + 50 },
+    value: { $gte: value - 1000, $lt: value + 1000 },
   });
 
   return height[0];
