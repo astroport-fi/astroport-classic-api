@@ -34,7 +34,6 @@ export async function runIndexers(txs: any, pairMap: Map<string, Pair>): Promise
           const swapLogFound = swapLogFinder(event);
 
           if(swapLogFound.length > 0) {
-            console.log("gotem")
             //await TxHistoryIndexer(manager, exchangeRate, timestamp, txHash, spwfLogFounds)
           }
 

@@ -2,13 +2,14 @@ import { getPool } from '../../lib/terra';
 import { getPricesFromPool } from '../../modules/terra';
 
 import { createPrice } from '../../services';
+import { Pair } from "../../types";
 
 export async function priceIndexer(
-  pairs: any,
+  pairs: Pair[],
   blockHeight: number
 ): Promise<void> {
   const priceMutations = pairs.map(async (pair: any) => {
-    const data = await getPool(pair.contractAddress, blockHeight);
+    const data = await getPool(pair.contractAddr, blockHeight);
 
     if (data == null) {
       return null;
