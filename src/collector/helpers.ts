@@ -4,6 +4,7 @@ dayjs.extend(utc);
 
 import { TERRA_CHAIN_ID } from '../constants';
 import { getHeightByDate } from '../services';
+import { Pair } from "../types";
 
 const chainId = TERRA_CHAIN_ID;
 
@@ -17,7 +18,7 @@ export async function getHeightsFromDate(
     return;
   }
 
-  let heights = [];
+  const heights = [];
 
   for (let i = 1; i <= 10; i++) {
     const height = await getHeightByDate(
@@ -33,4 +34,11 @@ export async function getHeightsFromDate(
   }
 
   return Promise.all(heights);
+}
+
+export async function pairListToMap(pairList: Pair[]): Promise<Map<string, Pair>> {
+  return pairList.reduce((mapAcc, obj) => {
+    mapAcc.set(obj.contractAddr, obj);
+    return mapAcc;
+  }, new Map());
 }

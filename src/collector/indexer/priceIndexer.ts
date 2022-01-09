@@ -22,6 +22,7 @@ export async function priceIndexer(
       pairId: pair._id,
       ...prices,
       createdAt: time,
+      updated_on_block: blockHeight
     });
   });
 
