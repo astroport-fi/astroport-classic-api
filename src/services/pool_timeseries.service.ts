@@ -13,8 +13,11 @@ export async function insertPoolTimeseries(
 }
 
 export async function getOnePoolTimeseries(poolAddress: string): Promise<PoolType> {
-  const pool = await PoolModel.findOne({ pool_address: poolAddress })
-  return pool
+  const pool = await PoolModel.findOne(
+    { pool_address: poolAddress },
+    { sort: { 'timestamp' : -1}}
+  )
+  return transformPoolModelToPoolType( {model: pool})
 }
 
 export async function getPoolTimeseries(): Promise<any> {
@@ -25,7 +28,6 @@ export async function getPoolTimeseries(): Promise<any> {
   for(const pool of pools) {
     result.push(transformPoolModelToPoolType({ model: pool }))
   }
-
 
   return result
 }
