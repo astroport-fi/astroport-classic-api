@@ -24,10 +24,10 @@ export const resolvers = {
       const pairs = await getPairs();
       return pairs;
     },
-    pool: async () => {
-      const pool = await getOnePoolTimeseries();
-      return pool
-    },
+    // pool: async (_: any, { poolAddress }: any) => {
+    //   const pool = await getOnePoolTimeseries(poolAddress);
+    //   return pool
+    // },
     pools: async () => {
       const pools = await getPoolTimeseries();
       return pools;
