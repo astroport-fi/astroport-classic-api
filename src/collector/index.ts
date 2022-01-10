@@ -12,6 +12,7 @@ import { dailyCollect } from './dailyCollect';
 import { heightCollect } from './heightCollect';
 import { chainCollect } from './chainCollect';
 import { supplyCollect } from './supplyCollect';
+import { poolCollect } from './poolCollect';
 import { getPairs } from "../services";
 import { pairListToMap } from "./helpers";
 
@@ -49,7 +50,10 @@ export async function run(
     // supply_timeseries
     console.log("Indexing supply...")
     await supplyCollect();
-    // blocks, pairs, tokens, pool_volume, pool time_series
+    // pool_timeseries
+    console.log("Indexing pool_timeseries")
+    await poolCollect();
+    // blocks, pairs, tokens, pool_volume
     console.log("Indexing chain...")
     await chainCollect(pairMap);
   } catch (e) {
