@@ -45,19 +45,16 @@ export const typeDefs = /* GraphQL */ `
     apy: Float
   }
   
-  type Fees {
-    trading: Fee
-    astro: Fee
-    native: Fee
-  }
-  
   type Pool {
     timestamp: DateTime
     pool_address: String
     trading_fee: Float
     pool_liquidity: Float
     _24hr_volume: Float
-    fees: Fees
+    trading_fees: Fee
+    astro_rewards: Fee
+    protocol_rewards: Fee
+    total_rewards: Fee
   }
 
   # The "Query" type lists all of the available queries that
