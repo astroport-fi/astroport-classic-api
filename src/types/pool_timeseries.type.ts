@@ -20,5 +20,10 @@ export type PoolTimeseries = {
       apr: number;
       apy: number;
     },
+    total: {
+      day: number;
+      apr: number;
+      apy: number;
+    }
   }
 };
