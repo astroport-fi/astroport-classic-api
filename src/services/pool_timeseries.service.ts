@@ -12,16 +12,8 @@ export async function insertPoolTimeseries(
   return pool;
 }
 
-export async function getOnePoolTimeseries(poolAddress: string): Promise<PoolType> {
-  const pool = await PoolModel.findOne(
-    { pool_address: poolAddress },
-    { sort: { 'timestamp' : -1}}
-  )
-  return transformPoolModelToPoolType( {model: pool})
-}
-
 export async function getPoolTimeseries(): Promise<any> {
-  const pools = await PoolModel.find();
+  const pools = await PoolModel.find({}, null, {limit: 100})
   const result = []
 
   // map
@@ -40,27 +32,25 @@ function transformPoolModelToPoolType({ model }: { model: any }) {
     trading_fee: model.metadata.trading_fee_rate_bp,
     pool_liquidity: model.metadata.pool_liquidity,
     _24hr_volume: model.metadata.day_volume_ust,
-    fees: {
-      trading: {
-        day: model.metadata.fees.trading.day,
-        apr: model.metadata.fees.trading.apr,
-        apy: model.metadata.fees.trading.apy,
-      },
-      astro: {
-        day: model.metadata.fees.astro.day,
-        apr: model.metadata.fees.astro.apr,
-        apy: model.metadata.fees.astro.apy,
-      },
-      native: {
-        day: model.metadata.fees.native.day,
-        apr: model.metadata.fees.native.apr,
-        apy: model.metadata.fees.native.apy,
-      },
-      total: {
-        day: model.metadata.fees.total.day,
-        apr: model.metadata.fees.total.apr,
-        apy: model.metadata.fees.total.apy,
-      },
+    trading_fees: {
+      day: model.metadata.fees.trading.day,
+      apr: model.metadata.fees.trading.apr,
+      apy: model.metadata.fees.trading.apy,
+    },
+    astro_rewards: {
+      day: model.metadata.fees.astro.day,
+      apr: model.metadata.fees.astro.apr,
+      apy: model.metadata.fees.astro.apy,
+    },
+    protocol_rewards: {
+      day: model.metadata.fees.native.day,
+      apr: model.metadata.fees.native.apr,
+      apy: model.metadata.fees.native.apy,
+    },
+    total_rewards: {
+      day: model.metadata.fees.total.day,
+      apr: model.metadata.fees.total.apr,
+      apy: model.metadata.fees.total.apy,
     }
   }
 }
