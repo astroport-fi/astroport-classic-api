@@ -37,7 +37,7 @@ export async function run(
   // get pairs
   // map contract_address -> pair
   const pairs = await getPairs();
-  const pairMap = await pairListToMap(pairs);
+  const pairMap = pairListToMap(pairs);
 
   try {
     // height

@@ -36,9 +36,40 @@ export async function getHeightsFromDate(
   return Promise.all(heights);
 }
 
-export async function pairListToMap(pairList: Pair[]): Promise<Map<string, Pair>> {
+export function pairListToMap(pairList: Pair[]): Map<string, Pair> {
   return pairList.reduce((mapAcc, obj) => {
     mapAcc.set(obj.contractAddr, obj);
     return mapAcc;
   }, new Map());
+}
+
+/**
+ * For a swap - return the corresponding UST volume of the swap.
+ * Only works with UST or Luna base pairs.
+ *
+ * TODO would like to rewrite this to pull price data from DB
+ * @param transformed
+ * @param lunaExchangeRate
+ * @param pairMap
+ */
+export function getUSTSwapValue(transformed: any, lunaExchangeRate: number): number {
+  let denom = transformed.assets[0].token;
+  let amount = Math.abs(transformed.assets[0].amount);
+  if(transformed.assets[0].token.startsWith("terra")) {
+    denom = transformed.assets[1].token
+    amount = Math.abs(transformed.assets[1].amount)
+  }
+  switch(denom) {
+    case "uusd": {
+      return amount / 1000000;
+    }
+    case "uluna": {
+      return lunaExchangeRate * amount / 1000000;
+    }
+    default: {
+      console.log("Unable to find UST value of " + denom)
+      break;
+    }
+  }
+  return 0
 }

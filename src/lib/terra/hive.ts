@@ -183,3 +183,22 @@ export async function getContractStore<T>(address: string, query: JSON): Promise
 
   return response.wasm.contractQuery
 }
+
+export async function getLunaExchangeRate(denom: string): Promise<number> {
+  const response = await hive.request(
+    gql`
+      query($denom: String!) {
+        oracle {
+          exchangeRate(denom: $denom) {
+            amount
+          }
+        }
+      }
+    `,
+    {
+      denom: denom
+    }
+  )
+
+  return response?.oracle?.exchangeRate?.amount;
+}

@@ -6,10 +6,9 @@ import { Pair } from "../../types";
 
 export function createSwapFinder(
   pairMap: Map<string, Pair>
-): ReturningLogFinderMapper<TxHistoryTransformed | null | undefined> {
+): ReturningLogFinderMapper<TxHistoryTransformed | undefined > {
   return createReturningLogFinder(swapRule(), (_, match) => {
-    console.log([match[0].value]);
-    if (pairMap.has("")) {
+    if (pairMap.has(match[0].value)) {
       const action = match[1].value
       const assets = [
         {
