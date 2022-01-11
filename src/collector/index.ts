@@ -15,6 +15,7 @@ import { supplyCollect } from './supplyCollect';
 import { poolCollect } from './poolCollect';
 import { getPairs } from "../services";
 import { pairListToMap } from "./helpers";
+import { poolVolumeCollect } from "./poolVolumeCollect";
 
 bluebird.config({
   longStackTraces: true,
@@ -53,6 +54,9 @@ export async function run(
     // pool_timeseries
     console.log("Indexing pool_timeseries")
     await poolCollect();
+    // pool_volume_24h
+    console.log("Indexing pool_volume_24h")
+    await poolVolumeCollect();
     // blocks, pairs, tokens, pool_volume
     console.log("Indexing chain...")
     await chainCollect(pairMap);

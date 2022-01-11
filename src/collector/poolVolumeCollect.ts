@@ -12,7 +12,7 @@ dayjs.extend(utc);
  */
 
 const DIGITS = 1000000;
-const chainId = "columbus-5";
+const chainId = TERRA_CHAIN_ID
 const BLOCKS_PER_YEAR = 4656810;
 
 export async function poolVolumeCollect(): Promise<void> {
