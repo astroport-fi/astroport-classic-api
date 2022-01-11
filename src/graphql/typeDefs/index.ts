@@ -38,12 +38,31 @@ export const typeDefs = /* GraphQL */ `
     totalValueLockedUst: Float
     dayVolumeUst: Float
   }
+  
+  type Fee {
+    day: Float
+    apr: Float
+    apy: Float
+  }
+  
+  type Pool {
+    timestamp: DateTime
+    pool_address: String
+    trading_fee: Float
+    pool_liquidity: Float
+    _24hr_volume: Float
+    trading_fees: Fee
+    astro_rewards: Fee
+    protocol_rewards: Fee
+    total_rewards: Fee
+  }
 
   # The "Query" type lists all of the available queries that
   # clients can execute, along with the return type for each.
   type Query {
     pair(contractAddr: ID!): Pair
     pairs: [Pair]
+    pools: [Pool]
     supply: Supply
     tokens: [Token]
   }

@@ -5,6 +5,7 @@ import {
   getSupply,
   getTokens
 } from "../../services";
+import { getPoolTimeseries } from "../../services/pool_timeseries.service";
 
 export const resolvers = {
   Pair: {
@@ -22,6 +23,10 @@ export const resolvers = {
     pairs: async () => {
       const pairs = await getPairs();
       return pairs;
+    },
+    pools: async () => {
+      const pools = await getPoolTimeseries();
+      return pools;
     },
     supply: async() => {
       const supply = await getSupply();

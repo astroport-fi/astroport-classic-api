@@ -11,9 +11,6 @@ export async function getSupply(): Promise<SupplyType> {
     return Promise.reject()
   }
 
-  console.log("returning inside getSupply")
-  console.log("supply: " + supply)
-
   return {
     circulatingSupply: supply?.metadata?.circulatingSupply,
     priceInUst: supply?.metadata?.priceInUst,

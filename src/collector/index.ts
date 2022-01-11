@@ -12,6 +12,10 @@ import { dailyCollect } from './dailyCollect';
 import { heightCollect } from './heightCollect';
 import { chainCollect } from './chainCollect';
 import { supplyCollect } from './supplyCollect';
+import { poolCollect } from './poolCollect';
+import { getPairs } from "../services";
+import { pairListToMap } from "./helpers";
+import { poolVolumeCollect } from "./poolVolumeCollect";
 
 bluebird.config({
   longStackTraces: true,
@@ -31,11 +35,31 @@ export async function run(
   await initHive(TERRA_HIVE);
   await initMantle(TERRA_MANTLE);
   await initLCD(TERRA_LCD, TERRA_CHAIN_ID);
+
+  // get pairs
+  // map contract_address -> pair
+  const pairs = await getPairs();
+  const pairMap = pairListToMap(pairs);
+
   try {
-    // await heightCollect();
-    // await dailyCollect();
+    // height
+    console.log("Indexing height...")
+    await heightCollect();
+    // prices
+    console.log("Indexing prices...")
+    await dailyCollect();
+    // supply_timeseries
+    console.log("Indexing supply...")
     await supplyCollect();
-    await chainCollect();
+    // pool_timeseries
+    console.log("Indexing pool_timeseries")
+    await poolCollect();
+    // pool_volume_24h
+    console.log("Indexing pool_volume_24h")
+    await poolVolumeCollect();
+    // blocks, pairs, tokens, pool_volume
+    console.log("Indexing chain...")
+    await chainCollect(pairMap);
   } catch (e) {
     throw new Error("Error while running indexer: " + e);
   }

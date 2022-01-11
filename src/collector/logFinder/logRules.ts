@@ -12,3 +12,18 @@ export function createPairRule(factoryAddress: string): LogFinderRule {
     ],
   };
 }
+
+// match swaps
+export function swapRule(): LogFinderRule {
+  return {
+    type: 'wasm',
+    attributes: [
+      ['contract_address'],
+      [
+        'action',
+        (value) => value === 'swap',
+      ],
+    ],
+    matchUntil: 'contract_address',
+  }
+}

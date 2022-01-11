@@ -6,6 +6,4 @@ export async function runIndexers(blockHeight: number): Promise<void> {
   const pairs = await getPairs();
 
   await priceIndexer(pairs, blockHeight);
-
-  console.log(`collected ${blockHeight} `);
 }

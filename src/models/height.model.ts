@@ -2,7 +2,7 @@ import { Schema, model } from 'mongoose';
 
 import { Height as HeightDocument } from '../types';
 
-const blockSchema: Schema<HeightDocument> = new Schema(
+const heightSchema: Schema<HeightDocument> = new Schema(
   {
     chainId: {
       type: Schema.Types.String,
@@ -19,4 +19,4 @@ const blockSchema: Schema<HeightDocument> = new Schema(
   }
 );
 
-export const Height = model('Height', blockSchema);
+export const Height = model('Height', heightSchema);

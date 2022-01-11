@@ -60,7 +60,7 @@ export async function dailyCollect(): Promise<void> {
     await priceIndexer(pairs, height);
 
     await updateBlock(chainId, { dailyHeight: height });
-    console.log(`collected ${height} `);
+
     await waitFor(1000);
   });
 }

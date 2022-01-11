@@ -1,14 +1,15 @@
 import { getPool } from '../../lib/terra';
 import { getPricesFromPool } from '../../modules/terra';
-
+import { Pair as PairModel } from '../../models';
 import { createPrice } from '../../services';
+import { Pair } from "../../types";
 
 export async function priceIndexer(
-  pairs: any,
+  pairs: Pair[],
   blockHeight: number
 ): Promise<void> {
   const priceMutations = pairs.map(async (pair: any) => {
-    const data = await getPool(pair.contractAddress, blockHeight);
+    const data = await getPool(pair.contractAddr, blockHeight);
 
     if (data == null) {
       return null;
@@ -18,10 +19,12 @@ export async function priceIndexer(
 
     const prices = getPricesFromPool(pool, pair.token1);
 
+    // add price
     return createPrice({
       pairId: pair._id,
       ...prices,
       createdAt: time,
+      updated_on_block: blockHeight
     });
   });
 

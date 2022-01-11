@@ -33,6 +33,11 @@ const pairSchema: Schema<PairDocument> = new Schema(
       trim: true,
       default: 'xyk',
     },
+    deregistered: {
+      type: Schema.Types.Boolean,
+      trim: true,
+      default: false
+    }
   },
   {
     timestamps: true,

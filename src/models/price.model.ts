@@ -16,6 +16,10 @@ const priceSchema: Schema<PriceDocument> = new Schema(
       type: Schema.Types.Number,
       required: true,
     },
+    updated_on_block: {
+      type: Schema.Types.Number,
+      required: false
+    }
   },
   {
     timestamps: true,

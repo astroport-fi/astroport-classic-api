@@ -182,4 +182,64 @@ export async function getContractStore<T>(address: string, query: JSON): Promise
   );
 
   return response.wasm.contractQuery
+
+}
+
+export async function getLunaExchangeRate(denom: string): Promise<number> {
+  const response = await hive.request(
+    gql`
+      query($denom: String!) {
+        oracle {
+          exchangeRate(denom: $denom) {
+            amount
+          }
+        }
+      }
+    `,
+    {
+      denom: denom
+    }
+  )
+
+  return response?.oracle?.exchangeRate?.amount;
+}
+
+// return pair liquiditiy in UST for a pair
+// just have to get one side of the pool and multiply by 2
+export async function getPairLiquidity(address: string, query: JSON): Promise<number> {
+  const response = await hive.request(
+    gql`
+      query($address: String!, $query: JSON!) {
+        wasm {
+          contractQuery(
+            contractAddress: $address,
+            query: $query
+          )
+        }
+      }
+    `,
+    {
+      address: address,
+      query: query
+    }
+  )
+
+  if(response?.wasm?.contractQuery?.assets[0]?.info?.native_token?.denom == "uusd") {
+    return 2 * response?.wasm?.contractQuery?.assets[0]?.amount / 1000000
+
+  } else if (response?.wasm?.contractQuery?.assets[1]?.info?.native_token?.denom == "uusd") {
+    return 2 * response?.wasm?.contractQuery?.assets[1]?.amount / 1000000
+
+  } else if (response?.wasm?.contractQuery?.assets[0]?.info?.native_token?.denom == "uluna") {
+    const lunaPrice = await getLunaExchangeRate("uusd");
+    return 2 * response?.wasm?.contractQuery?.assets[0]?.amount * lunaPrice / 1000000
+
+  } else if (response?.wasm?.contractQuery?.assets[1]?.info?.native_token?.denom == "uluna") {
+    const lunaPrice = await getLunaExchangeRate("uusd");
+    return 2 * response?.wasm?.contractQuery?.assets[1]?.amount * lunaPrice / 1000000
+
+  } else {
+    console.log("Error getting pair liquidity for contract: " + address)
+    return 0
+  }
 }

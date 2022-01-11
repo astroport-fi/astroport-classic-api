@@ -1,17 +1,18 @@
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-dayjs.extend(utc);
-
-import { getTxBlock } from '../lib/terra';
+import { getLunaExchangeRate, getTxBlock } from "../lib/terra";
 import { TERRA_CHAIN_ID } from '../constants';
 import { getBlock, updateBlock } from '../services';
-
+import { Pair } from '../types';
 import { runIndexers } from './chainIndexer';
+
+dayjs.extend(utc);
+
 
 const chainId = TERRA_CHAIN_ID;
 const waitFor = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-export async function chainCollect(): Promise<void> {
+export async function chainCollect(pairMap: Map<string, Pair>): Promise<void> {
   if (chainId == null) {
     return;
   }
@@ -24,14 +25,21 @@ export async function chainCollect(): Promise<void> {
 
   const lastHeight = collectedBlock.hiveHeight;
 
-  for (let height = lastHeight + 1; height <= lastHeight + 50; height++) {
-    const block = await getTxBlock(height);
-    if (!block) return;
+  const lunaExchangeRate = await getLunaExchangeRate("uusd");
 
-    await runIndexers(block);
+  for (let height = lastHeight + 1; height <= lastHeight + 1000; height++) { // TODO change back to 50 or 100 to slow indexing
+    const block = await getTxBlock(height);
+    if (!block) {
+      console.log("Block " + height + " not found");
+      return;
+    }
+
+    await runIndexers(block, height, pairMap, lunaExchangeRate);
 
     await updateBlock(chainId, { hiveHeight: height });
-    console.log(`collected ${height} `);
+
+    if (height % 100 === 0) console.log(`collected: ${height} / latest height: ${lastHeight}`)
+
     await waitFor(200);
   }
 }
