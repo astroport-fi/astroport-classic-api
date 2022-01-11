@@ -42,25 +42,26 @@ export async function run(
   const pairMap = pairListToMap(pairs);
 
   try {
-    // height
-    console.log("Indexing height...")
-    await heightCollect();
-    // prices
-    console.log("Indexing prices...")
-    await dailyCollect();
-    // supply_timeseries
-    console.log("Indexing supply...")
-    await supplyCollect();
-    // pool_timeseries
-    console.log("Indexing pool_timeseries")
-    await poolCollect();
-    // pool_volume_24h
-    console.log("Indexing pool_volume_24h")
-    await poolVolumeCollect();
-    // blocks, pairs, tokens, pool_volume
-    console.log("Indexing chain...")
-    await chainCollect(pairMap);
-    console.log("Finished indexing")
+    console.log("Temporarily disabled")
+    // // height
+    // console.log("Indexing height...")
+    // await heightCollect();
+    // // prices
+    // console.log("Indexing prices...")
+    // await dailyCollect();
+    // // supply_timeseries
+    // console.log("Indexing supply...")
+    // await supplyCollect();
+    // // pool_timeseries
+    // console.log("Indexing pool_timeseries")
+    // await poolCollect();
+    // // pool_volume_24h
+    // console.log("Indexing pool_volume_24h")
+    // await poolVolumeCollect();
+    // // blocks, pairs, tokens, pool_volume
+    // console.log("Indexing chain...")
+    // await chainCollect(pairMap);
+    // console.log("Finished indexing")
   } catch (e) {
     throw new Error("Error while running indexer: " + e);
   }
