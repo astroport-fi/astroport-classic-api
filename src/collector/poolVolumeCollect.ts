@@ -3,12 +3,12 @@ import utc from 'dayjs/plugin/utc';
 import { getHeightByDate, getLastHeight, getPairs } from "../services";
 import { TERRA_CHAIN_ID } from "../constants";
 import { PoolVolume } from "../models/pool_volume.model";
-import { PoolVolume24h } from "../models/pool_volume_24hr.model";
+import { PoolVolume24h } from "../models/pool_volume_24h.model";
 dayjs.extend(utc);
 
 /**
  * Combine stats for the last 24 hours from the pool_volume table
- * Update the pool_volume_24hr table
+ * Update the pool_volume_24h table
  */
 
 const DIGITS = 1000000;
@@ -21,7 +21,7 @@ export async function poolVolumeCollect(): Promise<void> {
   const latestHeight = await getLastHeight(chainId)
 
 
-  // get block height 24hrs ago
+  // get block height 24hs ago
   // TODO - an estimation - switch over when height data correctly indexed
   const startBlockHeight = latestHeight.value - Math.floor(BLOCKS_PER_YEAR / 365)
   // const startBlockHeight = await getHeightByDate(

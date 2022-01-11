@@ -18,7 +18,7 @@ const astro_ust_pair = ASTRO_UST_PAIR!
 
 describe('Hive tests', function() {
   describe('Get Supply Stats Happy Path', function() {
-    it('should return circ supply, astro price, tvl, 24hr volume', async function() {
+    it('should return circ supply, astro price, tvl, 24h volume', async function() {
 
       await initHive("https://hive.terra.dev/graphql");
       await initMantle("https://mantle.terra.dev/graphql")

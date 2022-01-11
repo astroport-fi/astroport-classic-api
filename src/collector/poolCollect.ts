@@ -7,7 +7,7 @@ import { getBlock, getHeight, getPairs, insertSupply } from "../services";
 import { TERRA_CHAIN_ID } from "../constants";
 import { insertPoolTimeseries } from "../services/pool_timeseries.service";
 import { PoolTimeseries } from "../models/pool_timeseries.model";
-import { PoolVolume24h } from "../models/pool_volume_24hr.model";
+import { PoolVolume24h } from "../models/pool_volume_24h.model";
 
 /**
  * Update the pool_timeseries table every minute.

@@ -31,7 +31,7 @@ function transformPoolModelToPoolType({ model }: { model: any }) {
     pool_address: model.metadata.pool_address,
     trading_fee: model.metadata.trading_fee_rate_bp,
     pool_liquidity: model.metadata.pool_liquidity,
-    _24hr_volume: model.metadata.day_volume_ust,
+    _24h_volume: model.metadata.day_volume_ust,
     trading_fees: {
       day: model.metadata.fees.trading.day,
       apr: model.metadata.fees.trading.apr,
