@@ -226,8 +226,14 @@ export async function getPairLiquidity(address: string, query: JSON): Promise<nu
   if(response?.wasm?.contractQuery?.assets[0]?.info?.native_token?.denom == "uusd") {
     return 2 * response?.wasm?.contractQuery?.assets[0]?.amount / 1000000
 
-  } else if (response?.wasm?.contractQuery?.assets[1]?.info?.native_token?.denom == "uluna") {
+  } else if (response?.wasm?.contractQuery?.assets[1]?.info?.native_token?.denom == "uusd") {
+    return 2 * response?.wasm?.contractQuery?.assets[1]?.amount / 1000000
 
+  } else if (response?.wasm?.contractQuery?.assets[0]?.info?.native_token?.denom == "uluna") {
+    const lunaPrice = await getLunaExchangeRate("uusd");
+    return 2 * response?.wasm?.contractQuery?.assets[0]?.amount * lunaPrice / 1000000
+
+  } else if (response?.wasm?.contractQuery?.assets[1]?.info?.native_token?.denom == "uluna") {
     const lunaPrice = await getLunaExchangeRate("uusd");
     return 2 * response?.wasm?.contractQuery?.assets[1]?.amount * lunaPrice / 1000000
 

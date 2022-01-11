@@ -1,9 +1,7 @@
 import mongoose from "mongoose";
-import { initHive, initMantle } from "../../src/lib/terra";
+import { getPairLiquidity, initHive, initMantle } from "../../src/lib/terra";
 import { poolVolumeCollect } from "../../src/collector/poolVolumeCollect";
 
-
-// TODO delete
 
 const MONGODB_URL = "" as string
 
@@ -18,7 +16,9 @@ describe('Example test', function() {
   describe('Test 1', function() {
     it('Test description', async function() {
 
-      await poolVolumeCollect();
+      // await poolVolumeCollect();
+      const respone = await getPairLiquidity("terra1qr2k6yjjd5p2kaewqvg93ag74k6gyjr7re37fs", JSON.parse('{ "pool": {} }'))
+      console.log(respone)
     });
   });
 });

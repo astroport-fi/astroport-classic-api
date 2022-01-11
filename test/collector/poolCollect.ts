@@ -6,7 +6,7 @@ import { poolCollect } from "../../src/collector/poolCollect";
 
 // TODO delete
 
-const MONGODB_URL = ""
+const MONGODB_URL = "" as string
 
 describe('Example test', function() {
 
