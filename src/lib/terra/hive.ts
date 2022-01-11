@@ -211,7 +211,7 @@ export async function getPairLiquidity(address: string, query: JSON): Promise<nu
       query($address: String!, $query: JSON!) {
         wasm {
           contractQuery(
-            contractAddress: $address",
+            contractAddress: $address,
             query: $query
           )
         }
