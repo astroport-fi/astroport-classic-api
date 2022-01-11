@@ -56,8 +56,10 @@ export async function poolCollect(): Promise<void> {
   for (const pair of pairs) {
     const result = new PoolTimeseries();
 
-    const pool_type: string = pair.type
     const pool_liquidity = await getPairLiquidity(pair.contractAddr, JSON.parse('{ "pool": {} }'))
+    if(pool_liquidity == 0) return
+
+    const pool_type: string = pair.type
     const dayVolumeResponse = await PoolVolume24h.findOne({ pool_address: pair.contractAddr })
     const dayVolume = dayVolumeResponse._24h_volume // in UST
 
@@ -95,8 +97,8 @@ export async function poolCollect(): Promise<void> {
       result.metadata.fees.astro.day +
       result.metadata.fees.native.day
 
-    result.metadata.fees.total.apr = result.metadata.fees.total.day * 365
-    result.metadata.fees.total.apy = Math.pow((1 + result.metadata.fees.total.day / pool_liquidity), 365)
+    result.metadata.fees.total.apr = (result.metadata.fees.total.day * 365) / pool_liquidity
+    result.metadata.fees.total.apy = Math.pow((1 + result.metadata.fees.total.day / pool_liquidity), 365) - 1
 
 
     await insertPoolTimeseries(result) //
