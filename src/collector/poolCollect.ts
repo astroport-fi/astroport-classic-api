@@ -61,7 +61,7 @@ export async function poolCollect(): Promise<void> {
 
     const pool_type: string = pair.type
     const dayVolumeResponse = await PoolVolume24h.findOne({ pool_address: pair.contractAddr })
-    const dayVolume = dayVolumeResponse._24h_volume // in UST
+    const dayVolume = dayVolumeResponse?._24h_volume ?? 0 // in UST
 
     const trading_fee_bp = FEES.get(pool_type) ?? 30 // basis points
     const trading_fee_perc = trading_fee_bp / 10000 // percentage
