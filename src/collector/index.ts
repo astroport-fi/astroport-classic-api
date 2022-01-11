@@ -60,6 +60,7 @@ export async function run(
     // blocks, pairs, tokens, pool_volume
     console.log("Indexing chain...")
     await chainCollect(pairMap);
+    console.log("Finished indexing")
   } catch (e) {
     throw new Error("Error while running indexer: " + e);
   }

@@ -19,7 +19,7 @@ export async function poolVolumeCollect(): Promise<void> {
 
   // get latest block height
   const latestHeight = await getLastHeight(chainId)
-
+  console.log("latest height: " + latestHeight.value)
 
   // get block height 24hs ago
   // TODO - an estimation - switch over when height data correctly indexed
@@ -27,6 +27,8 @@ export async function poolVolumeCollect(): Promise<void> {
   // const startBlockHeight = await getHeightByDate(
   //   chainId,
   //   dayjs().utc().subtract(1, 'y').toISOString());
+  console.log("one year back: " + Math.floor(BLOCKS_PER_YEAR / 365))
+  console.log("startBlockHeight: " + startBlockHeight)
 
 
   // get all pairs
