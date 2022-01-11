@@ -1,6 +1,6 @@
 import { getPool } from '../../lib/terra';
 import { getPricesFromPool } from '../../modules/terra';
-
+import { Pair as PairModel } from '../../models';
 import { createPrice } from '../../services';
 import { Pair } from "../../types";
 
@@ -19,6 +19,7 @@ export async function priceIndexer(
 
     const prices = getPricesFromPool(pool, pair.token1);
 
+    // add price
     return createPrice({
       pairId: pair._id,
       ...prices,
