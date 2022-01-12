@@ -2,5 +2,6 @@ export type Airdrop = {
   amount: number;
   claimed: boolean;
   address: string;
-  proofs: string[];
+  merkle_proof: string[];
+  index: number;
 };

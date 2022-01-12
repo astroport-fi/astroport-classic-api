@@ -14,16 +14,17 @@ const airdropSchema: Schema<AirdropDocument> = new Schema(
     },
     claimed: {
       type: Schema.Types.Boolean,
-      required: true,
+      required: false,
       default: false,
     },
-    proofs: {
+    merkle_proof: {
       type: [Schema.Types.String],
       required: true,
     },
-  },
-  {
-    timestamps: true,
+    index: {
+      type: Schema.Types.Number,
+      required: true
+    }
   }
 );
 

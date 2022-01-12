@@ -10,8 +10,8 @@ export const typeDefs = /* GraphQL */ `
   type Airdrop {
     amount: Float
     claimed: Boolean
-    proofs: [String]
-    createdAt: DateTime
+    merkle_proof: [String]
+    index: String
   }
 
   type Token {
@@ -60,6 +60,7 @@ export const typeDefs = /* GraphQL */ `
   # The "Query" type lists all of the available queries that
   # clients can execute, along with the return type for each.
   type Query {
+    airdrop(address: String!): Airdrop
     pair(contractAddr: ID!): Pair
     pairs: [Pair]
     pools: [Pool]
