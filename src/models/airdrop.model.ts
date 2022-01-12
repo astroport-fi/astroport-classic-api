@@ -14,7 +14,7 @@ const airdropSchema: Schema<AirdropDocument> = new Schema(
     },
     claimed: {
       type: Schema.Types.Boolean,
-      required: true,
+      required: false,
       default: false,
     },
     proofs: {

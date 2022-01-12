@@ -1,4 +1,5 @@
 import {
+  getAirdrop,
   getPair,
   getPairs,
   getPricesByPairId,
@@ -16,6 +17,10 @@ export const resolvers = {
   },
 
   Query: {
+    airdrop: async(_: any, { address }: any) => {
+      const airdrop = await getAirdrop(address);
+      return airdrop
+    },
     pair: async (_: any, { contractAddr }: any) => {
       const pair = await getPair(contractAddr);
       return pair;
@@ -30,9 +35,6 @@ export const resolvers = {
     },
     supply: async() => {
       const supply = await getSupply();
-      console.log("supply inside resolvers/index.ts: " + supply)
-      console.log("circ supply: " + supply.circulatingSupply)
-
       return supply;
     },
     tokens: async () => {
