@@ -49,9 +49,11 @@ export async function run(
     // // prices
     // console.log("Indexing prices...")
     // await dailyCollect();
-    // // supply_timeseries
-    // console.log("Indexing supply...")
-    // await supplyCollect();
+
+    // supply_timeseries
+    console.log("Indexing supply...")
+    await supplyCollect();
+
     // // pool_timeseries
     // console.log("Indexing pool_timeseries")
     // await poolCollect();
