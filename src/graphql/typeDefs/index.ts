@@ -10,8 +10,8 @@ export const typeDefs = /* GraphQL */ `
   type Airdrop {
     amount: Float
     claimed: Boolean
-    proofs: [String]
-    createdAt: DateTime
+    merkle_proof: [String]
+    index: String
   }
 
   type Token {
