@@ -24,6 +24,10 @@ const airdropSchema: Schema<AirdropDocument> = new Schema(
     index: {
       type: Schema.Types.Number,
       required: true
+    },
+    airdrop_series: {
+      type: Schema.Types.Number,
+      required: true
     }
   }
 );

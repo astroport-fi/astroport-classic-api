@@ -11,7 +11,8 @@ export const typeDefs = /* GraphQL */ `
     amount: Float
     claimed: Boolean
     merkle_proof: [String]
-    index: String
+    index: Int
+    airdrop_series: Int
   }
 
   type Token {
