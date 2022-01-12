@@ -1,5 +1,5 @@
 import {
-  getAirdrop,
+  getAirdrops,
   getPair,
   getPairs,
   getPricesByPairId,
@@ -18,8 +18,8 @@ export const resolvers = {
 
   Query: {
     airdrop: async(_: any, { address }: any) => {
-      const airdrop = await getAirdrop(address);
-      return airdrop
+      const airdrops = await getAirdrops(address);
+      return airdrops
     },
     pair: async (_: any, { contractAddr }: any) => {
       const pair = await getPair(contractAddr);
