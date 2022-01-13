@@ -47,6 +47,7 @@ const ASTRO_YEARLY_EMISSIONS = new Map<string, number>([
   ["xdef", 1566667], // xdef ust TODO
 ]);
 
+
 // TODO make this more legible
 export async function poolCollect(): Promise<void> {
 

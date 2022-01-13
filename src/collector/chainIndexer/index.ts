@@ -49,7 +49,7 @@ export async function runIndexers(
 
           if(!swapLogFound) {
             return
-          }
+          } // TODO problematic - is this enabled in prod?
 
           // transform, sum, add volume to pool_volume
           if(swapLogFound.length > 0) {
