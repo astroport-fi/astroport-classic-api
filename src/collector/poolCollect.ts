@@ -49,6 +49,7 @@ const ASTRO_YEARLY_EMISSIONS = new Map<string, number>([
 
 
 // TODO make this more legible
+// TODO double check math
 export async function poolCollect(): Promise<void> {
 
   // get all pairs

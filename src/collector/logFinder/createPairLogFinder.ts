@@ -5,7 +5,7 @@ import {
 
 import * as logRules from './logRules';
 
-export function createCreatePairLogFinders(
+export function createPairLogFinders(
   factoryAddress: string
 ): ReturningLogFinderMapper<{
   token1: string;

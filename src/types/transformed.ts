@@ -16,3 +16,9 @@ export interface TransferTransformed {
     amount: string
   }
 }
+
+export interface ProtocolTokenTransferTransformed {
+  token: string
+  pool: string
+  amount: number
+}

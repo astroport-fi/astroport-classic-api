@@ -4,7 +4,7 @@ import { swapRule } from "./logRules";
 import { Pair } from "../../types";
 
 
-export function createSwapFinder(
+export function createSwapLogFinder(
   pairMap: Map<string, Pair>
 ): ReturningLogFinderMapper<TxHistoryTransformed | undefined > {
   return createReturningLogFinder(swapRule(), (_, match) => {
