@@ -10,7 +10,6 @@ export async function findProtocolRewardEmissions(
 
   const poolTotal = new Map<string, any>();
 
-  console.log()
   for(const [key, value] of GENERATOR_PROXY_CONTRACTS.entries()) {
     const withdrawLogFinder = createWithdrawLogFinder(
       GENERATOR_PROXY_CONTRACTS,
@@ -22,6 +21,7 @@ export async function findProtocolRewardEmissions(
     const withdrawLogFound = withdrawLogFinder(event);
 
     if (withdrawLogFound) {
+      console.log("withdraw log found")
       for (const found of withdrawLogFound) {
         const transformed = found.transformed
 
@@ -40,6 +40,8 @@ export async function findProtocolRewardEmissions(
     }
   }
 
+  console.log(poolTotal);
+
   // save to db
   for (const [key, value] of poolTotal) {
     await PoolProtocolReward.create({
@@ -52,5 +54,7 @@ export async function findProtocolRewardEmissions(
       volume: value.value
     })
   }
+
+  console.log("saved " + poolTotal.size + " events to pool rewards table")
 
 }

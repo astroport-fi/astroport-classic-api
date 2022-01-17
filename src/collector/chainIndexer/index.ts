@@ -3,7 +3,6 @@ import { createPairIndexer } from './createPairIndex';
 import { TERRA_CHAIN_ID, GENERATOR_PROXY_CONTRACTS } from '../../constants';
 import { Pair } from "../../types";
 import { TxHistoryIndexer } from "./txHistoryIndexer";
-import { PoolProtocolReward } from "../../models/pool_protocol_reward.model";
 import { findProtocolRewardEmissions } from "./findProtocolRewardEmissions";
 
 const factory =
