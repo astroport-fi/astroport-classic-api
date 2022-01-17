@@ -40,6 +40,6 @@ export async function chainCollect(pairMap: Map<string, Pair>): Promise<void> {
 
     if (height % 100 === 0) console.log(`collected: ${height} / latest height: ${lastHeight}`)
 
-    await waitFor(100);
+    await waitFor(200);
   }
 }
