@@ -18,9 +18,17 @@ export async function findProtocolRewardEmissions(
       value.factory,
       value.tokenName);
 
+    console.log("key: " + key)
+    console.log("value: " + value)
+    console.log("token: " + value.token)
+    console.log("proxy: " + value.proxy)
+    console.log("factory: " + value.factory)
+    console.log("tokenName: " + value.tokenName)
+
     const withdrawLogFound = withdrawLogFinder(event);
 
     if (withdrawLogFound) {
+      console.log("Withdraw log: " + withdrawLogFound)
       for (const found of withdrawLogFound) {
         const transformed = found.transformed
 
@@ -37,6 +45,10 @@ export async function findProtocolRewardEmissions(
         }
       }
     }
+  }
+
+  if(poolTotal.size > 0) {
+    console.log("Pooltotal: " + poolTotal)
   }
 
   // save to db

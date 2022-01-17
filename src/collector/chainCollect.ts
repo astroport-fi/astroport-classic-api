@@ -35,10 +35,8 @@ export async function chainCollect(pairMap: Map<string, Pair>): Promise<void> {
       return;
     }
 
-    console.log("Running indexers")
     await runIndexers(block, height, pairMap, lunaExchangeRate);
 
-    console.log("Running updateBlock")
     await updateBlock(chainId, { hiveHeight: height });
 
     if (height % 100 === 0) console.log(`collected: ${height} / latest height: ${lastHeight}`)
