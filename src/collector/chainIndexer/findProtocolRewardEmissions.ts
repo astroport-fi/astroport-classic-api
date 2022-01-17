@@ -1,4 +1,3 @@
-import { ReturningLogFinderResult } from "@terra-money/log-finder";
 import { GENERATOR_PROXY_CONTRACTS } from "../../constants";
 import { createWithdrawLogFinder } from "../logFinder";
 import { PoolProtocolReward } from "../../models/pool_protocol_reward.model";
@@ -15,8 +14,7 @@ export async function findProtocolRewardEmissions(
       GENERATOR_PROXY_CONTRACTS,
       value.token,
       value.proxy,
-      value.factory,
-      value.tokenName);
+      value.factory);
 
     const withdrawLogFound = withdrawLogFinder(event);
 

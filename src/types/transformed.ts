@@ -21,5 +21,4 @@ export interface ProtocolTokenTransferTransformed {
   token: string
   pool: string
   amount: number
-  tokenName: string
 }
