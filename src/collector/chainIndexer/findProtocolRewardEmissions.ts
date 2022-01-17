@@ -21,7 +21,6 @@ export async function findProtocolRewardEmissions(
     const withdrawLogFound = withdrawLogFinder(event);
 
     if (withdrawLogFound) {
-      console.log("withdraw log found")
       for (const found of withdrawLogFound) {
         const transformed = found.transformed
 
@@ -40,8 +39,6 @@ export async function findProtocolRewardEmissions(
     }
   }
 
-  console.log(poolTotal);
-
   // save to db
   for (const [key, value] of poolTotal) {
     await PoolProtocolReward.create({
@@ -54,7 +51,4 @@ export async function findProtocolRewardEmissions(
       volume: value.value
     })
   }
-
-  console.log("saved " + poolTotal.size + " events to pool rewards table")
-
 }
