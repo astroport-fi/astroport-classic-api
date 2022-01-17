@@ -9,9 +9,8 @@ export async function findProtocolRewardEmissions(
 ): Promise<void> {
 
   const poolTotal = new Map<string, any>();
-  console.log("event: " + event)
-  console.log("height: " + height)
-  console.log(GENERATOR_PROXY_CONTRACTS)
+  console.log("event: " + JSON.stringify(event))
+
   for(const [key, value] of GENERATOR_PROXY_CONTRACTS.entries()) {
     const withdrawLogFinder = createWithdrawLogFinder(
       GENERATOR_PROXY_CONTRACTS,
@@ -23,7 +22,6 @@ export async function findProtocolRewardEmissions(
     const withdrawLogFound = withdrawLogFinder(event);
 
     if (withdrawLogFound) {
-      console.log("Withdraw log: " + withdrawLogFound)
       for (const found of withdrawLogFound) {
         const transformed = found.transformed
 
