@@ -63,13 +63,13 @@ export async function poolCollect(): Promise<void> {
       await PoolProtocolRewardVolume24h.findOne({ pool_address: pair.contractAddr })
 
     if(rewards_24h && rewards_24h._24h) {
-      rewards_24h = rewards_24h._24h
+      rewards_24h = rewards_24h._24h_volume
     } else {
       rewards_24h = 0
     }
-    result.metadata.fees.native.day = rewards_24h?._24h_volume // 24 hour fee amount, not rate
+    result.metadata.fees.native.day = rewards_24h // 24 hour fee amount, not rate
     result.metadata.fees.native.apr = (rewards_24h * 365) / pool_liquidity
-    result.metadata.fees.native.apy = Math.pow((1 + (rewards_24h?._24_volume) / pool_liquidity), 365) - 1
+    result.metadata.fees.native.apy = Math.pow((1 + (rewards_24h) / pool_liquidity), 365) - 1
 
     // total
     result.metadata.fees.total.day =
