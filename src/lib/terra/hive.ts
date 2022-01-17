@@ -133,6 +133,26 @@ export async function getTxBlocks(height: number) {
   const height18 = height + 17
   const height19 = height + 18
   const height20 = height + 19
+  const height21 = height + 20
+  const height22 = height + 21
+  const height23 = height + 22
+  const height24 = height + 23
+  const height25 = height + 24
+  const height26 = height + 25
+  const height27 = height + 26
+  const height28 = height + 27
+  const height29 = height + 28
+  const height30 = height + 29
+  const height31 = height + 30
+  const height32 = height + 31
+  const height33 = height + 32
+  const height34 = height + 33
+  const height35 = height + 34
+  const height36 = height + 35
+  const height37 = height + 36
+  const height38 = height + 37
+  const height39 = height + 38
+  const height40 = height + 39
 
   try {
     const response = await hive.request(
@@ -157,7 +177,27 @@ export async function getTxBlocks(height: number) {
           $height17: Float!,
           $height18: Float!,
           $height19: Float!,
-          $height20: Float!) {
+          $height20: Float!
+          $height21: Float!,
+          $height22: Float!,
+          $height23: Float!,
+          $height24: Float!,
+          $height25: Float!,
+          $height26: Float!,
+          $height27: Float!,
+          $height28: Float!,
+          $height29: Float!,
+          $height30: Float!
+          $height31: Float!,
+          $height32: Float!,
+          $height33: Float!,
+          $height34: Float!,
+          $height35: Float!,
+          $height36: Float!,
+          $height37: Float!,
+          $height38: Float!,
+          $height39: Float!,
+          $height40: Float!) {
           tx_1: tx {
             byHeight(height: $height1) {
               timestamp
@@ -498,6 +538,346 @@ export async function getTxBlocks(height: number) {
               }
             }
           }
+          tx_21: tx {
+            byHeight(height: $height21) {
+              timestamp
+              height
+              txhash
+              logs {
+                msg_index
+                events {
+                  type
+                  attributes {
+                    key
+                    value
+                  }
+                }
+              }
+            }
+          }
+          tx_22: tx {
+            byHeight(height: $height22) {
+              timestamp
+              height
+              txhash
+              logs {
+                msg_index
+                events {
+                  type
+                  attributes {
+                    key
+                    value
+                  }
+                }
+              }
+            }
+          }
+          tx_23: tx {
+            byHeight(height: $height23) {
+              timestamp
+              height
+              txhash
+              logs {
+                msg_index
+                events {
+                  type
+                  attributes {
+                    key
+                    value
+                  }
+                }
+              }
+            }
+          }
+          tx_24: tx {
+            byHeight(height: $height24) {
+              timestamp
+              height
+              txhash
+              logs {
+                msg_index
+                events {
+                  type
+                  attributes {
+                    key
+                    value
+                  }
+                }
+              }
+            }
+          }
+          tx_25: tx {
+            byHeight(height: $height25) {
+              timestamp
+              height
+              txhash
+              logs {
+                msg_index
+                events {
+                  type
+                  attributes {
+                    key
+                    value
+                  }
+                }
+              }
+            }
+          }
+          tx_26: tx {
+            byHeight(height: $height26) {
+              timestamp
+              height
+              txhash
+              logs {
+                msg_index
+                events {
+                  type
+                  attributes {
+                    key
+                    value
+                  }
+                }
+              }
+            }
+          }
+          tx_27: tx {
+            byHeight(height: $height27) {
+              timestamp
+              height
+              txhash
+              logs {
+                msg_index
+                events {
+                  type
+                  attributes {
+                    key
+                    value
+                  }
+                }
+              }
+            }
+          }
+          tx_28: tx {
+            byHeight(height: $height28) {
+              timestamp
+              height
+              txhash
+              logs {
+                msg_index
+                events {
+                  type
+                  attributes {
+                    key
+                    value
+                  }
+                }
+              }
+            }
+          }
+          tx_29: tx {
+            byHeight(height: $height29) {
+              timestamp
+              height
+              txhash
+              logs {
+                msg_index
+                events {
+                  type
+                  attributes {
+                    key
+                    value
+                  }
+                }
+              }
+            }
+          }
+          tx_30: tx {
+            byHeight(height: $height30) {
+              timestamp
+              height
+              txhash
+              logs {
+                msg_index
+                events {
+                  type
+                  attributes {
+                    key
+                    value
+                  }
+                }
+              }
+            }
+          }
+          tx_31: tx {
+            byHeight(height: $height31) {
+              timestamp
+              height
+              txhash
+              logs {
+                msg_index
+                events {
+                  type
+                  attributes {
+                    key
+                    value
+                  }
+                }
+              }
+            }
+          }
+          tx_32: tx {
+            byHeight(height: $height32) {
+              timestamp
+              height
+              txhash
+              logs {
+                msg_index
+                events {
+                  type
+                  attributes {
+                    key
+                    value
+                  }
+                }
+              }
+            }
+          }
+          tx_33: tx {
+            byHeight(height: $height33) {
+              timestamp
+              height
+              txhash
+              logs {
+                msg_index
+                events {
+                  type
+                  attributes {
+                    key
+                    value
+                  }
+                }
+              }
+            }
+          }
+          tx_34: tx {
+            byHeight(height: $height34) {
+              timestamp
+              height
+              txhash
+              logs {
+                msg_index
+                events {
+                  type
+                  attributes {
+                    key
+                    value
+                  }
+                }
+              }
+            }
+          }
+          tx_35: tx {
+            byHeight(height: $height35) {
+              timestamp
+              height
+              txhash
+              logs {
+                msg_index
+                events {
+                  type
+                  attributes {
+                    key
+                    value
+                  }
+                }
+              }
+            }
+          }
+          tx_36: tx {
+            byHeight(height: $height36) {
+              timestamp
+              height
+              txhash
+              logs {
+                msg_index
+                events {
+                  type
+                  attributes {
+                    key
+                    value
+                  }
+                }
+              }
+            }
+          }
+          tx_37: tx {
+            byHeight(height: $height37) {
+              timestamp
+              height
+              txhash
+              logs {
+                msg_index
+                events {
+                  type
+                  attributes {
+                    key
+                    value
+                  }
+                }
+              }
+            }
+          }
+          tx_38: tx {
+            byHeight(height: $height38) {
+              timestamp
+              height
+              txhash
+              logs {
+                msg_index
+                events {
+                  type
+                  attributes {
+                    key
+                    value
+                  }
+                }
+              }
+            }
+          }
+          tx_39: tx {
+            byHeight(height: $height39) {
+              timestamp
+              height
+              txhash
+              logs {
+                msg_index
+                events {
+                  type
+                  attributes {
+                    key
+                    value
+                  }
+                }
+              }
+            }
+          }
+          tx_40: tx {
+            byHeight(height: $height40) {
+              timestamp
+              height
+              txhash
+              logs {
+                msg_index
+                events {
+                  type
+                  attributes {
+                    key
+                    value
+                  }
+                }
+              }
+            }
+          }          
         }
 
       `,
@@ -521,7 +901,27 @@ export async function getTxBlocks(height: number) {
         height17,
         height18,
         height19,
-        height20
+        height20,
+        height21,
+        height22,
+        height23,
+        height24,
+        height25,
+        height26,
+        height27,
+        height28,
+        height29,
+        height30,
+        height31,
+        height32,
+        height33,
+        height34,
+        height35,
+        height36,
+        height37,
+        height38,
+        height39,
+        height40
       }
     );
 
@@ -546,8 +946,26 @@ export async function getTxBlocks(height: number) {
     result.push(response.tx_18.byHeight)
     result.push(response.tx_19.byHeight)
     result.push(response.tx_20.byHeight)
-
-
+    result.push(response.tx_21.byHeight)
+    result.push(response.tx_22.byHeight)
+    result.push(response.tx_23.byHeight)
+    result.push(response.tx_24.byHeight)
+    result.push(response.tx_25.byHeight)
+    result.push(response.tx_26.byHeight)
+    result.push(response.tx_27.byHeight)
+    result.push(response.tx_28.byHeight)
+    result.push(response.tx_29.byHeight)
+    result.push(response.tx_30.byHeight)
+    result.push(response.tx_31.byHeight)
+    result.push(response.tx_32.byHeight)
+    result.push(response.tx_33.byHeight)
+    result.push(response.tx_34.byHeight)
+    result.push(response.tx_35.byHeight)
+    result.push(response.tx_36.byHeight)
+    result.push(response.tx_37.byHeight)
+    result.push(response.tx_38.byHeight)
+    result.push(response.tx_39.byHeight)
+    result.push(response.tx_40.byHeight)
     return result
   } catch (e) {
     return null;

@@ -1,8 +1,10 @@
-import { createPairLogFinders, createSwapLogFinder } from '../logFinder';
+import { createPairLogFinders, createSwapLogFinder, createWithdrawLogFinder } from "../logFinder";
 import { createPairIndexer } from './createPairIndex';
-import { TERRA_CHAIN_ID } from '../../constants';
+import { TERRA_CHAIN_ID, GENERATOR_PROXY_CONTRACTS } from '../../constants';
 import { Pair } from "../../types";
 import { TxHistoryIndexer } from "./txHistoryIndexer";
+import { PoolProtocolReward } from "../../models/pool_protocol_reward.model";
+import { findProtocolRewardEmissions } from "./findProtocolRewardEmissions";
 
 const factory =
   TERRA_CHAIN_ID == 'bombay-12'
@@ -41,13 +43,21 @@ export async function runIndexers(
             await createPairIndexer(createPairLogFounds, timestamp);
           }
 
+          // find events for APR
+          try {
+            await findProtocolRewardEmissions(event, height);
+          } catch(e) {
+            console.log("Error during findProtocolRewardEmissions: " + e)
+          }
+
+
           // swaps from tx history
           const swapLogFinder = createSwapLogFinder(pairMap);
           const swapLogFound = swapLogFinder(event);
 
           if(!swapLogFound) {
             return
-          } // TODO problematic - is this enabled in prod?
+          }
 
           // transform, sum, add volume to pool_volume
           if(swapLogFound.length > 0) {
