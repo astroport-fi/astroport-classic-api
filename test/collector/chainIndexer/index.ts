@@ -6,7 +6,7 @@ import { runIndexers } from "../../../src/collector/chainIndexer";
 
 // TODO delete
 
-const MONGODB_URL = "" as string
+const MONGODB_URL = "mongodb+srv://dexter:p7Fu933TUv1Gphzm@astro-dev-cluster.qxbq9.mongodb.net/astroport?authSource=admin&replicaSet=atlas-13c9d8-shard-0&readPreference=primary&appname=MongoDB%20Compass&ssl=true" as string
 
 describe('Example test', function() {
 
@@ -20,6 +20,20 @@ describe('Example test', function() {
     it('Test description', async function() {
 
       const height = 5979042;
+
+      const pairs = await getPairs();
+      const pairMap = pairListToMap(pairs);
+      const exchangeRate = await getLunaExchangeRate("uusd")
+
+      const block = await getTxBlock(height) // 2 swaps
+      await runIndexers(block, height, pairMap, exchangeRate);
+    });
+  });
+
+  describe('Listen for a APR transaction', function() {
+    it('LP Deposit', async function() {
+
+      const height = 6099231;
 
       const pairs = await getPairs();
       const pairMap = pairListToMap(pairs);

@@ -28,14 +28,17 @@ export async function chainCollect(pairMap: Map<string, Pair>): Promise<void> {
   const lunaExchangeRate = await getLunaExchangeRate("uusd");
 
   for (let height = lastHeight + 1; height <= lastHeight + 50; height++) {
+    console.log("Current height: " + height)
     const block = await getTxBlock(height);
     if (!block) {
       console.log("Block " + height + " not found");
       return;
     }
 
+    console.log("Running indexers")
     await runIndexers(block, height, pairMap, lunaExchangeRate);
 
+    console.log("Running updateBlock")
     await updateBlock(chainId, { hiveHeight: height });
 
     if (height % 100 === 0) console.log(`collected: ${height} / latest height: ${lastHeight}`)

@@ -70,3 +70,33 @@ export const GENERATOR_PROXY_CONTRACTS = new Map<string, any>([
     token: "terra169edevav3pdrtjcx35j6pvzuv54aevewar4nlh"
   }]
 ])
+
+
+// TODO get from pair registration
+// fees basis points.  30 = 0.3%, 5 = 0.05%
+export const FEES = new Map<string, number>([
+  ["xyk", 30],
+  ["stable", 5]
+]);
+
+// TODO get from contract
+// map pair address to yearly emissions for year 1
+export const ASTRO_YEARLY_EMISSIONS = new Map<string, number>([
+  ["terra1j66jatn3k50hjtg2xemnjm8s7y8dws9xqa5y8w", 25000000], // bluna luna
+  ["terra17n5sunn88hpy965mzvt3079fqx3rttnplg779g", 15000000], // astro ust
+  ["terra1m6ywlgn6wrjuagcmmezzz2a029gtldhey5k552", 13000000], // luna ust
+  ["terra1qr2k6yjjd5p2kaewqvg93ag74k6gyjr7re37fs", 10444444], // anc ust
+  ["stluna", 9400000], // stluna luna TODO
+  ["terra134m8n2epp0n40qr08qsvvrzycn2zq4zcpmue48", 3655556], // mine ust
+  ["terra143xxfw5xf62d5m32k3t4eu9s82ccw80lcprzl9", 3394444], // mir ust
+  ["terra1m95udvvdame93kl6j2mk8d03kc982wqgr75jsr", 3394444], // stt ust
+  ["terra1mxyp5z27xxgmv70xpqjk7jvfq54as9dfzug74m", 2611111], // orion ust
+  ["terra1v5ct2tuhfqd0tf8z0wwengh4fg77kaczgf6gtx", 2350000], // psi ust
+  ["terra1zpnhtf9h5s7ze2ewlqyer83sr4043qcq64zfc4", 1827778], // apollo ust
+  ["nluna", 1827778], // nluna ust TODO
+  ["terra15s2wgdeqhuc4gfg7sfjyaep5cch38mwtzmwqrx", 1827778], // vkr ust
+  ["neth", 1566667], // neth ust TODO
+  ["steth", 1566667], // steth ust TODO
+  ["stsol", 1566667], // stsol ust TODO
+  ["xdef", 1566667], // xdef ust TODO
+]);
