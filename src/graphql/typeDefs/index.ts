@@ -64,6 +64,7 @@ export const typeDefs = /* GraphQL */ `
     airdrop(address: String!): [Airdrop]
     pair(contractAddr: ID!): Pair
     pairs: [Pair]
+    pool(address: String!): Pool
     pools: [Pool]
     supply: Supply
     tokens: [Token]

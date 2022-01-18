@@ -17,6 +17,7 @@ import { getPairs } from "../services";
 import { pairListToMap } from "./helpers";
 import { poolVolumeCollect } from "./poolVolumeCollect";
 import { poolProtocolRewardsCollect } from "./poolProtocolRewardsCollect";
+import { aggregatePool } from "./poolAggregate";
 
 bluebird.config({
   longStackTraces: true,
@@ -61,9 +62,15 @@ export async function run(
     console.log("Indexing pool_protocol_rewards_24h")
     await poolProtocolRewardsCollect();
 
+    // aggregate pool_timeseries -> pool
+    console.log("Aggregating...")
+    await aggregatePool();
+
     // blocks, pairs, tokens, pool_volume
     console.log("Indexing chain...")
     await chainCollect(pairMap);
+
+
 
   } catch (e) {
     throw new Error("Error while running indexer: " + e);
