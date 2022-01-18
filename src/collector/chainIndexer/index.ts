@@ -4,6 +4,8 @@ import { TERRA_CHAIN_ID, GENERATOR_PROXY_CONTRACTS } from '../../constants';
 import { Pair } from "../../types";
 import { TxHistoryIndexer } from "./txHistoryIndexer";
 import { findProtocolRewardEmissions } from "./findProtocolRewardEmissions";
+import { getPairs } from "../../services";
+import { priceIndexer } from "../indexer/priceIndexer";
 
 const factory =
   TERRA_CHAIN_ID == 'bombay-12'
@@ -34,12 +36,6 @@ export async function runIndexers(
       for (const event of events) {
         // for spam tx
         if (event.attributes.length < 1800) {
-          // find events for APR
-          try {
-            await findProtocolRewardEmissions(event, height);
-          } catch(e) {
-            console.log("Error during findProtocolRewardEmissions: " + e)
-          }
 
           // createPair
           try {
@@ -52,6 +48,19 @@ export async function runIndexers(
             console.log("Error during createPair: " + e)
           }
 
+          try {
+            const pairs = await getPairs();
+            await priceIndexer(pairs, height);
+          } catch(e) {
+            console.log("Error during priceIndexer: " + e)
+          }
+
+          // find events for APR
+          try {
+            await findProtocolRewardEmissions(event, height);
+          } catch(e) {
+            console.log("Error during findProtocolRewardEmissions: " + e)
+          }
 
           try {
             // swaps from tx history

@@ -19,6 +19,10 @@ export async function priceIndexer(
 
     const prices = getPricesFromPool(pool, pair.token1);
 
+    if(prices.token1 == Infinity || prices.token2 == Infinity) {
+      return
+    }
+
     // add price
     return createPrice({
       pairId: pair._id,
