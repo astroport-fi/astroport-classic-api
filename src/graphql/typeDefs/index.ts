@@ -29,7 +29,7 @@ export const typeDefs = /* GraphQL */ `
     token1: String
     token2: String
     type: String
-    prices: [Price]
+    prices: Price
     createdAt: DateTime
   }
   
