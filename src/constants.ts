@@ -83,7 +83,7 @@ export const FEES = new Map<string, number>([
 // map pair address to yearly emissions for year 1
 export const ASTRO_YEARLY_EMISSIONS = new Map<string, number>([
   ["terra1j66jatn3k50hjtg2xemnjm8s7y8dws9xqa5y8w", 25000000], // bluna luna
-  ["terra17n5sunn88hpy965mzvt3079fqx3rttnplg779g", 15000000], // astro ust
+  ["terra1l7xu2rl3c7qmtx3r5sd2tz25glf6jh8ul7aag7", 15000000], // astro ust
   ["terra1m6ywlgn6wrjuagcmmezzz2a029gtldhey5k552", 13000000], // luna ust
   ["terra1qr2k6yjjd5p2kaewqvg93ag74k6gyjr7re37fs", 10444444], // anc ust
   ["stluna", 9400000], // stluna luna TODO
