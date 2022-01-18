@@ -34,8 +34,6 @@ export async function runIndexers(
       for (const event of events) {
         // for spam tx
         if (event.attributes.length < 1800) {
-
-
           // find events for APR
           try {
             await findProtocolRewardEmissions(event, height);

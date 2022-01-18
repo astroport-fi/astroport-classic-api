@@ -16,6 +16,7 @@ export function createWithdrawLogFinder(
   factory: string
 ): ReturningLogFinderMapper<ProtocolTokenTransferTransformed | undefined > {
 
+  console.log("inside createwithdrawlogfinder.  token: " + token + " proxy: " + proxy + " factory: " + factory)
   return createReturningLogFinder(generatorProxyClaimRule(token, proxy, factory), (_, match) => {
     if (generatorProxyContracts.has(match[3].value)) {
       // just find transactions where the protocol token is sent to the generator proxy address
@@ -31,6 +32,7 @@ export function createWithdrawLogFinder(
         amount: parseInt(amount)
       }
 
+      console.log("Transformed: " + JSON.stringify(transformed))
       return transformed
     }
     return
