@@ -1,8 +1,9 @@
 import { Pool } from "../models/pool.model";
+import { Pool as PoolType } from "../types/pool.type"
 
 export async function getPool(address: string): Promise<any> {
   const pool = await Pool.findOne({ "metadata.pool_address": address })
-  return transformPoolModelToPoolType({ model: pool })
+  return transformPoolModelToPoolType(pool)
 }
 
 // TODO add filtering
@@ -12,13 +13,13 @@ export async function getPools(): Promise<any[]> {
 
   // map
   for(const pool of pools) {
-    result.push(transformPoolModelToPoolType({ model: pool }))
+    result.push(transformPoolModelToPoolType(pool))
   }
 
   return result
 }
 
-function transformPoolModelToPoolType({ model }: { model: any }) {
+function transformPoolModelToPoolType(model: any): PoolType {
 
   return {
     timestamp: model.timestamp,
