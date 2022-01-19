@@ -47,7 +47,7 @@ export async function poolProtocolRewardsCollect(): Promise<void> {
     const prev = await PoolProtocolRewardVolume24h.findOne({pool_address: value.pool})
     if(prev) {
       await PoolProtocolRewardVolume24h.findOneAndUpdate(
-        { pool: value.pool },
+        { pool_address: value.pool },
         {
           block: latestHeight.value,
           _24h_volume: sum
