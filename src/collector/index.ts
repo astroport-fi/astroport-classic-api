@@ -46,32 +46,33 @@ export async function run(
   const pairMap = pairListToMap(pairs);
 
   try {
-    console.log("Indexing height...")
-    await heightCollect();
-
-    console.log("Indexing prices...")
-    // await dailyCollect();
-    await priceCollect(pairs);
-
-    console.log("Indexing supply_timeseries...")
-    await supplyCollect();
-
-    console.log("Indexing pool_timeseries")
-    await poolCollect();
-
-    console.log("Indexing pool_volume_24h")
-    await poolVolumeCollect();
-
-    console.log("Indexing pool_protocol_rewards_24h")
-    await poolProtocolRewardsCollect();
-
-    // aggregate pool_timeseries -> pool
-    console.log("Aggregating...")
-    await aggregatePool();
-
-    // blocks, pairs, tokens, pool_volume
-    console.log("Indexing chain...")
-    await chainCollect(pairMap);
+    console.log("temporarily disabled")
+    // console.log("Indexing height...")
+    // await heightCollect();
+    //
+    // console.log("Indexing prices...")
+    // // await dailyCollect();
+    // await priceCollect(pairs);
+    //
+    // console.log("Indexing supply_timeseries...")
+    // await supplyCollect();
+    //
+    // console.log("Indexing pool_timeseries")
+    // await poolCollect();
+    //
+    // console.log("Indexing pool_volume_24h")
+    // await poolVolumeCollect();
+    //
+    // console.log("Indexing pool_protocol_rewards_24h")
+    // await poolProtocolRewardsCollect();
+    //
+    // // aggregate pool_timeseries -> pool
+    // console.log("Aggregating...")
+    // await aggregatePool();
+    //
+    // // blocks, pairs, tokens, pool_volume
+    // console.log("Indexing chain...")
+    // await chainCollect(pairMap);
 
 
 
