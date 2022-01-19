@@ -33,15 +33,11 @@ export async function poolProtocolRewardsCollect(): Promise<void> {
   // retrieve daily sums per pair and write to pool_protocol_rewards_24h
   for(const value of GENERATOR_PROXY_CONTRACTS.values()) {
     const pool_reward_volumes = await PoolProtocolReward.find({ pool: value.pool, block: { $gt: startBlockHeight, $lt: latestHeight.value }});
-    console.log("getting for pool: " + value.pool + " startblockheight: " + startBlockHeight + " latest: " + latestHeight.value)
-    console.log("entries found: " + pool_reward_volumes.length)
-
 
     let sum = 0;
     pool_reward_volumes.forEach((element) => {
       sum += element.volume
     })
-    console.log("sum: " + sum)
 
     // create or update
     const prev = await PoolProtocolRewardVolume24h.findOne({pool_address: value.pool})
