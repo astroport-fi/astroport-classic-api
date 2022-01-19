@@ -31,7 +31,6 @@ export function createWithdrawLogFinder(
         amount: parseInt(amount)
       }
 
-      console.log("Transformed: " + JSON.stringify(transformed))
       return transformed
     }
     return
