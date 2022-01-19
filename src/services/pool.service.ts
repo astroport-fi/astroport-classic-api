@@ -2,7 +2,7 @@ import { Pool } from "../models/pool.model";
 
 
 export async function getPool(address: string): Promise<any> {
-  const pool = await Pool.findOne({ pool_address: address })
+  const pool = await Pool.findOne({ _id: address })
   return transformPoolModelToPoolType({ model: pool })
 }
 
