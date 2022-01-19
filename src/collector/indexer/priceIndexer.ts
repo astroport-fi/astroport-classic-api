@@ -23,9 +23,7 @@ export async function priceIndexer(
        prices.token2 == "NaN" || prices.token2 == "Infinity") {
       return
     }
-
-    console.log("Prices: " + JSON.stringify(prices))
-
+    
     // add price
     return createPrice({
       pairId: pair._id,
