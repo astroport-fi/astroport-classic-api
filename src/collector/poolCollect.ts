@@ -31,7 +31,7 @@ export async function poolCollect(): Promise<void> {
     const result = new PoolTimeseries();
 
     const pool_liquidity = await getPairLiquidity(pair.contractAddr, JSON.parse('{ "pool": {} }'))
-    if(pool_liquidity == 0) return
+    if(pool_liquidity < 1000) return
 
     const pool_type: string = pair.type
     const dayVolumeResponse = await PoolVolume24h.findOne({ pool_address: pair.contractAddr })
