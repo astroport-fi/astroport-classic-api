@@ -25,14 +25,16 @@ export async function getPools(): Promise<any[]> {
 function transformPoolModelToPoolType(model: any): PoolType {
 
   // TODO remove
-  const symbol = TOKEN_ADDRESS_MAP.get(model.metadata.pool_address) ?? ""
-
+  const symbol = TOKEN_ADDRESS_MAP.get(model.metadata.pool_address)
+  
   return {
     timestamp: model.timestamp,
     pool_address: model.metadata.pool_address,
     trading_fee: model.metadata.trading_fee_rate_bp,
     pool_liquidity: model.metadata.pool_liquidity,
     _24hr_volume: model.metadata.day_volume_ust,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     token_symbol: symbol,
     trading_fees: {
       day: model.metadata.fees.trading.day,
