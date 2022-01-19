@@ -50,6 +50,7 @@ export async function poolCollect(): Promise<void> {
 
     // TODO - temporary solution
     if(TOKEN_ADDRESS_MAP.get(pair.contractAddr)) {
+      console.log("Saving token name for: " + pair.contractAddr + ": " + TOKEN_ADDRESS_MAP.get(pair.contractAddr))
       result.metadata.token_symbol = TOKEN_ADDRESS_MAP.get(pair.contractAddr)
     }
     

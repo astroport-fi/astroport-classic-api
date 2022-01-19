@@ -1,4 +1,4 @@
-import { PoolTimeseries, PoolTimeseries as PoolType } from "../types/pool_timeseries.type";
+import { PoolTimeseries as PoolType } from "../types/pool_timeseries.type";
 import { PoolTimeseries as PoolModel } from "../models/pool_timeseries.model";
 
 /**
