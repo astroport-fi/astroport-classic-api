@@ -61,7 +61,7 @@ export async function poolCollect(): Promise<void> {
     // protocol rewards - like ANC for ANC-UST
     console.log("Finding reward 24 for pool: " + pair.contractAddr)
     let protocolRewards = await PoolProtocolRewardVolume24h.findOne({ pool_address: pair.contractAddr })
-    if(protocolReward == null) {
+    if(protocolRewards == null) {
       protocolRewards = { _24_volume: 0 }
     }
 
