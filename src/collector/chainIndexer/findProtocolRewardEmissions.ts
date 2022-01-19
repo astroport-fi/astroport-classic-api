@@ -63,7 +63,7 @@ export async function findProtocolRewardEmissions(
 
   console.log("gen proxy size: " + GENERATOR_PROXY_CONTRACTS.size)
 
-  for(const [key, value] of GENERATOR_PROXY_CONTRACTS.entries()) {
+  for(const [key, value] of GENERATOR_PROXY_CONTRACTS) {
     console.log("key: " + key + " value: " + value)
     const withdrawLogFinder = createWithdrawLogFinder(
       GENERATOR_PROXY_CONTRACTS,
