@@ -48,13 +48,6 @@ export async function runIndexers(
             console.log("Error during createPair: " + e)
           }
 
-          try {
-            const pairs = await getPairs();
-            await priceIndexer(pairs, height);
-          } catch(e) {
-            console.log("Error during priceIndexer: " + e)
-          }
-
           // find events for APR
           try {
             await findProtocolRewardEmissions(event, height);
