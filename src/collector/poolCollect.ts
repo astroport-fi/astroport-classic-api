@@ -61,9 +61,10 @@ export async function poolCollect(): Promise<void> {
     // protocol rewards - like ANC for ANC-UST
     console.log("Pool: " + pair.contractAddr)
     const protocolRewardsRaw = await PoolProtocolRewardVolume24h.findOne({ pool_address: pair.contractAddr }) ?? { volume: 0 }
-    console.log("protocolRewardsRaw: " + protocolRewardsRaw)
+    console.log("protocolRewardsRaw: " + JSON.stringify(protocolRewardsRaw))
+    console.log("volume: " + protocolRewardsRaw.volume)
     const protocolRewards = Number(protocolRewardsRaw)
-    console.log("protocolRewards: " + protocolRewards)
+    console.log("protocolRewards: " + JSON.stringify(protocolRewards))
     console.log("apr: " + (protocolRewards * 365) / pool_liquidity)
 
     result.metadata.fees.native.day = protocolRewards // 24 hour fee amount, not rate
