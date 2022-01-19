@@ -52,7 +52,7 @@ export const typeDefs = /* GraphQL */ `
     trading_fee: Float
     pool_liquidity: Float
     _24hr_volume: Float
-    token_symbol: String
+    token_symbol: String!
     trading_fees: Fee
     astro_rewards: Fee
     protocol_rewards: Fee
