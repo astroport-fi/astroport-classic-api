@@ -59,17 +59,11 @@ export async function poolCollect(): Promise<void> {
     result.metadata.fees.astro.apy = Math.pow((1 + (astro_yearly_emission / 365) / pool_liquidity), 365) - 1
 
     // protocol rewards - like ANC for ANC-UST
-    console.log("Finding reward 24 for pool: " + pair.contractAddr)
-    let protocolRewards = await PoolProtocolRewardVolume24h.findOne({ pool_address: pair.contractAddr })
-    if(protocolRewards == null) {
-      protocolRewards = { _24_volume: 0 }
-    }
+    const protocolRewards = await PoolProtocolRewardVolume24h.findOne({ pool_address: pair.contractAddr }) ?? { volume: 0 }
 
-    console.log("Protocol rewards: " + JSON.stringify(protocolRewards))
-
-    result.metadata.fees.native.day = protocolRewards._24_volume // 24 hour fee amount, not rate
-    result.metadata.fees.native.apr = (protocolRewards._24_volume * 365) / pool_liquidity
-    result.metadata.fees.native.apy = Math.pow((1 + (protocolRewards._24_volume) / pool_liquidity), 365) - 1
+    result.metadata.fees.native.day = protocolRewards.volume // 24 hour fee amount, not rate
+    result.metadata.fees.native.apr = (protocolRewards.volume * 365) / pool_liquidity
+    result.metadata.fees.native.apy = Math.pow((1 + (protocolRewards.volume) / pool_liquidity), 365) - 1
 
     // total
     result.metadata.fees.total.day =

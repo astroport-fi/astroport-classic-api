@@ -13,7 +13,7 @@ const poolProtocolRewardVolume24hSchema: Schema = new Schema(
         required: false,
         trim: true
       },
-      _24h_volume: {
+      volume: {
         type: Schema.Types.Number,
         required: false,
         trim: true

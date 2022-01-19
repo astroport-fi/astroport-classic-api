@@ -46,13 +46,13 @@ export async function poolProtocolRewardsCollect(): Promise<void> {
         { pool_address: value.pool },
         {
           block: latestHeight.value,
-          _24h_volume: sum
+          volume: sum
         });
     } else {
       await PoolProtocolRewardVolume24h.create({
           pool_address: value.pool,
           block: latestHeight.value,
-          _24h_volume: sum
+          volume: sum
         });
     }
   }
