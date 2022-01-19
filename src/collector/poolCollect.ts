@@ -4,7 +4,7 @@ dayjs.extend(utc);
 
 import { getContractAddressStore, getContractStore, getPairLiquidity } from "../lib/terra";
 import { getBlock, getHeight, getPairs, getPriceByPairId, insertSupply } from "../services";
-import { ASTRO_YEARLY_EMISSIONS, FEES, TERRA_CHAIN_ID } from "../constants";
+import { ASTRO_YEARLY_EMISSIONS, FEES, TOKEN_ADDRESS_MAP, TERRA_CHAIN_ID } from "../constants";
 import { insertPoolTimeseries } from "../services/pool_timeseries.service";
 import { PoolTimeseries } from "../models/pool_timeseries.model";
 import { PoolVolume24h } from "../models/pool_volume_24hr.model";
@@ -47,6 +47,11 @@ export async function poolCollect(): Promise<void> {
     result.metadata.pool_address = pair.contractAddr
     result.metadata.pool_liquidity = pool_liquidity
     result.metadata.day_volume_ust = dayVolume
+
+    // TODO - temporary solution
+    if(TOKEN_ADDRESS_MAP.get(pair.contractAddr)) {
+      result.metadata.token_symbol = TOKEN_ADDRESS_MAP.get(pair.contractAddr)
+    }
     
     // trading fees
     result.metadata.fees.trading.day = trading_fee_perc * dayVolume // 24 hour fee amount, not rate

@@ -18,6 +18,20 @@ export const GENERATOR_ADDRESS = process.env.ASTRO_GENERATOR_ADDRESS as string;
 export const BLOCKS_PER_YEAR = 4656810
 export const BLOCKS_PER_DAY = BLOCKS_PER_YEAR / 365
 
+// TODO - switch to table
+// map pair address to token abbreviation
+// used for protocol rewards
+export const TOKEN_ADDRESS_MAP = new Map<string, string>([
+  ["terra1qr2k6yjjd5p2kaewqvg93ag74k6gyjr7re37fs", "ANC"],
+  ["terra1zpnhtf9h5s7ze2ewlqyer83sr4043qcq64zfc4", "APOLLO"],
+  ["terra143xxfw5xf62d5m32k3t4eu9s82ccw80lcprzl9", "MIR"],
+  ["terra1mxyp5z27xxgmv70xpqjk7jvfq54as9dfzug74m", "ORION"],
+  ["terra15s2wgdeqhuc4gfg7sfjyaep5cch38mwtzmwqrx", "VKR"],
+  ["terra1m95udvvdame93kl6j2mk8d03kc982wqgr75jsr", "STT"],
+  ["terra1476fucrvu5tuga2nx28r3fctd34xhksc2gckgf", "XDEFI"]
+])
+
+
 // map generator proxy contract -> factory/proxy/pool/token attributes
 export const GENERATOR_PROXY_CONTRACTS = new Map<string, any>([
   ["terra1v2wez00fyy8ajxgkh2jcx82haqfudvxcs5sdzr", {
