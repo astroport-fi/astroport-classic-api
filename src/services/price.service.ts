@@ -6,7 +6,7 @@ export async function getPrices(): Promise<any[]> {
 }
 
 export async function getPriceByPairId(pairId: string): Promise<any> {
-  const price = await Price.findOne({ pair: pairId })
+  const price = await Price.findOne({ pair_address: pairId })
     .sort({ createdAt: -1 })
     .limit(1);
 
@@ -15,12 +15,14 @@ export async function getPriceByPairId(pairId: string): Promise<any> {
 
 export async function createPrice({
   pairId,
+  pair_address,
   token1,
   token2,
   createdAt,
 }: any): Promise<any> {
   const price = await Price.create({
     pair: pairId,
+    pair_address,
     token1,
     token2,
     createdAt,

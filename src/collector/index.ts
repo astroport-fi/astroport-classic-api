@@ -18,6 +18,8 @@ import { pairListToMap } from "./helpers";
 import { poolVolumeCollect } from "./poolVolumeCollect";
 import { poolProtocolRewardsCollect } from "./poolProtocolRewardsCollect";
 import { aggregatePool } from "./poolAggregate";
+import { priceIndexer } from "./indexer/priceIndexer";
+import { priceCollect } from "./priceCollect";
 
 bluebird.config({
   longStackTraces: true,
@@ -48,7 +50,8 @@ export async function run(
     await heightCollect();
 
     console.log("Indexing prices...")
-    await dailyCollect();
+    // await dailyCollect();
+    await priceCollect(pairs);
 
     console.log("Indexing supply_timeseries...")
     await supplyCollect();

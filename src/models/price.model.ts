@@ -8,6 +8,10 @@ const priceSchema: Schema<PriceDocument> = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'Pair',
     },
+    pair_address: {
+      type: Schema.Types.String,
+      required: true
+    },
     token1: {
       type: Schema.Types.Number,
       required: true,

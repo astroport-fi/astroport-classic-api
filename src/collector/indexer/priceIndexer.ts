@@ -27,6 +27,7 @@ export async function priceIndexer(
     // add price
     return createPrice({
       pairId: pair._id,
+      pair_address: pair.contractAddr,
       ...prices,
       createdAt: time,
       updated_on_block: blockHeight
