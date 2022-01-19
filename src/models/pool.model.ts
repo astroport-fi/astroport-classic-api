@@ -29,6 +29,11 @@ const poolSchema: Schema = new Schema(
         required: false,
         trim: true
       },
+      token_symbol: {
+        type: Schema.Types.String,
+        required: false,
+        trim: true
+      },
       fees: {
         trading: {
           day: {

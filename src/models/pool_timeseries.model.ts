@@ -1,5 +1,4 @@
 import { Schema, model } from 'mongoose';
-import { Supply as SupplyDocument } from '../types/supply.type';
 
 const poolTimeseriesSchema: Schema = new Schema(
   {
@@ -26,6 +25,11 @@ const poolTimeseriesSchema: Schema = new Schema(
       },
       day_volume_ust: {
         type: Schema.Types.Number,
+        required: false,
+        trim: true
+      },
+      token_symbol: {
+        type: Schema.Types.String,
         required: false,
         trim: true
       },

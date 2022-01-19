@@ -2,8 +2,6 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { getHeightByDate, getLastHeight, getPairs } from "../services";
 import { GENERATOR_PROXY_CONTRACTS, TERRA_CHAIN_ID } from "../constants";
-import { PoolVolume } from "../models/pool_volume.model";
-import { PoolVolume24h } from "../models/pool_volume_24hr.model";
 import { PoolProtocolReward } from "../models/pool_protocol_reward.model";
 import { PoolProtocolRewardVolume24h } from "../models/pool_protocol_reward_volume_24hr.model";
 dayjs.extend(utc);

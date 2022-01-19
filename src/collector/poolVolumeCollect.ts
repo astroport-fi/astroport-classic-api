@@ -27,9 +27,6 @@ export async function poolVolumeCollect(): Promise<void> {
   // const startBlockHeight = await getHeightByDate(
   //   chainId,
   //   dayjs().utc().subtract(1, 'y').toISOString());
-  console.log("one year back: " + Math.floor(BLOCKS_PER_YEAR / 365))
-  console.log("startBlockHeight: " + startBlockHeight)
-
 
   // get all pairs
   const pairs = await getPairs()

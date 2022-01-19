@@ -4,26 +4,25 @@ export type Pool = {
   trading_fee: number;
   pool_liquidity: number;
   _24hr_volume: number;
-  fees: {
-    trading: {
-      day: number;
-      apr: number;
-      apy: number;
-    },
-    astro: {
-      day: number;
-      apr: number;
-      apy: number;
-    },
-    native: {
-      day: number;
-      apr: number;
-      apy: number;
-    },
-    total: {
-      day: number;
-      apr: number;
-      apy: number;
-    }
+  token_symbol: string;
+  trading_fees: {
+    day: number;
+    apr: number;
+    apy: number;
+  },
+  astro_rewards: {
+    day: number;
+    apr: number;
+    apy: number;
+  },
+  protocol_rewards: {
+    day: number;
+    apr: number;
+    apy: number;
+  },
+  total_rewards: {
+    day: number;
+    apr: number;
+    apy: number;
   }
 };

@@ -6,7 +6,7 @@ import { runIndexers } from "../../../src/collector/chainIndexer";
 
 // TODO delete
 
-const MONGODB_URL = "" as string
+const MONGODB_URL = "mongodb+srv://dexter:p7Fu933TUv1Gphzm@astro-dev-cluster.qxbq9.mongodb.net/astroport?authSource=admin&replicaSet=atlas-13c9d8-shard-0&readPreference=primary&appname=MongoDB%20Compass&ssl=true" as string
 
 describe('Example test', function() {
 

@@ -3,7 +3,8 @@ export type PoolTimeseries = {
   pool_address: string;
   trading_fee: number;
   pool_liquidity: number;
-  _24h_volume: number;
+  _24hr_volume: number;
+  token_symbol: string;
   fees: {
     trading: {
       day: number;
