@@ -1,5 +1,3 @@
-import { Schema } from "mongoose";
-
 export type Pool = {
   timestamp: Date; // TODO add block height
   pool_address: string;
