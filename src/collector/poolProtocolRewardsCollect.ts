@@ -31,7 +31,7 @@ export async function poolProtocolRewardsCollect(): Promise<void> {
   //   dayjs().utc().subtract(1, 'y').toISOString());
 
   // retrieve daily sums per pair and write to pool_protocol_rewards_24h
-  for (const [key, value] of GENERATOR_PROXY_CONTRACTS.entries()) {
+  for(const value of GENERATOR_PROXY_CONTRACTS.values()) {
     const pool_reward_volumes = await PoolProtocolReward.find({ pool: value.pool, block: { $gt: startBlockHeight, $lt: latestHeight.value }});
     let sum = 0;
     pool_reward_volumes.forEach((element) => {
