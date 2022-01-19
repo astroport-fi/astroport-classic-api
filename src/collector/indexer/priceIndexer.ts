@@ -19,6 +19,11 @@ export async function priceIndexer(
 
     const prices = getPricesFromPool(pool, pair.token1);
 
+    if(prices.token1 == "NaN" || prices.token1 == "Infinity" ||
+       prices.token2 == "NaN" || prices.token2 == "Infinity") {
+      return
+    }
+
     console.log("Prices: " + JSON.stringify(prices))
 
     // add price
