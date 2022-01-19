@@ -65,6 +65,8 @@ export async function poolCollect(): Promise<void> {
       protocolRewards = { _24_volume: 0 }
     }
 
+    console.log("Protocol rewards: " + JSON.stringify(protocolRewards))
+
     result.metadata.fees.native.day = protocolRewards._24_volume // 24 hour fee amount, not rate
     result.metadata.fees.native.apr = (protocolRewards._24_volume * 365) / pool_liquidity
     result.metadata.fees.native.apy = Math.pow((1 + (protocolRewards._24_volume) / pool_liquidity), 365) - 1
