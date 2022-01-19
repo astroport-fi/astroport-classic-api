@@ -65,12 +65,19 @@ export async function poolCollect(): Promise<void> {
 
     // protocol rewards - like ANC for ANC-UST
     const protocolRewardsRaw = await PoolProtocolRewardVolume24h.findOne({ pool_address: pair.contractAddr }) ?? { volume: 0 }
-    const protocolRewards = Number(protocolRewardsRaw.volume)
+    let protocolRewards = Number(protocolRewardsRaw.volume) / 1000000
+
+    // orion TODO fix this
+    if(pair.contractAddr == "terra1mxyp5z27xxgmv70xpqjk7jvfq54as9dfzug74m") {
+      protocolRewards = protocolRewards / 100 // 8 digits
+    }
+
     const nativeToken = await getPriceByPairId(pair.contractAddr)
     const nativeTokenPrice = nativeToken.token1
 
     result.metadata.fees.native.day = protocolRewards * nativeTokenPrice // 24 hour fee amount, not rate
     result.metadata.fees.native.apr = (protocolRewards * nativeTokenPrice * 365) / pool_liquidity
+    // note: can overflow to Infinity
     result.metadata.fees.native.apy = Math.pow((1 + (protocolRewards * nativeTokenPrice) / pool_liquidity), 365) - 1
 
     // total
