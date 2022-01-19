@@ -27,7 +27,8 @@ export async function chainCollect(pairMap: Map<string, Pair>): Promise<void> {
 
   const lunaExchangeRate = await getLunaExchangeRate("uusd");
 
-  for (let height = lastHeight + 1; height <= lastHeight + 1000; height++) { // TODO change back to 50 or 100 to slow indexing
+  for (let height = lastHeight + 1; height <= lastHeight + 50; height++) {
+    console.log("Current height: " + height)
     const block = await getTxBlock(height);
     if (!block) {
       console.log("Block " + height + " not found");

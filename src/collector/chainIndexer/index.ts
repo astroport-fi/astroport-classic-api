@@ -1,16 +1,16 @@
-import { createCreatePairLogFinders } from '../logFinder';
+import { createPairLogFinders, createSwapLogFinder, createWithdrawLogFinder } from "../logFinder";
 import { createPairIndexer } from './createPairIndex';
-import { TERRA_CHAIN_ID } from '../../constants';
-import { createSwapFinder } from "../logFinder/txHistoryLF";
+import { TERRA_CHAIN_ID, GENERATOR_PROXY_CONTRACTS } from '../../constants';
 import { Pair } from "../../types";
 import { TxHistoryIndexer } from "./txHistoryIndexer";
+import { findProtocolRewardEmissions } from "./findProtocolRewardEmissions";
+import { getPairs } from "../../services";
+import { priceIndexer } from "../indexer/priceIndexer";
 
 const factory =
   TERRA_CHAIN_ID == 'bombay-12'
     ? 'terra1xkuxfhxa2jmjercq3ryplnj65huhlxl5mv3d6x'
     : 'terra1fnywlw4edny3vw44x04xd67uzkdqluymgreu7g';
-
-const createPairLF = createCreatePairLogFinders(factory);
 
 /**
  * Indexes transactions for a single block
@@ -38,23 +38,40 @@ export async function runIndexers(
         if (event.attributes.length < 1800) {
 
           // createPair
-          const createPairLogFounds = createPairLF(event);
-          if (createPairLogFounds.length > 0) {
-            await createPairIndexer(createPairLogFounds, timestamp);
+          try {
+            const createPairLF = createPairLogFinders(factory);
+            const createPairLogFounds = createPairLF(event);
+            if (createPairLogFounds.length > 0) {
+              await createPairIndexer(createPairLogFounds, timestamp);
+            }
+          } catch(e) {
+            console.log("Error during createPair: " + e)
           }
 
-          // swaps from tx history
-          const swapLogFinder = createSwapFinder(pairMap);
-          const swapLogFound = swapLogFinder(event);
-
-          if(!swapLogFound) {
-            return
+          // find events for APR
+          try {
+            await findProtocolRewardEmissions(event, height);
+          } catch(e) {
+            console.log("Error during findProtocolRewardEmissions: " + e)
           }
 
-          // transform, sum, add volume to pool_volume
-          if(swapLogFound.length > 0) {
-            await TxHistoryIndexer(height, lunaExchangeRate, swapLogFound)
+          try {
+            // swaps from tx history
+            const swapLogFinder = createSwapLogFinder(pairMap);
+            const swapLogFound = swapLogFinder(event);
+
+            if(!swapLogFound) {
+              return
+            }
+
+            // transform, sum, add volume to pool_volume
+            if(swapLogFound.length > 0) {
+              await TxHistoryIndexer(height, lunaExchangeRate, swapLogFound)
+            }
+          } catch(e) {
+            console.log("Error during finding swaps/volume: " + e)
           }
+
         }
       }
     }

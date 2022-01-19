@@ -27,3 +27,16 @@ export function swapRule(): LogFinderRule {
     matchUntil: 'contract_address',
   }
 }
+// match proxy generator claims from protocol token factory
+export function generatorProxyClaimRule(token: string, proxy: string, factory: string): LogFinderRule {
+  return {
+    type: 'wasm',
+    attributes: [
+      ['contract_address', token],
+      ['action', 'transfer'],
+      ['from', factory],
+      ['to', proxy],
+      ['amount'],
+    ],
+  }
+}

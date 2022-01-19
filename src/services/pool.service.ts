@@ -1,18 +1,14 @@
-import { PoolTimeseries, PoolTimeseries as PoolType } from "../types/pool_timeseries.type";
-import { PoolTimeseries as PoolModel } from "../models/pool_timeseries.model";
+import { Pool } from "../models/pool.model";
 
-/**
- * Save pool_timeseries snapshot to db
- */
-export async function insertPoolTimeseries(
-  entry: PoolType
-): Promise<PoolType> {
-  const pool = await PoolModel.create(entry);
-  return pool;
+
+export async function getPool(address: string): Promise<any> {
+  const pool = await Pool.findOne({ "metadata.pool_address": address })
+  return transformPoolModelToPoolType({ model: pool })
 }
 
-export async function getPoolTimeseries(): Promise<any> {
-  const pools = await PoolModel.find({}, null, {limit: 100})
+// TODO add filtering
+export async function getPools(): Promise<any[]> {
+  const pools = await Pool.find({}, null, {limit: 100})
   const result = []
 
   // map
@@ -30,7 +26,7 @@ function transformPoolModelToPoolType({ model }: { model: any }) {
     pool_address: model.metadata.pool_address,
     trading_fee: model.metadata.trading_fee_rate_bp,
     pool_liquidity: model.metadata.pool_liquidity,
-    _24h_volume: model.metadata.day_volume_ust,
+    _24hr_volume: model.metadata.day_volume_ust,
     trading_fees: {
       day: model.metadata.fees.trading.day,
       apr: model.metadata.fees.trading.apr,

@@ -29,4 +29,18 @@ describe('Example test', function() {
       await runIndexers(block, height, pairMap, exchangeRate);
     });
   });
+
+  describe('Listen for a APR transaction', function() {
+    it('LP Deposit', async function() {
+
+      const height = 6099231;
+
+      const pairs = await getPairs();
+      const pairMap = pairListToMap(pairs);
+      const exchangeRate = await getLunaExchangeRate("uusd")
+
+      const block = await getTxBlock(height) // 2 swaps
+      await runIndexers(block, height, pairMap, exchangeRate);
+    });
+  });
 });

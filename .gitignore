@@ -11,3 +11,4 @@ env.yml
 /node_modules
 /npm-debug.log
 /mongodb_data
+/scripts

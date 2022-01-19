@@ -19,9 +19,15 @@ export async function priceIndexer(
 
     const prices = getPricesFromPool(pool, pair.token1);
 
+    if(prices.token1 == "NaN" || prices.token1 == "Infinity" ||
+       prices.token2 == "NaN" || prices.token2 == "Infinity") {
+      return
+    }
+
     // add price
     return createPrice({
       pairId: pair._id,
+      pair_address: pair.contractAddr,
       ...prices,
       createdAt: time,
       updated_on_block: blockHeight

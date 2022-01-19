@@ -29,7 +29,7 @@ export const typeDefs = /* GraphQL */ `
     token1: String
     token2: String
     type: String
-    prices: [Price]
+    prices: Price
     createdAt: DateTime
   }
   
@@ -64,6 +64,7 @@ export const typeDefs = /* GraphQL */ `
     airdrop(address: String!): [Airdrop]
     pair(contractAddr: ID!): Pair
     pairs: [Pair]
+    pool(address: String!): Pool
     pools: [Pool]
     supply: Supply
     tokens: [Token]

@@ -2,16 +2,16 @@ import {
   getAirdrops,
   getPair,
   getPairs,
-  getPricesByPairId,
+  getPriceByPairId,
   getSupply,
-  getTokens
+  getTokens,
+  getPools, getPool
 } from "../../services";
-import { getPoolTimeseries } from "../../services/pool_timeseries.service";
 
 export const resolvers = {
   Pair: {
     prices: async ({ _id }: any) => {
-      const prices = await getPricesByPairId(_id);
+      const prices = await getPriceByPairId(_id);
       return prices;
     },
   },
@@ -29,8 +29,12 @@ export const resolvers = {
       const pairs = await getPairs();
       return pairs;
     },
+    pool: async (_: any, { address }: any) => {
+      const pools = await getPool(address);
+      return pools;
+    },
     pools: async () => {
-      const pools = await getPoolTimeseries();
+      const pools = await getPools();
       return pools;
     },
     supply: async() => {
