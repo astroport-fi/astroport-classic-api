@@ -26,7 +26,7 @@ function transformPoolModelToPoolType({ model }: { model: any }) {
     trading_fee: model.metadata.trading_fee_rate_bp,
     pool_liquidity: model.metadata.pool_liquidity,
     _24hr_volume: model.metadata.day_volume_ust,
-    token_symbol: "test",
+    token_symbol: model.metadata.token_symbol,
     trading_fees: {
       day: model.metadata.fees.trading.day,
       apr: model.metadata.fees.trading.apr,
