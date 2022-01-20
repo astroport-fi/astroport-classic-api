@@ -27,14 +27,19 @@ export async function poolCollect(): Promise<void> {
 
   // get all pairs
   const pairs = await getPairs()
-
+  console.log("Pairs length: " + pairs.length)
+  let i = 1
   for (const pair of pairs) {
-
+    console.log(i + ": " + pair.contractAddr)
+    i+=1
+    if(i == 12) {
+      console.log()
+    }
     const result = new PoolTimeseries();
 
     const pool_liquidity = await getPairLiquidity(pair.contractAddr, JSON.parse('{ "pool": {} }'))
 
-    if (pool_liquidity < 1000) return
+    if (pool_liquidity < 1000) continue
 
     const pool_type: string = pair.type
     const dayVolumeResponse = await PoolVolume24h.findOne({ pool_address: pair.contractAddr })
@@ -80,7 +85,7 @@ export async function poolCollect(): Promise<void> {
       protocolRewards = protocolRewards / 100 // 8 digits
     }
 
-    const nativeToken = await getPriceByPairId(pair.contractAddr)
+    const nativeToken = await getPriceByPairId(pair.contractAddr) // TODO something's off here for bluna/luna
     const nativeTokenPrice = nativeToken.token1
 
     result.metadata.fees.native.day = protocolRewards * nativeTokenPrice // 24 hour fee amount, not rate
