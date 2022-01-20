@@ -89,8 +89,8 @@ export const GENERATOR_PROXY_CONTRACTS = new Map<string, any>([
 // TODO get from pair registration
 // fees basis points.  30 = 0.3%, 5 = 0.05%
 export const FEES = new Map<string, number>([
-  ["xyk", 30],
-  ["stable", 5]
+  ["xyk", 20],
+  ["stable", 2.5]
 ]);
 
 // TODO get from contract
@@ -112,5 +112,5 @@ export const ASTRO_YEARLY_EMISSIONS = new Map<string, number>([
   ["neth", 1566667], // neth ust TODO
   ["steth", 1566667], // steth ust TODO
   ["stsol", 1566667], // stsol ust TODO
-  ["xdef", 1566667], // xdef ust TODO
+  ["terra1476fucrvu5tuga2nx28r3fctd34xhksc2gckgf", 1566667], // xdef ust TODO
 ]);

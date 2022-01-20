@@ -28,16 +28,18 @@ export async function poolCollect(): Promise<void> {
   const pairs = await getPairs()
 
   for (const pair of pairs) {
+
     const result = new PoolTimeseries();
 
     const pool_liquidity = await getPairLiquidity(pair.contractAddr, JSON.parse('{ "pool": {} }'))
-    if(pool_liquidity < 1000) return
+
+    if (pool_liquidity < 1000) return
 
     const pool_type: string = pair.type
     const dayVolumeResponse = await PoolVolume24h.findOne({ pool_address: pair.contractAddr })
     const dayVolume = dayVolumeResponse?._24h_volume ?? 0 // in UST
 
-    const trading_fee_bp = FEES.get(pool_type) ?? 30 // basis points
+    const trading_fee_bp = FEES.get(pool_type) ?? 20 // basis points
     const trading_fee_perc = trading_fee_bp / 10000 // percentage
 
     result.timestamp = dayjs().valueOf()
@@ -51,7 +53,7 @@ export async function poolCollect(): Promise<void> {
     if(TOKEN_ADDRESS_MAP.get(pair.contractAddr)) {
       result.metadata.token_symbol = TOKEN_ADDRESS_MAP.get(pair.contractAddr)
     }
-    
+
     // trading fees
     result.metadata.fees.trading.day = trading_fee_perc * dayVolume // 24 hour fee amount, not rate
     result.metadata.fees.trading.apr = ((trading_fee_perc * dayVolume * 365) / pool_liquidity)
@@ -72,7 +74,7 @@ export async function poolCollect(): Promise<void> {
     let protocolRewards = Number(protocolRewardsRaw.volume) / 1000000
 
     // orion TODO fix this
-    if(pair.contractAddr == "terra1mxyp5z27xxgmv70xpqjk7jvfq54as9dfzug74m") {
+    if (pair.contractAddr == "terra1mxyp5z27xxgmv70xpqjk7jvfq54as9dfzug74m") {
       protocolRewards = protocolRewards / 100 // 8 digits
     }
 
@@ -94,6 +96,7 @@ export async function poolCollect(): Promise<void> {
     result.metadata.fees.total.apy = Math.pow((1 + result.metadata.fees.total.day / pool_liquidity), 365) - 1
 
 
-    await insertPoolTimeseries(result) //
+    await insertPoolTimeseries(result)
+
   }
 }
