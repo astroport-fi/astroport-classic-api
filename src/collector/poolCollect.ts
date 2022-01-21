@@ -85,13 +85,13 @@ export async function poolCollect(): Promise<void> {
     let protocolRewards = Number(protocolRewardsRaw.volume) / 1000000
     // for orion.  TODO
     if (pair.contractAddr == "terra1mxyp5z27xxgmv70xpqjk7jvfq54as9dfzug74m") {
-      protocolRewards /= 100
+      protocolRewards = protocolRewards / 100
     }
     const nativeToken = await getPriceByPairId(pair.contractAddr) // TODO something's off here for bluna/luna
     let nativeTokenPrice = nativeToken.token1
     // for orion.  TODO
     if (pair.contractAddr == "terra1mxyp5z27xxgmv70xpqjk7jvfq54as9dfzug74m") {
-      nativeTokenPrice *= 100
+      nativeTokenPrice = nativeTokenPrice * 100
     }
 
 
