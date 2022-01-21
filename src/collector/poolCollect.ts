@@ -28,20 +28,24 @@ export async function poolCollect(): Promise<void> {
   // get all pairs
   const pairs = await getPairs()
   console.log("Pairs length: " + pairs.length)
-  let i = 1
   for (const pair of pairs) {
-    console.log(i + ": " + pair.contractAddr)
-    i+=1
-    if(i == 12) {
-      console.log()
-    }
+    console.log(pair + ": " + pair.contractAddr)
+
+
     const result = new PoolTimeseries();
 
     const pool_liquidity = await getPairLiquidity(pair.contractAddr, JSON.parse('{ "pool": {} }'))
 
     if (pool_liquidity < 1000) continue
 
-    const pool_type: string = pair.type
+
+
+    let pool_type: string = pair.type
+    // TODO temp fix for bluna/luna => use stable, not xyk
+    if(pair.contractAddr == "terra1j66jatn3k50hjtg2xemnjm8s7y8dws9xqa5y8w") { // bluna luna
+      pool_type = "stable"
+    }
+
     const dayVolumeResponse = await PoolVolume24h.findOne({ pool_address: pair.contractAddr })
     const dayVolume = dayVolumeResponse._24h_volume // in UST
 
