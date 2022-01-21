@@ -85,7 +85,12 @@ export async function poolCollect(): Promise<void> {
     const protocolRewards = Number(protocolRewardsRaw.volume) / 1000000
 
     const nativeToken = await getPriceByPairId(pair.contractAddr) // TODO something's off here for bluna/luna
-    const nativeTokenPrice = nativeToken.token1
+    let nativeTokenPrice = nativeToken.token1
+    // for orion.  TODO
+    if (pair.contractAddr == "terra1mxyp5z27xxgmv70xpqjk7jvfq54as9dfzug74m") {
+      nativeTokenPrice *= 100
+    }
+
 
     result.metadata.fees.native.day = protocolRewards * nativeTokenPrice // 24 hour fee amount, not rate
     result.metadata.fees.native.apr = (protocolRewards * nativeTokenPrice * 365) / pool_liquidity
