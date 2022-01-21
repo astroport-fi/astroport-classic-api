@@ -82,12 +82,7 @@ export async function poolCollect(): Promise<void> {
 
     // protocol rewards - like ANC for ANC-UST
     const protocolRewardsRaw = await PoolProtocolRewardVolume24h.findOne({ pool_address: pair.contractAddr }) ?? { volume: 0 }
-    let protocolRewards = Number(protocolRewardsRaw.volume) / 1000000
-
-    // orion TODO fix this
-    if (pair.contractAddr == "terra1mxyp5z27xxgmv70xpqjk7jvfq54as9dfzug74m") {
-      protocolRewards = protocolRewards / 100 // 8 digits
-    }
+    const protocolRewards = Number(protocolRewardsRaw.volume) / 1000000
 
     const nativeToken = await getPriceByPairId(pair.contractAddr) // TODO something's off here for bluna/luna
     const nativeTokenPrice = nativeToken.token1
