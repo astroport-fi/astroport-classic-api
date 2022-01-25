@@ -2,22 +2,17 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 
-import { getContractAddressStore, getContractStore, getPairLiquidity } from "../lib/terra";
-import { getBlock, getHeight, getPairs, getPriceByPairId, insertSupply } from "../services";
-import { ASTRO_YEARLY_EMISSIONS, FEES, TOKEN_ADDRESS_MAP, TERRA_CHAIN_ID } from "../constants";
+import { getPairLiquidity } from "../lib/terra";
+import { getPairs, getPriceByPairId } from "../services";
+import { ASTRO_YEARLY_EMISSIONS, FEES, TOKEN_ADDRESS_MAP } from "../constants";
 import { insertPoolTimeseries } from "../services/pool_timeseries.service";
 import { PoolTimeseries } from "../models/pool_timeseries.model";
 import { PoolVolume24h } from "../models/pool_volume_24hr.model";
 import { PoolProtocolRewardVolume24h } from "../models/pool_protocol_reward_volume_24hr.model";
-import { getPricesFromPool } from "../modules/terra";
 
 /**
  * Update the pool_timeseries table every minute.
  */
-
-const DIGITS = 1000000;
-const chainId = TERRA_CHAIN_ID;
-const BLOCKS_PER_YEAR = 4656810
 
 const ASTRO_PAIR_ADDRESS = "terra1l7xu2rl3c7qmtx3r5sd2tz25glf6jh8ul7aag7"
 

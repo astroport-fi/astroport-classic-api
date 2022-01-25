@@ -28,11 +28,14 @@ export const TOKEN_ADDRESS_MAP = new Map<string, string>([
   ["terra1mxyp5z27xxgmv70xpqjk7jvfq54as9dfzug74m", "ORION"],
   ["terra15s2wgdeqhuc4gfg7sfjyaep5cch38mwtzmwqrx", "VKR"],
   ["terra1m95udvvdame93kl6j2mk8d03kc982wqgr75jsr", "STT"],
-  ["terra1476fucrvu5tuga2nx28r3fctd34xhksc2gckgf", "XDEFI"]
+  ["terra1476fucrvu5tuga2nx28r3fctd34xhksc2gckgf", "XDEFI"],
+  ["terra10lv5wz84kpwxys7jeqkfxx299drs3vnw0lj8mz", "PSI"],
+  ["terra18hjdxnnkv8ewqlaqj3zpn0vsfpzdt3d0y2ufdz", "PSI"],
+  ["terra1v5ct2tuhfqd0tf8z0wwengh4fg77kaczgf6gtx", "PSI"]
 ])
 
-
 // map generator proxy contract -> factory/proxy/pool/token attributes
+// used for native protocol rewards
 export const GENERATOR_PROXY_CONTRACTS = new Map<string, any>([
   ["terra1v2wez00fyy8ajxgkh2jcx82haqfudvxcs5sdzr", {
     tokenName: "ANC",
@@ -82,6 +85,27 @@ export const GENERATOR_PROXY_CONTRACTS = new Map<string, any>([
     proxy: "terra1wranc9ta64f0nwdyv842d7kdm7ae80kdl5tvne",
     pool: "terra1476fucrvu5tuga2nx28r3fctd34xhksc2gckgf",
     token: "terra169edevav3pdrtjcx35j6pvzuv54aevewar4nlh"
+  }],
+  ["", {
+    tokenName: "PSI-nLUNA",
+    factory: "",
+    proxy: "",
+    pool: "terra10lv5wz84kpwxys7jeqkfxx299drs3vnw0lj8mz",
+    token: ""
+  }],
+  ["", {
+    tokenName: "PSI-nETH",
+    factory: "",
+    proxy: "",
+    pool: "terra18hjdxnnkv8ewqlaqj3zpn0vsfpzdt3d0y2ufdz",
+    token: ""
+  }],
+  ["", {
+    tokenName: "PSI-UST",
+    factory: "",
+    proxy: "",
+    pool: "terra1v5ct2tuhfqd0tf8z0wwengh4fg77kaczgf6gtx",
+    token: ""
   }]
 ])
 
@@ -100,17 +124,17 @@ export const ASTRO_YEARLY_EMISSIONS = new Map<string, number>([
   ["terra1l7xu2rl3c7qmtx3r5sd2tz25glf6jh8ul7aag7", 15000000], // astro ust
   ["terra1m6ywlgn6wrjuagcmmezzz2a029gtldhey5k552", 13000000], // luna ust
   ["terra1qr2k6yjjd5p2kaewqvg93ag74k6gyjr7re37fs", 10444444], // anc ust
-  ["stluna", 9400000], // stluna luna TODO
+  ["terra1gxjjrer8mywt4020xdl5e5x7n6ncn6w38gjzae", 9400000], // stluna luna
   ["terra134m8n2epp0n40qr08qsvvrzycn2zq4zcpmue48", 3655556], // mine ust
   ["terra143xxfw5xf62d5m32k3t4eu9s82ccw80lcprzl9", 3394444], // mir ust
   ["terra1m95udvvdame93kl6j2mk8d03kc982wqgr75jsr", 3394444], // stt ust
   ["terra1mxyp5z27xxgmv70xpqjk7jvfq54as9dfzug74m", 2611111], // orion ust
   ["terra1v5ct2tuhfqd0tf8z0wwengh4fg77kaczgf6gtx", 2350000], // psi ust
   ["terra1zpnhtf9h5s7ze2ewlqyer83sr4043qcq64zfc4", 1827778], // apollo ust
-  ["nluna", 1827778], // nluna ust TODO
   ["terra15s2wgdeqhuc4gfg7sfjyaep5cch38mwtzmwqrx", 1827778], // vkr ust
-  ["neth", 1566667], // neth ust TODO
-  ["steth", 1566667], // steth ust TODO
-  ["stsol", 1566667], // stsol ust TODO
-  ["terra1476fucrvu5tuga2nx28r3fctd34xhksc2gckgf", 1566667], // xdef ust TODO
+  ["terra1476fucrvu5tuga2nx28r3fctd34xhksc2gckgf", 1566667], // xdefi ust
+  ["terra10lv5wz84kpwxys7jeqkfxx299drs3vnw0lj8mz", 1827778], // nluna psi
+  ["terra18hjdxnnkv8ewqlaqj3zpn0vsfpzdt3d0y2ufdz", 1566667], // neth psi
+  ["terra1edurrzv6hhd8u48engmydwhvz8qzmhhuakhwj3", 1566667], // steth ust
+  ["terra18dq84qfpz267xuu0k47066svuaez9hr4xvwlex", 1566667], // stsol ust
 ]);
