@@ -17,21 +17,23 @@ export function createWithdrawLogFinder(
 ): ReturningLogFinderMapper<ProtocolTokenTransferTransformed | undefined > {
 
   return createReturningLogFinder(generatorProxyClaimRule(token, proxy, factory), (_, match) => {
-    if (generatorProxyContracts.has(match[3].value)) {
-      // just find transactions where the protocol token is sent to the generator proxy address
-      const token = match[0].value
-      const action = match[1].value
-      const from = match[2].value
-      const to = match[3].value
-      const amount = match[4].value
 
-      const transformed = {
-        token: token,
-        pool: generatorProxyContracts.get(to) as string,
-        amount: parseInt(amount)
+    // just find transactions where the protocol token is sent to the generator proxy address
+    for(const value of generatorProxyContracts.values()) {
+      if(value.proxy == match[3].value) {
+        const token = match[0].value
+        const action = match[1].value
+        const from = match[2].value
+        const to = match[3].value
+        const amount = match[4].value
+
+        const transformed = {
+          token: token,
+          pool: to,
+          amount: parseInt(amount)
+        }
+        return transformed
       }
-
-      return transformed
     }
     return
   })
