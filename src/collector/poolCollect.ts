@@ -22,11 +22,7 @@ export async function poolCollect(): Promise<void> {
 
   // get all pairs
   const pairs = await getPairs()
-  console.log("Pairs length: " + pairs.length)
   for (const pair of pairs) {
-    console.log(pair + ": " + pair.contractAddr)
-
-
     const result = new PoolTimeseries();
 
     const pool_liquidity = await getPairLiquidity(pair.contractAddr, JSON.parse('{ "pool": {} }'))
@@ -56,7 +52,6 @@ export async function poolCollect(): Promise<void> {
 
     // TODO - temporary solution
     if (TOKEN_ADDRESS_MAP.get(pair.contractAddr)) {
-      console.log("Saving token name for: " + pair.contractAddr + ": " + TOKEN_ADDRESS_MAP.get(pair.contractAddr))
       result.metadata.token_symbol = TOKEN_ADDRESS_MAP.get(pair.contractAddr)
     }
 

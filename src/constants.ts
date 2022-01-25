@@ -31,7 +31,8 @@ export const TOKEN_ADDRESS_MAP = new Map<string, string>([
   ["terra1476fucrvu5tuga2nx28r3fctd34xhksc2gckgf", "XDEFI"],
   ["terra10lv5wz84kpwxys7jeqkfxx299drs3vnw0lj8mz", "PSI"],
   ["terra18hjdxnnkv8ewqlaqj3zpn0vsfpzdt3d0y2ufdz", "PSI"],
-  ["terra1v5ct2tuhfqd0tf8z0wwengh4fg77kaczgf6gtx", "PSI"]
+  ["terra1v5ct2tuhfqd0tf8z0wwengh4fg77kaczgf6gtx", "PSI"],
+  ["terra134m8n2epp0n40qr08qsvvrzycn2zq4zcpmue48", "MINE"]
 ])
 
 // map pool -> factory/proxy/pool/token attributes
@@ -106,6 +107,13 @@ export const GENERATOR_PROXY_CONTRACTS = new Map<string, any>([
     proxy: "terra1vtqv4j5v04x5ka5f84v9zuvt604u2rsqhjnpk8",
     pool: "terra1v5ct2tuhfqd0tf8z0wwengh4fg77kaczgf6gtx",
     token: "terra12897djskt9rge8dtmm86w654g7kzckkd698608"
+  }],
+  ["terra134m8n2epp0n40qr08qsvvrzycn2zq4zcpmue48", {
+    tokenName: "MINE-UST",
+    factory: "terra19nek85kaqrvzlxygw20jhy08h3ryjf5kg4ep3l",
+    proxy: "terra1gty5d3hmegmrzu7uyrrm6mcksus5cumkrxxg0z",
+    pool: "terra134m8n2epp0n40qr08qsvvrzycn2zq4zcpmue48",
+    token: "terra1kcthelkax4j9x8d3ny6sdag0qmxxynl3qtcrpy"
   }]
 ])
 

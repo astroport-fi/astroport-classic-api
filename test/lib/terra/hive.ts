@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { getPairLiquidity, getPsiExchangeRate, initHive, initMantle } from "../../../src/lib/terra";
+import { initHive, initMantle } from "../../../src/lib/terra";
 import { poolCollect } from "../../../src/collector/poolCollect";
 
 const MONGODB_URL = ""
