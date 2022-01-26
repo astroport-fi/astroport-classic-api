@@ -2,6 +2,8 @@ import { GraphQLClient, gql } from "graphql-request";
 
 export let hive: GraphQLClient;
 
+const PSI_TOKEN = "terra12897djskt9rge8dtmm86w654g7kzckkd698608" as string;
+
 export function initHive(URL: string): GraphQLClient {
   hive = new GraphQLClient(URL, {
     timeout: 60000,
@@ -204,7 +206,37 @@ export async function getLunaExchangeRate(denom: string): Promise<number> {
   return response?.oracle?.exchangeRate?.amount;
 }
 
-// return pair liquiditiy in UST for a pair
+export async function getPsiExchangeRate(): Promise<number> {
+
+  const response = await hive.request(
+    gql`
+      query($address: String!, $query: JSON!) {
+        wasm {
+          contractQuery(
+            contractAddress: $address,
+            query: $query
+          )
+        }
+      }
+    `,
+    {
+      address: "terra1v5ct2tuhfqd0tf8z0wwengh4fg77kaczgf6gtx",
+      query: JSON.parse('{ "pool": {} }')
+    }
+  )
+
+  let ustAmount, psiAmount
+  if(response?.wasm?.contractQuery?.assets[0]?.info?.native_token?.denom == "uusd") {
+    ustAmount = response?.wasm?.contractQuery?.assets[0]?.amount
+    psiAmount = response?.wasm?.contractQuery?.assets[1]?.amount
+  } else {
+    ustAmount = response?.wasm?.contractQuery?.assets[1]?.amount
+    psiAmount = response?.wasm?.contractQuery?.assets[0]?.amount
+  }
+  return ustAmount / psiAmount
+}
+
+// return pair liquidity in UST for a pair
 // just have to get one side of the pool and multiply by 2
 export async function getPairLiquidity(address: string, query: JSON): Promise<number> {
   const response = await hive.request(
@@ -224,6 +256,8 @@ export async function getPairLiquidity(address: string, query: JSON): Promise<nu
     }
   )
 
+  // TODO this must change to use prices
+
   if(response?.wasm?.contractQuery?.assets[0]?.info?.native_token?.denom == "uusd") {
     return 2 * response?.wasm?.contractQuery?.assets[0]?.amount / 1000000
 
@@ -237,6 +271,14 @@ export async function getPairLiquidity(address: string, query: JSON): Promise<nu
   } else if (response?.wasm?.contractQuery?.assets[1]?.info?.native_token?.denom == "uluna") {
     const lunaPrice = await getLunaExchangeRate("uusd");
     return 2 * response?.wasm?.contractQuery?.assets[1]?.amount * lunaPrice / 1000000
+
+  } else if (response?.wasm?.contractQuery?.assets[0]?.info?.token?.contract_addr == PSI_TOKEN) {
+    const psiPrice = await getPsiExchangeRate();
+    return 2 * response?.wasm?.contractQuery?.assets[0]?.amount * psiPrice / 1000000
+
+  } else if (response?.wasm?.contractQuery?.assets[1]?.info?.token?.contract_addr == PSI_TOKEN) {
+    const psiPrice = await getPsiExchangeRate();
+    return 2 * response?.wasm?.contractQuery?.assets[1]?.amount * psiPrice / 1000000
 
   } else {
     console.log("Error getting pair liquidity for contract: " + address)

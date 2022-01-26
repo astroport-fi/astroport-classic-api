@@ -1,9 +1,6 @@
 import mongoose from "mongoose";
-import { initHive, initMantle } from "../../src/lib/terra";
-import { poolProtocolRewardsCollect } from "../../src/collector/poolProtocolRewardsCollect";
-
-
-// TODO delete
+import { initHive, initMantle } from "../../../src/lib/terra";
+import { poolCollect } from "../../../src/collector/poolCollect";
 
 const MONGODB_URL = ""
 
@@ -17,7 +14,8 @@ describe('Protocol rewards collector test', function() {
 
   describe('Aggregate pool protocol rewards', function() {
     it('Test description', async function() {
-      await poolProtocolRewardsCollect();
+      const result = await poolCollect();
+      console.log(result)
     });
   });
 });

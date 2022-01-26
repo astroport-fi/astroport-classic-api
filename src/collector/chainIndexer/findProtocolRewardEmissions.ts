@@ -9,8 +9,7 @@ export async function findProtocolRewardEmissions(
 
   const poolTotal = new Map<string, any>();
 
-  for(const key of GENERATOR_PROXY_CONTRACTS.keys()) {
-    const value = GENERATOR_PROXY_CONTRACTS.get(key)
+  for(const value of GENERATOR_PROXY_CONTRACTS.values()) {
 
     const withdrawLogFinder = createWithdrawLogFinder(
       GENERATOR_PROXY_CONTRACTS,
@@ -27,12 +26,12 @@ export async function findProtocolRewardEmissions(
         if (transformed != null) {
           const rewardEntry = value
           rewardEntry.block = height
-          if (poolTotal.has(key)) {
-            rewardEntry.value = poolTotal.get(key) + transformed?.amount
-            poolTotal.set(key, rewardEntry)
+          if (poolTotal.has(value.proxy)) {
+            rewardEntry.value = poolTotal.get(value.proxy) + transformed?.amount
+            poolTotal.set(value.proxy, rewardEntry)
           } else {
             rewardEntry.value = transformed?.amount
-            poolTotal.set(key, rewardEntry)
+            poolTotal.set(value.proxy, rewardEntry)
           }
         }
       }

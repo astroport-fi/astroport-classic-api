@@ -3,8 +3,8 @@ import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 
 import { getPairLiquidity } from "../lib/terra";
-import { getBlock, getHeight, getPairs, getPriceByPairId, insertSupply } from "../services";
-import { ASTRO_YEARLY_EMISSIONS, FEES, TOKEN_ADDRESS_MAP, TERRA_CHAIN_ID } from "../constants";
+import { getPairs, getPriceByPairId } from "../services";
+import { ASTRO_YEARLY_EMISSIONS, FEES, TOKEN_ADDRESS_MAP } from "../constants";
 import { insertPoolTimeseries } from "../services/pool_timeseries.service";
 import { PoolTimeseries } from "../models/pool_timeseries.model";
 import { PoolProtocolRewardVolume24h } from "../models/pool_protocol_reward_volume_24hr.model";
@@ -14,10 +14,6 @@ import { PoolVolume24h } from "../models/pool_volume_24h.model";
  * Update the pool_timeseries table every minute.
  */
 
-const DIGITS = 1000000;
-const chainId = TERRA_CHAIN_ID;
-const BLOCKS_PER_YEAR = 4656810
-
 const ASTRO_PAIR_ADDRESS = "terra1l7xu2rl3c7qmtx3r5sd2tz25glf6jh8ul7aag7"
 
 // TODO make this more legible
@@ -26,11 +22,7 @@ export async function poolCollect(): Promise<void> {
 
   // get all pairs
   const pairs = await getPairs()
-  console.log("Pairs length: " + pairs.length)
   for (const pair of pairs) {
-    console.log(pair + ": " + pair.contractAddr)
-
-
     const result = new PoolTimeseries();
 
     const pool_liquidity = await getPairLiquidity(pair.contractAddr, JSON.parse('{ "pool": {} }'))
@@ -59,7 +51,7 @@ export async function poolCollect(): Promise<void> {
     result.metadata.day_volume_ust = dayVolume
 
     // TODO - temporary solution
-    if(TOKEN_ADDRESS_MAP.get(pair.contractAddr)) {
+    if (TOKEN_ADDRESS_MAP.get(pair.contractAddr)) {
       result.metadata.token_symbol = TOKEN_ADDRESS_MAP.get(pair.contractAddr)
     }
 
