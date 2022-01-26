@@ -32,7 +32,10 @@ export const TOKEN_ADDRESS_MAP = new Map<string, string>([
   ["terra10lv5wz84kpwxys7jeqkfxx299drs3vnw0lj8mz", "PSI"],
   ["terra18hjdxnnkv8ewqlaqj3zpn0vsfpzdt3d0y2ufdz", "PSI"],
   ["terra1v5ct2tuhfqd0tf8z0wwengh4fg77kaczgf6gtx", "PSI"],
-  ["terra134m8n2epp0n40qr08qsvvrzycn2zq4zcpmue48", "MINE"]
+  ["terra134m8n2epp0n40qr08qsvvrzycn2zq4zcpmue48", "MINE"],
+  ["terra1gxjjrer8mywt4020xdl5e5x7n6ncn6w38gjzae", "LDO"],
+  ["terra18dq84qfpz267xuu0k47066svuaez9hr4xvwlex", "LDO"],
+  ["terra1edurrzv6hhd8u48engmydwhvz8qzmhhuakhwj3", "LDO"]
 ])
 
 // map pool -> factory/proxy/pool/token attributes
@@ -114,6 +117,27 @@ export const GENERATOR_PROXY_CONTRACTS = new Map<string, any>([
     proxy: "terra1gty5d3hmegmrzu7uyrrm6mcksus5cumkrxxg0z",
     pool: "terra134m8n2epp0n40qr08qsvvrzycn2zq4zcpmue48",
     token: "terra1kcthelkax4j9x8d3ny6sdag0qmxxynl3qtcrpy"
+  }],
+  ["terra1gxjjrer8mywt4020xdl5e5x7n6ncn6w38gjzae", {
+    tokenName: "stLUNA-LUNA",
+    factory: "terra1r2ucpn7j8qcgvsvkzxr3x0698megrn2kn9nfwq",
+    proxy: "terra1hzkn3wr8qhmml6yu575tlz48j2lhgdahvx2ruk",
+    pool: "terra1gxjjrer8mywt4020xdl5e5x7n6ncn6w38gjzae",
+    token: "terra1jxypgnfa07j6w92wazzyskhreq2ey2a5crgt6z"
+  }],
+  ["terra18dq84qfpz267xuu0k47066svuaez9hr4xvwlex", {
+    tokenName: "stSOL-UST",
+    factory: "terra188xjhn8h39ert7ezs0m2dlgsqd4vf6k6hmv4jw",
+    proxy: "terra19ganxu5n5xghz0ftp6jfczl5yf38yryctprmd2",
+    pool: "terra18dq84qfpz267xuu0k47066svuaez9hr4xvwlex",
+    token: "terra1jxypgnfa07j6w92wazzyskhreq2ey2a5crgt6z"
+  }],
+  ["terra1edurrzv6hhd8u48engmydwhvz8qzmhhuakhwj3", {
+    tokenName: "stETH-UST",
+    factory: "terra1za0ltkcxjpvfw8wnwhetj5mr5r05pl6dgy936g",
+    proxy: "terra15re9z6l28vf4dfeu8zyfe8ax8cvjdxkfnmuwne",
+    pool: "terra1edurrzv6hhd8u48engmydwhvz8qzmhhuakhwj3",
+    token: "terra1jxypgnfa07j6w92wazzyskhreq2ey2a5crgt6z"
   }]
 ])
 
