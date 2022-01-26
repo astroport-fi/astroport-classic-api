@@ -58,11 +58,18 @@ export const typeDefs = /* GraphQL */ `
     protocol_rewards: Fee
     total_rewards: Fee
   }
+  
+  type AstroportStats {
+    total_liquidity: Float
+    total_volume_24h: Float
+    astro_price: Float
+  }
 
   # The "Query" type lists all of the available queries that
   # clients can execute, along with the return type for each.
   type Query {
     airdrop(address: String!): [Airdrop]
+    stats: AstroportStats
     pair(contractAddr: ID!): Pair
     pairs: [Pair]
     pool(address: String!): Pool
