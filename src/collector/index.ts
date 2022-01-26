@@ -20,6 +20,7 @@ import { poolProtocolRewardsCollect } from "./poolProtocolRewardsCollect";
 import { aggregatePool } from "./poolAggregate";
 import { priceIndexer } from "./indexer/priceIndexer";
 import { priceCollect } from "./priceCollect";
+import { astroportStatsCollect } from "./astroportStatCollect";
 
 bluebird.config({
   longStackTraces: true,
@@ -65,9 +66,11 @@ export async function run(
     console.log("Indexing pool_protocol_rewards_24h")
     await poolProtocolRewardsCollect();
 
-    // aggregate pool_timeseries -> pool
-    console.log("Aggregating...")
+    console.log("Aggregating pool timeseries -> pool")
     await aggregatePool();
+
+    console.log("Aggregating astroport global stats")
+    await astroportStatsCollect()
 
     // blocks, pairs, tokens, pool_volume
     console.log("Indexing chain...")
