@@ -7,6 +7,7 @@ import {
   getTokens,
   getPools, getPool
 } from "../../services";
+import { getStats } from "../../services/astroport_stats.service";
 
 export const resolvers = {
   Pair: {
@@ -20,6 +21,10 @@ export const resolvers = {
     airdrop: async(_: any, { address }: any) => {
       const airdrops = await getAirdrops(address);
       return airdrops
+    },
+    stats: async() => {
+      const stats = await getStats();
+      return stats
     },
     pair: async (_: any, { contractAddr }: any) => {
       const pair = await getPair(contractAddr);
