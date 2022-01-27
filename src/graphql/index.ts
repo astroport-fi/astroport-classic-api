@@ -37,6 +37,7 @@ const apolloServer = new ApolloServer({
 
     return { db };
   },
+  debug: false
 });
 
 export const run = apolloServer.createHandler();
