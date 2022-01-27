@@ -17,6 +17,7 @@ import { PoolVolume } from "../../models/pool_volume.model";
 export async function TxHistoryIndexer(
   height: number,
   lunaExchangeRate: number,
+  psiExchangeRate: number,
   founds: ReturningLogFinderResult<TxHistoryTransformed | undefined>[]
 ): Promise<void> {
 
@@ -27,7 +28,8 @@ export async function TxHistoryIndexer(
         // get UST value of swap (from asset)
         const val: number = getUSTSwapValue(
           transformed,
-          lunaExchangeRate
+          lunaExchangeRate,
+          psiExchangeRate
         )
 
         // if found, add to pool volume

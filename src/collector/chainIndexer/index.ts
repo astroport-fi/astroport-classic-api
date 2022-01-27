@@ -18,17 +18,23 @@ const factory =
  * @param height
  * @param pairMap
  * @param lunaExchangeRate
+ * @param psiExchangeRate
  */
 export async function runIndexers(
   txs: any,
   height: number,
   pairMap: Map<string, Pair>,
-  lunaExchangeRate: number
+  lunaExchangeRate: number,
+  psiExchangeRate: number
 ): Promise<void> {
   for (const tx of txs) {
     const Logs = tx.logs;
     const timestamp = tx.timestamp;
     const txHash = tx.txhash;
+
+    if(txHash == "F0D317A72818C03A35A862AD747CE732318CC47078C25854293CE8B49A2B80E3") {
+      console.log()
+    }
 
     for (const log of Logs) {
       const events = log.events;
@@ -66,7 +72,7 @@ export async function runIndexers(
 
             // transform, sum, add volume to pool_volume
             if(swapLogFound.length > 0) {
-              await TxHistoryIndexer(height, lunaExchangeRate, swapLogFound)
+              await TxHistoryIndexer(height, lunaExchangeRate, psiExchangeRate, swapLogFound)
             }
           } catch(e) {
             console.log("Error during finding swaps/volume: " + e)

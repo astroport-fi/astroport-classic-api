@@ -5,6 +5,7 @@ dayjs.extend(utc);
 import { TERRA_CHAIN_ID } from '../constants';
 import { getHeightByDate } from '../services';
 import { Pair } from "../types";
+import { getPsiExchangeRate } from "../lib/terra";
 
 const chainId = TERRA_CHAIN_ID;
 
@@ -45,26 +46,45 @@ export function pairListToMap(pairList: Pair[]): Map<string, Pair> {
 
 /**
  * For a swap - return the corresponding UST volume of the swap.
- * Only works with UST or Luna base pairs.
+ * Only works with UST, Luna, Psi base pairs.
  *
  * TODO would like to rewrite this to pull price data from DB
  * @param transformed
  * @param lunaExchangeRate
- * @param pairMap
+ * @param psiExchangeRate
  */
-export function getUSTSwapValue(transformed: any, lunaExchangeRate: number): number {
-  let denom = transformed.assets[0].token;
-  let amount = Math.abs(transformed.assets[0].amount);
-  if(transformed.assets[0].token.startsWith("terra")) {
+
+// supported token addresses for calculating volume
+const whitelisted = new Set<string>(['uusd', 'uluna', 'terra12897djskt9rge8dtmm86w654g7kzckkd698608'])
+
+
+export function getUSTSwapValue(transformed: any, lunaExchangeRate: number, psiExchangeRate: number): number {
+  // try for native tokens
+
+
+
+  let denom, amount = 0
+  if(whitelisted.has(transformed.assets[0].token)) {
+    denom = transformed.assets[0].token
+    amount = Math.abs(transformed.assets[0].amount)
+  } else if (whitelisted.has(transformed.assets[1].token)) {
     denom = transformed.assets[1].token
     amount = Math.abs(transformed.assets[1].amount)
+  } else {
+    console.log("Swap not supported from " + transformed.assets[0].token + " to " + transformed.assets[1].token)
   }
+
+
+
   switch(denom) {
     case "uusd": {
       return amount / 1000000;
     }
     case "uluna": {
       return lunaExchangeRate * amount / 1000000;
+    }
+    case "terra12897djskt9rge8dtmm86w654g7kzckkd698608": { // psi
+      return psiExchangeRate * amount / 1000000;
     }
     default: {
       console.log("Unable to find UST value of " + denom)
