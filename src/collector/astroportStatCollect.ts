@@ -12,16 +12,6 @@ const BLOCKS_PER_YEAR = 4656810;
 
 export async function astroportStatsCollect(): Promise<void> {
 
-  // get latest block height
-  const latestHeight = await getLastHeight(chainId)
-
-  // get block height 24hrs ago
-  // TODO - an estimation - switch over when height data correctly indexed
-  const startBlockHeight = latestHeight.value - Math.floor(BLOCKS_PER_YEAR / 365)
-  // const startBlockHeight = await getHeightByDate(
-  //   chainId,
-  //   dayjs().utc().subtract(1, 'y').toISOString());
-
   // get all pools
   const pools = await Pool.find()
 

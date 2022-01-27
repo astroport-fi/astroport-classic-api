@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import { getLunaExchangeRate, getTxBlock } from "../lib/terra";
+import { getLunaExchangeRate, getPsiExchangeRate, getTxBlock } from "../lib/terra";
 import { TERRA_CHAIN_ID } from '../constants';
 import { getBlock, updateBlock } from '../services';
 import { Pair } from '../types';
@@ -26,6 +26,7 @@ export async function chainCollect(pairMap: Map<string, Pair>): Promise<void> {
   const lastHeight = collectedBlock.hiveHeight;
 
   const lunaExchangeRate = await getLunaExchangeRate("uusd");
+  const psiExchangeRate = await getPsiExchangeRate()
 
   for (let height = lastHeight + 1; height <= lastHeight + 50; height++) {
     console.log("Current height: " + height)
@@ -35,7 +36,7 @@ export async function chainCollect(pairMap: Map<string, Pair>): Promise<void> {
       return;
     }
 
-    await runIndexers(block, height, pairMap, lunaExchangeRate);
+    await runIndexers(block, height, pairMap, lunaExchangeRate, psiExchangeRate);
 
     await updateBlock(chainId, { hiveHeight: height });
 
