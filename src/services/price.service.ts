@@ -16,8 +16,7 @@ export async function getPriceByPairId(pairId: string): Promise<any> {
 
     return price
   }
-
-
+  
   // TODO if no price data on astroport, use external api to get price
   // LDO pools - steth, stluna, stsol
   if(pairId == "terra1gxjjrer8mywt4020xdl5e5x7n6ncn6w38gjzae" ||
