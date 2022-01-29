@@ -23,9 +23,6 @@ export async function poolCollect(): Promise<void> {
   // get all pairs
   const pairs = await getPairs()
   for (const pair of pairs) {
-    if(pair.contractAddr == "terra1edurrzv6hhd8u48engmydwhvz8qzmhhuakhwj3") {
-      console.log()
-    }
 
     const result = new PoolTimeseries();
 
