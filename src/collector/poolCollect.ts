@@ -27,7 +27,7 @@ export async function poolCollect(): Promise<void> {
 
     const pool_liquidity = await getPairLiquidity(pair.contractAddr, JSON.parse('{ "pool": {} }'))
 
-    if (pool_liquidity < 1) continue
+    if (pool_liquidity < 10000) continue
 
     let pool_type: string = pair.type
     // TODO temp fix for bluna/luna => use stable, not xyk
