@@ -23,6 +23,10 @@ export async function poolCollect(): Promise<void> {
   // get all pairs
   const pairs = await getPairs()
   for (const pair of pairs) {
+    if(pair.contractAddr == "terra1edurrzv6hhd8u48engmydwhvz8qzmhhuakhwj3") {
+      console.log()
+    }
+
     const result = new PoolTimeseries();
 
     const pool_liquidity = await getPairLiquidity(pair.contractAddr, JSON.parse('{ "pool": {} }'))
@@ -82,7 +86,6 @@ export async function poolCollect(): Promise<void> {
     if (pair.contractAddr == "terra1mxyp5z27xxgmv70xpqjk7jvfq54as9dfzug74m") {
       nativeTokenPrice = nativeTokenPrice * 100
     }
-
 
     result.metadata.fees.native.day = protocolRewards * nativeTokenPrice // 24 hour fee amount, not rate
     result.metadata.fees.native.apr = (protocolRewards * nativeTokenPrice * 365) / pool_liquidity

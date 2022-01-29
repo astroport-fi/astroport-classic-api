@@ -6,6 +6,16 @@ export async function getPrices(): Promise<any[]> {
 }
 
 export async function getPriceByPairId(pairId: string): Promise<any> {
+
+  // TODO if no price data on astroport, use external api to get price
+  // LDO pools - steth, stluna, stsol
+  if(pairId == "terra1gxjjrer8mywt4020xdl5e5x7n6ncn6w38gjzae" ||
+     pairId == "terra18dq84qfpz267xuu0k47066svuaez9hr4xvwlex" ||
+     pairId == "terra1edurrzv6hhd8u48engmydwhvz8qzmhhuakhwj3") {
+    return 0 // TODO change to LDO price
+  }
+
+
   const price = await Price.findOne({ pair_address: pairId })
     .sort({ createdAt: -1 })
     .limit(1);
