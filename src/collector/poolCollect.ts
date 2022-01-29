@@ -16,9 +16,19 @@ import { PoolVolume24h } from "../models/pool_volume_24h.model";
 
 const ASTRO_PAIR_ADDRESS = "terra1l7xu2rl3c7qmtx3r5sd2tz25glf6jh8ul7aag7"
 
+// orion, wormhole
+const POOLS_WITH_8_DIGIT_REWARD_TOKENS = new Set<string>(
+  [
+    'terra1mxyp5z27xxgmv70xpqjk7jvfq54as9dfzug74m', // orion
+    'terra1gxjjrer8mywt4020xdl5e5x7n6ncn6w38gjzae', // stluna luna
+    'terra18dq84qfpz267xuu0k47066svuaez9hr4xvwlex', // stsol ust
+    'terra1edurrzv6hhd8u48engmydwhvz8qzmhhuakhwj3', // steth ust
+  ])
+
 // TODO make this more legible
 // TODO double check math
 export async function poolCollect(): Promise<void> {
+
 
   // get all pairs
   const pairs = await getPairs()
@@ -73,8 +83,9 @@ export async function poolCollect(): Promise<void> {
     // protocol rewards - like ANC for ANC-UST
     const protocolRewardsRaw = await PoolProtocolRewardVolume24h.findOne({ pool_address: pair.contractAddr }) ?? { volume: 0 }
     let protocolRewards = Number(protocolRewardsRaw.volume) / 1000000
-    // for orion.  TODO
-    if (pair.contractAddr == "terra1mxyp5z27xxgmv70xpqjk7jvfq54as9dfzug74m") {
+
+    // 8 digits for wormhole, orion TODO
+    if (POOLS_WITH_8_DIGIT_REWARD_TOKENS.has(pair.contractAddr)) {
       protocolRewards = protocolRewards / 100
     }
 
@@ -82,8 +93,8 @@ export async function poolCollect(): Promise<void> {
     // For example, It doesn't work for stLUNA-LUNA, which provides LDO rewards
     const nativeToken = await getPriceByPairId(pair.contractAddr) // TODO something's off here for bluna/luna
     let nativeTokenPrice = nativeToken.token1
-    // for orion.  TODO
-    if (pair.contractAddr == "terra1mxyp5z27xxgmv70xpqjk7jvfq54as9dfzug74m") {
+
+    if (POOLS_WITH_8_DIGIT_REWARD_TOKENS.has(pair.contractAddr)) {
       nativeTokenPrice = nativeTokenPrice * 100
     }
 
