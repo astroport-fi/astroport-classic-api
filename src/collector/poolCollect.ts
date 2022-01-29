@@ -27,11 +27,12 @@ export async function poolCollect(): Promise<void> {
 
     const pool_liquidity = await getPairLiquidity(pair.contractAddr, JSON.parse('{ "pool": {} }'))
 
-    if (pool_liquidity < 1) continue
+    if (pool_liquidity < 10000) continue
 
     let pool_type: string = pair.type
     // TODO temp fix for bluna/luna => use stable, not xyk
-    if(pair.contractAddr == "terra1j66jatn3k50hjtg2xemnjm8s7y8dws9xqa5y8w") { // bluna luna
+    if(pair.contractAddr == "terra1j66jatn3k50hjtg2xemnjm8s7y8dws9xqa5y8w" ||
+       pair.contractAddr == "terra1gxjjrer8mywt4020xdl5e5x7n6ncn6w38gjzae") { // bluna luna, stluna luna
       pool_type = "stable"
     }
 
