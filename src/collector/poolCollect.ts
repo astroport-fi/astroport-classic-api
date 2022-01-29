@@ -19,7 +19,15 @@ const ASTRO_PAIR_ADDRESS = "terra1l7xu2rl3c7qmtx3r5sd2tz25glf6jh8ul7aag7"
 // orion, wormhole
 const POOLS_WITH_8_DIGIT_REWARD_TOKENS = new Set<string>(
   [
-    'terra1mxyp5z27xxgmv70xpqjk7jvfq54as9dfzug74m', // orion
+    'terra1mxyp5z27xxgmv70xpqjk7jvfq54as9dfzug74m', //orion
+    'terra1gxjjrer8mywt4020xdl5e5x7n6ncn6w38gjzae', // stluna luna
+    'terra18dq84qfpz267xuu0k47066svuaez9hr4xvwlex', // stsol ust
+    'terra1edurrzv6hhd8u48engmydwhvz8qzmhhuakhwj3', // steth ust
+  ])
+
+// externally fetched rewards - wormhole
+const EXTERNALLY_FETCHED_REWARDS = new Set<string>(
+  [
     'terra1gxjjrer8mywt4020xdl5e5x7n6ncn6w38gjzae', // stluna luna
     'terra18dq84qfpz267xuu0k47066svuaez9hr4xvwlex', // stsol ust
     'terra1edurrzv6hhd8u48engmydwhvz8qzmhhuakhwj3', // steth ust
@@ -91,12 +99,16 @@ export async function poolCollect(): Promise<void> {
 
     // TODO this only works for pools where the corresponding reward is half the pool, i.e. ANC-UST
     // For example, It doesn't work for stLUNA-LUNA, which provides LDO rewards
-    const nativeToken = await getPriceByPairId(pair.contractAddr) // TODO something's off here for bluna/luna
+    const nativeToken = await getPriceByPairId(pair.contractAddr)
     let nativeTokenPrice = nativeToken.token1
 
     if (POOLS_WITH_8_DIGIT_REWARD_TOKENS.has(pair.contractAddr)) {
-      nativeTokenPrice = nativeTokenPrice * 100
+      // not externally fetched - coingecko gives correct price
+      if(!EXTERNALLY_FETCHED_REWARDS.has(pair.contractAddr)) {
+        nativeTokenPrice = nativeTokenPrice * 100
+      }
     }
+
 
     result.metadata.fees.native.day = protocolRewards * nativeTokenPrice // 24 hour fee amount, not rate
     result.metadata.fees.native.apr = (protocolRewards * nativeTokenPrice * 365) / pool_liquidity
