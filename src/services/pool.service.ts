@@ -33,6 +33,7 @@ function transformPoolModelToPoolType(model: any): PoolType {
     trading_fee: model.metadata.trading_fee_rate_bp,
     pool_liquidity: model.metadata.pool_liquidity,
     _24hr_volume: model.metadata.day_volume_ust,
+
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     token_symbol: symbol,

@@ -76,8 +76,6 @@ export async function run(
     console.log("Indexing chain...")
     await chainCollect(pairMap);
 
-
-
   } catch (e) {
     throw new Error("Error while running indexer: " + e);
   }

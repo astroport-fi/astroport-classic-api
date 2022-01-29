@@ -184,6 +184,7 @@ export async function getContractStore<T>(address: string, query: JSON): Promise
   );
 
   return response.wasm.contractQuery
+
 }
 
 export async function getLunaExchangeRate(denom: string): Promise<number> {
@@ -283,6 +284,4 @@ export async function getPairLiquidity(address: string, query: JSON): Promise<nu
     console.log("Error getting pair liquidity for contract: " + address)
     return 0
   }
-
-
 }

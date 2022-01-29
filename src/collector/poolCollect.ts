@@ -7,8 +7,8 @@ import { getPairs, getPriceByPairId } from "../services";
 import { ASTRO_YEARLY_EMISSIONS, FEES, TOKEN_ADDRESS_MAP } from "../constants";
 import { insertPoolTimeseries } from "../services/pool_timeseries.service";
 import { PoolTimeseries } from "../models/pool_timeseries.model";
-import { PoolVolume24h } from "../models/pool_volume_24hr.model";
 import { PoolProtocolRewardVolume24h } from "../models/pool_protocol_reward_volume_24hr.model";
+import { PoolVolume24h } from "../models/pool_volume_24h.model";
 
 /**
  * Update the pool_timeseries table every minute.
@@ -37,7 +37,7 @@ export async function poolCollect(): Promise<void> {
     }
 
     const dayVolumeResponse = await PoolVolume24h.findOne({ pool_address: pair.contractAddr })
-    const dayVolume = dayVolumeResponse._24h_volume // in UST
+    const dayVolume = dayVolumeResponse?._24h_volume ?? 0 // in UST
 
     const trading_fee_bp = FEES.get(pool_type) ?? 20 // basis points
     const trading_fee_perc = trading_fee_bp / 10000 // percentage
@@ -87,7 +87,11 @@ export async function poolCollect(): Promise<void> {
     result.metadata.fees.native.day = protocolRewards * nativeTokenPrice // 24 hour fee amount, not rate
     result.metadata.fees.native.apr = (protocolRewards * nativeTokenPrice * 365) / pool_liquidity
     // note: can overflow to Infinity
-    result.metadata.fees.native.apy = Math.pow((1 + (protocolRewards * nativeTokenPrice) / pool_liquidity), 365) - 1
+    if(Math.pow((1 + (protocolRewards * nativeTokenPrice) / pool_liquidity), 365) - 1 != Infinity) {
+      result.metadata.fees.native.apy = Math.pow((1 + (protocolRewards * nativeTokenPrice) / pool_liquidity), 365) - 1
+    } else {
+      result.metadata.fees.native.apy = 0
+    }
 
     // total
     result.metadata.fees.total.day =
@@ -96,7 +100,12 @@ export async function poolCollect(): Promise<void> {
       result.metadata.fees.native.day
 
     result.metadata.fees.total.apr = (result.metadata.fees.total.day * 365) / pool_liquidity
-    result.metadata.fees.total.apy = Math.pow((1 + result.metadata.fees.total.day / pool_liquidity), 365) - 1
+    
+    if(Math.pow((1 + result.metadata.fees.total.day / pool_liquidity), 365) - 1 != Infinity) {
+      result.metadata.fees.total.apy = Math.pow((1 + result.metadata.fees.total.day / pool_liquidity), 365) - 1
+    } else {
+      result.metadata.fees.total.apy = 0
+    }
 
 
     await insertPoolTimeseries(result)

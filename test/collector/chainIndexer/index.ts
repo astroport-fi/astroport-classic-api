@@ -4,7 +4,6 @@ import { getPairs } from "../../../src/services";
 import { pairListToMap } from "../../../src/collector/helpers";
 import { runIndexers } from "../../../src/collector/chainIndexer";
 
-// TODO delete
 
 const MONGODB_URL = "" as string
 

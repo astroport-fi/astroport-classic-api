@@ -1,6 +1,7 @@
 import { Schema, model } from 'mongoose';
 import { Supply as SupplyDocument } from '../types/supply.type';
 
+
 const supplySchema: Schema = new Schema(
   {
     timestamp: {

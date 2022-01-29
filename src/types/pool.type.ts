@@ -25,5 +25,4 @@ export type Pool = {
     apr: number;
     apy: number;
   }
-
 };
