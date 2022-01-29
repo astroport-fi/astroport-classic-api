@@ -89,8 +89,10 @@ export async function poolCollect(): Promise<void> {
     // note: can overflow to Infinity
     if(Math.pow((1 + (protocolRewards * nativeTokenPrice) / pool_liquidity), 365) - 1 != Infinity) {
       result.metadata.fees.native.apy = Math.pow((1 + (protocolRewards * nativeTokenPrice) / pool_liquidity), 365) - 1
+    } else {
+      result.metadata.fees.native.apy = 0
     }
-    
+
     // total
     result.metadata.fees.total.day =
       result.metadata.fees.trading.day +
@@ -98,7 +100,12 @@ export async function poolCollect(): Promise<void> {
       result.metadata.fees.native.day
 
     result.metadata.fees.total.apr = (result.metadata.fees.total.day * 365) / pool_liquidity
-    result.metadata.fees.total.apy = Math.pow((1 + result.metadata.fees.total.day / pool_liquidity), 365) - 1
+    
+    if(Math.pow((1 + result.metadata.fees.total.day / pool_liquidity), 365) - 1 != Infinity) {
+      result.metadata.fees.total.apy = Math.pow((1 + result.metadata.fees.total.day / pool_liquidity), 365) - 1
+    } else {
+      result.metadata.fees.total.apy = 0
+    }
 
 
     await insertPoolTimeseries(result)
