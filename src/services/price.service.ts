@@ -12,7 +12,7 @@ export async function getPriceByPairId(pairId: string): Promise<any> {
   if(pairId == "terra1gxjjrer8mywt4020xdl5e5x7n6ncn6w38gjzae" ||
      pairId == "terra18dq84qfpz267xuu0k47066svuaez9hr4xvwlex" ||
      pairId == "terra1edurrzv6hhd8u48engmydwhvz8qzmhhuakhwj3") {
-    return 0 // TODO change to LDO price
+    return {token1: 0} // TODO change to LDO price
   }
 
 
