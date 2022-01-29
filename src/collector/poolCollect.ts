@@ -23,6 +23,7 @@ export async function poolCollect(): Promise<void> {
   // get all pairs
   const pairs = await getPairs()
   for (const pair of pairs) {
+
     const result = new PoolTimeseries();
 
     const pool_liquidity = await getPairLiquidity(pair.contractAddr, JSON.parse('{ "pool": {} }'))
@@ -76,13 +77,15 @@ export async function poolCollect(): Promise<void> {
     if (pair.contractAddr == "terra1mxyp5z27xxgmv70xpqjk7jvfq54as9dfzug74m") {
       protocolRewards = protocolRewards / 100
     }
+
+    // TODO this only works for pools where the corresponding reward is half the pool, i.e. ANC-UST
+    // For example, It doesn't work for stLUNA-LUNA, which provides LDO rewards
     const nativeToken = await getPriceByPairId(pair.contractAddr) // TODO something's off here for bluna/luna
     let nativeTokenPrice = nativeToken.token1
     // for orion.  TODO
     if (pair.contractAddr == "terra1mxyp5z27xxgmv70xpqjk7jvfq54as9dfzug74m") {
       nativeTokenPrice = nativeTokenPrice * 100
     }
-
 
     result.metadata.fees.native.day = protocolRewards * nativeTokenPrice // 24 hour fee amount, not rate
     result.metadata.fees.native.apr = (protocolRewards * nativeTokenPrice * 365) / pool_liquidity
