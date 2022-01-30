@@ -33,6 +33,7 @@ const EXTERNALLY_FETCHED_REWARDS = new Set<string>(
     'terra1edurrzv6hhd8u48engmydwhvz8qzmhhuakhwj3', // steth ust
   ])
 
+const poolTimeseriesResult: any[] = []
 // TODO make this more legible
 // TODO double check math
 export async function poolCollect(): Promise<void> {
@@ -40,13 +41,27 @@ export async function poolCollect(): Promise<void> {
 
   // get all pairs
   const pairs = await getPairs()
-  for (const pair of pairs) {
 
+  // map pair address -> 24h pool volume
+  const dayVolumeResponses = await PoolVolume24h.find()
+  const dayVolumes24h = new Map(dayVolumeResponses.map(obj => [obj.pool_address, obj._24h_volume]));
+
+  // map pair address -> 24h protocol reward volume
+  const protocolRewardsRaw = await PoolProtocolRewardVolume24h.find()
+  const protocolRewards24h = new Map(protocolRewardsRaw.map(obj => [obj.pool_address, obj.volume]));
+
+  // generator rewards
+  let astro_price = await getPriceByPairId(ASTRO_PAIR_ADDRESS)
+  astro_price = astro_price.token1
+
+
+  for (const pair of pairs) {
     const result = new PoolTimeseries();
 
+    // TODO batch hive requests
     const pool_liquidity = await getPairLiquidity(pair.contractAddr, JSON.parse('{ "pool": {} }'))
 
-    if (pool_liquidity < 10000) continue
+    if (pool_liquidity < 1) continue
 
     let pool_type: string = pair.type
     // TODO temp fix for bluna/luna => use stable, not xyk
@@ -55,8 +70,7 @@ export async function poolCollect(): Promise<void> {
       pool_type = "stable"
     }
 
-    const dayVolumeResponse = await PoolVolume24h.findOne({ pool_address: pair.contractAddr })
-    const dayVolume = dayVolumeResponse?._24h_volume ?? 0 // in UST
+    const dayVolume = dayVolumes24h.get(pair.contractAddr) ?? 0 // in UST
 
     const trading_fee_bp = FEES.get(pool_type) ?? 20 // basis points
     const trading_fee_perc = trading_fee_bp / 10000 // percentage
@@ -78,10 +92,6 @@ export async function poolCollect(): Promise<void> {
     result.metadata.fees.trading.apr = ((trading_fee_perc * dayVolume * 365) / pool_liquidity)
     result.metadata.fees.trading.apy = Math.pow((1 + (trading_fee_perc * dayVolume) / pool_liquidity), 365) - 1
 
-    // generator rewards
-    let astro_price = await getPriceByPairId(ASTRO_PAIR_ADDRESS)
-    astro_price = astro_price.token1
-
     let astro_yearly_emission = ASTRO_YEARLY_EMISSIONS.get(pair.contractAddr) ?? 0
     astro_yearly_emission = astro_yearly_emission * astro_price
     result.metadata.fees.astro.day = astro_yearly_emission / 365 // 24 hour fee amount, not rate
@@ -89,8 +99,10 @@ export async function poolCollect(): Promise<void> {
     result.metadata.fees.astro.apy = Math.pow((1 + (astro_yearly_emission / 365) / pool_liquidity), 365) - 1
 
     // protocol rewards - like ANC for ANC-UST
-    const protocolRewardsRaw = await PoolProtocolRewardVolume24h.findOne({ pool_address: pair.contractAddr }) ?? { volume: 0 }
-    let protocolRewards = Number(protocolRewardsRaw.volume) / 1000000
+    let protocolRewards = Number(protocolRewards24h.get(pair.contractAddr)) / 1000000
+    if(isNaN(protocolRewards)) {
+      protocolRewards = 0
+    }
 
     // 8 digits for wormhole, orion TODO
     if (POOLS_WITH_8_DIGIT_REWARD_TOKENS.has(pair.contractAddr)) {
@@ -133,8 +145,9 @@ export async function poolCollect(): Promise<void> {
       result.metadata.fees.total.apy = 0
     }
 
-
-    await insertPoolTimeseries(result)
-
+    poolTimeseriesResult.push(result)
   }
+  await insertPoolTimeseries(poolTimeseriesResult)
+
+
 }

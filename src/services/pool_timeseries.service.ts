@@ -5,10 +5,9 @@ import { PoolTimeseries as PoolModel } from "../models/pool_timeseries.model";
  * Save pool_timeseries snapshot to db
  */
 export async function insertPoolTimeseries(
-  entry: PoolType
-): Promise<PoolType> {
-  const pool = await PoolModel.create(entry);
-  return pool;
+  entries: PoolType[]
+) {
+  await PoolModel.insertMany(entries)
 }
 
 export async function getPoolTimeseries(): Promise<any> {
