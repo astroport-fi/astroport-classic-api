@@ -28,11 +28,11 @@ const POOLS_WITH_8_DIGIT_REWARD_TOKENS = new Set<string>(
     'terra1m32zs8725j9jzvva7zmytzasj392wpss63j2v0', // weWETH luna
     'terra16e5tgdxre44gvmjuu3ulsa64kc6eku4972yjp3', // wsSOL luna
     'terra1wr07qcmfqz2vxhcfr6k8xv8eh5es7u9mv2z07x', // wMATIC luna
-    'terra1cevdyd0gvta3h79uh5t47kk235rvn42gzf0450', // whUSDC UST
+    // 'terra1cevdyd0gvta3h79uh5t47kk235rvn42gzf0450', // whUSDC UST
     'terra1szt6cq52akhmzcqw5jhkw3tvdjtl4kvyk3zkhx', // whBUSD UST
-    'terra1qmxkqcgcgq8ch72k6kwu3ztz6fh8tx2xd76ws7', // avUSDC UST
-    'terra1cc6kqk0yl25hdpr5llxmx62mlyfdl7n0rwl3hq', // soUSDC UST
-    'terra1x0ulpvp6m46c5j7t40nj24mjp900954ys2jsnu', // weUSDC UST
+    // 'terra1qmxkqcgcgq8ch72k6kwu3ztz6fh8tx2xd76ws7', // avUSDC UST
+    // 'terra1cc6kqk0yl25hdpr5llxmx62mlyfdl7n0rwl3hq', // soUSDC UST
+    // 'terra1x0ulpvp6m46c5j7t40nj24mjp900954ys2jsnu', // weUSDC UST
     'terra1mv04l9m4xc6fntxnty265rsqpnn0nk8aq0c9ge' // wgOHM UST
   ])
 
