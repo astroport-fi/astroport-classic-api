@@ -68,13 +68,6 @@ export async function poolCollect(): Promise<void> {
   for (const pair of pairs) {
     const result = new PoolTimeseries();
 
-    console.log("Getting liq for pair: "+ pair.contractAddr)
-
-    if(pair.contractAddr == "terra1cevdyd0gvta3h79uh5t47kk235rvn42gzf0450") {
-      console.log()
-    }
-
-
     // TODO batch hive requests
     const pool_liquidity = await getPairLiquidity(pair.contractAddr, JSON.parse('{ "pool": {} }'))
 
