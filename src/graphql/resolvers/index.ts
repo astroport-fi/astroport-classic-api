@@ -8,14 +8,18 @@ import {
   getPools, getPool
 } from "../../services";
 import { getStats } from "../../services/astroport_stats.service";
+<<<<<<< HEAD
+=======
+import { getPrice } from "../../services/priceV2.service";
+>>>>>>> develop
 
 export const resolvers = {
-  Pair: {
-    prices: async ({ _id }: any) => {
-      const prices = await getPriceByPairId(_id);
-      return prices;
-    },
-  },
+  // Pair: {
+  //   prices: async ({ _id }: any) => {
+  //     const prices = await getPriceByPairId(_id);
+  //     return prices;
+  //   },
+  // },
 
   Query: {
     airdrop: async(_: any, { address }: any) => {
@@ -33,6 +37,10 @@ export const resolvers = {
     pairs: async () => {
       const pairs = await getPairs();
       return pairs;
+    },
+    price: async(_: any, { tokenAddress }: any) => {
+      const price = await getPrice(tokenAddress);
+      return price
     },
     pool: async (_: any, { address }: any) => {
       const pools = await getPool(address);

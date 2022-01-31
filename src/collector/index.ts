@@ -8,7 +8,6 @@ import {
 import { initHive, initMantle, initLCD } from '../lib/terra';
 import { connectToDatabase } from '../modules/db';
 import { TERRA_MANTLE, TERRA_CHAIN_ID, TERRA_LCD, TERRA_HIVE } from "../constants";
-import { dailyCollect } from './dailyCollect';
 import { heightCollect } from './heightCollect';
 import { chainCollect } from './chainCollect';
 import { supplyCollect } from './supplyCollect';
@@ -18,9 +17,9 @@ import { pairListToMap } from "./helpers";
 import { poolVolumeCollect } from "./poolVolumeCollect";
 import { poolProtocolRewardsCollect } from "./poolProtocolRewardsCollect";
 import { aggregatePool } from "./poolAggregate";
-import { priceIndexer } from "./indexer/priceIndexer";
 import { priceCollect } from "./priceCollect";
 import { astroportStatsCollect } from "./astroportStatCollect";
+import { priceCollectV2 } from "./priceCollectV2";
 
 bluebird.config({
   longStackTraces: true,
@@ -54,22 +53,25 @@ export async function run(
     // await dailyCollect();
     await priceCollect(pairs);
 
+    console.log("Indexing prices v2...")
+    await priceCollectV2();
+
     console.log("Indexing supply_timeseries...")
     await supplyCollect();
 
-    console.log("Indexing pool_timeseries")
+    console.log("Indexing pool_timeseries...")
     await poolCollect();
 
-    console.log("Indexing pool_volume_24h")
+    console.log("Indexing pool_volume_24h...")
     await poolVolumeCollect();
 
-    console.log("Indexing pool_protocol_rewards_24h")
+    console.log("Indexing pool_protocol_rewards_24h...")
     await poolProtocolRewardsCollect();
 
-    console.log("Aggregating pool timeseries -> pool")
+    console.log("Aggregating pool timeseries -> pool...")
     await aggregatePool();
 
-    console.log("Aggregating astroport global stats")
+    console.log("Aggregating astroport global stats...")
     await astroportStatsCollect()
 
     // blocks, pairs, tokens, pool_volume
