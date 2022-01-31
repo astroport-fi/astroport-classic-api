@@ -1,12 +1,6 @@
 export const typeDefs = /* GraphQL */ `
   scalar DateTime
 
-  type Price {
-    token1: Float
-    token2: Float
-    createdAt: DateTime
-  }
-
   type Airdrop {
     amount: Float
     claimed: Boolean
@@ -31,6 +25,12 @@ export const typeDefs = /* GraphQL */ `
     type: String
     prices: Price
     createdAt: DateTime
+  }
+  
+  type Price {
+    tokenAddress: String
+    price: Float
+    updatedOnBlock: Float
   }
   
   type Supply {
@@ -74,6 +74,7 @@ export const typeDefs = /* GraphQL */ `
     pairs: [Pair]
     pool(address: String!): Pool
     pools: [Pool]
+    price(tokenAddress: String!): Price
     supply: Supply
     tokens: [Token]
   }
