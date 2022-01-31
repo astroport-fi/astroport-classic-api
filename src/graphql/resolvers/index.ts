@@ -2,16 +2,12 @@ import {
   getAirdrops,
   getPair,
   getPairs,
-  getPriceByPairId,
   getSupply,
   getTokens,
   getPools, getPool
 } from "../../services";
 import { getStats } from "../../services/astroport_stats.service";
-<<<<<<< HEAD
-=======
 import { getPrice } from "../../services/priceV2.service";
->>>>>>> develop
 
 export const resolvers = {
   // Pair: {
