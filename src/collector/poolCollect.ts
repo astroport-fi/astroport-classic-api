@@ -20,9 +20,20 @@ const ASTRO_PAIR_ADDRESS = "terra1l7xu2rl3c7qmtx3r5sd2tz25glf6jh8ul7aag7"
 const POOLS_WITH_8_DIGIT_REWARD_TOKENS = new Set<string>(
   [
     'terra1mxyp5z27xxgmv70xpqjk7jvfq54as9dfzug74m', //orion
-    'terra1gxjjrer8mywt4020xdl5e5x7n6ncn6w38gjzae', // stluna luna
-    'terra18dq84qfpz267xuu0k47066svuaez9hr4xvwlex', // stsol ust
-    'terra1edurrzv6hhd8u48engmydwhvz8qzmhhuakhwj3', // steth ust
+    'terra1gxjjrer8mywt4020xdl5e5x7n6ncn6w38gjzae', // stLUNA luna
+    'terra18dq84qfpz267xuu0k47066svuaez9hr4xvwlex', // stSOL ust
+    'terra1edurrzv6hhd8u48engmydwhvz8qzmhhuakhwj3', // stETH ust
+    'terra16jaryra6dgfvkd3gqr5tcpy3p2s37stpa9sk7s', // wAVAX luna
+    'terra1tehmd65kyleuwuf3a362mhnupkpza29vd86sml', // wbWBNB luna
+    'terra1m32zs8725j9jzvva7zmytzasj392wpss63j2v0', // weWETH luna
+    'terra16e5tgdxre44gvmjuu3ulsa64kc6eku4972yjp3', // wsSOL luna
+    'terra1wr07qcmfqz2vxhcfr6k8xv8eh5es7u9mv2z07x', // wMATIC luna
+    'terra1cevdyd0gvta3h79uh5t47kk235rvn42gzf0450', // whUSDC UST
+    'terra1szt6cq52akhmzcqw5jhkw3tvdjtl4kvyk3zkhx', // whBUSD UST
+    'terra1qmxkqcgcgq8ch72k6kwu3ztz6fh8tx2xd76ws7', // avUSDC UST
+    'terra1cc6kqk0yl25hdpr5llxmx62mlyfdl7n0rwl3hq', // soUSDC UST
+    'terra1x0ulpvp6m46c5j7t40nj24mjp900954ys2jsnu', // weUSDC UST
+    'terra1mv04l9m4xc6fntxnty265rsqpnn0nk8aq0c9ge' // wgOHM UST
   ])
 
 // externally fetched rewards - wormhole
@@ -37,7 +48,6 @@ const poolTimeseriesResult: any[] = []
 // TODO make this more legible
 // TODO double check math
 export async function poolCollect(): Promise<void> {
-
 
   // get all pairs
   const pairs = await getPairs()
@@ -58,10 +68,18 @@ export async function poolCollect(): Promise<void> {
   for (const pair of pairs) {
     const result = new PoolTimeseries();
 
+    console.log("Getting liq for pair: "+ pair.contractAddr)
+
+    if(pair.contractAddr == "terra1cevdyd0gvta3h79uh5t47kk235rvn42gzf0450") {
+      console.log()
+    }
+
+
     // TODO batch hive requests
     const pool_liquidity = await getPairLiquidity(pair.contractAddr, JSON.parse('{ "pool": {} }'))
 
-    if (pool_liquidity < 1) continue
+    // STOP CHANGING THIS VALUE
+    if (pool_liquidity < 0.01) continue
 
     let pool_type: string = pair.type
     // TODO temp fix for bluna/luna => use stable, not xyk
