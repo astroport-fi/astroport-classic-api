@@ -23,7 +23,7 @@ functions:
   collector:
     handler: src/collector/index.run
     events:
-      - schedule: rate(1 minute)
+      - schedule: rate(2 minutes)
   graphql:
     handler: src/graphql/index.run
     events:
