@@ -19,7 +19,7 @@ const ASTRO_PAIR_ADDRESS = "terra1l7xu2rl3c7qmtx3r5sd2tz25glf6jh8ul7aag7"
 // orion, wormhole
 const POOLS_WITH_8_DIGIT_REWARD_TOKENS = new Set<string>(
   [
-    'terra1mxyp5z27xxgmv70xpqjk7jvfq54as9dfzug74m', //orion
+    'terra1mxyp5z27xxgmv70xpqjk7jvfq54as9dfzug74m', // orion ust
     'terra1gxjjrer8mywt4020xdl5e5x7n6ncn6w38gjzae', // stLUNA luna
     'terra18dq84qfpz267xuu0k47066svuaez9hr4xvwlex', // stSOL ust
     'terra1edurrzv6hhd8u48engmydwhvz8qzmhhuakhwj3', // stETH ust
@@ -60,7 +60,6 @@ const poolTimeseriesResult: any[] = []
 // TODO double check math
 export async function poolCollect(): Promise<void> {
 
-
   // get all pairs
   const pairs = await getPairs()
 
@@ -77,6 +76,11 @@ export async function poolCollect(): Promise<void> {
   astro_price = astro_price.token1
 
   for (const pair of pairs) {
+
+    if(pair.contractAddr == "terra1mxyp5z27xxgmv70xpqjk7jvfq54as9dfzug74m") {
+      console.log()
+    }
+
     const result = new PoolTimeseries();
 
     // TODO batch hive requests
@@ -134,13 +138,6 @@ export async function poolCollect(): Promise<void> {
     // For example, It doesn't work for stLUNA-LUNA, which provides LDO rewards
     const nativeToken = await getPriceByPairId(pair.contractAddr)
     let nativeTokenPrice = nativeToken.token1
-
-    if (POOLS_WITH_8_DIGIT_REWARD_TOKENS.has(pair.contractAddr)) {
-      // not externally fetched - coingecko gives correct price
-      if(!EXTERNALLY_FETCHED_REWARDS.has(pair.contractAddr)) {
-        nativeTokenPrice = nativeTokenPrice * 100
-      }
-    }
 
     if (POOLS_WITH_8_DIGIT_REWARD_TOKENS.has(pair.contractAddr)) {
       // not externally fetched - coingecko gives correct price
