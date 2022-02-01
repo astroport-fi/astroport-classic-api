@@ -8,7 +8,6 @@ import {
 import { initHive, initMantle, initLCD } from '../lib/terra';
 import { connectToDatabase } from '../modules/db';
 import { TERRA_MANTLE, TERRA_CHAIN_ID, TERRA_LCD, TERRA_HIVE } from "../constants";
-import { dailyCollect } from './dailyCollect';
 import { heightCollect } from './heightCollect';
 import { chainCollect } from './chainCollect';
 import { supplyCollect } from './supplyCollect';
@@ -18,7 +17,6 @@ import { pairListToMap } from "./helpers";
 import { poolVolumeCollect } from "./poolVolumeCollect";
 import { poolProtocolRewardsCollect } from "./poolProtocolRewardsCollect";
 import { aggregatePool } from "./poolAggregate";
-import { priceIndexer } from "./indexer/priceIndexer";
 import { priceCollect } from "./priceCollect";
 import { astroportStatsCollect } from "./astroportStatCollect";
 import { priceCollectV2 } from "./priceCollectV2";

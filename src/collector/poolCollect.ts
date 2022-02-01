@@ -19,7 +19,7 @@ const ASTRO_PAIR_ADDRESS = "terra1l7xu2rl3c7qmtx3r5sd2tz25glf6jh8ul7aag7"
 // orion, wormhole
 const POOLS_WITH_8_DIGIT_REWARD_TOKENS = new Set<string>(
   [
-    'terra1mxyp5z27xxgmv70xpqjk7jvfq54as9dfzug74m', //orion
+    'terra1mxyp5z27xxgmv70xpqjk7jvfq54as9dfzug74m', // orion ust
     'terra1gxjjrer8mywt4020xdl5e5x7n6ncn6w38gjzae', // stLUNA luna
     'terra18dq84qfpz267xuu0k47066svuaez9hr4xvwlex', // stSOL ust
     'terra1edurrzv6hhd8u48engmydwhvz8qzmhhuakhwj3', // stETH ust
@@ -44,6 +44,17 @@ const EXTERNALLY_FETCHED_REWARDS = new Set<string>(
     'terra1edurrzv6hhd8u48engmydwhvz8qzmhhuakhwj3', // steth ust
   ])
 
+const STABLE_SWAP_POOLS = new Set<string>(
+  [
+    'terra1j66jatn3k50hjtg2xemnjm8s7y8dws9xqa5y8w', // bluna luna
+    'terra1gxjjrer8mywt4020xdl5e5x7n6ncn6w38gjzae', // stluna luna
+    'terra1cevdyd0gvta3h79uh5t47kk235rvn42gzf0450', // whUSDC UST
+    'terra1szt6cq52akhmzcqw5jhkw3tvdjtl4kvyk3zkhx', // whBUSD ust
+    'terra1qmxkqcgcgq8ch72k6kwu3ztz6fh8tx2xd76ws7', // avUSDC ust
+    'terra1cc6kqk0yl25hdpr5llxmx62mlyfdl7n0rwl3hq', // soUSDC ust
+    'terra1x0ulpvp6m46c5j7t40nj24mjp900954ys2jsnu', // weUSDC ust
+  ])
+
 const poolTimeseriesResult: any[] = []
 // TODO make this more legible
 // TODO double check math
@@ -64,7 +75,6 @@ export async function poolCollect(): Promise<void> {
   let astro_price = await getPriceByPairId(ASTRO_PAIR_ADDRESS)
   astro_price = astro_price.token1
 
-
   for (const pair of pairs) {
     const result = new PoolTimeseries();
 
@@ -76,8 +86,7 @@ export async function poolCollect(): Promise<void> {
 
     let pool_type: string = pair.type
     // TODO temp fix for bluna/luna => use stable, not xyk
-    if(pair.contractAddr == "terra1j66jatn3k50hjtg2xemnjm8s7y8dws9xqa5y8w" ||
-       pair.contractAddr == "terra1gxjjrer8mywt4020xdl5e5x7n6ncn6w38gjzae") { // bluna luna, stluna luna
+    if(STABLE_SWAP_POOLS.has(pair.contractAddr)) {
       pool_type = "stable"
     }
 
@@ -132,7 +141,6 @@ export async function poolCollect(): Promise<void> {
       }
     }
 
-
     result.metadata.fees.native.day = protocolRewards * nativeTokenPrice // 24 hour fee amount, not rate
     result.metadata.fees.native.apr = (protocolRewards * nativeTokenPrice * 365) / pool_liquidity
     // note: can overflow to Infinity
@@ -149,7 +157,7 @@ export async function poolCollect(): Promise<void> {
       result.metadata.fees.native.day
 
     result.metadata.fees.total.apr = (result.metadata.fees.total.day * 365) / pool_liquidity
-    
+
     if(Math.pow((1 + result.metadata.fees.total.day / pool_liquidity), 365) - 1 != Infinity) {
       result.metadata.fees.total.apy = Math.pow((1 + result.metadata.fees.total.day / pool_liquidity), 365) - 1
     } else {

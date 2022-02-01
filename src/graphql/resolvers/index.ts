@@ -2,7 +2,6 @@ import {
   getAirdrops,
   getPair,
   getPairs,
-  getPriceByPairId,
   getSupply,
   getTokens,
   getPools, getPool
