@@ -69,7 +69,7 @@ export async function run(
     await poolProtocolRewardsCollect();
 
     console.log("Aggregating pool timeseries -> pool...")
-    await aggregatePool();
+    // await aggregatePool();
 
     console.log("Aggregating astroport global stats...")
     await astroportStatsCollect()
