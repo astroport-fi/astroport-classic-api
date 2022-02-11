@@ -76,11 +76,6 @@ export async function poolCollect(): Promise<void> {
   astro_price = astro_price.token1
 
   for (const pair of pairs) {
-
-    if(pair.contractAddr == "terra1mxyp5z27xxgmv70xpqjk7jvfq54as9dfzug74m") {
-      console.log()
-    }
-
     const result = new PoolTimeseries();
 
     // TODO batch hive requests
@@ -162,7 +157,7 @@ export async function poolCollect(): Promise<void> {
       result.metadata.fees.native.day
 
     result.metadata.fees.total.apr = (result.metadata.fees.total.day * 365) / pool_liquidity
-    
+
     if(Math.pow((1 + result.metadata.fees.total.day / pool_liquidity), 365) - 1 != Infinity) {
       result.metadata.fees.total.apy = Math.pow((1 + result.metadata.fees.total.day / pool_liquidity), 365) - 1
     } else {
@@ -172,6 +167,5 @@ export async function poolCollect(): Promise<void> {
     poolTimeseriesResult.push(result)
   }
   await insertPoolTimeseries(poolTimeseriesResult)
-
 
 }
