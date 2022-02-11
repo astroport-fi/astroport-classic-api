@@ -15,7 +15,7 @@ const DIGITS = 1000000;
 const chainId = TERRA_CHAIN_ID
 const BLOCKS_PER_YEAR = 4656810;
 
-export async function poolVolumeCollect(): Promise<void> {
+export async function aggregatePoolVolume(): Promise<void> {
 
   // get latest block height
   const latestHeight = await getLastHeight(chainId)

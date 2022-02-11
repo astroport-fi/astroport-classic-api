@@ -4,7 +4,7 @@ variablesResolutionMode: 20210326
 
 plugins:
   - serverless-offline
-#  - serverless-dotenv-plugin
+  - serverless-dotenv-plugin
   - serverless-plugin-typescript
 
 provider:
@@ -20,6 +20,11 @@ provider:
     MONGODB_URL: ${self:custom.environment.MONGODB_URL}
 
 functions:
+  aggregator:
+    handler: src/aggregator/index.run
+    events:
+      - schedule: rate(2 minutes)
+    timeout: 115 # in seconds
   collector:
     handler: src/collector/index.run
     events:

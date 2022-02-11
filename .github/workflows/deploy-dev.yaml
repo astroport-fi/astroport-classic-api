@@ -25,11 +25,12 @@ jobs:
       - name: Install Serverless Framework
         run: npm install -g serverless
       - name: Serverless AWS authentication
-        run: sls config credentials --provider aws --key ${{ secrets.AWS_KEY }} --secret ${{ secrets.AWS_SECRET }}
+        run: NODE_ENV=development sls config credentials --provider aws --key ${{ secrets.AWS_KEY }} --secret ${{ secrets.AWS_SECRET }}
       - name: Create env file
-        run: | # cp sample.env.yml env.yml
-          cat > env.yml << EOF
-          ${{ secrets.ENV }}
+        run: |
+          cp .env.development .env
+          cat > .env << EOF
+          MONGODB_URL=${{ secrets.DEV_MONGO_URL_RW }}
           EOF
       - name: Install NPM dependencies
         run: npm install

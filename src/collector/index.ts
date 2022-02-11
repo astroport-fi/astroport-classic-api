@@ -14,11 +14,7 @@ import { supplyCollect } from './supplyCollect';
 import { poolCollect } from './poolCollect';
 import { getPairs } from "../services";
 import { pairListToMap } from "./helpers";
-import { poolVolumeCollect } from "./poolVolumeCollect";
-import { poolProtocolRewardsCollect } from "./poolProtocolRewardsCollect";
-import { aggregatePool } from "./poolAggregate";
 import { priceCollect } from "./priceCollect";
-import { astroportStatsCollect } from "./astroportStatCollect";
 import { priceCollectV2 } from "./priceCollectV2";
 
 bluebird.config({
@@ -46,37 +42,41 @@ export async function run(
   const pairMap = pairListToMap(pairs);
 
   try {
+
+    const start = new Date().getTime()
+
     console.log("Indexing height...")
     await heightCollect();
+    let elapsed = (new Date().getTime() - start) / 1000
+    console.log("Time elapsed: " + elapsed)
 
     console.log("Indexing prices...")
-    // await dailyCollect();
-    await priceCollect(pairs);
+    await priceCollect(pairs); // TODO deprecate
+    elapsed = (new Date().getTime() - elapsed) / 1000
+    console.log("Time elapsed: " + elapsed)
 
     console.log("Indexing prices v2...")
     await priceCollectV2();
+    elapsed = (new Date().getTime() - elapsed) / 1000
+    console.log("Time elapsed: " + elapsed)
 
     console.log("Indexing supply_timeseries...")
     await supplyCollect();
+    elapsed = (new Date().getTime() - elapsed) / 1000
+    console.log("Time elapsed: " + elapsed)
 
     console.log("Indexing pool_timeseries...")
     await poolCollect();
-
-    console.log("Indexing pool_volume_24h...")
-    await poolVolumeCollect();
-
-    console.log("Indexing pool_protocol_rewards_24h...")
-    await poolProtocolRewardsCollect();
-
-    console.log("Aggregating pool timeseries -> pool...")
-    // await aggregatePool();
-
-    console.log("Aggregating astroport global stats...")
-    await astroportStatsCollect()
+    elapsed = (new Date().getTime() - elapsed) / 1000
+    console.log("Time elapsed: " + elapsed)
 
     // blocks, pairs, tokens, pool_volume
     console.log("Indexing chain...")
     await chainCollect(pairMap);
+    elapsed = (new Date().getTime() - elapsed) / 1000
+    console.log("Time elapsed: " + elapsed)
+
+    console.log("Total time elapsed: " + (new Date().getTime() - start) / 1000)
 
   } catch (e) {
     throw new Error("Error while running indexer: " + e);

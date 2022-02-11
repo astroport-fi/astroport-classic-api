@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { getPairLiquidity, initHive, initLCD, initMantle } from "../../src/lib/terra";
-import { poolVolumeCollect } from "../../src/collector/poolVolumeCollect";
+import { aggregatePoolVolume } from "../../src/collector/aggregatePoolVolume";
 import { connectToDatabase } from "../../src/modules/db";
 import { TERRA_CHAIN_ID, TERRA_HIVE, TERRA_LCD, TERRA_MANTLE } from "../../src/constants";
 import { getPairs } from "../../src/services";
@@ -52,7 +52,7 @@ describe('Example test', function() {
           await poolCollect();
           // pool_volume_24h
           console.log("Indexing pool_volume_24h")
-          await poolVolumeCollect();
+          await aggregatePoolVolume();
           // blocks, pairs, tokens, pool_volume
           console.log("Indexing chain...")
           await chainCollect(pairMap);
