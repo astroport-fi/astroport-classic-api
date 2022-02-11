@@ -68,8 +68,8 @@ export async function run(
     console.log("Indexing pool_protocol_rewards_24h...")
     await poolProtocolRewardsCollect();
 
-    console.log("Aggregating pool timeseries -> pool...")
-    await aggregatePool();
+    // console.log("Aggregating pool timeseries -> pool...")
+    // await aggregatePool();
 
     console.log("Aggregating astroport global stats...")
     await astroportStatsCollect()
