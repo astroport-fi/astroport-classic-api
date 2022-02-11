@@ -42,7 +42,7 @@ functions:
           cors: true
 
 custom:
-  environment: ${file(env.yml):${opt:stage, "dev"}, file(env.yml):default}
+  environment: ${file(.env):${opt:stage, "dev"}, file(.env):default}
   serverlessPluginTypescript:
     tsConfigFileLocation: "./tsconfig.serverless.json"
   serverless-offline:
