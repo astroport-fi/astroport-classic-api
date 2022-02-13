@@ -24,7 +24,6 @@ export async function heightCollect(): Promise<void> {
     lastChainHeight = columbus4EndHeight;
   }
 
-  console.log("getLastHeight")
   const collectedHeight = await getLastHeight(chainId);
 
   if (collectedHeight == null) {
