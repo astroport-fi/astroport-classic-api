@@ -18,7 +18,6 @@ provider:
     TERRA_HIVE: ${env:TERRA_HIVE}
     TERRA_MANTLE: ${env:TERRA_MANTLE}
     TERRA_CHAIN_ID: ${env:TERRA_CHAIN_ID}
-    MONGODB_URL: ${env:MONGODB_URL}
 
 functions:
   aggregator:
@@ -26,11 +25,15 @@ functions:
     events:
       - schedule: rate(2 minutes)
     timeout: 115 # in seconds
+    environment:
+      MONGODB_URL: ${env:MONGODB_URL_RW}
   collector:
     handler: src/collector/index.run
     events:
       - schedule: rate(3 minutes)
     timeout: 175 # in seconds
+    environment:
+      MONGODB_URL: ${env:MONGODB_URL_RW}
   graphql:
     handler: src/graphql/index.run
     events:
@@ -42,6 +45,8 @@ functions:
           path: graphql
           method: get
           cors: true
+    environment:
+      MONGODB_URL: ${env:MONGODB_URL_R}
 
 custom:
   environment: ${file(.env)}

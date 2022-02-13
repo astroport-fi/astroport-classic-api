@@ -29,7 +29,8 @@ jobs:
       - name: Create env file
         run: |
           cp .env.development .env
-          echo -e 'MONGODB_URL="${{ secrets.DEV_MONGO_URL_RW }}"' >> .env
+          echo -e 'MONGODB_URL_R="${{ secrets.DEV_MONGO_URL_R }}"' >> .env
+          echo -e 'MONGODB_URL_RW="${{ secrets.DEV_MONGO_URL_RW }}"' >> .env
       - name: Install NPM dependencies
         run: npm install
       # Optional
