@@ -1,14 +1,11 @@
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import { getLastHeight, getPairs, getPriceByPairId } from "../services";
-import { ASTRO_UST_PAIR, TERRA_CHAIN_ID } from "../constants";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import { getPriceByPairId } from "../services";
 import { Pool } from "../models/pool.model";
 import { AstroportStat } from "../models/astroport_stats.model";
-dayjs.extend(utc);
+import { ASTRO_UST_PAIR } from "../constants";
 
-const ASTRO_PAIR = ASTRO_UST_PAIR
-const chainId = TERRA_CHAIN_ID
-const BLOCKS_PER_YEAR = 4656810;
+dayjs.extend(utc);
 
 export async function astroportStatsCollect(): Promise<void> {
 
@@ -25,7 +22,7 @@ export async function astroportStatsCollect(): Promise<void> {
   }
 
   // get astro price
-  const astro = await getPriceByPairId(ASTRO_PAIR)
+  const astro = await getPriceByPairId(ASTRO_UST_PAIR)
   const astroPrice = astro.token1
 
   // write to astroport_stats

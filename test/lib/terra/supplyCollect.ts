@@ -1,14 +1,5 @@
-import assert from "assert";
-import {
-  getContractAddressStore,
-  getContractStore,
-  getLatestBlock,
-  initHive,
-  initMantle
-} from "../../../src/lib/terra";
-import { BUILDER_UNLOCK, MULTISIG, ASTRO_TOKEN, ASTRO_UST_PAIR, VESTING_ADDRESS } from "../../../src/constants";
-import { supplyCollect } from "../../../src/collector/supplyCollect";
-import { connectToDatabase } from "../../../src/modules/db";
+import { getContractAddressStore, initHive, initMantle } from "../../../src/lib/terra";
+import { ASTRO_TOKEN, ASTRO_UST_PAIR, BUILDER_UNLOCK, MULTISIG } from "../../../src/constants";
 
 const builder_unlock_contract = BUILDER_UNLOCK!
 const multisig = MULTISIG!

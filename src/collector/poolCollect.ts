@@ -1,7 +1,5 @@
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-dayjs.extend(utc);
-
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 import { getPairLiquidity } from "../lib/terra";
 import { getPairs, getPriceByPairId } from "../services";
 import { ASTRO_YEARLY_EMISSIONS, FEES, TOKEN_ADDRESS_MAP } from "../constants";
@@ -9,6 +7,8 @@ import { insertPoolTimeseries } from "../services/pool_timeseries.service";
 import { PoolTimeseries } from "../models/pool_timeseries.model";
 import { PoolProtocolRewardVolume24h } from "../models/pool_protocol_reward_volume_24hr.model";
 import { PoolVolume24h } from "../models/pool_volume_24h.model";
+
+dayjs.extend(utc);
 
 /**
  * Update the pool_timeseries table every minute.

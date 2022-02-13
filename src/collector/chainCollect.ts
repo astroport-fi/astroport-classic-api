@@ -1,10 +1,10 @@
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 import { getLunaExchangeRate, getPsiExchangeRate, getTxBlock } from "../lib/terra";
-import { TERRA_CHAIN_ID } from '../constants';
-import { getBlock, updateBlock } from '../services';
-import { Pair } from '../types';
-import { runIndexers } from './chainIndexer';
+import { TERRA_CHAIN_ID } from "../constants";
+import { getBlock, updateBlock } from "../services";
+import { Pair } from "../types";
+import { runIndexers } from "./chainIndexer";
 
 dayjs.extend(utc);
 

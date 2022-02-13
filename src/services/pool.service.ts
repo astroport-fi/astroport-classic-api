@@ -1,8 +1,6 @@
 import { Pool } from "../models/pool.model";
-import { Pool as PoolType } from "../types/pool.type"
+import { Pool as PoolType } from "../types/pool.type";
 import { TOKEN_ADDRESS_MAP } from "../constants";
-
-
 
 export async function getPool(address: string): Promise<any> {
   const pool = await Pool.findOne({ "metadata.pool_address": address })

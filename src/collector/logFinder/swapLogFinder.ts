@@ -1,5 +1,5 @@
 import { createReturningLogFinder, ReturningLogFinderMapper } from '@terra-money/log-finder'
-import { TxHistoryTransformed } from '../../types/transformed'
+import { TxHistoryTransformed } from "../../types"
 import { swapRule } from "./logRules";
 import { Pair } from "../../types";
 

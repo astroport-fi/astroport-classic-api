@@ -1,4 +1,3 @@
-// TODO remove this pattern
 export * from './airdrop.service';
 export * from './pair.service';
 export * from './height.service';

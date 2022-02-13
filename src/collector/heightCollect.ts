@@ -1,6 +1,6 @@
-import { getChainBlock, getLatestBlock } from '../lib/terra';
-import { MONGODB_URL, TERRA_CHAIN_ID, TERRA_HIVE, TERRA_LCD, TERRA_MANTLE } from "../constants";
-import { createHeight, getLastHeight } from '../services';
+import { getChainBlock, getLatestBlock } from "../lib/terra";
+import { TERRA_CHAIN_ID, TERRA_HIVE, TERRA_LCD, TERRA_MANTLE } from "../constants";
+import { createHeight, getLastHeight } from "../services";
 
 const columbus4EndHeight = 4_724_000;
 const chainId = TERRA_CHAIN_ID;

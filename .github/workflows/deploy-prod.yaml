@@ -27,10 +27,10 @@ jobs:
       - name: Serverless AWS authentication
         run: sls config credentials --provider aws --key ${{ secrets.AWS_KEY }} --secret ${{ secrets.AWS_SECRET }}
       - name: Create env file
-        run: | # cp sample.env.yml env.yml
-          cat > env.yml << EOF
-          ${{ secrets.ENV }}
-          EOF
+        run: |
+          cp .env.production .env
+          echo -e 'MONGODB_URL_R="${{ secrets.PROD_MONGO_URL_R }}"' >> .env
+          echo -e 'MONGODB_URL_RW="${{ secrets.PROD_MONGO_URL_RW }}"' >> .env
       - name: Install NPM dependencies
         run: npm install
       # Optional

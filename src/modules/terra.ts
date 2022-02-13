@@ -5,11 +5,7 @@ export const isNative = (token: string): boolean => {
 };
 
 export const isNativeToken = (token: any): boolean => {
-  if ('native_token' in token) {
-    return true;
-  }
-
-  return false;
+  return 'native_token' in token;
 };
 
 export const getTokenDenom = (info: any) => {

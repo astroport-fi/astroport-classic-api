@@ -1,17 +1,13 @@
-import bluebird from 'bluebird';
-import {
-  APIGatewayProxyResult,
-  APIGatewayProxyEvent,
-  APIGatewayAuthorizerResultContext,
-} from 'aws-lambda';
+import bluebird from "bluebird";
+import { APIGatewayAuthorizerResultContext, APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 
-import { initHive, initMantle, initLCD } from '../lib/terra';
-import { connectToDatabase } from '../modules/db';
-import { TERRA_MANTLE, TERRA_CHAIN_ID, TERRA_LCD, TERRA_HIVE } from "../constants";
-import { heightCollect } from './heightCollect';
-import { chainCollect } from './chainCollect';
-import { supplyCollect } from './supplyCollect';
-import { poolCollect } from './poolCollect';
+import { initHive, initLCD, initMantle } from "../lib/terra";
+import { connectToDatabase } from "../modules/db";
+import { TERRA_CHAIN_ID, TERRA_HIVE, TERRA_LCD, TERRA_MANTLE } from "../constants";
+import { heightCollect } from "./heightCollect";
+import { chainCollect } from "./chainCollect";
+import { supplyCollect } from "./supplyCollect";
+import { poolCollect } from "./poolCollect";
 import { getPairs } from "../services";
 import { pairListToMap } from "./helpers";
 import { priceCollect } from "./priceCollect";

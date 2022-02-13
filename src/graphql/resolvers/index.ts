@@ -1,11 +1,4 @@
-import {
-  getAirdrops,
-  getPair,
-  getPairs,
-  getSupply,
-  getTokens,
-  getPools, getPool
-} from "../../services";
+import { getAirdrops, getPair, getPairs, getPool, getPools, getSupply, getTokens } from "../../services";
 import { getStats } from "../../services/astroport_stats.service";
 import { getPrice } from "../../services/priceV2.service";
 

@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { getPairLiquidity, initHive, initLCD, initMantle } from "../../src/lib/terra";
+import { initHive, initLCD, initMantle } from "../../src/lib/terra";
 import { aggregatePoolVolume } from "../../src/collector/aggregatePoolVolume";
 import { connectToDatabase } from "../../src/modules/db";
 import { TERRA_CHAIN_ID, TERRA_HIVE, TERRA_LCD, TERRA_MANTLE } from "../../src/constants";

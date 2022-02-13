@@ -1,5 +1,4 @@
-import { Price } from '../models';
-import { getTokenPrice } from "../collector/coingecko/client";
+import { Price } from "../models";
 import { PriceV2 } from "../models/price_v2.model";
 
 export async function getPrices(): Promise<any[]> {
