@@ -47,34 +47,22 @@ export async function run(
 
     console.log("Indexing height...")
     await heightCollect();
-    let elapsed = (new Date().getTime() - start) / 1000
-    console.log("Time elapsed: " + elapsed)
 
     console.log("Indexing prices...")
     await priceCollect(pairs); // TODO deprecate
-    elapsed = (new Date().getTime() - elapsed) / 1000
-    console.log("Time elapsed: " + elapsed)
 
     console.log("Indexing prices v2...")
     await priceCollectV2();
-    elapsed = (new Date().getTime() - elapsed) / 1000
-    console.log("Time elapsed: " + elapsed)
 
     console.log("Indexing supply_timeseries...")
     await supplyCollect();
-    elapsed = (new Date().getTime() - elapsed) / 1000
-    console.log("Time elapsed: " + elapsed)
 
     console.log("Indexing pool_timeseries...")
     await poolCollect();
-    elapsed = (new Date().getTime() - elapsed) / 1000
-    console.log("Time elapsed: " + elapsed)
 
     // blocks, pairs, tokens, pool_volume
     console.log("Indexing chain...")
     await chainCollect(pairMap);
-    elapsed = (new Date().getTime() - elapsed) / 1000
-    console.log("Time elapsed: " + elapsed)
 
     console.log("Total time elapsed: " + (new Date().getTime() - start) / 1000)
 
