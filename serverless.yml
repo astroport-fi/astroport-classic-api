@@ -30,6 +30,7 @@ functions:
     handler: src/collector/index.run
     events:
       - schedule: rate(3 minutes)
+    timeout: 175 # in seconds
   graphql:
     handler: src/graphql/index.run
     events:
