@@ -25,7 +25,7 @@ jobs:
       - name: Install Serverless Framework
         run: npm install -g serverless
       - name: Serverless AWS authentication
-        run: NODE_ENV=development sls config credentials --provider aws --key ${{ secrets.AWS_KEY }} --secret ${{ secrets.AWS_SECRET }}
+        run: sls config credentials --provider aws --key ${{ secrets.AWS_KEY }} --secret ${{ secrets.AWS_SECRET }}
       - name: Create env file
         run: |
           cp .env.development .env
