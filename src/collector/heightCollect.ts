@@ -1,5 +1,5 @@
 import { getChainBlock, getLatestBlock } from '../lib/terra';
-import { MONGODB_URL, TERRA_CHAIN_ID } from "../constants";
+import { MONGODB_URL, TERRA_CHAIN_ID, TERRA_HIVE, TERRA_LCD, TERRA_MANTLE } from "../constants";
 import { createHeight, getLastHeight } from '../services';
 
 const columbus4EndHeight = 4_724_000;
@@ -8,9 +8,12 @@ const chainId = TERRA_CHAIN_ID;
 const waitFor = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 export async function heightCollect(): Promise<void> {
-  console.log("mongodb url: " + MONGODB_URL) // TODO delete
 
   console.log("getLatestBlock")
+  console.log(TERRA_HIVE)
+  console.log(TERRA_CHAIN_ID)
+  console.log(TERRA_MANTLE)
+  console.log(TERRA_LCD)
   let { height: lastChainHeight } = await getLatestBlock();
 
   if (lastChainHeight < 1 || chainId == null) {
