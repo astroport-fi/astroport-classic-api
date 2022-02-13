@@ -1,10 +1,10 @@
 service: astroport-graph-api
-
+useDotenv: true
 variablesResolutionMode: 20210326
 
 plugins:
   - serverless-offline
-  - serverless-dotenv-plugin
+#  - serverless-dotenv-plugin
   - serverless-plugin-typescript
 
 provider:
