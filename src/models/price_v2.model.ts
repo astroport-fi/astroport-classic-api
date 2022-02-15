@@ -8,7 +8,7 @@ const priceV2Schema: Schema<PriceDocument> = new Schema(
       type: Schema.Types.String,
       required: true
     },
-    price_in_usd: {
+    price_usd: {
       type: Schema.Types.Number,
       required: false,
     },

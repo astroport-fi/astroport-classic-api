@@ -97,7 +97,7 @@ async function indexPrices(pairs: Pair[]): Promise<Map<string, PriceGraphNode>> 
     node.price_ust = getExchangeRate(edges, node, nodes.get("uusd"))
     node.block_last_updated = height
     // node.symbol
-    // node.price_in_usd = 123
+    // node.price_usd = 123
     // node.ust_usd
 
   }

@@ -1,8 +1,10 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import { getLastHeight, getPairs } from "../services";
+import { getLastHeight } from "../services";
 import { PoolVolume } from "../models/pool_volume.model";
 import { PoolVolume7d } from "../models/pool_volume_7d.model";
+import { Pair } from "../types";
+import { BLOCKS_PER_YEAR, TERRA_CHAIN_ID } from "../constants";
 
 dayjs.extend(utc);
 
@@ -11,14 +13,10 @@ dayjs.extend(utc);
  * Update the pool_volume_7d table
  */
 
-const DIGITS = 1000000;
-const chainId = "columbus-5"
-const BLOCKS_PER_YEAR = 4656810;
-
-export async function poolVolume7dCollect(): Promise<void> {
+export async function poolVolume7dCollect(pairs: Pair[]): Promise<void> {
 
   // get latest block height
-  const latestHeight = await getLastHeight(chainId)
+  const latestHeight = await getLastHeight(TERRA_CHAIN_ID)
   console.log("latest height: " + latestHeight.value)
 
   // get block height 7d ago
@@ -27,9 +25,6 @@ export async function poolVolume7dCollect(): Promise<void> {
   // const startBlockHeight = await getHeightByDate(
   //   chainId,
   //   dayjs().utc().subtract(1, 'y').toISOString());
-
-  // get all pairs
-  const pairs = await getPairs()
 
   // retrieve daily sums per pair and write to pool_volume_7d
   for (const element of pairs) {

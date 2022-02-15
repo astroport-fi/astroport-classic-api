@@ -5,10 +5,13 @@ import { initHive, initLCD, initMantle } from "../lib/terra";
 import { connectToDatabase } from "../modules/db";
 import { TERRA_CHAIN_ID, TERRA_HIVE, TERRA_LCD, TERRA_MANTLE } from "../constants";
 
-import { aggregatePoolVolume } from "../collector/aggregatePoolVolume";
-import { aggregatePoolProtocolRewards } from "../collector/aggregatePoolProtocolRewards";
-import { aggregatePool } from "../collector/poolAggregate";
-import { astroportStatsCollect } from "../collector/astroportStatCollect";
+import { aggregatePoolVolume } from "./aggregatePoolVolume";
+import { aggregatePoolProtocolRewards } from "./aggregatePoolProtocolRewards";
+import { aggregatePool } from "./poolAggregate";
+import { astroportStatsCollect } from "./astroportStatCollect";
+import { poolVolume7dCollect } from "./poolVolume7dCollect";
+import { getPairs } from "../services";
+import { aggregatePoolProtocolRewards7d } from "./aggregatePoolProtocolRewards7d";
 
 bluebird.config({
   longStackTraces: true,
@@ -29,15 +32,23 @@ export async function run(
   await initMantle(TERRA_MANTLE);
   await initLCD(TERRA_LCD, TERRA_CHAIN_ID);
 
+  const pairs = await getPairs();
+
   try {
     console.log("Aggregating pool_volume_24h...")
     await aggregatePoolVolume();
+
+    console.log("Aggregating pool_volume_7d...")
+    await poolVolume7dCollect(pairs)
 
     console.log("Aggregating pool timeseries -> pool...")
     await aggregatePool();
 
     console.log("Aggregating pool_protocol_rewards_24h...")
     await aggregatePoolProtocolRewards();
+
+    console.log("Aggregating pool_protocol_rewards_7d...")
+    await aggregatePoolProtocolRewards7d();
 
     console.log("Aggregating astroport global stats...")
     await astroportStatsCollect()
