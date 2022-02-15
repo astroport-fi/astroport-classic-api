@@ -57,7 +57,7 @@ export async function poolCollect(): Promise<void> {
     const pool_liquidity = await getPairLiquidity(pair.contractAddr, JSON.parse('{ "pool": {} }'), priceMap)
 
     // STOP CHANGING THIS VALUE
-    if (pool_liquidity < 0.01) continue
+    if (isNaN(pool_liquidity) || pool_liquidity < 0.01) continue
 
     let pool_type: string = pair.type
 
