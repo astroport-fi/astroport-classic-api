@@ -280,8 +280,6 @@ export async function getPairLiquidity(address: string, query: JSON, priceMap: M
     }
   }
 
-  if(liquidity == 0) console.log("Zero pair liquidity for contract: " + address)
-
   return liquidity
 }
 

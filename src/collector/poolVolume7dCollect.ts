@@ -1,10 +1,9 @@
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import { getHeightByDate, getLastHeight, getPairs } from "../services";
-import { TERRA_CHAIN_ID } from "../constants";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import { getLastHeight, getPairs } from "../services";
 import { PoolVolume } from "../models/pool_volume.model";
 import { PoolVolume7d } from "../models/pool_volume_7d.model";
-import { AstroportStat } from "../models/astroport_stats.model";
+
 dayjs.extend(utc);
 
 /**
