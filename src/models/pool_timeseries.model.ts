@@ -39,7 +39,7 @@ const poolTimeseriesSchema: Schema = new Schema(
         trim: true
       },
       prices: {
-        token1_symbol: {
+        token1_address: {
           type: Schema.Types.String,
           required: false,
           trim: true
@@ -49,7 +49,7 @@ const poolTimeseriesSchema: Schema = new Schema(
           required: false,
           trim: true
         },
-        token2_symbol: {
+        token2_address: {
           type: Schema.Types.String,
           required: false,
           trim: true

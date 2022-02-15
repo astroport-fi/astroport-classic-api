@@ -32,9 +32,9 @@ function transformPoolModelToPoolType({ model }: { model: any }) {
     pool_liquidity: model.metadata.pool_liquidity,
     _24h_volume: model.metadata.day_volume_ust,
     prices: {
-      token1_symbol: model.metadata.prices.token1_symbol,
+      token1_address: model.metadata.prices.token1_address,
       token1_price_ust: model.metadata.prices.token1_price_ust,
-      token2_symbol: model.metadata.prices.token2_symbol,
+      token2_address: model.metadata.prices.token2_address,
       token2_price_ust: model.metadata.prices.token2_price_ust,
     },
     trading_fees: {

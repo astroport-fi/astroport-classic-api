@@ -62,9 +62,9 @@ export const typeDefs = /* GraphQL */ `
   }
   
   type PoolPrices {
-    token1_symbol: String
+    token1_address: String
     token1_price_in_ust: Float
-    token2_symbol: String
+    token2_address: String
     token2_price_in_ust: Float
   }
   

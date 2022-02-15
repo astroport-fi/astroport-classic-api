@@ -79,9 +79,9 @@ export async function poolCollect(): Promise<void> {
     result.metadata.day_volume_ust = dayVolume
 
     result.metadata.prices = {
-      token1_symbol: pair.token1,
+      token1_address: pair.token1,
       token1_price_ust: priceMap.get(pair.token1)?.price_in_ust ?? 0,
-      token2_symbol: pair.token2,
+      token2_address: pair.token2,
       token2_price_ust: priceMap.get(pair.token2)?.price_in_ust ?? 0
     }
 

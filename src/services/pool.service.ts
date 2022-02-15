@@ -33,9 +33,9 @@ function transformPoolModelToPoolType(model: any): PoolType {
     pool_liquidity: model.metadata.pool_liquidity,
     _24hr_volume: model.metadata.day_volume_ust,
     prices: {
-      token1_symbol: model.metadata.prices.token1_symbol,
+      token1_address: model.metadata.prices.token1_address,
       token1_price_ust: model.metadata.prices.token1_price_ust,
-      token2_symbol: model.metadata.prices.token2_symbol,
+      token2_address: model.metadata.prices.token2_address,
       token2_price_ust: model.metadata.prices.token2_price_ust,
     },
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment

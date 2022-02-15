@@ -7,9 +7,9 @@ export type Pool = {
   _24hr_volume: number;
   token_symbol: string;
   prices: {
-    token1_symbol: string;
+    token1_address: string;
     token1_price_ust: number;
-    token2_symbol: string;
+    token2_address: string;
     token2_price_ust: number;
   };
   trading_fees: {
