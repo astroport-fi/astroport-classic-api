@@ -10,8 +10,8 @@ import { supplyCollect } from "./supplyCollect";
 import { poolCollect } from "./poolCollect";
 import { getPairs } from "../services";
 import { pairListToMap } from "./helpers";
-import { priceCollect } from "./priceCollect";
-import { priceCollectV2 } from "./priceCollectV2";
+import { priceCollectV2 } from "./priceIndexer/priceCollectV2";
+import { externalPriceCollect } from "./externalPriceCollect";
 
 bluebird.config({
   longStackTraces: true,
@@ -44,11 +44,11 @@ export async function run(
     console.log("Indexing height...")
     await heightCollect();
 
-    console.log("Indexing prices...")
-    await priceCollect(pairs); // TODO deprecate
-
     console.log("Indexing prices v2...")
-    await priceCollectV2();
+    await priceCollectV2(pairs);
+
+    console.log("Fetching external prices...")
+    await externalPriceCollect()
 
     console.log("Indexing supply_timeseries...")
     await supplyCollect();

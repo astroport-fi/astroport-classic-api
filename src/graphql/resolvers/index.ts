@@ -1,6 +1,6 @@
 import { getAirdrops, getPair, getPairs, getPool, getPools, getSupply, getTokens } from "../../services";
 import { getStats } from "../../services/astroport_stats.service";
-import { getPrice } from "../../services/priceV2.service";
+import { getPriceByTokenAddress } from "../../services/priceV2.service";
 
 export const resolvers = {
   // Pair: {
@@ -28,7 +28,7 @@ export const resolvers = {
       return pairs;
     },
     price: async(_: any, { tokenAddress }: any) => {
-      const price = await getPrice(tokenAddress);
+      const price = await getPriceByTokenAddress(tokenAddress);
       return price
     },
     pool: async (_: any, { address }: any) => {

@@ -28,6 +28,7 @@ function transformPoolModelToPoolType(model: any): PoolType {
   return {
     timestamp: model.timestamp,
     pool_address: model.metadata.pool_address,
+    lp_address: model.metadata.pool_address,
     trading_fee: model.metadata.trading_fee_rate_bp,
     pool_liquidity: model.metadata.pool_liquidity,
     _24hr_volume: model.metadata.day_volume_ust,

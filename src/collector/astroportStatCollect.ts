@@ -1,9 +1,9 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import { getPriceByPairId } from "../services";
-import { Pool } from "../models/pool.model";
+import { getPriceByTokenAddress } from "../services/priceV2.service";
+import { ASTRO_TOKEN } from "../constants";
 import { AstroportStat } from "../models/astroport_stats.model";
-import { ASTRO_UST_PAIR } from "../constants";
+import { Pool } from "../models/pool.model";
 
 dayjs.extend(utc);
 
@@ -22,8 +22,8 @@ export async function astroportStatsCollect(): Promise<void> {
   }
 
   // get astro price
-  const astro = await getPriceByPairId(ASTRO_UST_PAIR)
-  const astroPrice = astro.token1
+  let astroPrice = await getPriceByTokenAddress(ASTRO_TOKEN)
+  astroPrice = astroPrice.price_in_ust
 
   // write to astroport_stats
   await AstroportStat.updateOne(

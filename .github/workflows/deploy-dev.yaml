@@ -30,7 +30,8 @@ jobs:
         run: |
           cp .env.development .env
           echo -e 'MONGODB_URL_R="${{ secrets.DEV_MONGO_URL_R }}"' >> .env
-          echo -e 'MONGODB_URL_RW="${{ secrets.DEV_MONGO_URL_RW }}"' >> .env
+          echo -e 'MONGODB_URL_RW="${{ secrets.DEV_MONGO_URL_RW }}"' >> .env 
+          echo -e 'COINGECKO_API_KEY="${{ secrets.COINGECKO_API_KEY }}"' >> .env
       - name: Install NPM dependencies
         run: npm install
       # Optional

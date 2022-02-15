@@ -1,4 +1,4 @@
-export type PriceV2 = {
+export class PriceGraphNode {
   token_address: string;
   price_in_usd: number;
   price_in_ust: number;
@@ -11,4 +11,4 @@ export type PriceV2 = {
     name: string;
   }
   block_last_updated: number;
-};
+}

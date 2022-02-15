@@ -1,4 +1,5 @@
 import { gql, GraphQLClient } from "graphql-request";
+import { PriceV2 } from "../../types/priceV2.type";
 
 export let hive: GraphQLClient;
 
@@ -237,8 +238,7 @@ export async function getPsiExchangeRate(): Promise<number> {
 }
 
 // return pair liquidity in UST for a pair
-// just have to get one side of the pool and multiply by 2
-export async function getPairLiquidity(address: string, query: JSON): Promise<number> {
+export async function getPairLiquidity(address: string, query: JSON, priceMap: Map<string, PriceV2>): Promise<number> {
   const response = await hive.request(
     gql`
       query($address: String!, $query: JSON!) {
@@ -256,32 +256,75 @@ export async function getPairLiquidity(address: string, query: JSON): Promise<nu
     }
   )
 
-  // TODO this must change to use prices
+  let liquidity = 0
 
-  if(response?.wasm?.contractQuery?.assets[0]?.info?.native_token?.denom == "uusd") {
-    return 2 * response?.wasm?.contractQuery?.assets[0]?.amount / 1000000
-
-  } else if (response?.wasm?.contractQuery?.assets[1]?.info?.native_token?.denom == "uusd") {
-    return 2 * response?.wasm?.contractQuery?.assets[1]?.amount / 1000000
-
-  } else if (response?.wasm?.contractQuery?.assets[0]?.info?.native_token?.denom == "uluna") {
-    const lunaPrice = await getLunaExchangeRate("uusd");
-    return 2 * response?.wasm?.contractQuery?.assets[0]?.amount * lunaPrice / 1000000
-
-  } else if (response?.wasm?.contractQuery?.assets[1]?.info?.native_token?.denom == "uluna") {
-    const lunaPrice = await getLunaExchangeRate("uusd");
-    return 2 * response?.wasm?.contractQuery?.assets[1]?.amount * lunaPrice / 1000000
-
-  } else if (response?.wasm?.contractQuery?.assets[0]?.info?.token?.contract_addr == PSI_TOKEN) {
-    const psiPrice = await getPsiExchangeRate();
-    return 2 * response?.wasm?.contractQuery?.assets[0]?.amount * psiPrice / 1000000
-
-  } else if (response?.wasm?.contractQuery?.assets[1]?.info?.token?.contract_addr == PSI_TOKEN) {
-    const psiPrice = await getPsiExchangeRate();
-    return 2 * response?.wasm?.contractQuery?.assets[1]?.amount * psiPrice / 1000000
-
-  } else {
-    console.log("Error getting pair liquidity for contract: " + address)
-    return 0
+  for(const asset of response?.wasm?.contractQuery?.assets) {
+    if (asset?.info?.native_token) {
+      const address = asset?.info?.native_token?.denom
+      const amount = asset?.amount / 1000000
+      if (priceMap.has(address)) {
+        // @ts-ignore
+        liquidity += priceMap.get(address).price_in_ust * amount
+      } else {
+        // fetch external price TODO
+      }
+    } else {
+      const address = asset?.info?.token?.contract_addr
+      const amount = asset?.amount / 1000000
+      if (priceMap.has(address)) {
+        // @ts-ignore
+        liquidity += priceMap.get(address).price_in_ust * amount
+      } else {
+        // fetch external price TODO
+      }
+    }
   }
+
+  if(liquidity == 0) console.log("Zero pair liquidity for contract: " + address)
+
+  return liquidity
+}
+
+/**
+ * Given a pool, find the relative price of the given token to the other token in the pair
+ *
+ * @param poolAddress
+ * @param token - token to simulate the swap
+ * @param amount - amount of token to simulate the swap
+ */
+export async function getStableswapRelativePrice(poolAddress: string, token: string, amount: string) {
+
+  let query = {}
+  if(token.startsWith("terra")) {
+    query = { token: { contract_addr: token }}
+  } else { // native
+    query = { native_token: { denom: token }}
+  }
+
+  const response = await hive.request(
+    gql`
+      query($address: String!, $query: JSON!, $amount: String!) {
+        wasm {
+          contractQuery(
+            contractAddress: $address
+            query: {
+              simulation: {
+                offer_asset: { 
+                  info: $query,
+                  amount: $amount
+                }
+              }
+            }
+          )
+        }
+      }
+    `,
+    {
+      address: poolAddress,
+      query: query,
+      amount: amount
+    }
+  )
+
+  return response?.wasm?.contractQuery?.return_amount
 }

@@ -13,6 +13,11 @@ const poolTimeseriesSchema: Schema = new Schema(
         required: false,
         trim: true
       },
+      lp_address: {
+        type: Schema.Types.String,
+        required: false,
+        trim: true
+      },
       trading_fee_rate_bp: {
         type: Schema.Types.Number,
         required: false,
@@ -32,6 +37,28 @@ const poolTimeseriesSchema: Schema = new Schema(
         type: Schema.Types.String,
         required: false,
         trim: true
+      },
+      prices: {
+        token1_symbol: {
+          type: Schema.Types.String,
+          required: false,
+          trim: true
+        },
+        token1_price_ust: {
+          type: Schema.Types.Number,
+          required: false,
+          trim: true
+        },
+        token2_symbol: {
+          type: Schema.Types.String,
+          required: false,
+          trim: true
+        },
+        token2_price_ust: {
+          type: Schema.Types.Number,
+          required: false,
+          trim: true
+        },
       },
       fees: {
         trading: {

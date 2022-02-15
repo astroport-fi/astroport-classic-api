@@ -4,7 +4,7 @@ export const TERRA_HIVE = process.env.TERRA_HIVE as string;
 export const TERRA_MANTLE = process.env.TERRA_MANTLE as string;
 export const TERRA_CHAIN_ID = process.env.TERRA_CHAIN_ID as string;
 export const START_BLOCK_HEIGHT = Number(process.env.START_BLOCK_HEIGHT);
-export const MONGODB_URL = process.env.MONGODB_URL;
+export const MONGODB_URL = process.env.MONGODB_URL as string;
 
 export const ASTRO_TOKEN = "terra1xj49zyqrwpv5k928jwfpfy2ha668nwdgkwlrg3"
 export const XASTRO_TOKEN = "terra1cw7znqh9w5f2ryyskq76fmxhj9hdl06uv0j0cd"
@@ -18,6 +18,8 @@ export const FACTORY_ADDRESS = "terra1fnywlw4edny3vw44x04xd67uzkdqluymgreu7g"
 
 export const BLOCKS_PER_YEAR = 4656810
 export const BLOCKS_PER_DAY = BLOCKS_PER_YEAR / 365
+
+export const COINGECKO_API_KEY = process.env.COINGECKO_API_KEY as string;
 
 // TODO - switch to table
 // map pair address to token abbreviation
@@ -171,3 +173,78 @@ export const ASTRO_YEARLY_EMISSIONS = new Map<string, number>([
   ["terra1edurrzv6hhd8u48engmydwhvz8qzmhhuakhwj3", 1566667], // steth ust
   ["terra18dq84qfpz267xuu0k47066svuaez9hr4xvwlex", 1566667], // stsol ust
 ]);
+
+/**
+ * PoolCollect constants
+ */
+export const ASTRO_PAIR_ADDRESS = "terra1l7xu2rl3c7qmtx3r5sd2tz25glf6jh8ul7aag7"
+
+// orion, wormhole
+export const POOLS_WITH_8_DIGIT_REWARD_TOKENS = new Set<string>(
+  [
+    'terra1mxyp5z27xxgmv70xpqjk7jvfq54as9dfzug74m', // orion ust
+    'terra1gxjjrer8mywt4020xdl5e5x7n6ncn6w38gjzae', // stLUNA luna
+    'terra18dq84qfpz267xuu0k47066svuaez9hr4xvwlex', // stSOL ust
+    'terra1edurrzv6hhd8u48engmydwhvz8qzmhhuakhwj3', // stETH ust
+    'terra16jaryra6dgfvkd3gqr5tcpy3p2s37stpa9sk7s', // wAVAX luna
+    'terra1tehmd65kyleuwuf3a362mhnupkpza29vd86sml', // wbWBNB luna
+    'terra1m32zs8725j9jzvva7zmytzasj392wpss63j2v0', // weWETH luna
+    'terra16e5tgdxre44gvmjuu3ulsa64kc6eku4972yjp3', // wsSOL luna
+    'terra1wr07qcmfqz2vxhcfr6k8xv8eh5es7u9mv2z07x', // wMATIC luna
+    // 'terra1cevdyd0gvta3h79uh5t47kk235rvn42gzf0450', // whUSDC UST
+    'terra1szt6cq52akhmzcqw5jhkw3tvdjtl4kvyk3zkhx', // whBUSD UST
+    // 'terra1qmxkqcgcgq8ch72k6kwu3ztz6fh8tx2xd76ws7', // avUSDC UST
+    // 'terra1cc6kqk0yl25hdpr5llxmx62mlyfdl7n0rwl3hq', // soUSDC UST
+    // 'terra1x0ulpvp6m46c5j7t40nj24mjp900954ys2jsnu', // weUSDC UST
+    'terra1mv04l9m4xc6fntxnty265rsqpnn0nk8aq0c9ge' // wgOHM UST
+  ])
+
+// pools that externally fetch rewards, like LDO for wormhole
+export const EXTERNALLY_FETCHED_REWARDS = new Set<string>(
+  [
+    'terra1gxjjrer8mywt4020xdl5e5x7n6ncn6w38gjzae', // stluna luna
+    'terra18dq84qfpz267xuu0k47066svuaez9hr4xvwlex', // stsol ust
+    'terra1edurrzv6hhd8u48engmydwhvz8qzmhhuakhwj3', // steth ust
+  ])
+
+// stableswap pools
+export const STABLE_SWAP_POOLS = new Set<string>(
+  [
+    'terra1j66jatn3k50hjtg2xemnjm8s7y8dws9xqa5y8w', // bluna luna
+    'terra1gxjjrer8mywt4020xdl5e5x7n6ncn6w38gjzae', // stluna luna
+    'terra1cevdyd0gvta3h79uh5t47kk235rvn42gzf0450', // whUSDC UST
+    'terra1szt6cq52akhmzcqw5jhkw3tvdjtl4kvyk3zkhx', // whBUSD ust
+    'terra1qmxkqcgcgq8ch72k6kwu3ztz6fh8tx2xd76ws7', // avUSDC ust
+    'terra1cc6kqk0yl25hdpr5llxmx62mlyfdl7n0rwl3hq', // soUSDC ust
+    'terra1x0ulpvp6m46c5j7t40nj24mjp900954ys2jsnu', // weUSDC ust
+  ])
+
+// tokens that have 8 digits
+// TODO this should be picked up from create_pair
+export const TOKENS_WITH_8_DIGITS = new Set<string>(
+  [
+    'terra1mddcdx0ujx89f38gu7zspk2r2ffdl5enyz2u03', // orion
+    'terra1hj8de24c3yqvcsv9r8chr03fzwsak3hgd8gv3m', // wavax
+    'terra1cetg5wruw2wsdjp7j46rj44xdel00z006e9yg8', // wbnb
+    'terra14tl83xcwqjy0ken9peu4pjjuu755lrry2uy25r', // weth
+    'terra190tqwgqx7s8qrknz6kckct7v607cu068gfujpk', // sol
+    'terra1dtqlfecglk47yplfrtwjzyagkgcqqngd5lgjp8', // wmatic
+    'terra169edevav3pdrtjcx35j6pvzuv54aevewar4nlh', // xdefi
+    'terra1skjr69exm6v8zellgjpaa2emhwutrk5a6dz7dd', // busd
+    'terra1t9ul45l7m6jw6sxgvnp8e5hj8xzkjsg82g84ap', // stsol
+    'terra133chr09wu8sakfte5v7vd8qzq9vghtkv4tn0ur', // wsteth
+    'terra1fpfn2kkr8mv390wx4dtpfk3vkjx9ch3thvykl3', // gohm
+  ]
+)
+
+// map CW20 address -> coingecko attributes
+export const EXTERNAL_TOKENS = new Map<string, any>(
+  [
+    ['terra1jxypgnfa07j6w92wazzyskhreq2ey2a5crgt6z', // LDO
+    {
+      source: "ethereum",
+      address: "0x5a98fcbea516cf06857215779fd812ca3bef1b32",
+      currency: "USD"
+    }]
+  ]
+)

@@ -9,11 +9,6 @@ const waitFor = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 export async function heightCollect(): Promise<void> {
 
-  console.log("getLatestBlock")
-  console.log(TERRA_HIVE)
-  console.log(TERRA_CHAIN_ID)
-  console.log(TERRA_MANTLE)
-  console.log(TERRA_LCD)
   let { height: lastChainHeight } = await getLatestBlock();
 
   if (lastChainHeight < 1 || chainId == null) {

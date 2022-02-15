@@ -6,7 +6,6 @@ import { TERRA_CHAIN_ID, TERRA_HIVE, TERRA_LCD, TERRA_MANTLE } from "../../src/c
 import { getPairs } from "../../src/services";
 import { pairListToMap } from "../../src/collector/helpers";
 import { heightCollect } from "../../src/collector/heightCollect";
-import { dailyCollect } from "../../src/collector/dailyCollect";
 import { supplyCollect } from "../../src/collector/supplyCollect";
 import { poolCollect } from "../../src/collector/poolCollect";
 import { chainCollect } from "../../src/collector/chainCollect";
@@ -41,9 +40,6 @@ describe('Example test', function() {
           // height
           console.log("Indexing height...")
           await heightCollect();
-          // prices
-          console.log("Indexing prices...")
-          await dailyCollect();
           // supply_timeseries
           console.log("Indexing supply...")
           await supplyCollect();

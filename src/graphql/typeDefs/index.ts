@@ -49,14 +49,23 @@ export const typeDefs = /* GraphQL */ `
   type Pool {
     timestamp: DateTime
     pool_address: String
+    lp_address: String
     trading_fee: Float
     pool_liquidity: Float
     _24hr_volume: Float
     token_symbol: String
+    prices: PoolPrices
     trading_fees: Fee
     astro_rewards: Fee
     protocol_rewards: Fee
     total_rewards: Fee
+  }
+  
+  type PoolPrices {
+    token1_symbol: String
+    token1_price_in_ust: Float
+    token2_symbol: String
+    token2_price_in_ust: Float
   }
   
   type AstroportStats {
