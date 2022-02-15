@@ -74,6 +74,7 @@ export async function poolCollect(): Promise<void> {
     result.metadata.pool_type = pool_type
     result.metadata.trading_fee_rate_bp = FEES.get(pool_type)
     result.metadata.pool_address = pair.contractAddr
+    result.metadata.lp_address = pair.liquidityToken
     result.metadata.pool_liquidity = pool_liquidity
     result.metadata.day_volume_ust = dayVolume
 

@@ -25,9 +25,9 @@ export async function priceIndexerV2(
   await PriceV2.updateOne(
     {},
     { $set: {
-        tokenAddress: LDOaddress,
+        token_address: LDOaddress,
         price: LDOprice,
-        updatedOnBlock: blockHeight
+        block_last_updated: blockHeight
       }},
     {upsert: true})
 

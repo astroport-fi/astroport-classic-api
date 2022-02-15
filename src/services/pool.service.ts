@@ -28,11 +28,16 @@ function transformPoolModelToPoolType(model: any): PoolType {
   return {
     timestamp: model.timestamp,
     pool_address: model.metadata.pool_address,
-    lp_address: model.metadata.pool_address,
+    lp_address: model.metadata.lp_address,
     trading_fee: model.metadata.trading_fee_rate_bp,
     pool_liquidity: model.metadata.pool_liquidity,
     _24hr_volume: model.metadata.day_volume_ust,
-
+    prices: {
+      token1_symbol: model.metadata.prices.token1_symbol,
+      token1_price_ust: model.metadata.prices.token1_price_ust,
+      token2_symbol: model.metadata.prices.token2_symbol,
+      token2_price_ust: model.metadata.prices.token2_price_ust,
+    },
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     token_symbol: symbol,

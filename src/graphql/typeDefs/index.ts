@@ -28,9 +28,9 @@ export const typeDefs = /* GraphQL */ `
   }
   
   type Price {
-    tokenAddress: String
+    token_address: String
     price: Float
-    updatedOnBlock: Float
+    block_last_updated: Float
   }
   
   type Supply {
