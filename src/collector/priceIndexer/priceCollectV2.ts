@@ -94,7 +94,7 @@ async function indexPrices(pairs: Pair[]): Promise<Map<string, PriceGraphNode>> 
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    node.price_in_ust = getExchangeRate(edges, node, nodes.get("uusd"))
+    node.price_ust = getExchangeRate(edges, node, nodes.get("uusd"))
     node.block_last_updated = height
     // node.symbol
     // node.price_in_usd = 123
@@ -107,7 +107,7 @@ async function indexPrices(pairs: Pair[]): Promise<Map<string, PriceGraphNode>> 
 
 async function savePrices(prices: Map<string, PriceGraphNode>) {
   for(const [key, node] of prices) {
-    if(node.price_in_ust == 0) continue
+    if(node.price_ust == 0) continue
 
     await PriceV2.updateOne(
       {
@@ -116,7 +116,7 @@ async function savePrices(prices: Map<string, PriceGraphNode>) {
       {
         $set: {
           token_address: node.token_address,
-          price_in_ust: node.price_in_ust,
+          price_ust: node.price_ust,
           block_last_updated: node.block_last_updated
         }
       },

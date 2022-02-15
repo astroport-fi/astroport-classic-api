@@ -48,7 +48,7 @@ export async function poolCollect(): Promise<void> {
   const priceMap = new Map(pricesRaw.map(price => [price.token_address, price]))
 
   // generator rewards
-  const astro_price = priceMap.get(ASTRO_TOKEN)?.price_in_ust as number
+  const astro_price = priceMap.get(ASTRO_TOKEN)?.price_ust as number
 
   for (const pair of pairs) {
     const result = new PoolTimeseries();
@@ -80,9 +80,9 @@ export async function poolCollect(): Promise<void> {
 
     result.metadata.prices = {
       token1_address: pair.token1,
-      token1_price_ust: priceMap.get(pair.token1)?.price_in_ust ?? 0,
+      token1_price_ust: priceMap.get(pair.token1)?.price_ust ?? 0,
       token2_address: pair.token2,
-      token2_price_ust: priceMap.get(pair.token2)?.price_in_ust ?? 0
+      token2_price_ust: priceMap.get(pair.token2)?.price_ust ?? 0
     }
 
     // TODO - temporary solution
@@ -117,7 +117,7 @@ export async function poolCollect(): Promise<void> {
     const rewardToken = GENERATOR_PROXY_CONTRACTS.get(pair.contractAddr)?.token
     let nativeTokenPrice = 0
     if(priceMap.has(rewardToken)) {
-      nativeTokenPrice = priceMap.get(rewardToken)?.price_in_ust as number
+      nativeTokenPrice = priceMap.get(rewardToken)?.price_ust as number
     } else if (EXTERNAL_TOKENS.has(rewardToken)) {
       const { source, address, currency } = EXTERNAL_TOKENS.get(rewardToken)
       nativeTokenPrice = await fetchExternalTokenPrice(source, address, currency)

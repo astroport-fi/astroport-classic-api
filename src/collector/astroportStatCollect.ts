@@ -23,7 +23,7 @@ export async function astroportStatsCollect(): Promise<void> {
 
   // get astro price
   let astroPrice = await getPriceByTokenAddress(ASTRO_TOKEN)
-  astroPrice = astroPrice.price_in_ust
+  astroPrice = astroPrice.price_ust
 
   // write to astroport_stats
   await AstroportStat.updateOne(

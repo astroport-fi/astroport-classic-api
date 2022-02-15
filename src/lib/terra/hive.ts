@@ -264,7 +264,7 @@ export async function getPairLiquidity(address: string, query: JSON, priceMap: M
       const amount = asset?.amount / 1000000
       if (priceMap.has(address)) {
         // @ts-ignore
-        liquidity += priceMap.get(address).price_in_ust * amount
+        liquidity += priceMap.get(address).price_ust * amount
       } else {
         // fetch external price TODO
       }
@@ -273,7 +273,7 @@ export async function getPairLiquidity(address: string, query: JSON, priceMap: M
       const amount = asset?.amount / 1000000
       if (priceMap.has(address)) {
         // @ts-ignore
-        liquidity += priceMap.get(address).price_in_ust * amount
+        liquidity += priceMap.get(address).price_ust * amount
       } else {
         // fetch external price TODO
       }

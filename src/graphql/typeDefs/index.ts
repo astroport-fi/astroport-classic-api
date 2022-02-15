@@ -29,7 +29,7 @@ export const typeDefs = /* GraphQL */ `
   
   type Price {
     token_address: String
-    price_in_ust: Float
+    price_ust: Float
     block_last_updated: Float
   }
   
@@ -63,9 +63,9 @@ export const typeDefs = /* GraphQL */ `
   
   type PoolPrices {
     token1_address: String
-    token1_price_in_ust: Float
+    token1_price_ust: Float
     token2_address: String
-    token2_price_in_ust: Float
+    token2_price_ust: Float
   }
   
   type AstroportStats {

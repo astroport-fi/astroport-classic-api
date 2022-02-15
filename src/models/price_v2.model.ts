@@ -12,7 +12,7 @@ const priceV2Schema: Schema<PriceDocument> = new Schema(
       type: Schema.Types.Number,
       required: false,
     },
-    price_in_ust: {
+    price_ust: {
       type: Schema.Types.Number,
       required: false,
     },

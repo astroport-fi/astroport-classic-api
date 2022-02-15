@@ -1,7 +1,7 @@
 export type PriceV2 = {
   token_address: string;
-  price_in_usd: number;
-  price_in_ust: number;
+  price_usd: number;
+  price_ust: number;
   ust_usd: number;
   is_external: boolean;
   symbol: string;
