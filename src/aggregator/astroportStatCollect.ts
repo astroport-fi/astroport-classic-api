@@ -19,6 +19,8 @@ export async function astroportStatsCollect(): Promise<void> {
   for (const pool of pools) {
     volume24hSum += pool.metadata.day_volume_ust
     tvlSum += pool.metadata.pool_liquidity
+    console.log("Pool: " + pool.metadata.pool_address)
+    console.log("Liquidity: " + pool.metadata.pool_liquidity)
   }
 
   // get astro price
