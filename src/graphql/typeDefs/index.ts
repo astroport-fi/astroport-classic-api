@@ -9,14 +9,6 @@ export const typeDefs = /* GraphQL */ `
     airdrop_series: Int
   }
 
-  type Token {
-    tokenAddr: String
-    symbol: String
-    icon: String
-    decimals: Int
-    createdAt: DateTime
-  }
-
   type Pair {
     contractAddr: String
     liquidityToken: String
@@ -85,6 +77,5 @@ export const typeDefs = /* GraphQL */ `
     pools: [Pool]
     price(tokenAddress: String!): Price
     supply: Supply
-    tokens: [Token]
   }
 `;
