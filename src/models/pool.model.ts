@@ -1,5 +1,4 @@
-import { Schema, model } from 'mongoose';
-import { Supply as SupplyDocument } from '../types/supply.type';
+import { model, Schema } from "mongoose";
 
 const poolSchema: Schema = new Schema(
   {
@@ -10,6 +9,11 @@ const poolSchema: Schema = new Schema(
     },
     metadata: {
       pool_address: {
+        type: Schema.Types.String,
+        required: false,
+        trim: true
+      },
+      lp_address: {
         type: Schema.Types.String,
         required: false,
         trim: true
@@ -33,6 +37,28 @@ const poolSchema: Schema = new Schema(
         type: Schema.Types.String,
         required: false,
         trim: true
+      },
+      prices: {
+        token1_address: {
+          type: Schema.Types.String,
+          required: false,
+          trim: true
+        },
+        token1_price_ust: {
+          type: Schema.Types.Number,
+          required: false,
+          trim: true
+        },
+        token2_address: {
+          type: Schema.Types.String,
+          required: false,
+          trim: true
+        },
+        token2_price_ust: {
+          type: Schema.Types.Number,
+          required: false,
+          trim: true
+        },
       },
       fees: {
         trading: {

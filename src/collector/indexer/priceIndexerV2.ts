@@ -1,4 +1,4 @@
-import { getTokenPrice } from "../coingecko/client";
+import { fetchExternalTokenPrice } from "../coingecko/client";
 import { PriceV2 } from "../../models/price_v2.model";
 
 /**
@@ -13,7 +13,7 @@ export async function priceIndexerV2(
   // TODO fetch pair prices
 
   // TODO fetch external prices
-  const LDOprice = await getTokenPrice(
+  const LDOprice = await fetchExternalTokenPrice(
     "ethereum",
     "0x5a98fcbea516cf06857215779fd812ca3bef1b32",
     "USD"
@@ -23,11 +23,11 @@ export async function priceIndexerV2(
 
   // write to astroport_stats
   await PriceV2.updateOne(
-    {},
+    { token_address: LDOaddress },
     { $set: {
-        tokenAddress: LDOaddress,
-        price: LDOprice,
-        updatedOnBlock: blockHeight
+        token_address: LDOaddress,
+        price_ust: LDOprice,
+        block_last_updated: blockHeight
       }},
     {upsert: true})
 

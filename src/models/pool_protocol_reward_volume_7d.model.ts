@@ -1,6 +1,6 @@
 import { model, Schema } from "mongoose";
 
-const poolVolume24hSchema: Schema = new Schema(
+const poolProtocolRewardVolume7dSchema: Schema = new Schema(
   {
       pool_address: {
         type: Schema.Types.String,
@@ -12,7 +12,7 @@ const poolVolume24hSchema: Schema = new Schema(
         required: false,
         trim: true
       },
-      _24h_volume: {
+      volume: {
         type: Schema.Types.Number,
         required: false,
         trim: true
@@ -20,4 +20,4 @@ const poolVolume24hSchema: Schema = new Schema(
   }
 );
 
-export const PoolVolume24h = model('PoolVolume24h', poolVolume24hSchema, 'pool_volume_24h');
+export const PoolProtocolRewardVolume7d = model('PoolProtocolRewardVolume7d', poolProtocolRewardVolume7dSchema, 'pool_protocol_rewards_7d');

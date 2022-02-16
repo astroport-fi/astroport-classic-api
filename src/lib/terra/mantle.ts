@@ -31,3 +31,16 @@ export async function getContractAddressStore<T>(address: string, query: string)
 
   return response.WasmContractsContractAddressStore
 }
+
+
+export async function getLatestHeight() {
+  const response = await mantle.request(
+    gql`
+      {
+        LastSyncedHeight
+      }
+    `
+  );
+
+  return response?.LastSyncedHeight
+}

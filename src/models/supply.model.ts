@@ -1,5 +1,5 @@
-import { Schema, model } from 'mongoose';
-import { Supply as SupplyDocument } from '../types/supply.type';
+import { model, Schema } from "mongoose";
+
 
 
 const supplySchema: Schema = new Schema(

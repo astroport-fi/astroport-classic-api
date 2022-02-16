@@ -1,9 +1,6 @@
-import {
-  createReturningLogFinder,
-  ReturningLogFinderMapper,
-} from '@terra-money/log-finder';
+import { createReturningLogFinder, ReturningLogFinderMapper } from "@terra-money/log-finder";
 
-import * as logRules from './logRules';
+import * as logRules from "./logRules";
 
 export function createPairLogFinders(
   factoryAddress: string

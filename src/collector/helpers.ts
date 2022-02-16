@@ -1,11 +1,11 @@
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-dayjs.extend(utc);
-
-import { TERRA_CHAIN_ID } from '../constants';
-import { getHeightByDate } from '../services';
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import { TERRA_CHAIN_ID } from "../constants";
+import { getHeightByDate } from "../services";
 import { Pair } from "../types";
 import { getPsiExchangeRate } from "../lib/terra";
+
+dayjs.extend(utc);
 
 const chainId = TERRA_CHAIN_ID;
 

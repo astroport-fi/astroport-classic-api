@@ -1,59 +1,30 @@
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-dayjs.extend(utc);
-
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 import { getPairLiquidity } from "../lib/terra";
-import { getPairs, getPriceByPairId } from "../services";
-import { ASTRO_YEARLY_EMISSIONS, FEES, TOKEN_ADDRESS_MAP } from "../constants";
+import { getPairs } from "../services";
+import {
+  ASTRO_TOKEN,
+  ASTRO_YEARLY_EMISSIONS,
+  EXTERNAL_TOKENS,
+  FEES,
+  GENERATOR_PROXY_CONTRACTS, POOLS_WITH_8_DIGIT_REWARD_TOKENS, STABLE_SWAP_POOLS,
+  TOKEN_ADDRESS_MAP
+} from "../constants";
 import { insertPoolTimeseries } from "../services/pool_timeseries.service";
 import { PoolTimeseries } from "../models/pool_timeseries.model";
-import { PoolProtocolRewardVolume24h } from "../models/pool_protocol_reward_volume_24hr.model";
+import { getPrices } from "../services/priceV2.service";
+import { PoolProtocolRewardVolume7d } from "../models/pool_protocol_reward_volume_7d.model";
+import { PoolVolume7d } from "../models/pool_volume_7d.model";
 import { PoolVolume24h } from "../models/pool_volume_24h.model";
+import { PoolProtocolRewardVolume24h } from "../models/pool_protocol_reward_volume_24hr.model";
+import { fetchExternalTokenPrice } from "./coingecko/client";
+
+
+dayjs.extend(utc);
 
 /**
  * Update the pool_timeseries table every minute.
  */
-
-const ASTRO_PAIR_ADDRESS = "terra1l7xu2rl3c7qmtx3r5sd2tz25glf6jh8ul7aag7"
-
-// orion, wormhole
-const POOLS_WITH_8_DIGIT_REWARD_TOKENS = new Set<string>(
-  [
-    'terra1mxyp5z27xxgmv70xpqjk7jvfq54as9dfzug74m', // orion ust
-    'terra1gxjjrer8mywt4020xdl5e5x7n6ncn6w38gjzae', // stLUNA luna
-    'terra18dq84qfpz267xuu0k47066svuaez9hr4xvwlex', // stSOL ust
-    'terra1edurrzv6hhd8u48engmydwhvz8qzmhhuakhwj3', // stETH ust
-    'terra16jaryra6dgfvkd3gqr5tcpy3p2s37stpa9sk7s', // wAVAX luna
-    'terra1tehmd65kyleuwuf3a362mhnupkpza29vd86sml', // wbWBNB luna
-    'terra1m32zs8725j9jzvva7zmytzasj392wpss63j2v0', // weWETH luna
-    'terra16e5tgdxre44gvmjuu3ulsa64kc6eku4972yjp3', // wsSOL luna
-    'terra1wr07qcmfqz2vxhcfr6k8xv8eh5es7u9mv2z07x', // wMATIC luna
-    // 'terra1cevdyd0gvta3h79uh5t47kk235rvn42gzf0450', // whUSDC UST
-    'terra1szt6cq52akhmzcqw5jhkw3tvdjtl4kvyk3zkhx', // whBUSD UST
-    // 'terra1qmxkqcgcgq8ch72k6kwu3ztz6fh8tx2xd76ws7', // avUSDC UST
-    // 'terra1cc6kqk0yl25hdpr5llxmx62mlyfdl7n0rwl3hq', // soUSDC UST
-    // 'terra1x0ulpvp6m46c5j7t40nj24mjp900954ys2jsnu', // weUSDC UST
-    'terra1mv04l9m4xc6fntxnty265rsqpnn0nk8aq0c9ge' // wgOHM UST
-  ])
-
-// externally fetched rewards - wormhole
-const EXTERNALLY_FETCHED_REWARDS = new Set<string>(
-  [
-    'terra1gxjjrer8mywt4020xdl5e5x7n6ncn6w38gjzae', // stluna luna
-    'terra18dq84qfpz267xuu0k47066svuaez9hr4xvwlex', // stsol ust
-    'terra1edurrzv6hhd8u48engmydwhvz8qzmhhuakhwj3', // steth ust
-  ])
-
-const STABLE_SWAP_POOLS = new Set<string>(
-  [
-    'terra1j66jatn3k50hjtg2xemnjm8s7y8dws9xqa5y8w', // bluna luna
-    'terra1gxjjrer8mywt4020xdl5e5x7n6ncn6w38gjzae', // stluna luna
-    'terra1cevdyd0gvta3h79uh5t47kk235rvn42gzf0450', // whUSDC UST
-    'terra1szt6cq52akhmzcqw5jhkw3tvdjtl4kvyk3zkhx', // whBUSD ust
-    'terra1qmxkqcgcgq8ch72k6kwu3ztz6fh8tx2xd76ws7', // avUSDC ust
-    'terra1cc6kqk0yl25hdpr5llxmx62mlyfdl7n0rwl3hq', // soUSDC ust
-    'terra1x0ulpvp6m46c5j7t40nj24mjp900954ys2jsnu', // weUSDC ust
-  ])
 
 const poolTimeseriesResult: any[] = []
 // TODO make this more legible
@@ -63,34 +34,43 @@ export async function poolCollect(): Promise<void> {
   // get all pairs
   const pairs = await getPairs()
 
-  // map pair address -> 24h pool volume
-  const dayVolumeResponses = await PoolVolume24h.find()
-  const dayVolumes24h = new Map(dayVolumeResponses.map(obj => [obj.pool_address, obj._24h_volume]));
+  // map pair address -> 24h, 7d pool volume
+  const dayVolumeResponse = await PoolVolume24h.find()
+  const dayVolumeMap = new Map(dayVolumeResponse.map(obj => [obj.pool_address, obj._24h_volume]));
+  const weekVolumeResponse = await PoolVolume7d.find()
+  const weekVolumeMap = new Map(weekVolumeResponse.map(obj => [obj.pool_address, obj._7d_volume]));
 
-  // map pair address -> 24h protocol reward volume
-  const protocolRewardsRaw = await PoolProtocolRewardVolume24h.find()
-  const protocolRewards24h = new Map(protocolRewardsRaw.map(obj => [obj.pool_address, obj.volume]));
+  // map pair address -> 24h, 7d protocol reward volume
+  const protocolRewards24hRaw = await PoolProtocolRewardVolume24h.find()
+  const protocolRewards24hMap = new Map(protocolRewards24hRaw.map(obj => [obj.pool_address, obj.volume]));
+  const protocolRewards7dRaw = await PoolProtocolRewardVolume7d.find()
+  const protocolRewards7dMap = new Map(protocolRewards7dRaw.map(obj => [obj.pool_address, obj.volume]));
+
+
+  // map token address -> price
+  const pricesRaw = await getPrices()
+  const priceMap = new Map(pricesRaw.map(price => [price.token_address, price]))
 
   // generator rewards
-  let astro_price = await getPriceByPairId(ASTRO_PAIR_ADDRESS)
-  astro_price = astro_price.token1
+  const astro_price = priceMap.get(ASTRO_TOKEN)?.price_ust as number
 
   for (const pair of pairs) {
     const result = new PoolTimeseries();
 
     // TODO batch hive requests
-    const pool_liquidity = await getPairLiquidity(pair.contractAddr, JSON.parse('{ "pool": {} }'))
+    const pool_liquidity = await getPairLiquidity(pair.contractAddr, JSON.parse('{ "pool": {} }'), priceMap)
 
     // STOP CHANGING THIS VALUE
-    if (pool_liquidity < 0.01) continue
+    if (isNaN(pool_liquidity) || pool_liquidity < 0.01) continue
 
     let pool_type: string = pair.type
-    // TODO temp fix for bluna/luna => use stable, not xyk
+
     if(STABLE_SWAP_POOLS.has(pair.contractAddr)) {
       pool_type = "stable"
     }
 
-    const dayVolume = dayVolumes24h.get(pair.contractAddr) ?? 0 // in UST
+    const dayVolume = dayVolumeMap.get(pair.contractAddr) ?? 0 // in UST
+    const weekVolume = weekVolumeMap.get(pair.contractAddr) ?? 0
 
     const trading_fee_bp = FEES.get(pool_type) ?? 20 // basis points
     const trading_fee_perc = trading_fee_bp / 10000 // percentage
@@ -99,8 +79,17 @@ export async function poolCollect(): Promise<void> {
     result.metadata.pool_type = pool_type
     result.metadata.trading_fee_rate_bp = FEES.get(pool_type)
     result.metadata.pool_address = pair.contractAddr
+    result.metadata.lp_address = pair.liquidityToken
     result.metadata.pool_liquidity = pool_liquidity
     result.metadata.day_volume_ust = dayVolume
+    result.metadata.week_volume_ust = weekVolume
+
+    result.metadata.prices = {
+      token1_address: pair.token1,
+      token1_price_ust: priceMap.get(pair.token1)?.price_ust ?? 0,
+      token2_address: pair.token2,
+      token2_price_ust: priceMap.get(pair.token2)?.price_ust ?? 0
+    }
 
     // TODO - temporary solution
     if (TOKEN_ADDRESS_MAP.get(pair.contractAddr)) {
@@ -109,8 +98,8 @@ export async function poolCollect(): Promise<void> {
 
     // trading fees
     result.metadata.fees.trading.day = trading_fee_perc * dayVolume // 24 hour fee amount, not rate
-    result.metadata.fees.trading.apr = ((trading_fee_perc * dayVolume * 365) / pool_liquidity)
-    result.metadata.fees.trading.apy = Math.pow((1 + (trading_fee_perc * dayVolume) / pool_liquidity), 365) - 1
+    result.metadata.fees.trading.apr = ((trading_fee_perc * weekVolume * 52) / pool_liquidity)
+    result.metadata.fees.trading.apy = Math.pow((1 + (trading_fee_perc * weekVolume) / pool_liquidity), 52) - 1
 
     let astro_yearly_emission = ASTRO_YEARLY_EMISSIONS.get(pair.contractAddr) ?? 0
     astro_yearly_emission = astro_yearly_emission * astro_price
@@ -119,33 +108,46 @@ export async function poolCollect(): Promise<void> {
     result.metadata.fees.astro.apy = Math.pow((1 + (astro_yearly_emission / 365) / pool_liquidity), 365) - 1
 
     // protocol rewards - like ANC for ANC-UST
-    let protocolRewards = Number(protocolRewards24h.get(pair.contractAddr)) / 1000000
-    if(isNaN(protocolRewards)) {
-      protocolRewards = 0
+    let protocolRewards24h = Number(protocolRewards24hMap.get(pair.contractAddr)) / 1000000
+    let protocolRewards7d = Number(protocolRewards7dMap.get(pair.contractAddr)) / 1000000
+
+    if(isNaN(protocolRewards24h)) {
+      protocolRewards24h = 0
+    }
+
+    if(isNaN(protocolRewards7d)) {
+      protocolRewards7d = 0
     }
 
     // 8 digits for wormhole, orion TODO
     if (POOLS_WITH_8_DIGIT_REWARD_TOKENS.has(pair.contractAddr)) {
-      protocolRewards = protocolRewards / 100
+      protocolRewards24h = protocolRewards24h / 100
+      protocolRewards7d = protocolRewards7d / 100
     }
 
-    // TODO this only works for pools where the corresponding reward is half the pool, i.e. ANC-UST
-    // For example, It doesn't work for stLUNA-LUNA, which provides LDO rewards
-    const nativeToken = await getPriceByPairId(pair.contractAddr)
-    let nativeTokenPrice = nativeToken.token1
-
-    if (POOLS_WITH_8_DIGIT_REWARD_TOKENS.has(pair.contractAddr)) {
-      // not externally fetched - coingecko gives correct price
-      if(!EXTERNALLY_FETCHED_REWARDS.has(pair.contractAddr)) {
-        nativeTokenPrice = nativeTokenPrice * 100
-      }
+    // TODO add config file for mapping and change price api
+    // TODO also add a "standardize" function that changes the decimal to 6
+    const rewardToken = GENERATOR_PROXY_CONTRACTS.get(pair.contractAddr)?.token
+    let nativeTokenPrice = 0
+    if(priceMap.has(rewardToken)) {
+      nativeTokenPrice = priceMap.get(rewardToken)?.price_ust as number
+    } else if (EXTERNAL_TOKENS.has(rewardToken)) {
+      const { source, address, currency } = EXTERNAL_TOKENS.get(rewardToken)
+      nativeTokenPrice = await fetchExternalTokenPrice(source, address, currency)
+    } else if (rewardToken != null && protocolRewards24h != 0) {
+      console.log("Reward token listed, but no price found for: " + rewardToken)
+    } else {
+      // no reward token listed - null
     }
 
-    result.metadata.fees.native.day = protocolRewards * nativeTokenPrice // 24 hour fee amount, not rate
-    result.metadata.fees.native.apr = (protocolRewards * nativeTokenPrice * 365) / pool_liquidity
+    if(isNaN(nativeTokenPrice)) {
+      nativeTokenPrice = 0
+    }
+    result.metadata.fees.native.day = protocolRewards24h * nativeTokenPrice // 24 hour fee amount, not rate
+    result.metadata.fees.native.apr = (protocolRewards7d * nativeTokenPrice * 52) / pool_liquidity
     // note: can overflow to Infinity
-    if(Math.pow((1 + (protocolRewards * nativeTokenPrice) / pool_liquidity), 365) - 1 != Infinity) {
-      result.metadata.fees.native.apy = Math.pow((1 + (protocolRewards * nativeTokenPrice) / pool_liquidity), 365) - 1
+    if(Math.pow((1 + (protocolRewards7d * nativeTokenPrice) / pool_liquidity), 52) - 1 != Infinity) {
+      result.metadata.fees.native.apy = Math.pow((1 + (protocolRewards7d * nativeTokenPrice) / pool_liquidity), 52) - 1
     } else {
       result.metadata.fees.native.apy = 0
     }
@@ -156,10 +158,16 @@ export async function poolCollect(): Promise<void> {
       result.metadata.fees.astro.day +
       result.metadata.fees.native.day
 
-    result.metadata.fees.total.apr = (result.metadata.fees.total.day * 365) / pool_liquidity
+    // weekly fees
+    const weekTotalFees = (trading_fee_perc * weekVolume) +
+      (astro_yearly_emission / 52) +
+      (protocolRewards7d * nativeTokenPrice)
 
-    if(Math.pow((1 + result.metadata.fees.total.day / pool_liquidity), 365) - 1 != Infinity) {
-      result.metadata.fees.total.apy = Math.pow((1 + result.metadata.fees.total.day / pool_liquidity), 365) - 1
+    // total yearly fees / pool liquidity
+    result.metadata.fees.total.apr = (weekTotalFees * 52) / pool_liquidity
+
+    if(Math.pow((1 + weekTotalFees / pool_liquidity), 52) - 1 != Infinity) {
+      result.metadata.fees.total.apy = Math.pow((1 + weekTotalFees / pool_liquidity), 52) - 1
     } else {
       result.metadata.fees.total.apy = 0
     }

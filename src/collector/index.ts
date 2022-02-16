@@ -1,25 +1,17 @@
-import bluebird from 'bluebird';
-import {
-  APIGatewayProxyResult,
-  APIGatewayProxyEvent,
-  APIGatewayAuthorizerResultContext,
-} from 'aws-lambda';
+import bluebird from "bluebird";
+import { APIGatewayAuthorizerResultContext, APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 
-import { initHive, initMantle, initLCD } from '../lib/terra';
-import { connectToDatabase } from '../modules/db';
-import { TERRA_MANTLE, TERRA_CHAIN_ID, TERRA_LCD, TERRA_HIVE } from "../constants";
-import { heightCollect } from './heightCollect';
-import { chainCollect } from './chainCollect';
-import { supplyCollect } from './supplyCollect';
-import { poolCollect } from './poolCollect';
+import { initHive, initLCD, initMantle } from "../lib/terra";
+import { connectToDatabase } from "../modules/db";
+import { TERRA_CHAIN_ID, TERRA_HIVE, TERRA_LCD, TERRA_MANTLE } from "../constants";
+import { heightCollect } from "./heightCollect";
+import { chainCollect } from "./chainCollect";
+import { supplyCollect } from "./supplyCollect";
+import { poolCollect } from "./poolCollect";
 import { getPairs } from "../services";
 import { pairListToMap } from "./helpers";
-import { poolVolumeCollect } from "./poolVolumeCollect";
-import { poolProtocolRewardsCollect } from "./poolProtocolRewardsCollect";
-import { aggregatePool } from "./poolAggregate";
-import { priceCollect } from "./priceCollect";
-import { astroportStatsCollect } from "./astroportStatCollect";
-import { priceCollectV2 } from "./priceCollectV2";
+import { priceCollectV2 } from "./priceIndexer/priceCollectV2";
+import { externalPriceCollect } from "./externalPriceCollect";
 
 bluebird.config({
   longStackTraces: true,
@@ -46,15 +38,17 @@ export async function run(
   const pairMap = pairListToMap(pairs);
 
   try {
+
+    const start = new Date().getTime()
+
     console.log("Indexing height...")
     await heightCollect();
 
-    console.log("Indexing prices...")
-    // await dailyCollect();
-    await priceCollect(pairs);
-
     console.log("Indexing prices v2...")
-    await priceCollectV2();
+    await priceCollectV2(pairs);
+
+    console.log("Fetching external prices...")
+    await externalPriceCollect()
 
     console.log("Indexing supply_timeseries...")
     await supplyCollect();
@@ -62,21 +56,11 @@ export async function run(
     console.log("Indexing pool_timeseries...")
     await poolCollect();
 
-    console.log("Indexing pool_volume_24h...")
-    await poolVolumeCollect();
-
-    console.log("Indexing pool_protocol_rewards_24h...")
-    await poolProtocolRewardsCollect();
-
-    console.log("Aggregating pool timeseries -> pool...")
-    await aggregatePool();
-
-    console.log("Aggregating astroport global stats...")
-    await astroportStatsCollect()
-
     // blocks, pairs, tokens, pool_volume
     console.log("Indexing chain...")
     await chainCollect(pairMap);
+
+    console.log("Total time elapsed: " + (new Date().getTime() - start) / 1000)
 
   } catch (e) {
     throw new Error("Error while running indexer: " + e);

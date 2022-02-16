@@ -1,11 +1,11 @@
-import { ApolloServer } from 'apollo-server-lambda';
-import { makeExecutableSchema } from '@graphql-tools/schema';
-import { DateTimeResolver } from 'graphql-scalars';
-import mongoose from 'mongoose';
+import { ApolloServer } from "apollo-server-lambda";
+import { makeExecutableSchema } from "@graphql-tools/schema";
+import { DateTimeResolver } from "graphql-scalars";
+import mongoose from "mongoose";
 
-import { MONGODB_URL } from '../constants';
-import { typeDefs } from './typeDefs';
-import { resolvers } from './resolvers';
+import { MONGODB_URL } from "../constants";
+import { typeDefs } from "./typeDefs";
+import { resolvers } from "./resolvers";
 
 let db: any = null;
 

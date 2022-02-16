@@ -1,16 +1,9 @@
-import { createPairLogFinders, createSwapLogFinder, createWithdrawLogFinder } from "../logFinder";
-import { createPairIndexer } from './createPairIndex';
-import { TERRA_CHAIN_ID, GENERATOR_PROXY_CONTRACTS } from '../../constants';
+import { createPairLogFinders, createSwapLogFinder } from "../logFinder";
+import { createPairIndexer } from "./createPairIndex";
+import { FACTORY_ADDRESS } from "../../constants";
 import { Pair } from "../../types";
 import { TxHistoryIndexer } from "./txHistoryIndexer";
 import { findProtocolRewardEmissions } from "./findProtocolRewardEmissions";
-import { getPairs } from "../../services";
-import { priceIndexer } from "../indexer/priceIndexer";
-
-const factory =
-  TERRA_CHAIN_ID == 'bombay-12'
-    ? 'terra1xkuxfhxa2jmjercq3ryplnj65huhlxl5mv3d6x'
-    : 'terra1fnywlw4edny3vw44x04xd67uzkdqluymgreu7g';
 
 /**
  * Indexes transactions for a single block
@@ -45,7 +38,7 @@ export async function runIndexers(
 
           // createPair
           try {
-            const createPairLF = createPairLogFinders(factory);
+            const createPairLF = createPairLogFinders(FACTORY_ADDRESS);
             const createPairLogFounds = createPairLF(event);
             if (createPairLogFounds.length > 0) {
               await createPairIndexer(createPairLogFounds, timestamp);

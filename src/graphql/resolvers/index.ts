@@ -1,13 +1,7 @@
-import {
-  getAirdrops,
-  getPair,
-  getPairs,
-  getSupply,
-  getTokens,
-  getPools, getPool
-} from "../../services";
+
+import { getAirdrops, getPair, getPairs, getPool, getPools, getSupply } from "../../services";
 import { getStats } from "../../services/astroport_stats.service";
-import { getPrice } from "../../services/priceV2.service";
+import { getPriceByTokenAddress } from "../../services/priceV2.service";
 
 export const resolvers = {
   // Pair: {
@@ -35,7 +29,7 @@ export const resolvers = {
       return pairs;
     },
     price: async(_: any, { tokenAddress }: any) => {
-      const price = await getPrice(tokenAddress);
+      const price = await getPriceByTokenAddress(tokenAddress);
       return price
     },
     pool: async (_: any, { address }: any) => {
@@ -49,10 +43,6 @@ export const resolvers = {
     supply: async() => {
       const supply = await getSupply();
       return supply;
-    },
-    tokens: async () => {
-      const tokens = await getTokens();
-      return tokens;
-    },
+    }
   },
 };

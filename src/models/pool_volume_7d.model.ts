@@ -1,6 +1,7 @@
-import { model, Schema } from "mongoose";
+import { Schema, model } from 'mongoose';
+import { PoolVolume as PoolVolumeDocument } from '../types/pool_volume.type';
 
-const poolVolume24hSchema: Schema = new Schema(
+const poolVolume7dSchema: Schema = new Schema(
   {
       pool_address: {
         type: Schema.Types.String,
@@ -12,7 +13,7 @@ const poolVolume24hSchema: Schema = new Schema(
         required: false,
         trim: true
       },
-      _24h_volume: {
+      _7d_volume: {
         type: Schema.Types.Number,
         required: false,
         trim: true
@@ -20,4 +21,4 @@ const poolVolume24hSchema: Schema = new Schema(
   }
 );
 
-export const PoolVolume24h = model('PoolVolume24h', poolVolume24hSchema, 'pool_volume_24h');
+export const PoolVolume7d = model('PoolVolume7d', poolVolume7dSchema, 'pool_volume_7d');

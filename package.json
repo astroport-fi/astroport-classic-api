@@ -26,6 +26,7 @@
     "@types/aws-lambda": "^8.10.89",
     "@types/chai": "^4.3.0",
     "@types/mocha": "^9.0.0",
+    "@saberhq/stableswap-sdk": "^1.12.37",
     "apollo-server": "^3.5.0",
     "apollo-server-lambda": "^3.5.0",
     "bignumber.js": "^9.0.2",

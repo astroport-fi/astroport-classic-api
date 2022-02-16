@@ -14,7 +14,7 @@ export function initConnection() {
   }
 
   if (cachedConnection === null) {
-    let options: mongoose.ConnectOptions = {};
+    const options: mongoose.ConnectOptions = {};
 
     cachedConnection = mongoose.createConnection(MONGODB_URL, options);
     console.log('connected to mongo');

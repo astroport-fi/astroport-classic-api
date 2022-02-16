@@ -9,14 +9,6 @@ export const typeDefs = /* GraphQL */ `
     airdrop_series: Int
   }
 
-  type Token {
-    tokenAddr: String
-    symbol: String
-    icon: String
-    decimals: Int
-    createdAt: DateTime
-  }
-
   type Pair {
     contractAddr: String
     liquidityToken: String
@@ -28,9 +20,9 @@ export const typeDefs = /* GraphQL */ `
   }
   
   type Price {
-    tokenAddress: String
-    price: Float
-    updatedOnBlock: Float
+    token_address: String
+    price_ust: Float
+    block_last_updated: Float
   }
   
   type Supply {
@@ -49,16 +41,27 @@ export const typeDefs = /* GraphQL */ `
   type Pool {
     timestamp: DateTime
     pool_address: String
+    lp_address: String
     trading_fee: Float
     pool_liquidity: Float
     _24hr_volume: Float
     token_symbol: String
+    prices: PoolPrices
     trading_fees: Fee
     astro_rewards: Fee
     protocol_rewards: Fee
     total_rewards: Fee
   }
   
+
+  type PoolPrices {
+    token1_address: String
+    token1_price_ust: Float
+    token2_address: String
+    token2_price_ust: Float
+  }
+  
+
   type AstroportStats {
     total_liquidity: Float
     total_volume_24h: Float
@@ -76,6 +79,5 @@ export const typeDefs = /* GraphQL */ `
     pools: [Pool]
     price(tokenAddress: String!): Price
     supply: Supply
-    tokens: [Token]
   }
 `;
