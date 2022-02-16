@@ -23,7 +23,7 @@ export async function priceIndexerV2(
 
   // write to astroport_stats
   await PriceV2.updateOne(
-    {},
+    { token_address: LDOaddress },
     { $set: {
         token_address: LDOaddress,
         price: LDOprice,
