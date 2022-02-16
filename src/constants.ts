@@ -196,7 +196,8 @@ export const POOLS_WITH_8_DIGIT_REWARD_TOKENS = new Set<string>(
     // 'terra1qmxkqcgcgq8ch72k6kwu3ztz6fh8tx2xd76ws7', // avUSDC UST
     // 'terra1cc6kqk0yl25hdpr5llxmx62mlyfdl7n0rwl3hq', // soUSDC UST
     // 'terra1x0ulpvp6m46c5j7t40nj24mjp900954ys2jsnu', // weUSDC UST
-    'terra1mv04l9m4xc6fntxnty265rsqpnn0nk8aq0c9ge' // wgOHM UST
+    'terra1mv04l9m4xc6fntxnty265rsqpnn0nk8aq0c9ge', // wgOHM UST
+    'terra1476fucrvu5tuga2nx28r3fctd34xhksc2gckgf'
   ])
 
 // pools that externally fetch rewards, like LDO for wormhole
