@@ -63,6 +63,10 @@ export async function run(
     console.log("Total time elapsed: " + (new Date().getTime() - start) / 1000)
 
   } catch (e) {
+    console.log("throw in indexer")
+    console.log(e)
+    console.log(typeof e)
+
     throw new Error("Error while running indexer: " + e);
   }
 
