@@ -25,10 +25,10 @@ export async function chainCollect(pairMap: Map<string, Pair>): Promise<void> {
 
   const lastHeight = collectedBlock.hiveHeight;
 
-  const lunaExchangeRate = await getLunaExchangeRate("uusd");
+  const lunaExchangeRate = await getLunaExchangeRate();
   const psiExchangeRate = await getPsiExchangeRate()
 
-  for (let height = lastHeight + 1; height <= lastHeight + 50; height++) {
+  for (let height = lastHeight + 1; height <= lastHeight + 150; height++) {
     console.log("Current height: " + height)
     const block = await getTxBlock(height);
     if (!block) {

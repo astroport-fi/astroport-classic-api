@@ -1,3 +1,4 @@
+// TODO remove this pattern
 export * from './airdrop.model';
 export * from './block.model';
 export * from './height.model';

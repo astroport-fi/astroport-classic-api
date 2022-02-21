@@ -25,6 +25,10 @@ export async function runIndexers(
     const timestamp = tx.timestamp;
     const txHash = tx.txhash;
 
+    if(txHash == "F0D317A72818C03A35A862AD747CE732318CC47078C25854293CE8B49A2B80E3") {
+      console.log()
+    }
+
     for (const log of Logs) {
       const events = log.events;
 

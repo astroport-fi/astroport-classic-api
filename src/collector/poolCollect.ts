@@ -21,7 +21,6 @@ import { PoolVolume7d } from "../models/pool_volume_7d.model";
 import { PoolVolume24h } from "../models/pool_volume_24h.model";
 import { PoolProtocolRewardVolume24h } from "../models/pool_protocol_reward_volume_24hr.model";
 
-dayjs.extend(utc);
 
 dayjs.extend(utc);
 
@@ -178,6 +177,5 @@ export async function poolCollect(): Promise<void> {
     poolTimeseriesResult.push(result)
   }
   await insertPoolTimeseries(poolTimeseriesResult)
-
 
 }

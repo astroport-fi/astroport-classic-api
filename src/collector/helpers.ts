@@ -3,6 +3,9 @@ import utc from "dayjs/plugin/utc";
 import { TERRA_CHAIN_ID } from "../constants";
 import { getHeightByDate } from "../services";
 import { Pair } from "../types";
+import { getPsiExchangeRate } from "../lib/terra";
+
+dayjs.extend(utc);
 
 dayjs.extend(utc);
 

@@ -68,7 +68,7 @@ async function indexPrices(pairs: Pair[]): Promise<Map<string, PriceGraphNode>> 
     if(prices.token1 == "NaN" || prices.token1 == "Infinity" ||
       prices.token2 == "NaN" || prices.token2 == "Infinity" ||
       !nodes.has(pair.token1) || !nodes.has(pair.token2)) {
-      console.log("Unable to calculate price for pair: " + pair.contractAddr)
+      // this happens too often to log
       continue
     }
 

@@ -3,8 +3,6 @@ import { PriceV2 } from "../../types/priceV2.type";
 
 export let hive: GraphQLClient;
 
-const PSI_TOKEN = "terra12897djskt9rge8dtmm86w654g7kzckkd698608" as string;
-
 export function initHive(URL: string): GraphQLClient {
   hive = new GraphQLClient(URL, {
     timeout: 60000,
@@ -188,20 +186,17 @@ export async function getContractStore<T>(address: string, query: JSON): Promise
 
 }
 
-export async function getLunaExchangeRate(denom: string): Promise<number> {
+export async function getLunaExchangeRate(): Promise<number> {
   const response = await hive.request(
     gql`
-      query($denom: String!) {
+      query {
         oracle {
-          exchangeRate(denom: $denom) {
+          exchangeRate(denom: uusd) {
             amount
           }
         }
       }
-    `,
-    {
-      denom: denom
-    }
+    `
   )
 
   return response?.oracle?.exchangeRate?.amount;
@@ -291,7 +286,6 @@ export async function getPairLiquidity(address: string, query: JSON, priceMap: M
  * @param amount - amount of token to simulate the swap
  */
 export async function getStableswapRelativePrice(poolAddress: string, token: string, amount: string) {
-
   let query = {}
   if(token.startsWith("terra")) {
     query = { token: { contract_addr: token }}
