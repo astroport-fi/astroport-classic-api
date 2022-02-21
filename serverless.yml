@@ -23,13 +23,8 @@ functions:
   aggregator:
     handler: src/aggregator/index.run
     events:
-<<<<<<< HEAD
-      - schedule: rate(2 minutes)
-    timeout: 115 # in seconds
-=======
       - schedule: rate(3 minutes)
     timeout: 175 # in seconds
->>>>>>> master
     environment:
       MONGODB_URL: ${env:MONGODB_URL_RW}
   collector:
