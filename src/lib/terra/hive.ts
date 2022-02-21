@@ -1,7 +1,9 @@
 import { gql, GraphQLClient } from "graphql-request";
 import { PriceV2 } from "../../types/priceV2.type";
+import { TOKENS_WITH_8_DIGITS } from "../../constants";
 
 export let hive: GraphQLClient;
+
 
 export function initHive(URL: string): GraphQLClient {
   hive = new GraphQLClient(URL, {
@@ -265,7 +267,12 @@ export async function getPairLiquidity(address: string, query: JSON, priceMap: M
       }
     } else {
       const address = asset?.info?.token?.contract_addr
-      const amount = asset?.amount / 1000000
+      let amount = asset?.amount / 1000000
+
+      if(TOKENS_WITH_8_DIGITS.has(address)) {
+        amount = amount / 100
+      }
+
       if (priceMap.has(address)) {
         // @ts-ignore
         liquidity += priceMap.get(address).price_ust * amount
@@ -286,6 +293,7 @@ export async function getPairLiquidity(address: string, query: JSON, priceMap: M
  * @param amount - amount of token to simulate the swap
  */
 export async function getStableswapRelativePrice(poolAddress: string, token: string, amount: string) {
+
   let query = {}
   if(token.startsWith("terra")) {
     query = { token: { contract_addr: token }}

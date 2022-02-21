@@ -7,19 +7,30 @@ import {
   ASTRO_YEARLY_EMISSIONS,
   EXTERNAL_TOKENS,
   FEES,
+<<<<<<< HEAD
   GENERATOR_PROXY_CONTRACTS,
   POOLS_WITH_8_DIGIT_REWARD_TOKENS,
   STABLE_SWAP_POOLS,
+=======
+  GENERATOR_PROXY_CONTRACTS, POOLS_WITH_8_DIGIT_REWARD_TOKENS, STABLE_SWAP_POOLS,
+>>>>>>> master
   TOKEN_ADDRESS_MAP
 } from "../constants";
 import { insertPoolTimeseries } from "../services/pool_timeseries.service";
 import { PoolTimeseries } from "../models/pool_timeseries.model";
 import { getPrices } from "../services/priceV2.service";
+<<<<<<< HEAD
 import { fetchExternalTokenPrice } from "./coingecko/client";
+=======
+>>>>>>> master
 import { PoolProtocolRewardVolume7d } from "../models/pool_protocol_reward_volume_7d.model";
 import { PoolVolume7d } from "../models/pool_volume_7d.model";
 import { PoolVolume24h } from "../models/pool_volume_24h.model";
 import { PoolProtocolRewardVolume24h } from "../models/pool_protocol_reward_volume_24hr.model";
+<<<<<<< HEAD
+=======
+import { fetchExternalTokenPrice } from "./coingecko/client";
+>>>>>>> master
 
 
 dayjs.extend(utc);
