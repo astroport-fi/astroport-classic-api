@@ -53,6 +53,7 @@ export const typeDefs = /* GraphQL */ `
     total_rewards: Fee
   }
   
+
   type PoolPrices {
     token1_address: String
     token1_price_ust: Float
@@ -60,6 +61,7 @@ export const typeDefs = /* GraphQL */ `
     token2_price_ust: Float
   }
   
+
   type AstroportStats {
     total_liquidity: Float
     total_volume_24h: Float

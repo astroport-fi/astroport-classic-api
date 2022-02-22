@@ -19,6 +19,7 @@ import { PoolVolume24h } from "../models/pool_volume_24h.model";
 import { PoolProtocolRewardVolume24h } from "../models/pool_protocol_reward_volume_24hr.model";
 import { fetchExternalTokenPrice } from "./coingecko/client";
 
+
 dayjs.extend(utc);
 
 /**

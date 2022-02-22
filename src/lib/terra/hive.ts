@@ -4,6 +4,7 @@ import { TOKENS_WITH_8_DIGITS } from "../../constants";
 
 export let hive: GraphQLClient;
 
+const PSI_TOKEN = "terra12897djskt9rge8dtmm86w654g7kzckkd698608" as string;
 
 export function initHive(URL: string): GraphQLClient {
   hive = new GraphQLClient(URL, {

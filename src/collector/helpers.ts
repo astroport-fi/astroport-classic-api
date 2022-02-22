@@ -61,6 +61,8 @@ const whitelisted = new Set<string>(['uusd', 'uluna', 'terra12897djskt9rge8dtmm8
 export function getUSTSwapValue(transformed: any, lunaExchangeRate: number, psiExchangeRate: number): number {
   // try for native tokens
 
+
+
   let denom, amount = 0
   if(whitelisted.has(transformed.assets[0].token)) {
     denom = transformed.assets[0].token

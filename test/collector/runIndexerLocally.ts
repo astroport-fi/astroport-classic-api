@@ -40,6 +40,7 @@ describe('Example test', function() {
           // height
           console.log("Indexing height...")
           await heightCollect();
+
           // supply_timeseries
           console.log("Indexing supply...")
           await supplyCollect();
@@ -49,6 +50,7 @@ describe('Example test', function() {
           // pool_volume_24h
           console.log("Indexing pool_volume_24h")
           await aggregatePoolVolume();
+
           // blocks, pairs, tokens, pool_volume
           console.log("Indexing chain...")
           await chainCollect(pairMap);
