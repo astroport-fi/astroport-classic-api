@@ -5,6 +5,7 @@ import { TERRA_CHAIN_ID } from "../constants";
 import { getBlock, updateBlock } from "../services";
 import { Pair } from "../types";
 import { runIndexers } from "./chainIndexer";
+import { PriceV2 } from "../types/priceV2.type";
 
 dayjs.extend(utc);
 
@@ -12,7 +13,7 @@ dayjs.extend(utc);
 const chainId = TERRA_CHAIN_ID;
 const waitFor = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-export async function chainCollect(pairMap: Map<string, Pair>): Promise<void> {
+export async function chainCollect(pairMap: Map<string, Pair>, priceMap: Map<string, PriceV2>): Promise<void> {
   if (chainId == null) {
     return;
   }
@@ -25,9 +26,6 @@ export async function chainCollect(pairMap: Map<string, Pair>): Promise<void> {
 
   const lastHeight = collectedBlock.hiveHeight;
 
-  const lunaExchangeRate = await getLunaExchangeRate();
-  const psiExchangeRate = await getPsiExchangeRate()
-
   for (let height = lastHeight + 1; height <= lastHeight + 150; height++) {
     console.log("Current height: " + height)
     const block = await getTxBlock(height);
@@ -36,7 +34,7 @@ export async function chainCollect(pairMap: Map<string, Pair>): Promise<void> {
       return;
     }
 
-    await runIndexers(block, height, pairMap, lunaExchangeRate, psiExchangeRate);
+    await runIndexers(block, height, pairMap, priceMap);
 
     await updateBlock(chainId, { hiveHeight: height });
 

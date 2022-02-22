@@ -28,6 +28,7 @@ export async function heightCollect(): Promise<void> {
   const lastHeight = collectedHeight.value;
 
   if (chainId === 'columbus-4' || lastHeight < columbus4EndHeight) {
+    console.log("heightcollect throw")
     throw new Error(
       'this version is for the columbus-5, you have to collect columbus-4 data by using columbus-4 version of terraswap-graph first'
     );

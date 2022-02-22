@@ -9,9 +9,10 @@ import { chainCollect } from "./chainCollect";
 import { supplyCollect } from "./supplyCollect";
 import { poolCollect } from "./poolCollect";
 import { getPairs } from "../services";
-import { pairListToMap } from "./helpers";
+import { pairListToMap, priceListToMap } from "./helpers";
 import { priceCollectV2 } from "./priceIndexer/priceCollectV2";
 import { externalPriceCollect } from "./externalPriceCollect";
+import { getPrices } from "../services/priceV2.service";
 
 bluebird.config({
   longStackTraces: true,
@@ -37,6 +38,9 @@ export async function run(
   const pairs = await getPairs();
   const pairMap = pairListToMap(pairs);
 
+  const prices = await getPrices();
+  const priceMap = priceListToMap(prices);
+
   try {
 
     const start = new Date().getTime()
@@ -58,7 +62,7 @@ export async function run(
 
     // blocks, pairs, tokens, pool_volume
     console.log("Indexing chain...")
-    await chainCollect(pairMap);
+    await chainCollect(pairMap, priceMap);
 
     console.log("Total time elapsed: " + (new Date().getTime() - start) / 1000)
 
