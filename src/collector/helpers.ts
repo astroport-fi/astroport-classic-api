@@ -1,9 +1,10 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import { TERRA_CHAIN_ID } from "../constants";
+import { TERRA_CHAIN_ID, TOKENS_WITH_8_DIGITS } from "../constants";
 import { getHeightByDate } from "../services";
 import { Pair } from "../types";
 import { getPsiExchangeRate } from "../lib/terra";
+import { PriceV2 } from "../types/priceV2.type";
 
 dayjs.extend(utc);
 
@@ -44,24 +45,26 @@ export function pairListToMap(pairList: Pair[]): Map<string, Pair> {
   }, new Map());
 }
 
+export function priceListToMap(priceList: PriceV2[]): Map<string, PriceV2> {
+  return priceList.reduce((mapAcc, obj) => {
+    mapAcc.set(obj.token_address, obj);
+    return mapAcc;
+  }, new Map());
+}
+
 /**
  * For a swap - return the corresponding UST volume of the swap.
- * Only works with UST, Luna, Psi base pairs.
+ * Certain pairs are disjoint with the rest of astroport, and need external price
+ * data for this function to work.
  *
- * TODO would like to rewrite this to pull price data from DB
  * @param transformed
- * @param lunaExchangeRate
- * @param psiExchangeRate
+ * @param priceMap
  */
 
-// supported token addresses for calculating volume
-const whitelisted = new Set<string>(['uusd', 'uluna', 'terra12897djskt9rge8dtmm86w654g7kzckkd698608'])
+export function getUSTSwapValue(transformed: any, priceMap: Map<string, PriceV2>): number {
 
-
-export function getUSTSwapValue(transformed: any, lunaExchangeRate: number, psiExchangeRate: number): number {
-  // try for native tokens
-
-
+  // supported token addresses for calculating volume
+  const whitelisted = new Set(priceMap.keys())
 
   let denom, amount = 0
   if(whitelisted.has(transformed.assets[0].token)) {
@@ -74,22 +77,13 @@ export function getUSTSwapValue(transformed: any, lunaExchangeRate: number, psiE
     console.log("Swap not supported from " + transformed.assets[0].token + " to " + transformed.assets[1].token)
   }
 
+  const price_ust = priceMap.get(denom)?.price_ust as number
 
+  let result = price_ust * amount / 1000000
 
-  switch(denom) {
-    case "uusd": {
-      return amount / 1000000;
-    }
-    case "uluna": {
-      return lunaExchangeRate * amount / 1000000;
-    }
-    case "terra12897djskt9rge8dtmm86w654g7kzckkd698608": { // psi
-      return psiExchangeRate * amount / 1000000;
-    }
-    default: {
-      console.log("Unable to find UST value of " + denom)
-      break;
-    }
+  if(TOKENS_WITH_8_DIGITS.has(denom)) {
+    result /= 100
   }
-  return 0
+
+  return result
 }

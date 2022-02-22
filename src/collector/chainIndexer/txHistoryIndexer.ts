@@ -2,6 +2,7 @@ import { Pair, TxHistoryTransformed } from "../../types";
 import { ReturningLogFinderResult } from '@terra-money/log-finder'
 import { getUSTSwapValue } from "../helpers";
 import { PoolVolume } from "../../models/pool_volume.model";
+import { PriceV2 } from "../../types/priceV2.type";
 
 /**
  * Iterates an events of a swap
@@ -9,15 +10,13 @@ import { PoolVolume } from "../../models/pool_volume.model";
  * Adds an entry to pool_volume for the block -> pool -> volume
  *
  * @param height
- * @param lunaExchangeRate
- * @param pairMap
+ * @param priceMap
  * @param founds
  * @constructor
  */
 export async function TxHistoryIndexer(
   height: number,
-  lunaExchangeRate: number,
-  psiExchangeRate: number,
+  priceMap: Map<string, PriceV2>,
   founds: ReturningLogFinderResult<TxHistoryTransformed | undefined>[]
 ): Promise<void> {
 
@@ -26,11 +25,7 @@ export async function TxHistoryIndexer(
     if (transformed) {
       if (transformed.action === 'swap') {
         // get UST value of swap (from asset)
-        const val: number = getUSTSwapValue(
-          transformed,
-          lunaExchangeRate,
-          psiExchangeRate
-        )
+        const val: number = getUSTSwapValue(transformed, priceMap)
 
         // if found, add to pool volume
         // otherwise insert new record

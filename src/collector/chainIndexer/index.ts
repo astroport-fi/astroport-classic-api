@@ -4,30 +4,25 @@ import { FACTORY_ADDRESS } from "../../constants";
 import { Pair } from "../../types";
 import { TxHistoryIndexer } from "./txHistoryIndexer";
 import { findProtocolRewardEmissions } from "./findProtocolRewardEmissions";
+import { PriceV2 } from "../../types/priceV2.type";
 
 /**
  * Indexes transactions for a single block
  * @param txs
  * @param height
  * @param pairMap
- * @param lunaExchangeRate
- * @param psiExchangeRate
+ * @param priceMap
  */
 export async function runIndexers(
   txs: any,
   height: number,
   pairMap: Map<string, Pair>,
-  lunaExchangeRate: number,
-  psiExchangeRate: number
+  priceMap: Map<string, PriceV2>
 ): Promise<void> {
   for (const tx of txs) {
     const Logs = tx.logs;
     const timestamp = tx.timestamp;
     const txHash = tx.txhash;
-
-    if(txHash == "F0D317A72818C03A35A862AD747CE732318CC47078C25854293CE8B49A2B80E3") {
-      console.log()
-    }
 
     for (const log of Logs) {
       const events = log.events;
@@ -65,7 +60,7 @@ export async function runIndexers(
 
             // transform, sum, add volume to pool_volume
             if(swapLogFound.length > 0) {
-              await TxHistoryIndexer(height, lunaExchangeRate, psiExchangeRate, swapLogFound)
+              await TxHistoryIndexer(height, priceMap, swapLogFound)
             }
           } catch(e) {
             console.log("Error during finding swaps/volume: " + e)
