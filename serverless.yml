@@ -34,6 +34,13 @@ functions:
     timeout: 175 # in seconds
     environment:
       MONGODB_URL: ${env:MONGODB_URL_RW}
+  makerFeeSwap:
+    handler: src/bot/makerSwap/index.run
+    events:
+      - schedule: rate(12 hours)
+    timeout: 10 # in seconds
+    environment:
+      MONGODB_URL: ${env:MONGODB_URL_R}
   graphql:
     handler: src/graphql/index.run
     events:
