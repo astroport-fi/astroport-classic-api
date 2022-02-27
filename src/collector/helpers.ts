@@ -3,6 +3,7 @@ import utc from "dayjs/plugin/utc";
 import { TERRA_CHAIN_ID, TOKENS_WITH_8_DIGITS } from "../constants";
 import { getHeightByDate } from "../services";
 import { Pair } from "../types";
+import { getPsiExchangeRate } from "../lib/terra";
 import { PriceV2 } from "../types/priceV2.type";
 
 dayjs.extend(utc);
@@ -55,7 +56,6 @@ export function priceListToMap(priceList: PriceV2[]): Map<string, PriceV2> {
  * For a swap - return the corresponding UST volume of the swap.
  * Certain pairs are disjoint with the rest of astroport, and need external price
  * data for this function to work.
- *
  *
  * @param transformed
  * @param priceMap
