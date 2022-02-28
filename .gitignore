@@ -1,6 +1,7 @@
 .env.local
 .DS_Store
 .idea/
+.env
 .env*.local
 .serverless
 /.build

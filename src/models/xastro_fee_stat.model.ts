@@ -39,17 +39,7 @@ const xAstroFeeStatSchema: Schema = new Schema(
       type: Schema.Types.Number,
       required: false,
       trim: true
-    },
-    astro_price: {
-      type: Schema.Types.Number,
-      required: false,
-      trim: true
-    },
-    xastro_staked: {
-      type: Schema.Types.Number,
-      required: false,
-      trim: true
-    },
+    }
   },
   {
     timestamps: true,

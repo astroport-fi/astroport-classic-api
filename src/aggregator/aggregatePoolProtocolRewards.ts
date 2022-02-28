@@ -12,7 +12,6 @@ dayjs.extend(utc);
  * Update the pool_volume_24hr table TODO
  */
 
-const DIGITS = 1000000;
 const chainId = TERRA_CHAIN_ID
 const BLOCKS_PER_YEAR = 4656810;
 
@@ -22,12 +21,7 @@ export async function aggregatePoolProtocolRewards(): Promise<void> {
   const latestHeight = await getLastHeight(chainId)
 
   // get block height 24hrs ago
-  // TODO - an estimation - switch over when height data correctly indexed
   const startBlockHeight = latestHeight.value - Math.floor(BLOCKS_PER_YEAR / 365)
-
-  // const startBlockHeight = await getHeightByDate(
-  //   chainId,
-  //   dayjs().utc().subtract(1, 'y').toISOString());
 
   // retrieve daily sums per pair and write to pool_protocol_rewards_24h
   for(const value of GENERATOR_PROXY_CONTRACTS.values()) {

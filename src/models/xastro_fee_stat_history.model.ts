@@ -1,9 +1,9 @@
 import { model, Schema } from "mongoose";
 
 /**
- * Historical xastro stats
+ * Historical xAstro stats
  */
-const xAstroFeeStatSchema: Schema = new Schema(
+const xAstroFeeStatHistorySchema: Schema = new Schema(
   {
     block: {
       type: Schema.Types.Number,
@@ -56,4 +56,4 @@ const xAstroFeeStatSchema: Schema = new Schema(
   }
 );
 
-export const xAstroFeeStat = model('XAstroFeeStat', xAstroFeeStatSchema, 'xastro_fee_stat');
+export const xAstroFeeStatHistory = model('XAstroFeeStatHistory', xAstroFeeStatHistorySchema, 'xastro_fee_stat_history');
