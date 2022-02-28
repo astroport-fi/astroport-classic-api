@@ -63,6 +63,9 @@ export async function run(
     console.log("Aggregating xAstro fees...")
     await aggregateXAstroFees(priceMap)
 
+    console.log("Done aggregating")
+
+
   } catch (e) {
     throw new Error("Error while running aggregator: " + e);
   }
