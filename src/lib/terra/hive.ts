@@ -4,8 +4,6 @@ import { TOKENS_WITH_8_DIGITS } from "../../constants";
 
 export let hive: GraphQLClient;
 
-const PSI_TOKEN = "terra12897djskt9rge8dtmm86w654g7kzckkd698608" as string;
-
 export function initHive(URL: string): GraphQLClient {
   hive = new GraphQLClient(URL, {
     timeout: 60000,
@@ -187,52 +185,6 @@ export async function getContractStore<T>(address: string, query: JSON): Promise
 
   return response.wasm.contractQuery
 
-}
-
-export async function getLunaExchangeRate(): Promise<number> {
-  const response = await hive.request(
-    gql`
-      query {
-        oracle {
-          exchangeRate(denom: uusd) {
-            amount
-          }
-        }
-      }
-    `
-  )
-
-  return response?.oracle?.exchangeRate?.amount;
-}
-
-export async function getPsiExchangeRate(): Promise<number> {
-
-  const response = await hive.request(
-    gql`
-      query($address: String!, $query: JSON!) {
-        wasm {
-          contractQuery(
-            contractAddress: $address,
-            query: $query
-          )
-        }
-      }
-    `,
-    {
-      address: "terra1v5ct2tuhfqd0tf8z0wwengh4fg77kaczgf6gtx",
-      query: JSON.parse('{ "pool": {} }')
-    }
-  )
-
-  let ustAmount, psiAmount
-  if(response?.wasm?.contractQuery?.assets[0]?.info?.native_token?.denom == "uusd") {
-    ustAmount = response?.wasm?.contractQuery?.assets[0]?.amount
-    psiAmount = response?.wasm?.contractQuery?.assets[1]?.amount
-  } else {
-    ustAmount = response?.wasm?.contractQuery?.assets[1]?.amount
-    psiAmount = response?.wasm?.contractQuery?.assets[0]?.amount
-  }
-  return ustAmount / psiAmount
 }
 
 // return pair liquidity in UST for a pair

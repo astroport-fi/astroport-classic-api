@@ -12,6 +12,7 @@ import { astroportStatsCollect } from "./astroportStatCollect";
 import { poolVolume7dCollect } from "./poolVolume7dCollect";
 import { getPairs } from "../services";
 import { aggregatePoolProtocolRewards7d } from "./aggregatePoolProtocolRewards7d";
+import { aggregateXAstroFees } from "./aggregateXAstroFees";
 
 bluebird.config({
   longStackTraces: true,
@@ -52,6 +53,9 @@ export async function run(
 
     console.log("Aggregating astroport global stats...")
     await astroportStatsCollect()
+
+    console.log("Aggregating xAstro fees...")
+    await aggregateXAstroFees()
 
   } catch (e) {
     throw new Error("Error while running aggregator: " + e);

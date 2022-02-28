@@ -1,4 +1,5 @@
 import { LogFinderRule } from '@terra-money/log-finder';
+import { MAKER_ADDRESS } from "../../constants";
 
 export function createPairRule(factoryAddress: string): LogFinderRule {
   return {
@@ -27,6 +28,39 @@ export function swapRule(): LogFinderRule {
     matchUntil: 'contract_address',
   }
 }
+
+
+// match cw20 token fees sent to maker
+export function xAstroCW20FeeRule(): LogFinderRule {
+  return {
+    type: 'wasm',
+    attributes: [
+      ['contract_address'],
+      ['action', 'transfer'],
+      ['from'],
+      ['to', MAKER_ADDRESS],
+      ['amount'],
+    ]
+  }
+}
+
+// match native terra asset fees sent to maker
+export function xAstroNativeFeeRule(): LogFinderRule {
+  return {
+    type: 'wasm',
+    attributes: [
+      ['ask_asset'],
+      ['offer_amount'],
+      ['return_amount'],
+      ['tax_amount'],
+      ['spread_amount'],
+      ['commission_amount'],
+      ['maker_fee_amount']
+    ]
+  }
+}
+
+
 // match proxy generator claims from protocol token factory
 export function generatorProxyClaimRule(token: string, proxy: string, factory: string): LogFinderRule {
   return {

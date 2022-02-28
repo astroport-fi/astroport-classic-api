@@ -4,7 +4,9 @@ import { FACTORY_ADDRESS } from "../../constants";
 import { Pair } from "../../types";
 import { TxHistoryIndexer } from "./txHistoryIndexer";
 import { findProtocolRewardEmissions } from "./findProtocolRewardEmissions";
+
 import { PriceV2 } from "../../types/priceV2.type";
+import { findXAstroFees } from "./findXAstroFees";
 
 /**
  * Indexes transactions for a single block
@@ -50,6 +52,13 @@ export async function runIndexers(
           }
 
           try {
+            // xAstro fees sent to maker
+            await findXAstroFees(event, height);
+          } catch(e) {
+            console.log("Error during findXAstroFees: " + e)
+          }
+
+          try {
             // swaps from tx history
             const swapLogFinder = createSwapLogFinder(pairMap);
             const swapLogFound = swapLogFinder(event);
@@ -65,6 +74,7 @@ export async function runIndexers(
           } catch(e) {
             console.log("Error during finding swaps/volume: " + e)
           }
+
 
         }
       }
