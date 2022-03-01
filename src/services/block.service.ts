@@ -19,7 +19,6 @@ export async function getBlock(chainId: string): Promise<any> {
 export async function getBlockResponse(): Promise<any> {
   const block = await Block.findOne({TERRA_CHAIN_ID})
   return {
-    chain_id: block?.chainId,
     height: block?.hiveHeight
   }
 }

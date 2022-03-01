@@ -64,7 +64,6 @@ export const typeDefs = /* GraphQL */ `
   }
   
   type Block {
-    chain_id: String
     height: Float
   }
 
