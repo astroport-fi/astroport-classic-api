@@ -19,7 +19,7 @@ export const resolvers = {
       return airdrops
     },
     block: async() => {
-      const block = await getBlock(TERRA_CHAIN_ID)
+      const block = await getBlock(TERRA_CHAIN_ID);
       return block
     },
     stats: async() => {

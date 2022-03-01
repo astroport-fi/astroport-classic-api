@@ -64,7 +64,7 @@ export const typeDefs = /* GraphQL */ `
   }
   
   type Block {
-    chain_id: string
+    chain_id: String
     hive_height: Float
   }
 
