@@ -43,7 +43,6 @@ export const typeDefs = /* GraphQL */ `
     total_rewards: Fee
   }
   
-
   type PoolPrices {
     token1_address: String
     token1_price_ust: Float
@@ -63,11 +62,17 @@ export const typeDefs = /* GraphQL */ `
     _24h_apy: Float
     block: Float
   }
+  
+  type Block {
+    chain_id: string
+    hive_height: Float
+  }
 
   # The "Query" type lists all of the available queries that
   # clients can execute, along with the return type for each.
   type Query {
     airdrop(address: String!): [Airdrop]
+    block: Block
     stats: AstroportStats
     pool(address: String!): Pool
     pools: [Pool]

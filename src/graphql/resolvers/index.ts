@@ -1,8 +1,9 @@
 
-import { getAirdrops, getPair, getPairs, getPool, getPools, getSupply } from "../../services";
+import { getAirdrops, getBlock, getPair, getPairs, getPool, getPools, getSupply } from "../../services";
 import { getStats } from "../../services/astroport_stats.service";
 import { getPriceByTokenAddress } from "../../services/priceV2.service";
 import { getStakingStats } from "../../services/xastro_fee_stat.service";
+import { TERRA_CHAIN_ID } from "../../constants";
 
 export const resolvers = {
   // Pair: {
@@ -16,6 +17,10 @@ export const resolvers = {
     airdrop: async(_: any, { address }: any) => {
       const airdrops = await getAirdrops(address);
       return airdrops
+    },
+    block: async() => {
+      const block = await getBlock(TERRA_CHAIN_ID)
+      return block
     },
     stats: async() => {
       const stats = await getStats();

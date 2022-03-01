@@ -1,5 +1,5 @@
 export type Block = {
-  chainId: string;
-  hiveHeight: number;
-  dailyHeight: number;
+  chain_id: string;
+  hive_height: number;
+  daily_height: number;
 };
