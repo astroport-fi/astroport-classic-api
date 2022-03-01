@@ -2,7 +2,7 @@ import { START_BLOCK_HEIGHT, TERRA_CHAIN_ID } from "../constants";
 import { Block } from "../models";
 
 export async function getBlock(chainId: string): Promise<any> {
-  const block = await Block.findOne({ chainId });
+  const block = await Block.findOne({ chainId: chainId });
 
   if (block == null) {
     const newBlock = new Block({
@@ -17,7 +17,7 @@ export async function getBlock(chainId: string): Promise<any> {
 }
 
 export async function getBlockResponse(): Promise<any> {
-  const block = await Block.findOne({TERRA_CHAIN_ID})
+  const block = await Block.findOne({ chainId: TERRA_CHAIN_ID })
   return {
     height: block?.hiveHeight
   }
@@ -30,6 +30,6 @@ export async function updateBlock(
     hiveHeight?: number;
   }
 ): Promise<any> {
-  const block = await Block.findOneAndUpdate({ chainId }, object);
+  const block = await Block.findOneAndUpdate({ chainId: chainId }, object);
   return block;
 }

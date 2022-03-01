@@ -1,10 +1,7 @@
 
 import {
   getAirdrops,
-  getBlock,
   getBlockResponse,
-  getPair,
-  getPairs,
   getPool,
   getPools,
   getSupply
@@ -12,7 +9,6 @@ import {
 import { getStats } from "../../services/astroport_stats.service";
 import { getPriceByTokenAddress } from "../../services/priceV2.service";
 import { getStakingStats } from "../../services/xastro_fee_stat.service";
-import { TERRA_CHAIN_ID } from "../../constants";
 
 export const resolvers = {
   // Pair: {
