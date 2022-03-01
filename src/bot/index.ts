@@ -41,7 +41,7 @@ export async function run(
     await initMantle("https://mantle.terra.dev/graphql")
     await initLCD(TERRA_LCD, TERRA_CHAIN_ID);
 
-    
+
     const devHeightRaw = await dev.request(gql`query { block { height } }`)
     const devHeight = devHeightRaw?.block?.height
     const mantleHeight = await getLatestHeight()
@@ -72,16 +72,17 @@ export async function run(
     message += "Blocks behind: " + (mantleHeight - devHeight) + "\n"
     message += "Hours behind : " + Math.round((mantleHeight - devHeight) / 600 * 100) / 100 + "\n"
     message += "---------------------\n"
-    // console.log("Realtime      : " + mantleHeight)
-    // console.log("Prod          : " + prodHeight)
-    // console.log("Blocks behind : " + (mantleHeight - prodHeight))
-    // console.log("Hours behind  : " + Math.round((mantleHeight - prodHeight) / 600 * 100) / 100)
+    message += "Prod stats coming next deployment\n"
+    // message += "Realtime     : " + mantleHeight + "\n"
+    // message += "Prod         : " + prodHeight + "\n"
+    // message += "Blocks behind: " + (mantleHeight - prodHeight) + "\n"
+    // message += "Hours behind : " + Math.round((mantleHeight - prodHeight) / 600 * 100) / 100 + "\n"
 
     message += "--------------------------\n"
     message += "|          Bots          |\n"
     message += "--------------------------\n"
 
-    message += "Maker Fee Swapper\n"
+    message += "Maker Fee Swapper - " + wallet + "\n"
     message += "UST balance: " + ust_rounded + "\n"
     message += "Days left  : " + Math.round(ust_rounded / daily_gas) + "\n"
     message += "```"

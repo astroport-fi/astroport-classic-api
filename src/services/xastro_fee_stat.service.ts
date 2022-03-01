@@ -13,10 +13,19 @@ export async function getStakingStats(): Promise<XAstroFeeStat> {
     return Promise.reject()
   }
 
+  let apr = result?._24h_apr
+  if(isNaN(apr) || !isFinite(apr)) {
+    apr = 0
+  }
+
+  let apy = result?._24h_apy
+  if(isNaN(apy) || !isFinite(apy)) {
+    apy = 0
+  }
   return {
     _24h_fees_ust: result?._24h_fees_ust,
-    _24h_apr: result?._24h_apr,
-    _24h_apy: result?._24h_apy,
+    _24h_apr: apr,
+    _24h_apy: apy,
     block: result?.block,
     _7d_fees_ust: 0,
     _7d_apr: 0,
