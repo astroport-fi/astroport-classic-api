@@ -18,6 +18,8 @@ const DEV_URL = "https://2h8711jruf.execute-api.us-east-1.amazonaws.com/dev/grap
 const PROD_URL = "https://api.astroport.fi/graphql"
 const SLACK_WEBHOOK = "https://hooks.slack.com/services/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"
 
+
+
 export async function run(
   _: APIGatewayProxyEvent,
   context: APIGatewayAuthorizerResultContext
@@ -26,6 +28,7 @@ export async function run(
   context.callbackWaitsForEmptyEventLoop = false;
 
   try {
+
     const dev = new GraphQLClient(DEV_URL, {
       timeout: 5000,
       keepalive: true,
@@ -35,6 +38,10 @@ export async function run(
       keepalive: true
     })
 
+    await initMantle("https://mantle.terra.dev/graphql")
+    await initLCD(TERRA_LCD, TERRA_CHAIN_ID);
+
+    
     const devHeightRaw = await dev.request(gql`query { block { height } }`)
     const devHeight = devHeightRaw?.block?.height
     const mantleHeight = await getLatestHeight()
@@ -89,7 +96,7 @@ export async function run(
     }
 
     await axios.post(SLACK_WEBHOOK, post_fields, config)
-    
+
   } catch (e) {
     throw new Error("Error while running bots: " + e);
   }
