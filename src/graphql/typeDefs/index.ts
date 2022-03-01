@@ -65,7 +65,7 @@ export const typeDefs = /* GraphQL */ `
   
   type Block {
     chain_id: String
-    hive_height: Float
+    height: Float
   }
 
   # The "Query" type lists all of the available queries that

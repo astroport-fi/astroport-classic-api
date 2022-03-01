@@ -1,4 +1,4 @@
-import { START_BLOCK_HEIGHT } from "../constants";
+import { START_BLOCK_HEIGHT, TERRA_CHAIN_ID } from "../constants";
 import { Block } from "../models";
 
 export async function getBlock(chainId: string): Promise<any> {
@@ -14,6 +14,14 @@ export async function getBlock(chainId: string): Promise<any> {
     return newBlock.save();
   }
   return block;
+}
+
+export async function getBlockResponse(): Promise<any> {
+  const block = await Block.findOne({TERRA_CHAIN_ID})
+  return {
+    chain_id: block?.chainId,
+    height: block?.hiveHeight
+  }
 }
 
 export async function updateBlock(
