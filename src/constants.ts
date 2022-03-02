@@ -6,9 +6,13 @@ export const TERRA_CHAIN_ID = process.env.TERRA_CHAIN_ID as string;
 export const START_BLOCK_HEIGHT = Number(process.env.START_BLOCK_HEIGHT);
 export const MONGODB_URL = process.env.MONGODB_URL as string;
 
+// seed for wallet that calls maker contract
+export const MAKER_FEE_COLLECTOR_SEED = process.env.TRIGGER_SEED as string
+// trigger collect on this address
+export const MAKER_CONTRACT = process.env.MAKER_CONTRACT as string
+
 export const ASTRO_TOKEN = "terra1xj49zyqrwpv5k928jwfpfy2ha668nwdgkwlrg3" as string
 export const XASTRO_TOKEN = "terra1cw7znqh9w5f2ryyskq76fmxhj9hdl06uv0j0cd"
-
 export const BUILDER_UNLOCK = "terra1fh27l8h4s0tfx9ykqxq5efq4xx88f06x6clwmr"
 export const MULTISIG = "terra1c7m6j8ya58a2fkkptn8fgudx8sqjqvc8azq0ex"
 export const ASTRO_UST_PAIR = "terra1l7xu2rl3c7qmtx3r5sd2tz25glf6jh8ul7aag7"

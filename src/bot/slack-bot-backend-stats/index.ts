@@ -1,8 +1,8 @@
 import bluebird from "bluebird";
 import { APIGatewayAuthorizerResultContext, APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 
-import { getLatestHeight, initHive, initLCD, initMantle } from "../lib/terra";
-import { TERRA_CHAIN_ID, TERRA_HIVE, TERRA_LCD, TERRA_MANTLE } from "../constants";
+import { getLatestHeight, initLCD, initMantle } from "../../lib/terra";
+import { TERRA_CHAIN_ID, TERRA_LCD } from "../../constants";
 
 import { gql, GraphQLClient } from "graphql-request";
 import axios from "axios";
@@ -41,14 +41,18 @@ export async function run(
     await initMantle("https://mantle.terra.dev/graphql")
     await initLCD(TERRA_LCD, TERRA_CHAIN_ID);
 
-
+    // blocks
     const devHeightRaw = await dev.request(gql`query { block { height } }`)
     const devHeight = devHeightRaw?.block?.height
     const mantleHeight = await getLatestHeight()
-    // TODO enable after deployment
-    // const prodHeightRaw = await prod.request(gql`query { block { height } }`)
-    // const prodHeight = prodHeightRaw?.data?.block?.height
+    const prodHeightRaw = await prod.request(gql`query { block { height } }`)
+    const prodHeight = prodHeightRaw?.data?.block?.height
 
+    // stats
+    const dayFeesRaw = await dev.request(gql`query { staking { _24h_fees_ust }}`)
+    const dayFees  = dayFeesRaw?.staking?._24h_fees_ust
+
+    // bots
     // maker bot address - mainnet
     const wallet = "terra1lz4pz06aa3e5f70u2pcc3u754n847lk9cww05r"
     const url = "https://lcd.terra.dev/cosmos/bank/v1beta1/balances/" + wallet + "/by_denom?denom=uusd"
@@ -73,10 +77,14 @@ export async function run(
     message += "Hours behind : " + Math.round((mantleHeight - devHeight) / 600 * 100) / 100 + "\n"
     message += "---------------------\n"
     message += "Prod stats coming next deployment\n"
-    // message += "Realtime     : " + mantleHeight + "\n"
-    // message += "Prod         : " + prodHeight + "\n"
-    // message += "Blocks behind: " + (mantleHeight - prodHeight) + "\n"
-    // message += "Hours behind : " + Math.round((mantleHeight - prodHeight) / 600 * 100) / 100 + "\n"
+    message += "Realtime     : " + mantleHeight + "\n"
+    message += "Prod         : " + prodHeight + "\n"
+    message += "Blocks behind: " + (mantleHeight - prodHeight) + "\n"
+    message += "Hours behind : " + Math.round((mantleHeight - prodHeight) / 600 * 100) / 100 + "\n"
+    message += "--------------------------\n"
+    message += "|          Stats         |\n"
+    message += "--------------------------\n"
+    message += "Fees 24h: " + dayFees  + "\n"
 
     message += "--------------------------\n"
     message += "|          Bots          |\n"
