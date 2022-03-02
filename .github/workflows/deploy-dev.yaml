@@ -32,7 +32,7 @@ jobs:
           echo -e 'MONGODB_URL_R="${{ secrets.DEV_MONGO_URL_R }}"' >> .env
           echo -e 'MONGODB_URL_RW="${{ secrets.DEV_MONGO_URL_RW }}"' >> .env 
           echo -e 'COINGECKO_API_KEY="${{ secrets.COINGECKO_API_KEY }}"' >> .env
-          echo -e 'MAKER_FEE_COLLECTOR_SEED="{{ secrets.MAKER_FEE_COLLECTOR_SEED }}"' >> .env
+          echo -e 'MAKER_FEE_COLLECTOR_SEED="${{ secrets.MAKER_FEE_COLLECTOR_SEED }}"' >> .env
       - name: Install NPM dependencies
         run: npm install
       # Optional
