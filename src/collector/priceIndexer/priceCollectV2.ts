@@ -16,8 +16,10 @@ import { PriceV2 } from "../../models/price_v2.model";
  */
 export async function priceCollectV2(pairs: Pair[]): Promise<void> {
   // get/calculate prices
+  console.log("Index prices")
   const prices = await indexPrices(pairs)
   // update prices
+  console.log("Save prices")
   await savePrices(prices)
 
 }
@@ -47,8 +49,12 @@ async function indexPrices(pairs: Pair[]): Promise<Map<string, PriceGraphNode>> 
     }
   }
 
+  console.log("Adding price edges")
   // add price (edges)
   for(const pair of pairs) {
+    // TODO this query takes too long, especially for 145 pairs
+    // TODO Start saving pool token amounts in DB
+    // TODO and batch querying
     const data = await getPool(pair.contractAddr, height);
     if (data == null) continue
 
