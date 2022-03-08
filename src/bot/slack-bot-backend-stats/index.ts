@@ -46,10 +46,10 @@ export async function run(
     const devHeight = devHeightRaw?.block?.height
     const mantleHeight = await getLatestHeight()
     const prodHeightRaw = await prod.request(gql`query { block { height } }`)
-    const prodHeight = prodHeightRaw?.data?.block?.height
+    const prodHeight = prodHeightRaw?.block?.height
 
     // stats
-    const dayFeesRaw = await dev.request(gql`query { staking { _24h_fees_ust }}`)
+    const dayFeesRaw = await prod.request(gql`query { staking { _24h_fees_ust }}`)
     const dayFees  = dayFeesRaw?.staking?._24h_fees_ust
 
     // bots
@@ -75,16 +75,15 @@ export async function run(
     message += "Dev          : " + devHeight + "\n"
     message += "Blocks behind: " + (mantleHeight - devHeight) + "\n"
     message += "Hours behind : " + Math.round((mantleHeight - devHeight) / 600 * 100) / 100 + "\n"
-    message += "---------------------\n"
-    message += "Prod stats coming next deployment\n"
+    message += "\n"
     message += "Realtime     : " + mantleHeight + "\n"
     message += "Prod         : " + prodHeight + "\n"
     message += "Blocks behind: " + (mantleHeight - prodHeight) + "\n"
-    message += "Hours behind : " + Math.round((mantleHeight - prodHeight) / 600 * 100) / 100 + "\n"
+    message += "Hours behind : " + Math.round((mantleHeight - prodHeight) / 600 * 100) / 100 + "\n\n"
     message += "--------------------------\n"
     message += "|          Stats         |\n"
     message += "--------------------------\n"
-    message += "Fees 24h: " + dayFees  + "\n"
+    message += "Fees 24h: " + dayFees  + "\n\n"
 
     message += "--------------------------\n"
     message += "|          Bots          |\n"

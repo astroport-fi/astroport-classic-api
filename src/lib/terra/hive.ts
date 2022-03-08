@@ -180,8 +180,8 @@ export async function getContractStore<T>(address: string, query: JSON): Promise
       }
     `,
     {
-        address,
-        query,
+      address,
+      query,
     }
   );
 
