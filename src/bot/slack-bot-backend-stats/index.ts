@@ -49,7 +49,7 @@ export async function run(
     const prodHeight = prodHeightRaw?.block?.height
 
     // stats
-    const dayFeesRaw = await dev.request(gql`query { staking { _24h_fees_ust }}`)
+    const dayFeesRaw = await prod.request(gql`query { staking { _24h_fees_ust }}`)
     const dayFees  = dayFeesRaw?.staking?._24h_fees_ust
 
     // bots
