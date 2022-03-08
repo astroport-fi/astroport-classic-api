@@ -84,6 +84,7 @@ export async function run(
     message += "|          Stats         |\n"
     message += "--------------------------\n"
     message += "Fees 24h: " + dayFees  + "\n\n"
+
     message += "--------------------------\n"
     message += "|          Bots          |\n"
     message += "--------------------------\n"

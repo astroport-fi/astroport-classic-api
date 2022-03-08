@@ -4,7 +4,6 @@ import { FACTORY_ADDRESS } from "../../constants";
 import { Pair } from "../../types";
 import { TxHistoryIndexer } from "./txHistoryIndexer";
 import { findProtocolRewardEmissions } from "./findProtocolRewardEmissions";
-
 import { PriceV2 } from "../../types/priceV2.type";
 import { findXAstroFees } from "./findXAstroFees";
 

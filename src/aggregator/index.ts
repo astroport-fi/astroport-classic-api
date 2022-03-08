@@ -40,7 +40,6 @@ export async function run(
   const prices = await getPrices();
   const priceMap = priceListToMap(prices);
 
-
   try {
     console.log("Aggregating pool_volume_24h...")
     await aggregatePoolVolume();

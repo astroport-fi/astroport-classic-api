@@ -255,3 +255,46 @@ export const EXTERNAL_TOKENS = new Map<string, any>(
     }]
   ]
 )
+
+// temporary pair whitelist for prices/pools until we
+// improve performance
+export const PAIRS_WHITELIST = new Set<string>([
+  "terra1m6ywlgn6wrjuagcmmezzz2a029gtldhey5k552",
+  "terra1qr2k6yjjd5p2kaewqvg93ag74k6gyjr7re37fs",
+  "terra143xxfw5xf62d5m32k3t4eu9s82ccw80lcprzl9",
+  "terra1mxyp5z27xxgmv70xpqjk7jvfq54as9dfzug74m",
+  "terra1m95udvvdame93kl6j2mk8d03kc982wqgr75jsr",
+  "terra15s2wgdeqhuc4gfg7sfjyaep5cch38mwtzmwqrx",
+  "terra134m8n2epp0n40qr08qsvvrzycn2zq4zcpmue48",
+  "terra1v5ct2tuhfqd0tf8z0wwengh4fg77kaczgf6gtx",
+  "terra1zpnhtf9h5s7ze2ewlqyer83sr4043qcq64zfc4",
+  "terra1j66jatn3k50hjtg2xemnjm8s7y8dws9xqa5y8w",
+  "terra1l7xu2rl3c7qmtx3r5sd2tz25glf6jh8ul7aag7",
+  "terra1rhk92dvz3tjayymy8pl08gpkmamnud7ttzc03h",
+  "terra1nujm9zqa4hpaz9s8wrhrp86h3m9xwprjt9kmf9",
+  "terra16jaryra6dgfvkd3gqr5tcpy3p2s37stpa9sk7s",
+  "terra1tehmd65kyleuwuf3a362mhnupkpza29vd86sml",
+  "terra1m32zs8725j9jzvva7zmytzasj392wpss63j2v0",
+  "terra16e5tgdxre44gvmjuu3ulsa64kc6eku4972yjp3",
+  "terra1wr07qcmfqz2vxhcfr6k8xv8eh5es7u9mv2z07x",
+  "terra1476fucrvu5tuga2nx28r3fctd34xhksc2gckgf",
+  "terra18hjdxnnkv8ewqlaqj3zpn0vsfpzdt3d0y2ufdz",
+  "terra10lv5wz84kpwxys7jeqkfxx299drs3vnw0lj8mz",
+  "terra1x0ulpvp6m46c5j7t40nj24mjp900954ys2jsnu",
+  "terra1cc6kqk0yl25hdpr5llxmx62mlyfdl7n0rwl3hq",
+  "terra1qmxkqcgcgq8ch72k6kwu3ztz6fh8tx2xd76ws7",
+  "terra1szt6cq52akhmzcqw5jhkw3tvdjtl4kvyk3zkhx",
+  "terra1cevdyd0gvta3h79uh5t47kk235rvn42gzf0450",
+  "terra1gxjjrer8mywt4020xdl5e5x7n6ncn6w38gjzae",
+  "terra18dq84qfpz267xuu0k47066svuaez9hr4xvwlex",
+  "terra1edurrzv6hhd8u48engmydwhvz8qzmhhuakhwj3",
+  "terra1mv04l9m4xc6fntxnty265rsqpnn0nk8aq0c9ge",
+  "terra13yftwgefkggq3u627gphq98s6ufwh9u85h5kmg",
+  "terra1shgwa4xwdegsxvtr0qaergjq689sakzvn87fvy",
+  "terra1qswfc7hmmsnwf7f2nyyx843sug60urnqgz75zu",
+  "terra1lnr6aacxfng34m69076s2mdfjzt8nev2p6z5q0",
+  "terra1296jw27cq8svlg4ywm8t84u448p3zs7mcqg9ra",
+  "terra124yter7w9e5mf6m843erql48xy5szsxd75zjxw",
+  "terra1092tamrn3w8j7qp0uu2ltml7sjts7z9hkj2wga",
+  "terra143az0w2e504n56q7k43qyh2fu69fh3rhup32n3",
+  "terra19wauh79y42u5vt62c5adt2g5h4exgh26t3rpds"]);

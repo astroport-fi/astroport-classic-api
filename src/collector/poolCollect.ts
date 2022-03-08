@@ -7,7 +7,7 @@ import {
   ASTRO_YEARLY_EMISSIONS,
   EXTERNAL_TOKENS,
   FEES,
-  GENERATOR_PROXY_CONTRACTS, POOLS_WITH_8_DIGIT_REWARD_TOKENS, STABLE_SWAP_POOLS,
+  GENERATOR_PROXY_CONTRACTS, PAIRS_WHITELIST, POOLS_WITH_8_DIGIT_REWARD_TOKENS, STABLE_SWAP_POOLS,
   TOKEN_ADDRESS_MAP
 } from "../constants";
 import { insertPoolTimeseries } from "../services/pool_timeseries.service";
@@ -55,6 +55,11 @@ export async function poolCollect(): Promise<void> {
   const astro_price = priceMap.get(ASTRO_TOKEN)?.price_ust as number
 
   for (const pair of pairs) {
+    // TODO remove after batching
+    if(!PAIRS_WHITELIST.has(pair.contractAddr)) {
+      continue
+    }
+
     const result = new PoolTimeseries();
 
     // TODO batch hive requests
