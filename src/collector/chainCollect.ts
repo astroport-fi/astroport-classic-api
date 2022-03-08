@@ -25,7 +25,7 @@ export async function chainCollect(pairMap: Map<string, Pair>, priceMap: Map<str
 
   const lastHeight = collectedBlock.hiveHeight;
 
-  for (let height = lastHeight + 1; height <= lastHeight + 150; height++) {
+  for (let height = lastHeight + 1; height <= lastHeight + 500; height++) {
     console.log("Current height: " + height)
     const block = await getTxBlock(height);
     if (!block) {
