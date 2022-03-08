@@ -46,7 +46,7 @@ export async function run(
     const devHeight = devHeightRaw?.block?.height
     const mantleHeight = await getLatestHeight()
     const prodHeightRaw = await prod.request(gql`query { block { height } }`)
-    const prodHeight = prodHeightRaw?.data?.block?.height
+    const prodHeight = prodHeightRaw?.block?.height
 
     // stats
     const dayFeesRaw = await dev.request(gql`query { staking { _24h_fees_ust }}`)
