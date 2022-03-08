@@ -297,4 +297,6 @@ export const PAIRS_WHITELIST = new Set<string>([
   "terra124yter7w9e5mf6m843erql48xy5szsxd75zjxw",
   "terra1092tamrn3w8j7qp0uu2ltml7sjts7z9hkj2wga",
   "terra143az0w2e504n56q7k43qyh2fu69fh3rhup32n3",
-  "terra19wauh79y42u5vt62c5adt2g5h4exgh26t3rpds"]);
+  "terra19wauh79y42u5vt62c5adt2g5h4exgh26t3rpds",
+  "terra1z7634s8kyyvjjuv7lcgkfy49hamxssxq9f9xw6"
+]);
