@@ -30,8 +30,8 @@ functions:
   collector:
     handler: src/collector/index.run
     events:
-      - schedule: rate(8 minutes)
-    timeout: 475 # in seconds
+      - schedule: rate(15 minutes)
+    timeout: 895 # in seconds
     environment:
       MONGODB_URL: ${env:MONGODB_URL_RW}
   graphql:
