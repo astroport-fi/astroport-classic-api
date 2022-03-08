@@ -52,7 +52,7 @@ export async function findXAstroFees(
         block: height
       })
     } catch (e) {
-      console.log("Error finding xastro fees: " + e)
+      // console.log("Error finding xastro fees: " + e)
     }
   }
 }
