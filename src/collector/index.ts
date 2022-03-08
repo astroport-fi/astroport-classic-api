@@ -48,8 +48,8 @@ export async function run(
     console.log("Indexing height...")
     await heightCollect();
 
-    console.log("Indexing prices v2...")
-    await priceCollectV2(pairs);
+    // console.log("Indexing prices v2...")
+    // await priceCollectV2(pairs);
 
     console.log("Fetching external prices...")
     await externalPriceCollect()
