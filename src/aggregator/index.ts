@@ -12,6 +12,9 @@ import { astroportStatsCollect } from "./astroportStatCollect";
 import { poolVolume7dCollect } from "./poolVolume7dCollect";
 import { getPairs } from "../services";
 import { aggregatePoolProtocolRewards7d } from "./aggregatePoolProtocolRewards7d";
+import { getPrices } from "../services/priceV2.service";
+import { priceListToMap } from "../collector/helpers";
+import { aggregateXAstroFees } from "./aggregateXAstroFees";
 
 bluebird.config({
   longStackTraces: true,
@@ -34,6 +37,9 @@ export async function run(
 
   const pairs = await getPairs();
 
+  const prices = await getPrices();
+  const priceMap = priceListToMap(prices);
+
   try {
     console.log("Aggregating pool_volume_24h...")
     await aggregatePoolVolume();
@@ -52,6 +58,12 @@ export async function run(
 
     console.log("Aggregating astroport global stats...")
     await astroportStatsCollect()
+
+    console.log("Aggregating xAstro fees...")
+    await aggregateXAstroFees(priceMap)
+
+    console.log("Done aggregating")
+
 
   } catch (e) {
     throw new Error("Error while running aggregator: " + e);

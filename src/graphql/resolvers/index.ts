@@ -1,7 +1,13 @@
-
-import { getAirdrops, getPair, getPairs, getPool, getPools, getSupply } from "../../services";
+import {
+  getAirdrops,
+  getBlockResponse,
+  getPool,
+  getPools,
+  getSupply
+} from "../../services";
 import { getStats } from "../../services/astroport_stats.service";
 import { getPriceByTokenAddress } from "../../services/priceV2.service";
+import { getStakingStats } from "../../services/xastro_fee_stat.service";
 
 export const resolvers = {
   // Pair: {
@@ -16,17 +22,13 @@ export const resolvers = {
       const airdrops = await getAirdrops(address);
       return airdrops
     },
+    block: async() => {
+      const block = await getBlockResponse();
+      return block
+    },
     stats: async() => {
       const stats = await getStats();
       return stats
-    },
-    pair: async (_: any, { contractAddr }: any) => {
-      const pair = await getPair(contractAddr);
-      return pair;
-    },
-    pairs: async () => {
-      const pairs = await getPairs();
-      return pairs;
     },
     price: async(_: any, { tokenAddress }: any) => {
       const price = await getPriceByTokenAddress(tokenAddress);
@@ -43,6 +45,10 @@ export const resolvers = {
     supply: async() => {
       const supply = await getSupply();
       return supply;
+    },
+    staking: async() => {
+      const xastro_fee_stat = await getStakingStats()
+      return xastro_fee_stat;
     }
   },
 };

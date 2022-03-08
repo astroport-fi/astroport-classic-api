@@ -22,3 +22,8 @@ export interface ProtocolTokenTransferTransformed {
   pool: string
   amount: number
 }
+
+export interface XAstroFeeTransformed {
+  token: string
+  amount: number
+}

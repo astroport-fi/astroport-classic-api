@@ -8,16 +8,6 @@ export const typeDefs = /* GraphQL */ `
     index: Int
     airdrop_series: Int
   }
-
-  type Pair {
-    contractAddr: String
-    liquidityToken: String
-    token1: String
-    token2: String
-    type: String
-    prices: Price
-    createdAt: DateTime
-  }
   
   type Price {
     token_address: String
@@ -53,7 +43,6 @@ export const typeDefs = /* GraphQL */ `
     total_rewards: Fee
   }
   
-
   type PoolPrices {
     token1_address: String
     token1_price_ust: Float
@@ -61,23 +50,33 @@ export const typeDefs = /* GraphQL */ `
     token2_price_ust: Float
   }
   
-
   type AstroportStats {
     total_liquidity: Float
     total_volume_24h: Float
     astro_price: Float
+  }
+  
+  type Staking {
+    _24h_fees_ust: Float
+    _24h_apr: Float
+    _24h_apy: Float
+    block: Float
+  }
+  
+  type Block {
+    height: Float
   }
 
   # The "Query" type lists all of the available queries that
   # clients can execute, along with the return type for each.
   type Query {
     airdrop(address: String!): [Airdrop]
+    block: Block
     stats: AstroportStats
-    pair(contractAddr: ID!): Pair
-    pairs: [Pair]
     pool(address: String!): Pool
     pools: [Pool]
     price(tokenAddress: String!): Price
     supply: Supply
+    staking: Staking
   }
 `;

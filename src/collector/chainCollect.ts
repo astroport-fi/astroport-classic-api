@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import { getLunaExchangeRate, getPsiExchangeRate, getTxBlock } from "../lib/terra";
+import { getTxBlock } from "../lib/terra";
 import { TERRA_CHAIN_ID } from "../constants";
 import { getBlock, updateBlock } from "../services";
 import { Pair } from "../types";
@@ -10,15 +10,14 @@ import { PriceV2 } from "../types/priceV2.type";
 dayjs.extend(utc);
 
 
-const chainId = TERRA_CHAIN_ID;
 const waitFor = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 export async function chainCollect(pairMap: Map<string, Pair>, priceMap: Map<string, PriceV2>): Promise<void> {
-  if (chainId == null) {
+  if (TERRA_CHAIN_ID == null) {
     return;
   }
 
-  const collectedBlock = await getBlock(chainId);
+  const collectedBlock = await getBlock(TERRA_CHAIN_ID);
 
   if (collectedBlock == null) {
     return;
@@ -36,7 +35,7 @@ export async function chainCollect(pairMap: Map<string, Pair>, priceMap: Map<str
 
     await runIndexers(block, height, pairMap, priceMap);
 
-    await updateBlock(chainId, { hiveHeight: height });
+    await updateBlock(TERRA_CHAIN_ID, { hiveHeight: height });
 
     if (height % 100 === 0) console.log(`collected: ${height} / latest height: ${lastHeight}`)
 

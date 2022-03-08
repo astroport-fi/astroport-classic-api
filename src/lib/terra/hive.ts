@@ -186,53 +186,6 @@ export async function getContractStore<T>(address: string, query: JSON): Promise
   );
 
   return response.wasm.contractQuery
-
-}
-
-export async function getLunaExchangeRate(): Promise<number> {
-  const response = await hive.request(
-    gql`
-      query {
-        oracle {
-          exchangeRate(denom: uusd) {
-            amount
-          }
-        }
-      }
-    `
-  )
-
-  return response?.oracle?.exchangeRate?.amount;
-}
-
-export async function getPsiExchangeRate(): Promise<number> {
-
-  const response = await hive.request(
-    gql`
-      query($address: String!, $query: JSON!) {
-        wasm {
-          contractQuery(
-            contractAddress: $address,
-            query: $query
-          )
-        }
-      }
-    `,
-    {
-      address: "terra1v5ct2tuhfqd0tf8z0wwengh4fg77kaczgf6gtx",
-      query: JSON.parse('{ "pool": {} }')
-    }
-  )
-
-  let ustAmount, psiAmount
-  if(response?.wasm?.contractQuery?.assets[0]?.info?.native_token?.denom == "uusd") {
-    ustAmount = response?.wasm?.contractQuery?.assets[0]?.amount
-    psiAmount = response?.wasm?.contractQuery?.assets[1]?.amount
-  } else {
-    ustAmount = response?.wasm?.contractQuery?.assets[1]?.amount
-    psiAmount = response?.wasm?.contractQuery?.assets[0]?.amount
-  }
-  return ustAmount / psiAmount
 }
 
 // return pair liquidity in UST for a pair

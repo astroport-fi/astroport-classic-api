@@ -49,6 +49,9 @@ async function indexPrices(pairs: Pair[]): Promise<Map<string, PriceGraphNode>> 
 
   // add price (edges)
   for(const pair of pairs) {
+    // TODO this query takes too long, especially for 145 pairs
+    // TODO Start saving pool token amounts in DB
+    // TODO and batch querying
     const data = await getPool(pair.contractAddr, height);
     if (data == null) continue
 

@@ -3,7 +3,6 @@ import utc from "dayjs/plugin/utc";
 import { TERRA_CHAIN_ID, TOKENS_WITH_8_DIGITS } from "../constants";
 import { getHeightByDate } from "../services";
 import { Pair } from "../types";
-import { getPsiExchangeRate } from "../lib/terra";
 import { PriceV2 } from "../types/priceV2.type";
 
 dayjs.extend(utc);
