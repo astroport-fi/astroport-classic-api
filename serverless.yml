@@ -23,15 +23,15 @@ functions:
   aggregator:
     handler: src/aggregator/index.run
     events:
-      - schedule: rate(3 minutes)
-    timeout: 175 # in seconds
+      - schedule: rate(5 minutes)
+    timeout: 295 # in seconds
     environment:
       MONGODB_URL: ${env:MONGODB_URL_RW}
   collector:
     handler: src/collector/index.run
     events:
-      - schedule: rate(8 minutes)
-    timeout: 475 # in seconds
+      - schedule: rate(10 minutes)
+    timeout: 595 # in seconds
     environment:
       MONGODB_URL: ${env:MONGODB_URL_RW}
   slack-bot-backend-stats: # uncomment to redeploy backend-stat-bot

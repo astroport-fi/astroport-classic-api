@@ -224,6 +224,7 @@ export const STABLE_SWAP_POOLS = new Set<string>(
     'terra1qmxkqcgcgq8ch72k6kwu3ztz6fh8tx2xd76ws7', // avUSDC ust
     'terra1cc6kqk0yl25hdpr5llxmx62mlyfdl7n0rwl3hq', // soUSDC ust
     'terra1x0ulpvp6m46c5j7t40nj24mjp900954ys2jsnu', // weUSDC ust
+    'terra1qswfc7hmmsnwf7f2nyyx843sug60urnqgz75zu', // Luna LunaX
   ])
 
 // tokens that have 8 digits
@@ -298,5 +299,6 @@ export const PAIRS_WHITELIST = new Set<string>([
   "terra1092tamrn3w8j7qp0uu2ltml7sjts7z9hkj2wga",
   "terra143az0w2e504n56q7k43qyh2fu69fh3rhup32n3",
   "terra19wauh79y42u5vt62c5adt2g5h4exgh26t3rpds",
-  "terra1z7634s8kyyvjjuv7lcgkfy49hamxssxq9f9xw6"
+  "terra1z7634s8kyyvjjuv7lcgkfy49hamxssxq9f9xw6",
+  "terra1qswfc7hmmsnwf7f2nyyx843sug60urnqgz75zu" // Luna LunaX
 ]);
