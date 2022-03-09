@@ -57,8 +57,8 @@ export async function run(
     console.log("Indexing supply_timeseries...")
     await supplyCollect();
 
-    // console.log("Indexing pool_timeseries...")
-    // await poolCollect();
+    console.log("Indexing pool_timeseries...")
+    await poolCollect();
 
     // blocks, pairs, tokens, pool_volume
     console.log("Indexing chain...")
