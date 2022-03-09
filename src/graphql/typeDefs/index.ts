@@ -66,6 +66,13 @@ export const typeDefs = /* GraphQL */ `
   type Block {
     height: Float
   }
+  
+  type Token {
+    tokenAddr: String
+    symbol: String
+    icon: String
+    decimals: Float
+  }
 
   # The "Query" type lists all of the available queries that
   # clients can execute, along with the return type for each.
@@ -78,5 +85,6 @@ export const typeDefs = /* GraphQL */ `
     price(tokenAddress: String!): Price
     supply: Supply
     staking: Staking
+    tokens: [Token]
   }
 `;
