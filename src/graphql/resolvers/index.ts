@@ -4,7 +4,7 @@ import {
   getBlockResponse,
   getPool,
   getPools,
-  getSupply
+  getSupply, getTokens
 } from "../../services";
 import { getStats } from "../../services/astroport_stats.service";
 import { getPriceByTokenAddress } from "../../services/priceV2.service";
@@ -50,6 +50,10 @@ export const resolvers = {
     staking: async() => {
       const xastro_fee_stat = await getStakingStats()
       return xastro_fee_stat;
+    },
+    tokens: async () => {
+      const pools = await getTokens();
+      return pools;
     }
   },
 };
