@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import { getTxBlock } from "../lib/terra";
-import { TERRA_CHAIN_ID } from "../constants";
+import { CHAIN_COLLECT_BATCH_SIZE, TERRA_CHAIN_ID } from "../constants";
 import { getBlock, updateBlock } from "../services";
 import { Pair } from "../types";
 import { runIndexers } from "./chainIndexer";
@@ -25,7 +25,7 @@ export async function chainCollect(pairMap: Map<string, Pair>, priceMap: Map<str
 
   const lastHeight = collectedBlock.hiveHeight;
 
-  for (let height = lastHeight + 1; height <= lastHeight + 1000; height++) {
+  for (let height = lastHeight + 1; height <= lastHeight + CHAIN_COLLECT_BATCH_SIZE; height++) {
     console.log("Current height: " + height)
     const block = await getTxBlock(height);
     if (!block) {
