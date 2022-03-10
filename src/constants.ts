@@ -25,6 +25,9 @@ export const XASTRO_STAKING_ADDRESS = "terra1nq4aszdm82wujstxwpjxtvckg7ghu63mqke
 export const BLOCKS_PER_YEAR = 4656810
 export const BLOCKS_PER_DAY = BLOCKS_PER_YEAR / 365
 
+// maximum amount of blocks to collect during an indexer invocation
+export const CHAIN_COLLECT_BATCH_SIZE = 150
+
 export const COINGECKO_API_KEY = process.env.COINGECKO_API_KEY as string;
 
 // TODO - switch to table
@@ -44,7 +47,8 @@ export const TOKEN_ADDRESS_MAP = new Map<string, string>([
   ["terra134m8n2epp0n40qr08qsvvrzycn2zq4zcpmue48", "MINE"],
   ["terra1gxjjrer8mywt4020xdl5e5x7n6ncn6w38gjzae", "LDO"],
   ["terra18dq84qfpz267xuu0k47066svuaez9hr4xvwlex", "LDO"],
-  ["terra1edurrzv6hhd8u48engmydwhvz8qzmhhuakhwj3", "LDO"]
+  ["terra1edurrzv6hhd8u48engmydwhvz8qzmhhuakhwj3", "LDO"],
+  ["terra19wauh79y42u5vt62c5adt2g5h4exgh26t3rpds", "MARS"]
 ])
 
 // map pool -> factory/proxy/pool/token attributes
@@ -147,6 +151,13 @@ export const GENERATOR_PROXY_CONTRACTS = new Map<string, any>([
     proxy: "terra15re9z6l28vf4dfeu8zyfe8ax8cvjdxkfnmuwne",
     pool: "terra1edurrzv6hhd8u48engmydwhvz8qzmhhuakhwj3",
     token: "terra1jxypgnfa07j6w92wazzyskhreq2ey2a5crgt6z"
+  }],
+  ["terra19wauh79y42u5vt62c5adt2g5h4exgh26t3rpds", {
+    tokenName: "Mars-UST",
+    factory: "terra1gmggdadphqxua2kewcgn2l57xxteafpne50je0",
+    proxy: "terra1aqehsnrdadp7s8exny69h5vln3llp38wttv0cr",
+    pool: "terra19wauh79y42u5vt62c5adt2g5h4exgh26t3rpds",
+    token: "terra12hgwnpupflfpuual532wgrxu2gjp0tcagzgx4n"
   }]
 ])
 
@@ -224,6 +235,7 @@ export const STABLE_SWAP_POOLS = new Set<string>(
     'terra1qmxkqcgcgq8ch72k6kwu3ztz6fh8tx2xd76ws7', // avUSDC ust
     'terra1cc6kqk0yl25hdpr5llxmx62mlyfdl7n0rwl3hq', // soUSDC ust
     'terra1x0ulpvp6m46c5j7t40nj24mjp900954ys2jsnu', // weUSDC ust
+    'terra1qswfc7hmmsnwf7f2nyyx843sug60urnqgz75zu', // Luna LunaX
   ])
 
 // tokens that have 8 digits
@@ -297,6 +309,7 @@ export const PAIRS_WHITELIST = new Set<string>([
   "terra124yter7w9e5mf6m843erql48xy5szsxd75zjxw",
   "terra1092tamrn3w8j7qp0uu2ltml7sjts7z9hkj2wga",
   "terra143az0w2e504n56q7k43qyh2fu69fh3rhup32n3",
-  "terra19wauh79y42u5vt62c5adt2g5h4exgh26t3rpds",
-  "terra1z7634s8kyyvjjuv7lcgkfy49hamxssxq9f9xw6"
+  "terra19wauh79y42u5vt62c5adt2g5h4exgh26t3rpds", // Mars UST
+  "terra1z7634s8kyyvjjuv7lcgkfy49hamxssxq9f9xw6", // Lota UST
+  "terra1qswfc7hmmsnwf7f2nyyx843sug60urnqgz75zu" // Luna LunaX
 ]);
