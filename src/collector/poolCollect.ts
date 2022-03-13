@@ -23,7 +23,7 @@ import { fetchExternalTokenPrice } from "./coingecko/client";
 dayjs.extend(utc);
 
 /**
- * Update the pool_timeseries table every minute.
+ * Update the pool_timeseries table
  */
 
 const poolTimeseriesResult: any[] = []
@@ -103,8 +103,8 @@ export async function poolCollect(): Promise<void> {
 
     // trading fees
     result.metadata.fees.trading.day = trading_fee_perc * dayVolume // 24 hour fee amount, not rate
-    result.metadata.fees.trading.apr = ((trading_fee_perc * weekVolume * 52) / pool_liquidity)
-    result.metadata.fees.trading.apy = Math.pow((1 + (trading_fee_perc * weekVolume) / pool_liquidity), 52) - 1
+    result.metadata.fees.trading.apr = ((trading_fee_perc * dayVolume * 365) / pool_liquidity)
+    result.metadata.fees.trading.apy = Math.pow((1 + (trading_fee_perc * dayVolume * 365) / pool_liquidity), 365) - 1
 
     let astro_yearly_emission = ASTRO_YEARLY_EMISSIONS.get(pair.contractAddr) ?? 0
     astro_yearly_emission = astro_yearly_emission * astro_price
@@ -149,10 +149,10 @@ export async function poolCollect(): Promise<void> {
       nativeTokenPrice = 0
     }
     result.metadata.fees.native.day = protocolRewards24h * nativeTokenPrice // 24 hour fee amount, not rate
-    result.metadata.fees.native.apr = (protocolRewards7d * nativeTokenPrice * 52) / pool_liquidity
+    result.metadata.fees.native.apr = (protocolRewards24h * nativeTokenPrice * 365) / pool_liquidity
     // note: can overflow to Infinity
-    if(Math.pow((1 + (protocolRewards7d * nativeTokenPrice) / pool_liquidity), 52) - 1 != Infinity) {
-      result.metadata.fees.native.apy = Math.pow((1 + (protocolRewards7d * nativeTokenPrice) / pool_liquidity), 52) - 1
+    if(Math.pow((1 + (protocolRewards24h * nativeTokenPrice) / pool_liquidity), 365) - 1 != Infinity) {
+      result.metadata.fees.native.apy = Math.pow((1 + (protocolRewards24h * nativeTokenPrice) / pool_liquidity), 365) - 1
     } else {
       result.metadata.fees.native.apy = 0
     }
@@ -164,15 +164,15 @@ export async function poolCollect(): Promise<void> {
       result.metadata.fees.native.day
 
     // weekly fees
-    const weekTotalFees = (trading_fee_perc * weekVolume) +
-      (astro_yearly_emission / 52) +
-      (protocolRewards7d * nativeTokenPrice)
+    // const weekTotalFees = (trading_fee_perc * weekVolume) +
+    //   (astro_yearly_emission / 52) +
+    //   (protocolRewards7d * nativeTokenPrice)
 
     // total yearly fees / pool liquidity
-    result.metadata.fees.total.apr = (weekTotalFees * 52) / pool_liquidity
+    result.metadata.fees.total.apr = (result.metadata.fees.total.day * 365) / pool_liquidity
 
-    if(Math.pow((1 + weekTotalFees / pool_liquidity), 52) - 1 != Infinity) {
-      result.metadata.fees.total.apy = Math.pow((1 + weekTotalFees / pool_liquidity), 52) - 1
+    if(Math.pow((1 + result.metadata.fees.total.day / pool_liquidity), 365) - 1 != Infinity) {
+      result.metadata.fees.total.apy = Math.pow((1 + result.metadata.fees.total.day / pool_liquidity), 365) - 1
     } else {
       result.metadata.fees.total.apy = 0
     }
