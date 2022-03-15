@@ -17,6 +17,8 @@ const astroportStatSchema: Schema = new Schema(
       required: true,
       trim: true
     }
+  }, {
+    timestamps: true
   }
 );
 

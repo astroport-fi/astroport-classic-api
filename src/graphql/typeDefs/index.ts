@@ -20,6 +20,7 @@ export const typeDefs = /* GraphQL */ `
     priceInUst: Float
     totalValueLockedUst: Float
     dayVolumeUst: Float
+    updatedAt: DateTime
   }
   
   type Fee {
@@ -54,6 +55,7 @@ export const typeDefs = /* GraphQL */ `
     total_liquidity: Float
     total_volume_24h: Float
     astro_price: Float
+    updatedAt: DateTime
   }
   
   type Staking {
