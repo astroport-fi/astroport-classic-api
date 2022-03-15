@@ -3,6 +3,7 @@ import utc from "dayjs/plugin/utc";
 import { TERRA_CHAIN_ID, TOKENS_WITH_8_DIGITS } from "../constants";
 import { getHeightByDate } from "../services";
 import { Pair } from "../types";
+import { Proposal } from "../models/proposal.model"
 import { PriceV2 } from "../types/priceV2.type";
 
 dayjs.extend(utc);
@@ -47,6 +48,14 @@ export function pairListToMap(pairList: Pair[]): Map<string, Pair> {
 export function priceListToMap(priceList: PriceV2[]): Map<string, PriceV2> {
   return priceList.reduce((mapAcc, obj) => {
     mapAcc.set(obj.token_address, obj);
+    return mapAcc;
+  }, new Map());
+}
+
+// transform model proposal into map of proposal_id -> object
+export function proposalListToMap(proposalList: any[]): Map<string, any> {
+  return proposalList.reduce((mapAcc, obj) => {
+    mapAcc.set(obj.proposal_id, obj);
     return mapAcc;
   }, new Map());
 }

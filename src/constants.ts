@@ -21,9 +21,11 @@ export const GENERATOR_ADDRESS = "terra1zgrx9jjqrfye8swykfgmd6hpde60j0nszzupp9"
 export const FACTORY_ADDRESS = "terra1fnywlw4edny3vw44x04xd67uzkdqluymgreu7g"
 export const MAKER_ADDRESS = "terra12u7hcmpltazmmnq0fvyl225usn3fy6qqlp05w0" as string
 export const XASTRO_STAKING_ADDRESS = "terra1nq4aszdm82wujstxwpjxtvckg7ghu63mqkey33" as string
+export const GOVERNANCE_ASSEMBLY = "terra1lu3lrp53p6d5yrwhdkgrymvw2jsn6vcp6xugva" as string // TODO this is actually testnet
 
 export const BLOCKS_PER_YEAR = 4656810
 export const BLOCKS_PER_DAY = BLOCKS_PER_YEAR / 365
+export const SECONDS_PER_YEAR = 60*60*24*365
 
 // maximum amount of blocks to collect during an indexer invocation
 export const CHAIN_COLLECT_BATCH_SIZE = 150
@@ -154,10 +156,24 @@ export const GENERATOR_PROXY_CONTRACTS = new Map<string, any>([
   }],
   ["terra19wauh79y42u5vt62c5adt2g5h4exgh26t3rpds", {
     tokenName: "Mars-UST",
-    factory: "terra1gmggdadphqxua2kewcgn2l57xxteafpne50je0",
+    factory: "terra1ww6sqvfgmktp0afcmvg78st6z89x5zr3tmvpss",
     proxy: "terra1aqehsnrdadp7s8exny69h5vln3llp38wttv0cr",
     pool: "terra19wauh79y42u5vt62c5adt2g5h4exgh26t3rpds",
     token: "terra12hgwnpupflfpuual532wgrxu2gjp0tcagzgx4n"
+  }],
+  ["terra13yftwgefkggq3u627gphq98s6ufwh9u85h5kmg", {
+    tokenName: "Orne-UST",
+    factory: "terra1z5uvpz8ny5tz2lng30ff0aqnm5uuvxaat6lwxm",
+    proxy: "terra1dyuvfvjpuhqrmjly0xh3fhk207cyx8yrw2n736",
+    pool: "terra13yftwgefkggq3u627gphq98s6ufwh9u85h5kmg",
+    token: "terra1hnezwjqlhzawcrfysczcxs6xqxu2jawn729kkf"
+  }],
+  ["terra1repcset8dt8z9wm5s6x77n3sjg8hduem9tntd6", {
+    tokenName: "wLDO-stLuna",
+    factory: "terra10t8rn7swtkmkfm56mmxwmk2v9xrv78fljsd3ez",
+    proxy: "terra1xf6dsqpqap3hczk9jd7938h5n8de8ap9ycxhvu",
+    pool: "terra1repcset8dt8z9wm5s6x77n3sjg8hduem9tntd6",
+    token: "terra1jxypgnfa07j6w92wazzyskhreq2ey2a5crgt6z"
   }]
 ])
 
@@ -214,7 +230,9 @@ export const POOLS_WITH_8_DIGIT_REWARD_TOKENS = new Set<string>(
     // 'terra1cc6kqk0yl25hdpr5llxmx62mlyfdl7n0rwl3hq', // soUSDC UST
     // 'terra1x0ulpvp6m46c5j7t40nj24mjp900954ys2jsnu', // weUSDC UST
     'terra1mv04l9m4xc6fntxnty265rsqpnn0nk8aq0c9ge', // wgOHM UST
-    'terra1476fucrvu5tuga2nx28r3fctd34xhksc2gckgf'
+    'terra1476fucrvu5tuga2nx28r3fctd34xhksc2gckgf',
+    'terra1repcset8dt8z9wm5s6x77n3sjg8hduem9tntd6', // wLDO stLUNA
+
   ])
 
 // pools that externally fetch rewards, like LDO for wormhole
@@ -222,7 +240,7 @@ export const EXTERNALLY_FETCHED_REWARDS = new Set<string>(
   [
     'terra1gxjjrer8mywt4020xdl5e5x7n6ncn6w38gjzae', // stluna luna
     'terra18dq84qfpz267xuu0k47066svuaez9hr4xvwlex', // stsol ust
-    'terra1edurrzv6hhd8u48engmydwhvz8qzmhhuakhwj3', // steth ust
+    'terra1edurrzv6hhd8u48engmydwhvz8qzmhhuakhwj3'  // steth ust
   ])
 
 // stableswap pools
@@ -253,6 +271,7 @@ export const TOKENS_WITH_8_DIGITS = new Set<string>(
     'terra1t9ul45l7m6jw6sxgvnp8e5hj8xzkjsg82g84ap', // stsol
     'terra133chr09wu8sakfte5v7vd8qzq9vghtkv4tn0ur', // wsteth
     'terra1fpfn2kkr8mv390wx4dtpfk3vkjx9ch3thvykl3', // gohm
+    'terra1jxypgnfa07j6w92wazzyskhreq2ey2a5crgt6z'  // wLDO
   ]
 )
 
@@ -311,5 +330,7 @@ export const PAIRS_WHITELIST = new Set<string>([
   "terra143az0w2e504n56q7k43qyh2fu69fh3rhup32n3",
   "terra19wauh79y42u5vt62c5adt2g5h4exgh26t3rpds", // Mars UST
   "terra1z7634s8kyyvjjuv7lcgkfy49hamxssxq9f9xw6", // Lota UST
-  "terra1qswfc7hmmsnwf7f2nyyx843sug60urnqgz75zu" // Luna LunaX
+  "terra1qswfc7hmmsnwf7f2nyyx843sug60urnqgz75zu", // Luna LunaX
+  "terra13yftwgefkggq3u627gphq98s6ufwh9u85h5kmg", // Orne UST
+  "terra1repcset8dt8z9wm5s6x77n3sjg8hduem9tntd6"  // wLDO stLuna
 ]);

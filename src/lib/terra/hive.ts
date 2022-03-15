@@ -59,6 +59,39 @@ export const getPool = async (
   }
 };
 
+export const getProposals = async (
+  contract: string,
+  limit = 100,
+  offset= 0
+): Promise<any> => {
+
+  try {
+    const response = await hive.request(
+      gql`
+        query($limit: Int!, $offset: Int!, $contract: String!) {
+          wasm {
+            contractQuery(
+              contractAddress: $contract
+              query: { 
+                proposals: {
+                  limit: $limit
+                  start: $offset
+                } 
+              }
+            )
+          }
+        }
+      `,
+      { contract: contract, limit: limit, offset: offset }
+    );
+
+    return response?.wasm?.contractQuery?.proposal_list
+
+  } catch (e) {
+    return null;
+  }
+};
+
 export async function getTokenInfo(tokenAddr: string) {
   try {
     const response = await hive.request(

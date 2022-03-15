@@ -9,6 +9,7 @@ import {
 import { getStats } from "../../services/astroport_stats.service";
 import { getPriceByTokenAddress } from "../../services/priceV2.service";
 import { getStakingStats } from "../../services/xastro_fee_stat.service";
+import { getProposal, getProposals } from "../../services/proposal.service";
 
 export const resolvers = {
   // Pair: {
@@ -42,6 +43,14 @@ export const resolvers = {
     pools: async () => {
       const pools = await getPools();
       return pools;
+    },
+    proposal: async (_: any, { proposal_id }: any) => {
+      const proposal = await getProposal(proposal_id);
+      return proposal;
+    },
+    proposals: async() => {
+      const proposals = await getProposals();
+      return proposals
     },
     supply: async() => {
       const supply = await getSupply();

@@ -73,6 +73,32 @@ export const typeDefs = /* GraphQL */ `
     icon: String
     decimals: Float
   }
+  
+  type Proposal {
+    proposal_id: Float
+    state: String
+    created: DateTime
+    active: DateTime
+    passed: DateTime
+    executed: DateTime
+    rejected: DateTime
+    expired: DateTime
+    start_timestamp: DateTime
+    end_timestamp: DateTime
+    start_block: Float
+    end_block: Float
+    votes_for: Float
+    votes_for_power: Float
+    votes_against: Float
+    votes_against_power: Float
+    total_voting_power: Float
+    title: String
+    description: String
+    link: String
+    messages: String
+    submitter: String
+    submitter_tokens_submitted: Float
+  }
 
   # The "Query" type lists all of the available queries that
   # clients can execute, along with the return type for each.
@@ -83,6 +109,8 @@ export const typeDefs = /* GraphQL */ `
     pool(address: String!): Pool
     pools: [Pool]
     price(tokenAddress: String!): Price
+    proposal: Proposal
+    proposals: [Proposal]
     supply: Supply
     staking: Staking
     tokens: [Token]
