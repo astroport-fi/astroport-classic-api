@@ -65,6 +65,7 @@ export const typeDefs = /* GraphQL */ `
   
   type Block {
     height: Float
+    updatedAt: DateTime
   }
   
   type Token {

@@ -16,10 +16,13 @@ export async function getBlock(chainId: string): Promise<any> {
   return block;
 }
 
+
+// for api
 export async function getBlockResponse(): Promise<any> {
   const block = await Block.findOne({ chainId: TERRA_CHAIN_ID })
   return {
-    height: block?.hiveHeight
+    height: block?.hiveHeight,
+    updatedAt: block?.updatedAt
   }
 }
 
