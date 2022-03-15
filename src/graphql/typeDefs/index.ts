@@ -63,6 +63,7 @@ export const typeDefs = /* GraphQL */ `
     _24h_apr: Float
     _24h_apy: Float
     block: Float
+    updatedAt: DateTime
   }
   
   type Block {

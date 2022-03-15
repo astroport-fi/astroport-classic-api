@@ -31,6 +31,8 @@ const supplySchema: Schema = new Schema(
         trim: true
       },
     }
+  }, {
+    timestamps: true
   }
 );
 

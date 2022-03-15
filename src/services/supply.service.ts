@@ -15,7 +15,8 @@ export async function getSupply(): Promise<SupplyType> {
     circulatingSupply: supply?.metadata?.circulatingSupply,
     priceInUst: supply?.metadata?.priceInUst,
     totalValueLockedUst: supply?.metadata?.totalValueLockedUst,
-    dayVolumeUst: supply?.metadata?.dayVolumeUst
+    dayVolumeUst: supply?.metadata?.dayVolumeUst,
+    updatedAt: supply?.updatedAt
   };
 }
 

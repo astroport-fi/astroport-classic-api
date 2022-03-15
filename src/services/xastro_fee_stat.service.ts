@@ -1,5 +1,4 @@
 import { Supply } from "../models/supply.model";
-import { Supply as SupplyType } from "../types/supply.type"
 import { xAstroFeeStat } from "../models/xastro_fee_stat.model";
 import { XAstroFeeStat } from "../types/xastro_fee_stat.type";
 
@@ -29,7 +28,8 @@ export async function getStakingStats(): Promise<XAstroFeeStat> {
     block: result?.block,
     _7d_fees_ust: 0,
     _7d_apr: 0,
-    _7d_apy: 0
+    _7d_apy: 0,
+    updatedAt: result?.updatedAt
   };
 }
 
