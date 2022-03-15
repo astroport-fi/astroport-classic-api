@@ -109,7 +109,7 @@ export const typeDefs = /* GraphQL */ `
     pool(address: String!): Pool
     pools: [Pool]
     price(tokenAddress: String!): Price
-    proposal: Proposal
+    proposal(proposal_id: String!): Proposal
     proposals: [Proposal]
     supply: Supply
     staking: Staking
