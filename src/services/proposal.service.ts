@@ -4,7 +4,7 @@ import { BLOCKS_PER_DAY, BLOCKS_PER_YEAR, SECONDS_PER_YEAR } from "../constants"
 const SECONDS_PER_BLOCK = SECONDS_PER_YEAR / BLOCKS_PER_YEAR
 
 export async function getProposals(): Promise<any[]> {
-  const proposals = await Proposal.find().sort({ proposal_id: 1 });
+  const proposals = await Proposal.find().sort({ proposal_id: -1 });
   return proposals;
 }
 
