@@ -53,7 +53,7 @@ export function priceListToMap(priceList: PriceV2[]): Map<string, PriceV2> {
 }
 
 // transform model proposal into map of proposal_id -> object
-export function proposalListToMap(proposalList: any[]): Map<string, any> {
+export function proposalListToMap(proposalList: any[]): Map<number, any> {
   return proposalList.reduce((mapAcc, obj) => {
     mapAcc.set(obj.proposal_id, obj);
     return mapAcc;

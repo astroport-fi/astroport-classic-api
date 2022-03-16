@@ -47,7 +47,7 @@ export async function governanceProposalCollect(): Promise<void> {
     const updated_proposals: ProposalType[] = []
 
     for(const proposal of proposals) {
-        if(savedProposalMap.has(proposal.proposal_id + "")) {
+        if(savedProposalMap.has(Number(proposal.proposal_id))) {
             // check if existing proposal has changed status, voters
             console.log()
 
