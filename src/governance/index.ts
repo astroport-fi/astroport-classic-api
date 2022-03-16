@@ -22,9 +22,7 @@ export async function run(
   context.callbackWaitsForEmptyEventLoop = false;
 
   await connectToDatabase();
-  await initHive(TERRA_HIVE);
-  await initMantle(TERRA_MANTLE);
-  await initLCD(TERRA_LCD, TERRA_CHAIN_ID);
+  await initHive("https://testnet-hive.terra.dev/graphql"); // TODO change
 
   try {
 
