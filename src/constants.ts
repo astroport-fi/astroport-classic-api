@@ -156,7 +156,7 @@ export const GENERATOR_PROXY_CONTRACTS = new Map<string, any>([
   }],
   ["terra19wauh79y42u5vt62c5adt2g5h4exgh26t3rpds", {
     tokenName: "Mars-UST",
-    factory: "terra1ww6sqvfgmktp0afcmvg78st6z89x5zr3tmvpss",
+    factory: "terra1gmggdadphqxua2kewcgn2l57xxteafpne50je0",
     proxy: "terra1aqehsnrdadp7s8exny69h5vln3llp38wttv0cr",
     pool: "terra19wauh79y42u5vt62c5adt2g5h4exgh26t3rpds",
     token: "terra12hgwnpupflfpuual532wgrxu2gjp0tcagzgx4n"
