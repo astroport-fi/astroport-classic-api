@@ -34,6 +34,11 @@ functions:
     timeout: 475 # in seconds
     environment:
       MONGODB_URL: ${env:MONGODB_URL_RW}
+  governance:
+    handler: src/governance/index.run
+    events:
+      - schedule: rate(5 minutes)
+    timeout: 55 # in seconds
   slack-bot-backend-stats: # uncomment to redeploy backend-stat-bot
     handler: src/bot/slack-bot-backend-stats/index.run
     events:
