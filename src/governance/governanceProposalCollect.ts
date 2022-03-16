@@ -54,16 +54,14 @@ export async function governanceProposalCollect(): Promise<void> {
 
         } else {
             new_proposals.push(proposal)
-            await notifySlack(
-              '*New on-chain governance proposal: #' + proposal.proposal_id + "*",
-              'https://apeboard.finance/dashboard/' + proposal.submitter,
-              proposal.title,
-              proposal.description,
-              proposal.link)
+            // await notifySlack(
+            //   '*New on-chain governance proposal: #' + proposal.proposal_id + "*",
+            //   'https://apeboard.finance/dashboard/' + proposal.submitter,
+            //   proposal.title,
+            //   proposal.description,
+            //   proposal.link)
         }
     }
-
-    // notify state changes
 
     // save new proposals
     await saveProposals(new_proposals)

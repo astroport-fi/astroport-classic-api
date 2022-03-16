@@ -37,7 +37,7 @@ export async function run(
     console.log("Total time elapsed: " + (new Date().getTime() - start) / 1000)
 
   } catch (e) {
-    throw new Error("Error while running indexer: " + e);
+    throw new Error("Error while running governance indexer: " + e);
   }
 
   return {
