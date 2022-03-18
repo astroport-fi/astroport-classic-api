@@ -3,11 +3,12 @@ import utc from "dayjs/plugin/utc";
 import { GOVERNANCE_ASSEMBLY } from "../constants";
 import { Proposal as ProposalType } from "../types";
 import { Proposal } from "../models/proposal.model";
-import { getProposals } from "../lib/terra";
+import { getProposals, getTotalVotingPowerAt } from "../lib/terra";
 import { getProposals as getSavedProposals, saveProposals } from "../services/proposal.service";
 import { proposalListToMap } from "../collector/helpers";
 import axios from "axios";
 import { generate_post_fields } from "./slackHelpers";
+import { update_proposal_timestamps } from "./proposalStateMachine";
 
 dayjs.extend(utc);
 
@@ -27,7 +28,7 @@ export async function governanceProposalCollect(): Promise<void> {
     const savedProposalMap = proposalListToMap(savedProposals)
 
     // get proposals from chain
-    let proposals: ProposalType[] = []
+    let proposals: any[] = []
     let continue_querying = true
     let offset = 0
 
@@ -43,16 +44,38 @@ export async function governanceProposalCollect(): Promise<void> {
         offset += BATCH_SIZE
     }
 
-    const new_proposals: ProposalType[] = []
-    const updated_proposals: ProposalType[] = []
+    const new_proposals: any = []
+    const updated_proposals: any = []
+
+    const new_votes: any[] = []
+    const saved_votes: any[] = []
 
     for(const proposal of proposals) {
         if(savedProposalMap.has(Number(proposal.proposal_id))) {
             // check if existing proposal has changed status, voters
-            console.log()
+            const saved = savedProposalMap.get(Number(proposal.proposal_id))
+            if(proposal.status != saved.state ||
+               Number(proposal.for_power) != Number(saved.votes_for_power) ||
+               Number(proposal.against_power) != Number(saved.votes_against_power)
+            ) {
+                update_proposal_timestamps(saved, proposal)
+                updated_proposals.push(proposal)
+            }
+
+            // TODO parse votes
+
 
 
         } else {
+            // get total_voting_power
+            proposal.total_voting_power = await getTotalVotingPowerAt(
+              proposal.start_block-1,
+              proposal.start_time,
+              "terra1yufp7cv85qrxrx56ulpfgstt2gxz905fgmysq0", // TODO switch to prod addresses
+              "terra1hccg0cfrcu0nr4zgt5urmcgam9v88peg9s7h6j",
+              "terra1pqr02fx4ulc2mzws7xlqh8hpwqx2ls5m4fk62j"
+            )
+
             new_proposals.push(proposal)
             await notifySlack(
               '*New on-chain governance proposal: #' + proposal.proposal_id + "*",
@@ -70,22 +93,19 @@ export async function governanceProposalCollect(): Promise<void> {
     for(const updated of updated_proposals) {
         await Proposal.updateOne(
           {
-              proposal_id: updated.proposal_id
+              proposal_id: Number(updated.proposal_id)
           },
           {
               $set: {
-                  state: updated.state,
-                  passed: updated.passed,
-                  executed: updated.executed,
-                  rejected: updated.rejected,
-                  expired: updated.expired,
-                  votes_for: updated.votes_for,
+                  state:  updated.status,
+                  passed: new Date(updated.passed),
+                  executed:  new Date(updated.executed),
+                  rejected:  new Date(updated.rejected),
+                  expired:  new Date(updated.expired),
                   votes_for_power: updated.votes_for_power,
-                  votes_against: updated.votes_against,
                   votes_against_power: updated.votes_against_power,
               }
-          },
-          { upsert: true }
+          }
         )
     }
 }

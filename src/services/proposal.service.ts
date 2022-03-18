@@ -13,7 +13,6 @@ export async function getProposal(proposal_id: string): Promise<any> {
   return proposal;
 }
 
-// TODO
 export async function saveProposals(proposals: any[]): Promise<any> {
 
   const results: any[] = []
@@ -23,12 +22,7 @@ export async function saveProposals(proposals: any[]): Promise<any> {
 
     result.proposal_id = proposal.proposal_id
     result.state = proposal.status
-    // result.created = proposal.proposal_id
     result.active = new Date(proposal.start_time * 1000)
-    // result.passed = new Date(proposal.start_time);
-    // result.executed = new Date(proposal.start_time);
-    // result.rejected = new Date(proposal.start_time);
-    // result.expired = new Date(proposal.start_time);
     result.start_timestamp = new Date(proposal.start_time * 1000)
     const seconds = (proposal.end_block - proposal.start_block) * SECONDS_PER_BLOCK
 
@@ -36,18 +30,15 @@ export async function saveProposals(proposals: any[]): Promise<any> {
       new Date(proposal.start_time * 1000).getTime() + new Date(seconds * 1000).getTime())
     result.start_block = proposal.start_block
     result.end_block = proposal.end_block
-    // result.votes_for = proposal.for_voters
     result.votes_for_power = proposal.for_power
-    // result.votes_against = proposal.against_voters
     result.votes_against_power = proposal.against_power
     result.title = proposal.title
     result.description = proposal.description
     result.link = proposal.link
-
-
-    result.messages = JSON.stringify(proposal.messages)
+    result.messages = proposal.messages == null ? null : JSON.stringify(proposal.messages)
     result.submitter = proposal.submitter
     result.submitter_tokens_submitted = proposal.deposit_amount
+    result.total_voting_power = proposal.total_voting_power
 
     results.push(result)
   }

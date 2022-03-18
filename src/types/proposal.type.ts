@@ -1,7 +1,6 @@
 export type Proposal = {
   proposal_id: number;
   state: string;
-  created: Date;
   active: Date;
   passed: Date;
   executed: Date;
@@ -11,15 +10,13 @@ export type Proposal = {
   end_timestamp: Date;
   start_block: number;
   end_block: number;
-  votes_for: number;
   votes_for_power: number;
-  votes_against: number;
   votes_against_power: number;
   total_voting_power: number;
   title: string;
   description: string;
   link: string;
-  messages: string;
+  messages: string|null;
   submitter: string;
   submitter_tokens_submitted: number;
 };

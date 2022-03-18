@@ -13,10 +13,6 @@ const proposalSchema: Schema<ProposalDocument> = new Schema(
       type: Schema.Types.String,
       required: false,
     },
-    created: {
-      type: Schema.Types.Date,
-      required: false,
-    },
     active: {
       type: Schema.Types.Date,
       required: false,
@@ -53,15 +49,7 @@ const proposalSchema: Schema<ProposalDocument> = new Schema(
       type: Schema.Types.Number,
       required: false,
     },
-    votes_for: {
-      type: Schema.Types.Number,
-      required: false,
-    },
     votes_for_power: {
-      type: Schema.Types.Number,
-      required: false,
-    },
-    votes_against: {
       type: Schema.Types.Number,
       required: false,
     },

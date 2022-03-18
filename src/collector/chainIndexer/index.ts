@@ -73,12 +73,6 @@ export async function runIndexers(
           } catch(e) {
             console.log("Error during finding swaps/volume: " + e)
           }
-
-          try {
-            // governance state
-          }
-
-
         }
       }
     }
