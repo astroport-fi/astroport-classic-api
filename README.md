@@ -2,23 +2,31 @@
 
 ### Development
 
-- npm install
-- npm run dev
+In order to run this repo, you can do the following:
 
-Adding new env variables (non-secrets)
-- add to .env.development or .env.production
-- add to serverless.yml - provider.environment.NEW_ENV_VAR
+```
+npm install
+npm run dev
+```
+
+### Adding new env variables (non-secrets)
+
+- Add to .env.development or .env.production
+- Add to serverless.yml - provider.environment.NEW_ENV_VAR
 
 ### Running unit tests (Webstorm)
-- copy .env.development to .env.local and add MONGODB_URL="..."
+
+- Copy .env.development to .env.local and add MONGODB_URL="..."
 - Mocha config
-  - environment variables: DOTENV_CONFIG_PATH=.env.local
-  - extra mocha options  : --require ts-node/register --require dotenv/config --timeout 60000
+  - Environment variables: ```DOTENV_CONFIG_PATH=.env.local```
+  - EXxtra mocha options: ```--require ts-node/register --require dotenv/config --timeout 60000```
   
 ### Adding new env variables (non-secrets)
-- add to .env.development or .env.production
-- add to serverless.yml - provider.environment.NEW_ENV_VAR
+
+- Add to __.env.development__ or __.env.production__
+- Add to __serverless.yml__ - __provider.environment.NEW_ENV_VAR__
 
 ### Adding new env variables (secrets)
-- add to github secrets
-  - echo -e 'NEW_SECRET="${{ secrets.NEW_SECRET_NAME }}"' >> .env
+
+- Add to github secrets:
+ ```echo -e 'NEW_SECRET="${{ secrets.NEW_SECRET_NAME }}"' >> .env```
