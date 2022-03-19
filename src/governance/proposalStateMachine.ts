@@ -11,7 +11,6 @@ export enum ProposalState {
   Expired // terminal
 }
 
-// TODO double check these
 const VALID_TRANSITIONS: [ProposalState, ProposalState][] = [
   [ProposalState.Active, ProposalState.Expired],
   [ProposalState.Active, ProposalState.Rejected],

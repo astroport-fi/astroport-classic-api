@@ -21,7 +21,7 @@ export const GENERATOR_ADDRESS = "terra1zgrx9jjqrfye8swykfgmd6hpde60j0nszzupp9"
 export const FACTORY_ADDRESS = "terra1fnywlw4edny3vw44x04xd67uzkdqluymgreu7g"
 export const MAKER_ADDRESS = "terra12u7hcmpltazmmnq0fvyl225usn3fy6qqlp05w0" as string
 export const XASTRO_STAKING_ADDRESS = "terra1nq4aszdm82wujstxwpjxtvckg7ghu63mqkey33" as string
-export const GOVERNANCE_ASSEMBLY = "terra1lu3lrp53p6d5yrwhdkgrymvw2jsn6vcp6xugva" as string // TODO this is actually testnet
+export const GOVERNANCE_ASSEMBLY = "terra1suc5560s8ggnuxlmjpfrhfl2042gk8dl7dq8q0" as string // TODO this is actually testnet
 
 export const BLOCKS_PER_YEAR = 4656810
 export const BLOCKS_PER_DAY = BLOCKS_PER_YEAR / 365

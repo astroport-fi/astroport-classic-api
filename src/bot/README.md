@@ -1,3 +1,4 @@
 ### Contains functions that call smart contracts periodically
 - Swap maker fees to staking contract
-- Update slack #backend-stats channel 
+- Update slack #backend-stats channel
+- Trigger governance proposal state transitions
