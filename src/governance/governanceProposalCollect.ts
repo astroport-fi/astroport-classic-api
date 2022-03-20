@@ -98,10 +98,10 @@ export async function governanceProposalCollect(): Promise<void> {
           {
               $set: {
                   state:  updated.status,
-                  passed: new Date(updated.passed),
-                  executed:  new Date(updated.executed),
-                  rejected:  new Date(updated.rejected),
-                  expired:  new Date(updated.expired),
+                  passed: updated.passed,
+                  executed:  updated.executed,
+                  rejected:  updated.rejected,
+                  expired:  updated.expired,
                   votes_for_power: updated.votes_for_power,
                   votes_against_power: updated.votes_against_power,
               }

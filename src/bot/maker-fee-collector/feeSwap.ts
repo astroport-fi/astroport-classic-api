@@ -32,7 +32,8 @@ export async function swap(): Promise<void> {
 
   // TODO switch pair_addresses to WHITELISTED PAIRS for mainnet
   // create a message to a maker contract
-  const msg = new MsgExecuteContract(wallet.key.accAddress,
+  const msg = new MsgExecuteContract(
+    wallet.key.accAddress,
     MAKER_CONTRACT,
     {
       "collect": {

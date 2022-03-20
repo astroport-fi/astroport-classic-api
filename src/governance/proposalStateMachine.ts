@@ -37,10 +37,10 @@ export function update_proposal_timestamps(saved: any, new_proposal: any) {
     new_proposal.passed = new Date().toISOString()
 
   } else if(new_proposal.status == ProposalState[ProposalState.Rejected]) {
-    new_proposal.executed = new Date().toISOString()
+    new_proposal.rejected = new Date().toISOString()
 
   } else if(new_proposal.status == ProposalState[ProposalState.Executed]) {
-    new_proposal.rejected = new Date().toISOString()
+    new_proposal.executed = new Date().toISOString()
 
   } else if(new_proposal.status == ProposalState[ProposalState.Expired]) {
     new_proposal.expired = new Date().toISOString()

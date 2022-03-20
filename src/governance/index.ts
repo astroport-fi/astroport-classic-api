@@ -29,7 +29,7 @@ export async function run(
     const start = new Date().getTime()
 
     console.log("Checking for new governance proposals...")
-    await governanceProposalCollect();
+    // await governanceProposalCollect();
 
 
     console.log("Total time elapsed: " + (new Date().getTime() - start) / 1000)

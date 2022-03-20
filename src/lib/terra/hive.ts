@@ -1,6 +1,6 @@
 import { gql, GraphQLClient } from "graphql-request";
 import { PriceV2 } from "../../types/priceV2.type";
-import { TOKENS_WITH_8_DIGITS, XASTRO_TOKEN } from "../../constants";
+import { GOVERNANCE_ASSEMBLY, TOKENS_WITH_8_DIGITS, XASTRO_TOKEN } from "../../constants";
 
 export let hive: GraphQLClient;
 
@@ -361,5 +361,27 @@ export async function getTotalVotingPowerAt(
   return Number(response?.x?.contractQuery) +
     Number(response?.builder?.contractQuery?.remaining_astro_tokens) +
     Number(response?.vx?.contractQuery?.voting_power) / 1000000
+
+}
+
+export async function getAssemblyConfig() {
+
+  const response = await hive.request(
+    gql`
+      query($assembly: String!) {
+        wasm {
+          contractQuery(
+            contractAddress: $assembly
+          query: { config: {} }
+        )
+        }
+      }
+    `,
+    {
+      assembly: GOVERNANCE_ASSEMBLY
+    }
+  )
+
+  return response?.wasm?.contractQuery
 
 }

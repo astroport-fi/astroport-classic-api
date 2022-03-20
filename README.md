@@ -21,8 +21,5 @@ Adding new env variables (non-secrets)
 
 ### Adding new env variables (secrets)
 - add to github secrets
-  - echo -e 'NEW_SECRET="${{ secrets.NEW_SECRET_NAME }}"' >> .env
-
-
-
->>>>>>>>> woah
+- echo -e 'NEW_SECRET="${{ secrets.NEW_SECRET_NAME }}"' >> .env
+- add to constants

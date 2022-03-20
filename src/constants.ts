@@ -11,6 +11,13 @@ export const MAKER_FEE_COLLECTOR_SEED = process.env.TRIGGER_SEED as string
 // trigger collect on this address
 export const MAKER_CONTRACT = process.env.MAKER_CONTRACT as string
 
+// governance
+// seed for wallet that triggers governance state transitions
+export const GOVERNANCE_TRIGGER_BOT_SEED = process.env.GOVERNANCE_TRIGGER_BOT_SEED as string
+// trigger messages on this address
+export const GOVERNANCE_ASSEMBLY = "terra1suc5560s8ggnuxlmjpfrhfl2042gk8dl7dq8q0" as string // TODO this is actually testnet
+
+
 export const ASTRO_TOKEN = "terra1xj49zyqrwpv5k928jwfpfy2ha668nwdgkwlrg3" as string
 export const XASTRO_TOKEN = "terra1cw7znqh9w5f2ryyskq76fmxhj9hdl06uv0j0cd"
 export const BUILDER_UNLOCK = "terra1fh27l8h4s0tfx9ykqxq5efq4xx88f06x6clwmr"
@@ -21,7 +28,6 @@ export const GENERATOR_ADDRESS = "terra1zgrx9jjqrfye8swykfgmd6hpde60j0nszzupp9"
 export const FACTORY_ADDRESS = "terra1fnywlw4edny3vw44x04xd67uzkdqluymgreu7g"
 export const MAKER_ADDRESS = "terra12u7hcmpltazmmnq0fvyl225usn3fy6qqlp05w0" as string
 export const XASTRO_STAKING_ADDRESS = "terra1nq4aszdm82wujstxwpjxtvckg7ghu63mqkey33" as string
-export const GOVERNANCE_ASSEMBLY = "terra1suc5560s8ggnuxlmjpfrhfl2042gk8dl7dq8q0" as string // TODO this is actually testnet
 
 export const BLOCKS_PER_YEAR = 4656810
 export const BLOCKS_PER_DAY = BLOCKS_PER_YEAR / 365

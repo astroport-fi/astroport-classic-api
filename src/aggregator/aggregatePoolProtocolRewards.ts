@@ -9,7 +9,7 @@ dayjs.extend(utc);
 
 /**
  * Combine stats for the last 24 hours from the pool_volume table
- * Update the pool_volume_24hr table TODO
+ * Update the pool_protocol_rewards_24h table
  */
 
 const chainId = TERRA_CHAIN_ID
