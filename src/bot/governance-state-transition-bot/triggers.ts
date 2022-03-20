@@ -7,9 +7,8 @@ import {
   MsgExecuteContract
 } from "@terra-money/terra.js";
 import {
-  GOVERNANCE_ASSEMBLY, GOVERNANCE_TRIGGER_BOT_SEED,
-  MAKER_CONTRACT,
-  MAKER_FEE_COLLECTOR_SEED
+  GOVERNANCE_ASSEMBLY,
+  GOVERNANCE_TRIGGER_BOT_SEED,
 } from "../../constants";
 import { Proposal } from "../../models/proposal.model";
 

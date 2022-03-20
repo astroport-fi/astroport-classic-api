@@ -43,6 +43,18 @@ export async function runIndexers(
             console.log("Error during createPair: " + e)
           }
 
+          // getVotes TODO
+          // try {
+          //   const createPairLF = createPairLogFinders(FACTORY_ADDRESS);
+          //   const createPairLogFounds = createPairLF(event);
+          //   if (createPairLogFounds.length > 0) {
+          //     await createPairIndexer(createPairLogFounds, timestamp);
+          //   }
+          // } catch(e) {
+          //   console.log("Error during createPair: " + e)
+          // }
+
+
           // find events for APR
           try {
             await findProtocolRewardEmissions(event, height);
