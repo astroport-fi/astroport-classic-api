@@ -3,7 +3,6 @@ import { APIGatewayAuthorizerResultContext, APIGatewayProxyEvent, APIGatewayProx
 
 import { initHive, initLCD, initMantle } from "../lib/terra";
 import { connectToDatabase } from "../modules/db";
-import { TERRA_CHAIN_ID, TERRA_HIVE, TERRA_LCD, TERRA_MANTLE } from "../constants";
 import { governanceProposalCollect } from "./governanceProposalCollect";
 
 
@@ -29,7 +28,7 @@ export async function run(
     const start = new Date().getTime()
 
     console.log("Checking for new governance proposals...")
-    // await governanceProposalCollect();
+    await governanceProposalCollect();
 
 
     console.log("Total time elapsed: " + (new Date().getTime() - start) / 1000)

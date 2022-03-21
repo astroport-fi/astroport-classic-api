@@ -6,6 +6,8 @@ import { TxHistoryIndexer } from "./txHistoryIndexer";
 import { findProtocolRewardEmissions } from "./findProtocolRewardEmissions";
 import { PriceV2 } from "../../types/priceV2.type";
 import { findXAstroFees } from "./findXAstroFees";
+import { voteLogFinder } from "../logFinder/voteLogFinder";
+import { voteIndexer } from "./voteIndexer";
 
 /**
  * Indexes transactions for a single block
@@ -43,17 +45,16 @@ export async function runIndexers(
             console.log("Error during createPair: " + e)
           }
 
-          // getVotes TODO
-          // try {
-          //   const createPairLF = createPairLogFinders(FACTORY_ADDRESS);
-          //   const createPairLogFounds = createPairLF(event);
-          //   if (createPairLogFounds.length > 0) {
-          //     await createPairIndexer(createPairLogFounds, timestamp);
-          //   }
-          // } catch(e) {
-          //   console.log("Error during createPair: " + e)
-          // }
-
+          // find votes
+          try {
+            const voteLF = voteLogFinder();
+            const voteLogFounds = voteLF(event);
+            if (voteLogFounds.length > 0) {
+              await voteIndexer(voteLogFounds, timestamp, height, txHash);
+            }
+          } catch(e) {
+            console.log("Error while indexing votes: " + e)
+          }
 
           // find events for APR
           try {

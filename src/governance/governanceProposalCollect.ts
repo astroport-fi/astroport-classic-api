@@ -1,7 +1,6 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import { GOVERNANCE_ASSEMBLY } from "../constants";
-import { Proposal as ProposalType } from "../types";
+import { GOV_BUILDER_UNLOCK, GOV_VXASTRO, GOV_XASTRO, GOVERNANCE_ASSEMBLY } from "../constants";
 import { Proposal } from "../models/proposal.model";
 import { getProposals, getTotalVotingPowerAt } from "../lib/terra";
 import { getProposals as getSavedProposals, saveProposals } from "../services/proposal.service";
@@ -47,9 +46,6 @@ export async function governanceProposalCollect(): Promise<void> {
     const new_proposals: any = []
     const updated_proposals: any = []
 
-    const new_votes: any[] = []
-    const saved_votes: any[] = []
-
     for(const proposal of proposals) {
         if(savedProposalMap.has(Number(proposal.proposal_id))) {
             // check if existing proposal has changed status, voters
@@ -61,19 +57,14 @@ export async function governanceProposalCollect(): Promise<void> {
                 update_proposal_timestamps(saved, proposal)
                 updated_proposals.push(proposal)
             }
-
-            // TODO parse votes
-
-
-
         } else {
             // get total_voting_power
             proposal.total_voting_power = await getTotalVotingPowerAt(
               proposal.start_block-1,
               proposal.start_time,
-              "terra1yufp7cv85qrxrx56ulpfgstt2gxz905fgmysq0", // TODO switch to prod addresses
-              "terra1hccg0cfrcu0nr4zgt5urmcgam9v88peg9s7h6j",
-              "terra1pqr02fx4ulc2mzws7xlqh8hpwqx2ls5m4fk62j"
+              GOV_XASTRO,
+              GOV_BUILDER_UNLOCK,
+              GOV_VXASTRO
             )
 
             new_proposals.push(proposal)

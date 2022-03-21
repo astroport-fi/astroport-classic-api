@@ -48,13 +48,13 @@ export async function run(
 
 
     console.log("end_proposal (Active -> Passed/Rejected)")
-    // await end_proposal_vote(active_proposals);
+    await end_proposal_vote(active_proposals);
 
     console.log("execute_proposal (Passed -> Executed)")
-    // await execute_proposal(passed_proposals);
+    await execute_proposal(passed_proposals);
 
     console.log("remove_completed_proposal (Rejected -> Expired)")
-    // await expire_proposal(rejected_proposals);
+    await expire_proposal(rejected_proposals);
 
     console.log("Total time elapsed: " + (new Date().getTime() - start) / 1000)
 

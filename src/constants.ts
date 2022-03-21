@@ -15,8 +15,12 @@ export const MAKER_CONTRACT = process.env.MAKER_CONTRACT as string
 // seed for wallet that triggers governance state transitions
 export const GOVERNANCE_TRIGGER_BOT_SEED = process.env.GOVERNANCE_TRIGGER_BOT_SEED as string
 // trigger messages on this address
-export const GOVERNANCE_ASSEMBLY = "terra1suc5560s8ggnuxlmjpfrhfl2042gk8dl7dq8q0" as string // TODO this is actually testnet
+export const GOVERNANCE_ASSEMBLY = "terra1ujc6hpxcnq9kcq4e5qttf0z5cz2zykhwff2zm7" as string // TODO this is testnet, switch for prod gov deploy
 
+// TODO delete these for prod once gov is shipped
+export const GOV_XASTRO = "terra1yufp7cv85qrxrx56ulpfgstt2gxz905fgmysq0" as string
+export const GOV_BUILDER_UNLOCK = "terra1hccg0cfrcu0nr4zgt5urmcgam9v88peg9s7h6j" as string
+export const GOV_VXASTRO = "terra1pqr02fx4ulc2mzws7xlqh8hpwqx2ls5m4fk62j" as string
 
 export const ASTRO_TOKEN = "terra1xj49zyqrwpv5k928jwfpfy2ha668nwdgkwlrg3" as string
 export const XASTRO_TOKEN = "terra1cw7znqh9w5f2ryyskq76fmxhj9hdl06uv0j0cd"
@@ -64,10 +68,10 @@ export const TOKEN_ADDRESS_MAP = new Map<string, string>([
 export const GENERATOR_PROXY_CONTRACTS = new Map<string, any>([
   ["terra1qr2k6yjjd5p2kaewqvg93ag74k6gyjr7re37fs", {
     tokenName: "ANC",
-    factory: "terra1h3mf22jm68ddueryuv2yxwfmqxxadvjceuaqz6",
-    proxy: "terra1v2wez00fyy8ajxgkh2jcx82haqfudvxcs5sdzr",
-    pool: "terra1qr2k6yjjd5p2kaewqvg93ag74k6gyjr7re37fs",
-    token: "terra14z56l0fp2lsf86zy3hty2z47ezkhnthtr9yq76",
+    factory: "terra1h3mf22jm68ddueryuv2yxwfmqxxadvjceuaqz6", // from
+    proxy: "terra1v2wez00fyy8ajxgkh2jcx82haqfudvxcs5sdzr", // to
+    pool: "terra1qr2k6yjjd5p2kaewqvg93ag74k6gyjr7re37fs", // pool
+    token: "terra14z56l0fp2lsf86zy3hty2z47ezkhnthtr9yq76", // what is sent
   }],
   ["terra1zpnhtf9h5s7ze2ewlqyer83sr4043qcq64zfc4", {
     tokenName: "APOLLO",
@@ -238,7 +242,6 @@ export const POOLS_WITH_8_DIGIT_REWARD_TOKENS = new Set<string>(
     'terra1mv04l9m4xc6fntxnty265rsqpnn0nk8aq0c9ge', // wgOHM UST
     'terra1476fucrvu5tuga2nx28r3fctd34xhksc2gckgf',
     'terra1repcset8dt8z9wm5s6x77n3sjg8hduem9tntd6', // wLDO stLUNA
-
   ])
 
 // pools that externally fetch rewards, like LDO for wormhole

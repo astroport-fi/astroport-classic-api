@@ -10,7 +10,7 @@ import { aggregatePoolProtocolRewards } from "./aggregatePoolProtocolRewards";
 import { aggregatePool } from "./poolAggregate";
 import { astroportStatsCollect } from "./astroportStatCollect";
 import { poolVolume7dCollect } from "./poolVolume7dCollect";
-import { getBlock, getPairs } from "../services";
+import { getPairs } from "../services";
 import { aggregatePoolProtocolRewards7d } from "./aggregatePoolProtocolRewards7d";
 import { getPrices } from "../services/priceV2.service";
 import { priceListToMap } from "../collector/helpers";

@@ -10,15 +10,9 @@ import { getStats } from "../../services/astroport_stats.service";
 import { getPriceByTokenAddress } from "../../services/priceV2.service";
 import { getStakingStats } from "../../services/xastro_fee_stat.service";
 import { getProposal, getProposals } from "../../services/proposal.service";
+import { getVotes } from "../../services/vote.service";
 
 export const resolvers = {
-  // Pair: {
-  //   prices: async ({ _id }: any) => {
-  //     const prices = await getPriceByPairId(_id);
-  //     return prices;
-  //   },
-  // },
-
   Query: {
     airdrop: async(_: any, { address }: any) => {
       const airdrops = await getAirdrops(address);
@@ -63,6 +57,10 @@ export const resolvers = {
     tokens: async () => {
       const pools = await getTokens();
       return pools;
+    },
+    votes: async(_: any, { proposal_id, limit, offset }: any) => {
+      const votes = await getVotes(proposal_id, limit, offset);
+      return votes;
     }
   },
 };

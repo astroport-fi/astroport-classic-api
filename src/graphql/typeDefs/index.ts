@@ -91,9 +91,8 @@ export const typeDefs = /* GraphQL */ `
     end_timestamp: DateTime
     start_block: Float
     end_block: Float
-    votes_for: Float
+    votes: [Vote]
     votes_for_power: Float
-    votes_against: Float
     votes_against_power: Float
     total_voting_power: Float
     title: String
@@ -102,6 +101,15 @@ export const typeDefs = /* GraphQL */ `
     messages: String
     submitter: String
     submitter_tokens_submitted: Float
+  }
+  
+  type Vote {
+    voter: String,
+    proposal_id: Float,
+    vote: String,
+    voting_power: Float,
+    block: Float,
+    txn: String,
   }
 
   # The "Query" type lists all of the available queries that
@@ -118,5 +126,6 @@ export const typeDefs = /* GraphQL */ `
     supply: Supply
     staking: Staking
     tokens: [Token]
+    votes(proposal_id: String!, offset: Int, limit: Int): [Vote]
   }
 `;
