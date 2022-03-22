@@ -64,6 +64,7 @@
     "ts-node": "^10.4.0"
   },
   "prettier": {
-    "singleQuote": false
+    "singleQuote": false,
+    "printWidth": 100
   }
 }

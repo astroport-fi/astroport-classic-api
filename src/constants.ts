@@ -284,17 +284,30 @@ export const TOKENS_WITH_8_DIGITS = new Set<string>(
   ]
 )
 
+export interface CoingeckoValues {
+  source: string
+  address: string
+  currency: string
+}
 // map CW20 address -> coingecko attributes
-export const EXTERNAL_TOKENS = new Map<string, any>(
+export const EXTERNAL_TOKENS = new Map<string, CoingeckoValues>([
   [
-    ['terra1jxypgnfa07j6w92wazzyskhreq2ey2a5crgt6z', // LDO
+    "terra1jxypgnfa07j6w92wazzyskhreq2ey2a5crgt6z", // LDO
     {
       source: "ethereum",
       address: "0x5a98fcbea516cf06857215779fd812ca3bef1b32",
-      currency: "USD"
-    }]
-  ]
-)
+      currency: "USD",
+    },
+  ],
+  [
+    "terra1xfsdgcemqwxp4hhnyk4rle6wr22sseq7j07dnn", // KUJI
+    {
+      source: "terra",
+      address: "terra1xfsdgcemqwxp4hhnyk4rle6wr22sseq7j07dnn",
+      currency: "USD",
+    },
+  ],
+])
 
 // temporary pair whitelist for prices/pools until we
 // improve performance
