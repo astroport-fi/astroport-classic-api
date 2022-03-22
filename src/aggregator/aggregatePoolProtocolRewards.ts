@@ -4,6 +4,7 @@ import { getLastHeight } from "../services";
 import { GENERATOR_PROXY_CONTRACTS, TERRA_CHAIN_ID } from "../constants";
 import { PoolProtocolReward } from "../models/pool_protocol_reward.model";
 import { PoolProtocolRewardVolume24h } from "../models/pool_protocol_reward_volume_24hr.model";
+import { getLatestBlock } from "../lib/terra";
 
 dayjs.extend(utc);
 
@@ -18,10 +19,11 @@ const BLOCKS_PER_YEAR = 4656810;
 export async function aggregatePoolProtocolRewards(): Promise<void> {
 
   // get latest block height
-  const latestHeight = await getLastHeight(chainId)
+  const { height, time } = await getLatestBlock()
+  const latestHeight = Number(height)
 
   // get block height 24hrs ago
-  const startBlockHeight = latestHeight.value - Math.floor(BLOCKS_PER_YEAR / 365)
+  const startBlockHeight = latestHeight - Math.floor(BLOCKS_PER_YEAR / 365)
 
   // retrieve daily sums per pair and write to pool_protocol_rewards_24h
   for(const value of GENERATOR_PROXY_CONTRACTS.values()) {
@@ -38,13 +40,13 @@ export async function aggregatePoolProtocolRewards(): Promise<void> {
       await PoolProtocolRewardVolume24h.findOneAndUpdate(
         { pool_address: value.pool },
         {
-          block: latestHeight.value,
+          block: latestHeight,
           volume: sum
         });
     } else {
       await PoolProtocolRewardVolume24h.create({
           pool_address: value.pool,
-          block: latestHeight.value,
+          block: latestHeight,
           volume: sum
         });
     }
