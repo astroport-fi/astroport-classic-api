@@ -1,6 +1,6 @@
-import { Token } from '../models';
-import { isNative } from '../modules/terra';
-import { getTokenInfo } from '../lib/terra';
+import { Token } from "../models";
+import { isNative } from "../modules/terra";
+import { getTokenInfo } from "../lib/terra";
 
 export async function getTokens(): Promise<any[]> {
   const tokens = await Token.find();
@@ -17,7 +17,7 @@ export async function createToken(tokenAddr: string): Promise<any> {
     const options = {
       tokenAddr: tokenAddr,
       symbol: tokenAddr,
-      icon: '',
+      icon: "",
       decimals: 6,
     };
 
@@ -31,11 +31,12 @@ export async function createToken(tokenAddr: string): Promise<any> {
 
   const response = await getTokenInfo(tokenAddr);
 
-  let options = {
+  const options = {
     tokenAddr: tokenAddr,
     symbol: response?.symbol || tokenAddr,
     decimals: response?.decimals || 0,
-    icon: '',
+    name: response?.name || "",
+    icon: "",
   };
 
   try {

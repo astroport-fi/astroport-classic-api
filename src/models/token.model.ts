@@ -1,5 +1,5 @@
-import { Schema, model } from 'mongoose';
-import { Token as TokenDocument } from '../types/token.type';
+import { Schema, model } from "mongoose";
+import { Token as TokenDocument } from "../types/token.type";
 
 const tokenSchema: Schema<TokenDocument> = new Schema(
   {
@@ -26,10 +26,15 @@ const tokenSchema: Schema<TokenDocument> = new Schema(
       required: true,
       trim: true,
     },
+    name: {
+      type: Schema.Types.String,
+      required: false,
+      trim: true,
+    },
   },
   {
     timestamps: true,
   }
 );
 
-export const Token = model('Token', tokenSchema);
+export const Token = model("Token", tokenSchema);
