@@ -3,4 +3,5 @@ export type Token = {
   symbol: string;
   icon: string;
   decimals: number;
+  name: string;
 };
