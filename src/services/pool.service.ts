@@ -9,7 +9,7 @@ export async function getPool(address: string): Promise<any> {
 
 // TODO add filtering
 export async function getPools(): Promise<any[]> {
-  const pools = await Pool.find({}, null, {limit: 100})
+  const pools = await Pool.find({}, null, {limit: 500})
   const result = []
 
   // map
