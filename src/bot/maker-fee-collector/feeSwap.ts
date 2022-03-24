@@ -1,6 +1,6 @@
 import { LCDClient, MnemonicKey, MsgExecuteContract } from "@terra-money/terra.js";
 import whitelist from "./whitelist-prod.json";
-import { MAKER_CONTRACT, MAKER_FEE_COLLECTOR_SEED } from "../../constants";
+import { MAKER_CONTRACT, MAKER_FEE_COLLECTOR_SEED, TERRA_CHAIN_ID, TERRA_LCD } from "../../constants";
 
 // pairs to swap and distribute to xastro stakers
 
@@ -21,11 +21,9 @@ export async function swap(): Promise<void> {
     mnemonic: MAKER_FEE_COLLECTOR_SEED
   });
 
-  // TODO Important - change to TERRA_LCD and TERRA_CHAIN_ID for prod
-  // TODO disable in testnet before prod deploy
   const terra = new LCDClient({
-    URL: 'https://bombay-lcd.terra.dev',
-    chainID: 'bombay-12',
+    URL: TERRA_LCD,
+    chainID: TERRA_CHAIN_ID,
   });
 
   const wallet = terra.wallet(mk);

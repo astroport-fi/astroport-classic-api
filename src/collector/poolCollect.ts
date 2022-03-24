@@ -5,6 +5,7 @@ import { getPairs } from "../services";
 import {
   ASTRO_TOKEN,
   ASTRO_YEARLY_EMISSIONS,
+  CoingeckoValues,
   EXTERNAL_TOKENS,
   FEES,
   GENERATOR_PROXY_CONTRACTS, PAIRS_WHITELIST, POOLS_WITH_8_DIGIT_REWARD_TOKENS, STABLE_SWAP_POOLS,
@@ -137,7 +138,7 @@ export async function poolCollect(): Promise<void> {
     if(priceMap.has(rewardToken)) {
       nativeTokenPrice = priceMap.get(rewardToken)?.price_ust as number
     } else if (EXTERNAL_TOKENS.has(rewardToken)) {
-      const { source, address, currency } = EXTERNAL_TOKENS.get(rewardToken)
+      const { source, address, currency } = EXTERNAL_TOKENS.get(rewardToken) as CoingeckoValues
       nativeTokenPrice = await fetchExternalTokenPrice(source, address, currency)
     } else if (rewardToken != null && protocolRewards24h != 0) {
       console.log("Reward token listed, but no price found for: " + rewardToken)

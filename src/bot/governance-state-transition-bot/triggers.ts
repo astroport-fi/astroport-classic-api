@@ -8,7 +8,7 @@ import {
 } from "@terra-money/terra.js";
 import {
   GOVERNANCE_ASSEMBLY,
-  GOVERNANCE_TRIGGER_BOT_SEED,
+  GOVERNANCE_TRIGGER_BOT_SEED, TERRA_CHAIN_ID, TERRA_LCD
 } from "../../constants";
 import { Proposal } from "../../models/proposal.model";
 
@@ -67,11 +67,9 @@ export async function assembly_msg(message: any): Promise<void> {
     mnemonic: GOVERNANCE_TRIGGER_BOT_SEED
   });
 
-  // TODO Important - change to TERRA_LCD and TERRA_CHAIN_ID for prod
-  // TODO disable in testnet before prod deploy
   const terra = new LCDClient({
-    URL: 'https://bombay-lcd.terra.dev',
-    chainID: 'bombay-12',
+    URL: TERRA_LCD,
+    chainID: TERRA_CHAIN_ID,
   });
 
   const wallet = terra.wallet(mk);

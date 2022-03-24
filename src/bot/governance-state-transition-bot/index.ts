@@ -21,7 +21,6 @@ export async function run(
   context.callbackWaitsForEmptyEventLoop = false;
 
   await initHive(TERRA_HIVE);
-  await initMantle(TERRA_MANTLE);
   await initLCD(TERRA_LCD, TERRA_CHAIN_ID);
 
   await mongoose.connect(MONGODB_URL);

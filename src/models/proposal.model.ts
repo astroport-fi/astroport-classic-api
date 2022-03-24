@@ -49,6 +49,14 @@ const proposalSchema: Schema<ProposalDocument> = new Schema(
       type: Schema.Types.Number,
       required: false,
     },
+    votes_for: {
+      type: Schema.Types.Number,
+      required: false,
+    },
+    votes_against: {
+      type: Schema.Types.Number,
+      required: false,
+    },
     votes_for_power: {
       type: Schema.Types.Number,
       required: false,
@@ -91,4 +99,4 @@ const proposalSchema: Schema<ProposalDocument> = new Schema(
   }
 );
 
-export const Proposal = model('Proposal', proposalSchema, "gov_proposal");
+export const Proposal = model('Proposal', proposalSchema, "proposal");
