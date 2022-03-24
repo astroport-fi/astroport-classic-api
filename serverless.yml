@@ -45,7 +45,7 @@ functions:
   governance-state-transition-bot: # TODO change to prod values
     handler: src/bot/governance-state-transition-bot/index.run
     events:
-      - schedule: rate(1 minutes)
+      - schedule: rate(1 minute)
     timeout: 30 # in seconds
     environment:
       MONGODB_URL: ${env:MONGODB_URL_RW}
