@@ -1,5 +1,9 @@
 import bluebird from "bluebird";
-import { APIGatewayAuthorizerResultContext, APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
+import {
+  APIGatewayAuthorizerResultContext,
+  APIGatewayProxyEvent,
+  APIGatewayProxyResult,
+} from "aws-lambda";
 
 import { initHive, initLCD, initMantle } from "../../lib/terra";
 import { TERRA_CHAIN_ID, TERRA_HIVE, TERRA_LCD, TERRA_MANTLE } from "../../constants";
@@ -15,8 +19,6 @@ export async function run(
   _: APIGatewayProxyEvent,
   context: APIGatewayAuthorizerResultContext
 ): Promise<APIGatewayProxyResult> {
-
-
   context.callbackWaitsForEmptyEventLoop = false;
 
   await initHive(TERRA_HIVE);
@@ -24,20 +26,18 @@ export async function run(
   await initLCD(TERRA_LCD, TERRA_CHAIN_ID);
 
   try {
+    const start = new Date().getTime();
 
-    const start = new Date().getTime()
-
-    console.log("Swapping maker fees...")
+    console.log("Swapping maker fees...");
     await swap();
 
-    console.log("Total time elapsed: " + (new Date().getTime() - start) / 1000)
-
+    console.log("Total time elapsed: " + (new Date().getTime() - start) / 1000);
   } catch (e) {
     throw new Error("Error while swapping maker fees: " + e);
   }
 
   return {
     statusCode: 200,
-    body: 'swapped',
+    body: "swapped",
   };
 }

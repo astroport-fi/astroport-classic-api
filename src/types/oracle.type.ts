@@ -1,7 +1,7 @@
 export interface ExchangeRate {
-  height: string
+  height: string;
   result: {
-    denom: string
-    amount: string
-  }[]
+    denom: string;
+    amount: string;
+  }[];
 }

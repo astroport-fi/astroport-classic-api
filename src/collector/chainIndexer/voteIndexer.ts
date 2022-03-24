@@ -16,11 +16,7 @@ export async function voteIndexer(
     const transformed = logFound.transformed;
 
     if (transformed) {
-      await createVote(
-        { ...transformed,
-          createdAt: timestamp,
-          block: height,
-          txn: txnHash });
+      await createVote({ ...transformed, createdAt: timestamp, block: height, txn: txnHash });
     }
   }
 }

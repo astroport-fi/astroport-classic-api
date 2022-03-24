@@ -1,4 +1,4 @@
-import { Pair } from './pair.type';
+import { Pair } from "./pair.type";
 
 export type Price = {
   pair: Pair;

@@ -1,6 +1,6 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model } from "mongoose";
 
-import { Block as BlockDocument } from '../types';
+import { Block as BlockDocument } from "../types";
 
 const blockSchema: Schema<BlockDocument> = new Schema(
   {
@@ -25,4 +25,4 @@ const blockSchema: Schema<BlockDocument> = new Schema(
   }
 );
 
-export const Block = model('Block', blockSchema);
+export const Block = model("Block", blockSchema);
