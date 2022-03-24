@@ -10,6 +10,8 @@ export type Proposal = {
   end_timestamp: Date;
   start_block: number;
   end_block: number;
+  votes_for: number;
+  votes_against: number;
   votes_for_power: number;
   votes_against_power: number;
   total_voting_power: number;

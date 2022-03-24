@@ -15,6 +15,7 @@ import { aggregatePoolProtocolRewards7d } from "./aggregatePoolProtocolRewards7d
 import { getPrices } from "../services/priceV2.service";
 import { priceListToMap } from "../collector/helpers";
 import { aggregateXAstroFees } from "./aggregateXAstroFees";
+import { aggregateVotes } from "./aggregateVotes";
 
 bluebird.config({
   longStackTraces: true,
@@ -61,6 +62,9 @@ export async function run(
 
     console.log("Aggregating xAstro fees...")
     await aggregateXAstroFees(priceMap)
+
+    console.log("Aggregating vote counts...")
+    await aggregateVotes()
 
     console.log("Done aggregating")
 
