@@ -15,9 +15,9 @@ export const MAKER_CONTRACT = process.env.MAKER_CONTRACT as string
 // seed for wallet that triggers governance state transitions
 export const GOVERNANCE_TRIGGER_BOT_SEED = process.env.GOVERNANCE_TRIGGER_BOT_SEED as string
 // trigger messages on this address
-export const GOVERNANCE_ASSEMBLY = "terra1ujc6hpxcnq9kcq4e5qttf0z5cz2zykhwff2zm7" as string // TODO this is testnet, switch for prod gov deploy
+export const GOVERNANCE_ASSEMBLY = process.env.GOVERNANCE_ASSEMBLY as string
 
-// TODO delete these for prod once gov is shipped
+// TODO change these to prod once gov is shipped
 export const GOV_XASTRO = "terra1yufp7cv85qrxrx56ulpfgstt2gxz905fgmysq0" as string
 export const GOV_BUILDER_UNLOCK = "terra1hccg0cfrcu0nr4zgt5urmcgam9v88peg9s7h6j" as string
 export const GOV_VXASTRO = "terra1pqr02fx4ulc2mzws7xlqh8hpwqx2ls5m4fk62j" as string
