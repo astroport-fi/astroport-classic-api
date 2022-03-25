@@ -1,6 +1,6 @@
-import { BigNumber } from 'bignumber.js';
+import { BigNumber } from "bignumber.js";
 
-import { DECIMALS } from '../constants';
+import { DECIMALS } from "../constants";
 
 BigNumber.config({
   DECIMAL_PLACES: DECIMALS,
@@ -11,4 +11,4 @@ export function num(number: number | string): BigNumber {
   return new BigNumber(number);
 }
 
-export * from 'bignumber.js';
+export * from "bignumber.js";

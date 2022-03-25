@@ -1,13 +1,13 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model } from "mongoose";
 
-import { Proposal as ProposalDocument } from '../types';
+import { Proposal as ProposalDocument } from "../types";
 
 const proposalSchema: Schema<ProposalDocument> = new Schema(
   {
     proposal_id: {
       type: Schema.Types.Number,
       required: true,
-      unique: true
+      unique: true,
     },
     state: {
       type: Schema.Types.String,
@@ -99,4 +99,4 @@ const proposalSchema: Schema<ProposalDocument> = new Schema(
   }
 );
 
-export const Proposal = model('Proposal', proposalSchema, "proposal");
+export const Proposal = model("Proposal", proposalSchema, "proposal");

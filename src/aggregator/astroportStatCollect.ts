@@ -8,31 +8,32 @@ import { Pool } from "../models/pool.model";
 dayjs.extend(utc);
 
 export async function astroportStatsCollect(): Promise<void> {
-
   // get all pools
-  const pools = await Pool.find()
+  const pools = await Pool.find();
 
   // retrieve tvl, volume sums per pool
-  let volume24hSum = 0
-  let tvlSum = 0
+  let volume24hSum = 0;
+  let tvlSum = 0;
 
   for (const pool of pools) {
-    volume24hSum += pool.metadata.day_volume_ust
-    tvlSum += pool.metadata.pool_liquidity
+    volume24hSum += pool.metadata.day_volume_ust;
+    tvlSum += pool.metadata.pool_liquidity;
   }
 
   // get astro price
-  let astroPrice = await getPriceByTokenAddress(ASTRO_TOKEN)
-  astroPrice = astroPrice.price_ust
+  let astroPrice = await getPriceByTokenAddress(ASTRO_TOKEN);
+  astroPrice = astroPrice.price_ust;
 
   // write to astroport_stats
   await AstroportStat.updateOne(
     {},
-    { $set: {
+    {
+      $set: {
         total_liquidity: tvlSum,
         total_volume_24h: volume24hSum,
-        astro_price: astroPrice
-    }},
-    {upsert: true})
-
+        astro_price: astroPrice,
+      },
+    },
+    { upsert: true }
+  );
 }

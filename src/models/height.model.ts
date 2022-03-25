@@ -1,6 +1,6 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model } from "mongoose";
 
-import { Height as HeightDocument } from '../types';
+import { Height as HeightDocument } from "../types";
 
 const heightSchema: Schema<HeightDocument> = new Schema(
   {
@@ -19,4 +19,4 @@ const heightSchema: Schema<HeightDocument> = new Schema(
   }
 );
 
-export const Height = model('Height', heightSchema);
+export const Height = model("Height", heightSchema);

@@ -16,20 +16,20 @@ export type Pool = {
     day: number;
     apr: number;
     apy: number;
-  },
+  };
   astro_rewards: {
     day: number;
     apr: number;
     apy: number;
-  },
+  };
   protocol_rewards: {
     day: number;
     apr: number;
     apy: number;
-  },
+  };
   total_rewards: {
     day: number;
     apr: number;
     apy: number;
-  }
+  };
 };

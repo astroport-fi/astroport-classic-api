@@ -3,7 +3,7 @@ import utc from "dayjs/plugin/utc";
 import { TERRA_CHAIN_ID, TOKENS_WITH_8_DIGITS } from "../constants";
 import { getHeightByDate } from "../services";
 import { Pair } from "../types";
-import { Proposal } from "../models/proposal.model"
+import { Proposal } from "../models/proposal.model";
 import { PriceV2 } from "../types/priceV2.type";
 
 dayjs.extend(utc);
@@ -23,10 +23,7 @@ export async function getHeightsFromDate(
   const heights = [];
 
   for (let i = 1; i <= 10; i++) {
-    const height = await getHeightByDate(
-      chainId,
-      lastHeightInDate.add(i, interval).toISOString()
-    );
+    const height = await getHeightByDate(chainId, lastHeightInDate.add(i, interval).toISOString());
 
     if (height == null) {
       continue;
@@ -70,28 +67,33 @@ export function proposalListToMap(proposalList: any[]): Map<number, any> {
  */
 
 export function getUSTSwapValue(transformed: any, priceMap: Map<string, PriceV2>): number {
-
   // supported token addresses for calculating volume
-  const whitelisted = new Set(priceMap.keys())
+  const whitelisted = new Set(priceMap.keys());
 
-  let denom, amount = 0
-  if(whitelisted.has(transformed.assets[0].token)) {
-    denom = transformed.assets[0].token
-    amount = Math.abs(transformed.assets[0].amount)
+  let denom,
+    amount = 0;
+  if (whitelisted.has(transformed.assets[0].token)) {
+    denom = transformed.assets[0].token;
+    amount = Math.abs(transformed.assets[0].amount);
   } else if (whitelisted.has(transformed.assets[1].token)) {
-    denom = transformed.assets[1].token
-    amount = Math.abs(transformed.assets[1].amount)
+    denom = transformed.assets[1].token;
+    amount = Math.abs(transformed.assets[1].amount);
   } else {
-    console.log("Swap not supported from " + transformed.assets[0].token + " to " + transformed.assets[1].token)
+    console.log(
+      "Swap not supported from " +
+        transformed.assets[0].token +
+        " to " +
+        transformed.assets[1].token
+    );
   }
 
-  const price_ust = priceMap.get(denom)?.price_ust as number
+  const price_ust = priceMap.get(denom)?.price_ust as number;
 
-  let result = price_ust * amount / 1000000
+  let result = (price_ust * amount) / 1000000;
 
-  if(TOKENS_WITH_8_DIGITS.has(denom)) {
-    result /= 100
+  if (TOKENS_WITH_8_DIGITS.has(denom)) {
+    result /= 100;
   }
 
-  return result
+  return result;
 }

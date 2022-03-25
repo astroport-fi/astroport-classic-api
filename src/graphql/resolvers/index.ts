@@ -1,10 +1,10 @@
-
 import {
   getAirdrops,
   getBlockResponse,
   getPool,
   getPools,
-  getSupply, getTokens
+  getSupply,
+  getTokens,
 } from "../../services";
 import { getStats } from "../../services/astroport_stats.service";
 import { getPriceByTokenAddress } from "../../services/priceV2.service";
@@ -14,21 +14,21 @@ import { getVotes } from "../../services/vote.service";
 
 export const resolvers = {
   Query: {
-    airdrop: async(_: any, { address }: any) => {
+    airdrop: async (_: any, { address }: any) => {
       const airdrops = await getAirdrops(address);
-      return airdrops
+      return airdrops;
     },
-    block: async() => {
+    block: async () => {
       const block = await getBlockResponse();
-      return block
+      return block;
     },
-    stats: async() => {
+    stats: async () => {
       const stats = await getStats();
-      return stats
+      return stats;
     },
-    price: async(_: any, { tokenAddress }: any) => {
+    price: async (_: any, { tokenAddress }: any) => {
       const price = await getPriceByTokenAddress(tokenAddress);
-      return price
+      return price;
     },
     pool: async (_: any, { address }: any) => {
       const pools = await getPool(address);
@@ -42,25 +42,25 @@ export const resolvers = {
       const proposal = await getProposal(proposal_id);
       return proposal;
     },
-    proposals: async() => {
+    proposals: async () => {
       const proposals = await getProposals();
-      return proposals
+      return proposals;
     },
-    supply: async() => {
+    supply: async () => {
       const supply = await getSupply();
       return supply;
     },
-    staking: async() => {
-      const xastro_fee_stat = await getStakingStats()
+    staking: async () => {
+      const xastro_fee_stat = await getStakingStats();
       return xastro_fee_stat;
     },
     tokens: async () => {
       const pools = await getTokens();
       return pools;
     },
-    votes: async(_: any, { proposal_id, choice, limit, offset }: any) => {
+    votes: async (_: any, { proposal_id, choice, limit, offset }: any) => {
       const votes = await getVotes(proposal_id, choice, limit, offset);
       return votes;
-    }
+    },
   },
 };

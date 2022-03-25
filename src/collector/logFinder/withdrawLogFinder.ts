@@ -1,7 +1,6 @@
-import { createReturningLogFinder, ReturningLogFinderMapper } from '@terra-money/log-finder'
+import { createReturningLogFinder, ReturningLogFinderMapper } from "@terra-money/log-finder";
 import { ProtocolTokenTransferTransformed } from "../../types";
 import { generatorProxyClaimRule } from "./logRules";
-
 
 /**
  * When a user provides or withdraws LP tokens to a pool, the protocol factory contract sends
@@ -14,27 +13,25 @@ export function createWithdrawLogFinder(
   token: string,
   proxy: string,
   factory: string
-): ReturningLogFinderMapper<ProtocolTokenTransferTransformed | undefined > {
-
+): ReturningLogFinderMapper<ProtocolTokenTransferTransformed | undefined> {
   return createReturningLogFinder(generatorProxyClaimRule(token, proxy, factory), (_, match) => {
-
     // just find transactions where the protocol token is sent to the generator proxy address
-    for(const value of generatorProxyContracts.values()) {
-      if(value.proxy == match[3].value) {
-        const token = match[0].value
-        const action = match[1].value
-        const from = match[2].value
-        const to = match[3].value
-        const amount = match[4].value
+    for (const value of generatorProxyContracts.values()) {
+      if (value.proxy == match[3].value) {
+        const token = match[0].value;
+        const action = match[1].value;
+        const from = match[2].value;
+        const to = match[3].value;
+        const amount = match[4].value;
 
         const transformed = {
           token: token,
           pool: to,
-          amount: parseInt(amount)
-        }
-        return transformed
+          amount: parseInt(amount),
+        };
+        return transformed;
       }
     }
-    return
-  })
+    return;
+  });
 }

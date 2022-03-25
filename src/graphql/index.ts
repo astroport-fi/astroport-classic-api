@@ -26,18 +26,18 @@ const apolloServer = new ApolloServer({
       }
 
       try {
-        console.log('connecting to mongo');
+        console.log("connecting to mongo");
 
         const options: mongoose.ConnectOptions = {};
         db = await mongoose.connect(MONGODB_URL, options);
       } catch (e) {
-        console.log('--->error while connecting via graphql context (db)', e);
+        console.log("--->error while connecting via graphql context (db)", e);
       }
     }
 
     return { db };
   },
-  debug: false
+  debug: false,
 });
 
 export const run = apolloServer.createHandler();

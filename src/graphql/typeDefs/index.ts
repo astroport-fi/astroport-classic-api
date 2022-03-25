@@ -92,7 +92,7 @@ export const typeDefs = /* GraphQL */ `
     end_timestamp: DateTime
     start_block: Float
     end_block: Float
-    votes_for: Float,
+    votes_for: Float
     votes_against: Float
     votes_for_power: Float
     votes_against_power: Float
@@ -106,11 +106,11 @@ export const typeDefs = /* GraphQL */ `
   }
 
   type Vote {
-    voter: String,
-    proposal_id: Float,
-    vote: String,
-    voting_power: Float,
-    block: Float,
+    voter: String
+    proposal_id: Float
+    vote: String
+    voting_power: Float
+    block: Float
     txn: String
   }
 

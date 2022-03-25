@@ -9,15 +9,12 @@ export function voteLogFinder(): ReturningLogFinderMapper<{
   vote: string;
   voting_power: number;
 }> {
-  return createReturningLogFinder(
-    logRules.governanceVoteRule(),
-    (_, match) => {
-      return {
-        proposal_id: Number(match[2].value),
-        voter: match[3].value as string,
-        vote: match[4].value as string,
-        voting_power: Number(match[5].value)
-      };
-    }
-  );
+  return createReturningLogFinder(logRules.governanceVoteRule(), (_, match) => {
+    return {
+      proposal_id: Number(match[2].value),
+      voter: match[3].value as string,
+      vote: match[4].value as string,
+      voting_power: Number(match[5].value),
+    };
+  });
 }

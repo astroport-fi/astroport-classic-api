@@ -15,37 +15,41 @@ dayjs.extend(utc);
  */
 
 export async function aggregatePoolProtocolRewards7d(): Promise<void> {
-
   // get latest block height
-  const latestHeight = await getLastHeight(TERRA_CHAIN_ID)
+  const latestHeight = await getLastHeight(TERRA_CHAIN_ID);
 
   // get block height 7d ago
   // TODO - an estimation - switch over when height data correctly indexed
-  const startBlockHeight = latestHeight.value - Math.floor(BLOCKS_PER_YEAR / 52)
+  const startBlockHeight = latestHeight.value - Math.floor(BLOCKS_PER_YEAR / 52);
 
   // const startBlockHeight = await getHeightByDate(
   //   chainId,
   //   dayjs().utc().subtract(1, 'y').toISOString());
 
   // retrieve weekly sums per pair and write to pool_protocol_rewards_7d
-  for(const value of GENERATOR_PROXY_CONTRACTS.values()) {
-    const pool_reward_volumes = await PoolProtocolReward.find({ pool: value.pool, block: { $gt: startBlockHeight, $lt: latestHeight.value }});
+  for (const value of GENERATOR_PROXY_CONTRACTS.values()) {
+    const pool_reward_volumes = await PoolProtocolReward.find({
+      pool: value.pool,
+      block: { $gt: startBlockHeight, $lt: latestHeight.value },
+    });
 
     let sum = 0;
     pool_reward_volumes.forEach((element) => {
-      sum += element.volume
-    })
+      sum += element.volume;
+    });
 
     // create or update
     await PoolProtocolRewardVolume7d.updateOne(
       {
-        pool_address: value.pool
+        pool_address: value.pool,
       },
-      { $set: {
+      {
+        $set: {
           block: latestHeight.value,
-          volume: sum
-        }},
-      {upsert: true}
-    )
+          volume: sum,
+        },
+      },
+      { upsert: true }
+    );
   }
 }

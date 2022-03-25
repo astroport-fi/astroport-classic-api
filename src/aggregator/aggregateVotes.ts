@@ -11,38 +11,37 @@ dayjs.extend(utc);
  */
 
 export async function aggregateVotes(): Promise<void> {
-
-  const proposals = await Proposal.find({state: "Active"})
+  const proposals = await Proposal.find({ state: "Active" });
 
   for (const proposal of proposals) {
-    const votes = await Vote.find({ proposal_id: proposal.proposal_id })
+    const votes = await Vote.find({ proposal_id: proposal.proposal_id });
 
     // these all represent unique voters
-    const totalVoters = new Set<string>()
-    const forVoters = new Set<string>()
-    const againstVoters = new Set<string>()
+    const totalVoters = new Set<string>();
+    const forVoters = new Set<string>();
+    const againstVoters = new Set<string>();
 
     votes.forEach((vote) => {
-      if(vote.vote == "for") {
-        forVoters.add(vote.voter)
-
+      if (vote.vote == "for") {
+        forVoters.add(vote.voter);
       } else if (vote.vote == "against") {
-        againstVoters.add(vote.voter)
-
+        againstVoters.add(vote.voter);
       } else {
-        console.log("Encountered a non standard vote choice: " + vote.vote)
+        console.log("Encountered a non standard vote choice: " + vote.vote);
       }
 
-      totalVoters.add(vote.voter)
-    })
+      totalVoters.add(vote.voter);
+    });
 
     await Proposal.updateOne(
       { proposal_id: proposal.proposal_id },
-      { $set: {
+      {
+        $set: {
           votes_for: forVoters.size,
           votes_against: againstVoters.size,
-          votes_total: totalVoters.size
-        }}
-    )
+          votes_total: totalVoters.size,
+        },
+      }
+    );
   }
 }

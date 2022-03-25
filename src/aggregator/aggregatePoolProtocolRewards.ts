@@ -13,42 +13,45 @@ dayjs.extend(utc);
  * Update the pool_protocol_rewards_24h table
  */
 
-const chainId = TERRA_CHAIN_ID
+const chainId = TERRA_CHAIN_ID;
 const BLOCKS_PER_YEAR = 4656810;
 
 export async function aggregatePoolProtocolRewards(): Promise<void> {
-
   // get latest block height
-  const { height, time } = await getLatestBlock()
-  const latestHeight = Number(height)
+  const { height, time } = await getLatestBlock();
+  const latestHeight = Number(height);
 
   // get block height 24hrs ago
-  const startBlockHeight = latestHeight - Math.floor(BLOCKS_PER_YEAR / 365)
+  const startBlockHeight = latestHeight - Math.floor(BLOCKS_PER_YEAR / 365);
 
   // retrieve daily sums per pair and write to pool_protocol_rewards_24h
-  for(const value of GENERATOR_PROXY_CONTRACTS.values()) {
-    const pool_reward_volumes = await PoolProtocolReward.find({ pool: value.pool, block: { $gt: startBlockHeight, $lt: latestHeight }});
+  for (const value of GENERATOR_PROXY_CONTRACTS.values()) {
+    const pool_reward_volumes = await PoolProtocolReward.find({
+      pool: value.pool,
+      block: { $gt: startBlockHeight, $lt: latestHeight },
+    });
 
     let sum = 0;
     pool_reward_volumes.forEach((element) => {
-      sum += element.volume
-    })
+      sum += element.volume;
+    });
 
     // create or update
-    const prev = await PoolProtocolRewardVolume24h.findOne({pool_address: value.pool})
-    if(prev) {
+    const prev = await PoolProtocolRewardVolume24h.findOne({ pool_address: value.pool });
+    if (prev) {
       await PoolProtocolRewardVolume24h.findOneAndUpdate(
         { pool_address: value.pool },
         {
           block: latestHeight,
-          volume: sum
-        });
+          volume: sum,
+        }
+      );
     } else {
       await PoolProtocolRewardVolume24h.create({
-          pool_address: value.pool,
-          block: latestHeight,
-          volume: sum
-        });
+        pool_address: value.pool,
+        block: latestHeight,
+        volume: sum,
+      });
     }
   }
 }

@@ -7,11 +7,9 @@ import { getBlock, updateBlock } from "./testnetIndexerHelpers";
 
 dayjs.extend(utc);
 
-
 const waitFor = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 export async function chainCollect(): Promise<void> {
-
   const collectedBlock = await getBlock("bombay-12");
 
   if (collectedBlock == null) {
@@ -21,7 +19,7 @@ export async function chainCollect(): Promise<void> {
   const lastHeight = collectedBlock.hiveHeight;
 
   for (let height = lastHeight + 1; height <= lastHeight + CHAIN_COLLECT_BATCH_SIZE; height++) {
-    console.log("Current height: " + height)
+    console.log("Current height: " + height);
     const block = await getTxBlock(height);
     if (!block) {
       console.log("Block " + height + " not found");
@@ -32,7 +30,7 @@ export async function chainCollect(): Promise<void> {
 
     await updateBlock("bombay-12", { hiveHeight: height });
 
-    if (height % 100 === 0) console.log(`collected: ${height} / latest height: ${lastHeight}`)
+    if (height % 100 === 0) console.log(`collected: ${height} / latest height: ${lastHeight}`);
 
     await waitFor(200);
   }

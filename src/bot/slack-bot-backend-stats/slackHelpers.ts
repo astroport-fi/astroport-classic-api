@@ -1,16 +1,15 @@
-
 export function generate_post_fields(text: string) {
   const post_fields = {
-    "blocks": [
+    blocks: [
       {
-        "type": "section",
-        "text": {
-          "type": "mrkdwn",
-          "text": text
-        }
-      }
-    ]
-  }
+        type: "section",
+        text: {
+          type: "mrkdwn",
+          text: text,
+        },
+      },
+    ],
+  };
 
-  return post_fields
+  return post_fields;
 }

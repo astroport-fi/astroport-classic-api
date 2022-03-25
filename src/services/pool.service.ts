@@ -3,28 +3,27 @@ import { Pool as PoolType } from "../types/pool.type";
 import { TOKEN_ADDRESS_MAP } from "../constants";
 
 export async function getPool(address: string): Promise<any> {
-  const pool = await Pool.findOne({ "metadata.pool_address": address })
-  return transformPoolModelToPoolType(pool)
+  const pool = await Pool.findOne({ "metadata.pool_address": address });
+  return transformPoolModelToPoolType(pool);
 }
 
 // TODO add filtering
 export async function getPools(): Promise<any[]> {
-  const pools = await Pool.find({}, null, {limit: 500})
-  const result = []
+  const pools = await Pool.find({}, null, { limit: 500 });
+  const result = [];
 
   // map
-  for(const pool of pools) {
-    result.push(transformPoolModelToPoolType(pool))
+  for (const pool of pools) {
+    result.push(transformPoolModelToPoolType(pool));
   }
 
-  return result
+  return result;
 }
 
 function transformPoolModelToPoolType(model: any): PoolType {
-
   // TODO remove
-  const symbol = TOKEN_ADDRESS_MAP.get(model.metadata.pool_address)
-  
+  const symbol = TOKEN_ADDRESS_MAP.get(model.metadata.pool_address);
+
   return {
     timestamp: model.timestamp,
     pool_address: model.metadata.pool_address,
@@ -60,6 +59,6 @@ function transformPoolModelToPoolType(model: any): PoolType {
       day: model.metadata.fees.total.day,
       apr: model.metadata.fees.total.apr,
       apy: model.metadata.fees.total.apy,
-    }
-  }
+    },
+  };
 }

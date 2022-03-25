@@ -17,21 +17,21 @@ export type PoolTimeseries = {
       day: number;
       apr: number;
       apy: number;
-    },
+    };
     astro: {
       day: number;
       apr: number;
       apy: number;
-    },
+    };
     native: {
       day: number;
       apr: number;
       apy: number;
-    },
+    };
     total: {
       day: number;
       apr: number;
       apy: number;
-    }
-  }
+    };
+  };
 };

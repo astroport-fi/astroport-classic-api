@@ -3,12 +3,7 @@ import mongoose from "mongoose";
 import { expect } from "chai";
 import { getTxBlock, initHive, initMantle } from "../../../src/lib/terra";
 import { getToken } from "../../../src/services";
-import {
-  FACTORY_ADDRESS,
-  MONGODB_URL,
-  TERRA_HIVE,
-  TERRA_MANTLE,
-} from "../../../src/constants";
+import { FACTORY_ADDRESS, MONGODB_URL, TERRA_HIVE, TERRA_MANTLE } from "../../../src/constants";
 // import { priceCollectV2 } from "../../../src/collector/priceIndexer/priceCollectV2";
 import { createPairLogFinders } from "../../../src/collector/logFinder";
 // import { LogFragment } from "@terra-money/log-finder";

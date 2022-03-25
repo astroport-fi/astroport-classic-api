@@ -1,6 +1,11 @@
 import { LCDClient, MnemonicKey, MsgExecuteContract } from "@terra-money/terra.js";
 import whitelist from "./whitelist-prod.json";
-import { MAKER_CONTRACT, MAKER_FEE_COLLECTOR_SEED, TERRA_CHAIN_ID, TERRA_LCD } from "../../constants";
+import {
+  MAKER_CONTRACT,
+  MAKER_FEE_COLLECTOR_SEED,
+  TERRA_CHAIN_ID,
+  TERRA_LCD,
+} from "../../constants";
 
 // pairs to swap and distribute to xastro stakers
 
@@ -12,13 +17,13 @@ import { MAKER_CONTRACT, MAKER_FEE_COLLECTOR_SEED, TERRA_CHAIN_ID, TERRA_LCD } f
 
 // testnet TODO delete
 export const WHITELISTED_PAIRS = [
-  'terra1ec0fnjk2u6mms05xyyrte44jfdgdaqnx0upesr', // astro ust testnet
-  'terra122ddg6rnvcvcwkt3xgxhh3j522993s5xxdqcm2'] // anc ust testnet
-
+  "terra1ec0fnjk2u6mms05xyyrte44jfdgdaqnx0upesr", // astro ust testnet
+  "terra122ddg6rnvcvcwkt3xgxhh3j522993s5xxdqcm2",
+]; // anc ust testnet
 
 export async function swap(): Promise<void> {
   const mk = new MnemonicKey({
-    mnemonic: MAKER_FEE_COLLECTOR_SEED
+    mnemonic: MAKER_FEE_COLLECTOR_SEED,
   });
 
   const terra = new LCDClient({
@@ -30,22 +35,22 @@ export async function swap(): Promise<void> {
 
   // TODO switch pair_addresses to WHITELISTED PAIRS for mainnet
   // create a message to a maker contract
-  const msg = new MsgExecuteContract(
-    wallet.key.accAddress,
-    MAKER_CONTRACT,
-    {
-      "collect": {
-        "pair_addresses": WHITELISTED_PAIRS
-      }
-    });
+  const msg = new MsgExecuteContract(wallet.key.accAddress, MAKER_CONTRACT, {
+    collect: {
+      pair_addresses: WHITELISTED_PAIRS,
+    },
+  });
 
   try {
-    await wallet.createAndSignTx({ msgs: [msg] }).then(tx => terra.tx.broadcast(tx)).then(result => {
-      console.log(`TX hash: ${result.txhash}`);
-      if (result.logs.length >= 1) {
-        console.log("logs.events: ", result.logs[result.logs.length - 1].events);
-      }
-    });
+    await wallet
+      .createAndSignTx({ msgs: [msg] })
+      .then((tx) => terra.tx.broadcast(tx))
+      .then((result) => {
+        console.log(`TX hash: ${result.txhash}`);
+        if (result.logs.length >= 1) {
+          console.log("logs.events: ", result.logs[result.logs.length - 1].events);
+        }
+      });
   } catch (e) {
     console.log(e);
   }
