@@ -3,10 +3,7 @@ import { createAstroCW20FeeLogFinder } from "../logFinder/createAstroCW20FeeLogF
 import { createAstroNativeFeeLogFinder } from "../logFinder/createAstroNativeFeeLogFinder";
 import { XAstroFeeTransformed } from "../../types";
 
-export async function findXAstroFees(
-  event: any,
-  height: number
-): Promise<void> {
+export async function findXAstroFees(event: any, height: number): Promise<void> {
   const blockFees = new Set<XAstroFeeTransformed>();
 
   // get cw20 rewards
@@ -15,13 +12,13 @@ export async function findXAstroFees(
 
   if (astroCW20FeeLogFound) {
     for (const found of astroCW20FeeLogFound) {
-      const transformed = found.transformed
+      const transformed = found.transformed;
 
-      if(transformed != null) {
+      if (transformed != null) {
         blockFees.add({
           token: transformed.token,
-          amount: transformed.amount
-        })
+          amount: transformed.amount,
+        });
       }
     }
   }
@@ -30,15 +27,15 @@ export async function findXAstroFees(
   const astroNativeFeeLogFinder = createAstroNativeFeeLogFinder();
   const astroNativeFeeLogFound = astroNativeFeeLogFinder(event);
 
-  if(astroNativeFeeLogFound) {
-    for(const found of astroNativeFeeLogFound) {
-      const transformed = found.transformed
+  if (astroNativeFeeLogFound) {
+    for (const found of astroNativeFeeLogFound) {
+      const transformed = found.transformed;
 
-      if(transformed != null) {
+      if (transformed != null) {
         blockFees.add({
           token: transformed.token,
-          amount: transformed.amount
-        })
+          amount: transformed.amount,
+        });
       }
     }
   }
@@ -49,8 +46,8 @@ export async function findXAstroFees(
       await xAstroFee.create({
         token: fee.token,
         volume: fee.amount,
-        block: height
-      })
+        block: height,
+      });
     } catch (e) {
       // console.log("Error finding xastro fees: " + e)
     }

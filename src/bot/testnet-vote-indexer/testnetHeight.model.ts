@@ -1,6 +1,5 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model } from "mongoose";
 import { Height } from "../../types";
-
 
 const testnetHeightSchema: Schema<Height> = new Schema(
   {
@@ -19,4 +18,4 @@ const testnetHeightSchema: Schema<Height> = new Schema(
   }
 );
 
-export const TestnetHeight = model('TestnetHeight', testnetHeightSchema, "testnetHeight");
+export const TestnetHeight = model("TestnetHeight", testnetHeightSchema, "testnetHeight");

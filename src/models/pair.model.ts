@@ -1,6 +1,6 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model } from "mongoose";
 
-import { Pair as PairDocument } from '../types/pair.type';
+import { Pair as PairDocument } from "../types/pair.type";
 
 const pairSchema: Schema<PairDocument> = new Schema(
   {
@@ -31,17 +31,17 @@ const pairSchema: Schema<PairDocument> = new Schema(
       type: Schema.Types.String,
       required: true,
       trim: true,
-      default: 'xyk',
+      default: "xyk",
     },
     deregistered: {
       type: Schema.Types.Boolean,
       trim: true,
-      default: false
-    }
+      default: false,
+    },
   },
   {
     timestamps: true,
   }
 );
 
-export const Pair = model('Pair', pairSchema);
+export const Pair = model("Pair", pairSchema);

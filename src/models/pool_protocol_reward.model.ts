@@ -1,6 +1,6 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model } from "mongoose";
 
-import { PoolProtocolReward as PoolProtocolRewardDocument } from '../types/pool_protocol_reward.type';
+import { PoolProtocolReward as PoolProtocolRewardDocument } from "../types/pool_protocol_reward.type";
 
 const poolProtocolRewardSchema: Schema<PoolProtocolRewardDocument> = new Schema(
   {
@@ -10,32 +10,36 @@ const poolProtocolRewardSchema: Schema<PoolProtocolRewardDocument> = new Schema(
     },
     factory: {
       type: Schema.Types.String,
-      required: false
+      required: false,
     },
     proxy: {
       type: Schema.Types.String,
-      required: false
+      required: false,
     },
     token: {
       type: Schema.Types.String,
-      required: false
+      required: false,
     },
     tokenName: {
       type: Schema.Types.String,
-      required: false
+      required: false,
     },
     block: {
       type: Schema.Types.Number,
-      required: false
+      required: false,
     },
     volume: {
       type: Schema.Types.Number,
-      required: false
-    }
+      required: false,
+    },
   },
   {
     timestamps: true,
   }
 );
 
-export const PoolProtocolReward = model('PoolProtocolReward', poolProtocolRewardSchema, 'pool_protocol_rewards');
+export const PoolProtocolReward = model(
+  "PoolProtocolReward",
+  poolProtocolRewardSchema,
+  "pool_protocol_rewards"
+);

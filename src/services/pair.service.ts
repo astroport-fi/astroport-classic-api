@@ -1,4 +1,4 @@
-import { Pair } from '../models';
+import { Pair } from "../models";
 
 export async function getPairs(): Promise<any[]> {
   const pairs = await Pair.find();

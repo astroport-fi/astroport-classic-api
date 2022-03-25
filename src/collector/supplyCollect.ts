@@ -1,10 +1,15 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 
-
 import { getContractAddressStore, getContractStore } from "../lib/terra";
 import { insertSupply } from "../services";
-import { ASTRO_TOKEN, ASTRO_UST_PAIR, BUILDER_UNLOCK, MULTISIG, VESTING_ADDRESS } from "../constants";
+import {
+  ASTRO_TOKEN,
+  ASTRO_UST_PAIR,
+  BUILDER_UNLOCK,
+  MULTISIG,
+  VESTING_ADDRESS,
+} from "../constants";
 
 dayjs.extend(utc);
 
@@ -19,16 +24,19 @@ export async function supplyCollect(): Promise<void> {
   // get circ supply
   const multisigResponse = await getContractStore(
     ASTRO_TOKEN,
-    JSON.parse('{"balance": { "address": "' + MULTISIG + '" }}'));
+    JSON.parse('{"balance": { "address": "' + MULTISIG + '" }}')
+  );
 
   const builderBalance = await getContractStore(
     ASTRO_TOKEN,
-    JSON.parse('{"balance": { "address": "' + BUILDER_UNLOCK + '" }}'));
+    JSON.parse('{"balance": { "address": "' + BUILDER_UNLOCK + '" }}')
+  );
 
   // get vestingAddress
   const vesting = await getContractAddressStore(
     ASTRO_TOKEN,
-    '{"balance": { "address": "' + VESTING_ADDRESS + '" }}');
+    '{"balance": { "address": "' + VESTING_ADDRESS + '" }}'
+  );
 
   // TODO generator contract - test when it has tokens
   // GENERATOR_ADDRESS
@@ -39,21 +47,22 @@ export async function supplyCollect(): Promise<void> {
   // get astro pool balance
   const astroPool = await getContractStore(
     ASTRO_UST_PAIR,
-    JSON.parse('{"pool": { "address": "' + BUILDER_UNLOCK + '" }}'));
+    JSON.parse('{"pool": { "address": "' + BUILDER_UNLOCK + '" }}')
+  );
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  const circulatingSupply = (INITIAL_TOKEN_SUPPLY - multisigResponse?.balance - builderBalance?.balance - JSON.parse(vesting.Result)?.balance) / DIGITS;
+  const circulatingSupply =
+    (INITIAL_TOKEN_SUPPLY -
+      multisigResponse?.balance -
+      builderBalance?.balance -
+      JSON.parse(vesting.Result)?.balance) /
+    DIGITS;
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const astroPrice = astroPool.assets[1].amount / astroPool.assets[0].amount;
 
-
   // // TODO Total Astroport TVL
   // // TODO 24 hour volume
-  await insertSupply(
-    dayjs().valueOf(),
-    circulatingSupply,
-    astroPrice
-  )
+  await insertSupply(dayjs().valueOf(), circulatingSupply, astroPrice);
 }

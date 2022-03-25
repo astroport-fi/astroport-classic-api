@@ -6,10 +6,7 @@
 import { voteLogFinder } from "../../collector/logFinder/voteLogFinder";
 import { voteIndexer } from "../../collector/chainIndexer/voteIndexer";
 
-export async function runIndexers(
-  txs: any,
-  height: number,
-): Promise<void> {
+export async function runIndexers(txs: any, height: number): Promise<void> {
   for (const tx of txs) {
     const Logs = tx.logs;
     const timestamp = tx.timestamp;
@@ -28,8 +25,8 @@ export async function runIndexers(
             if (voteLogFounds.length > 0) {
               await voteIndexer(voteLogFounds, timestamp, height, txHash);
             }
-          } catch(e) {
-            console.log("Error while indexing votes: " + e)
+          } catch (e) {
+            console.log("Error while indexing votes: " + e);
           }
         }
       }

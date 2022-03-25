@@ -1,6 +1,6 @@
-import { getPairs } from '../../services';
+import { getPairs } from "../../services";
 
-import { priceIndexer } from './priceIndexer';
+import { priceIndexer } from "./priceIndexer";
 
 export async function runIndexers(blockHeight: number): Promise<void> {
   const pairs = await getPairs();

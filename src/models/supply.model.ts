@@ -1,39 +1,38 @@
 import { model, Schema } from "mongoose";
 
-
-
 const supplySchema: Schema = new Schema(
   {
     timestamp: {
       type: Schema.Types.Date,
       required: false,
-      trim: true
+      trim: true,
     },
     metadata: {
       circulatingSupply: {
         type: Schema.Types.Number,
         required: false,
-        trim: true
+        trim: true,
       },
       priceInUst: {
         type: Schema.Types.Number,
         required: false,
-        trim: true
+        trim: true,
       },
       totalValueLockedUst: {
         type: Schema.Types.Number,
         required: false,
-        trim: true
+        trim: true,
       },
       dayVolumeUst: {
         type: Schema.Types.Number,
         required: false,
-        trim: true
+        trim: true,
       },
-    }
-  }, {
-    timestamps: true
+    },
+  },
+  {
+    timestamps: true,
   }
 );
 
-export const Supply = model('Supply', supplySchema, 'supply_timeseries');
+export const Supply = model("Supply", supplySchema, "supply_timeseries");

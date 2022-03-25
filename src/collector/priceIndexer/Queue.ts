@@ -7,6 +7,6 @@ export class Queue<T> {
     return this._store.shift();
   }
   isEmpty(): boolean {
-    return this._store.length == 0
+    return this._store.length == 0;
   }
 }

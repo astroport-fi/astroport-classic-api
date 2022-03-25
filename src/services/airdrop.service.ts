@@ -1,4 +1,4 @@
-import { Airdrop } from '../models';
+import { Airdrop } from "../models";
 
 export async function getAirdrops(address: string): Promise<any[]> {
   const airdrops = await Airdrop.find({ address });
@@ -7,9 +7,6 @@ export async function getAirdrops(address: string): Promise<any[]> {
 }
 
 export async function updateAirdrop(address: string): Promise<any> {
-  const airdrop = await Airdrop.findOneAndUpdate(
-    { address },
-    { claimed: true }
-  );
+  const airdrop = await Airdrop.findOneAndUpdate({ address }, { claimed: true });
   return airdrop;
 }

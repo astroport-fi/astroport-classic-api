@@ -4,35 +4,35 @@ import {
   isTxError,
   LCDClient,
   MnemonicKey,
-  MsgExecuteContract
+  MsgExecuteContract,
 } from "@terra-money/terra.js";
 import {
   GOVERNANCE_ASSEMBLY,
-  GOVERNANCE_TRIGGER_BOT_SEED, TERRA_CHAIN_ID, TERRA_LCD
+  GOVERNANCE_TRIGGER_BOT_SEED,
+  TERRA_CHAIN_ID,
+  TERRA_LCD,
 } from "../../constants";
 import { Proposal } from "../../models/proposal.model";
 
 // active -> passed/rejected
 export async function end_proposal_vote(proposals: any[]): Promise<void> {
-  for(const proposal of proposals) {
+  for (const proposal of proposals) {
     await assembly_msg({
-        "end_proposal": {
-          "proposal_id": proposal.proposal_id
-        }
-      }
-    )
+      end_proposal: {
+        proposal_id: proposal.proposal_id,
+      },
+    });
   }
 }
 
 // passed -> executed
 export async function execute_proposal(proposals: any[]): Promise<void> {
-  for(const proposal of proposals) {
+  for (const proposal of proposals) {
     await assembly_msg({
-        "execute_proposal": {
-          "proposal_id": proposal.proposal_id
-        }
-      }
-    )
+      execute_proposal: {
+        proposal_id: proposal.proposal_id,
+      },
+    });
   }
 }
 
@@ -40,31 +40,30 @@ export async function execute_proposal(proposals: any[]): Promise<void> {
 // because this removes the proposal from the smart contract, we update
 // the Proposal database entry as well
 export async function expire_proposal(proposals: any[]): Promise<void> {
-  for(const proposal of proposals) {
+  for (const proposal of proposals) {
     await assembly_msg({
-        "remove_completed_proposal": {
-          "proposal_id": proposal.proposal_id
-        }
-      }
-    )
+      remove_completed_proposal: {
+        proposal_id: proposal.proposal_id,
+      },
+    });
 
     await Proposal.updateOne(
       {
-        proposal_id: Number(proposal.proposal_id)
+        proposal_id: Number(proposal.proposal_id),
       },
       {
         $set: {
-          state:  "Expired",
-          expired:  new Date().toISOString()
-        }
+          state: "Expired",
+          expired: new Date().toISOString(),
+        },
       }
-    )
+    );
   }
 }
 
 export async function assembly_msg(message: any): Promise<void> {
   const mk = new MnemonicKey({
-    mnemonic: GOVERNANCE_TRIGGER_BOT_SEED
+    mnemonic: GOVERNANCE_TRIGGER_BOT_SEED,
   });
 
   const terra = new LCDClient({
@@ -75,15 +74,12 @@ export async function assembly_msg(message: any): Promise<void> {
   const wallet = terra.wallet(mk);
 
   // create a message to a maker contract
-  const executeMsg = new MsgExecuteContract(
-    wallet.key.accAddress,
-    GOVERNANCE_ASSEMBLY,
-    message);
+  const executeMsg = new MsgExecuteContract(wallet.key.accAddress, GOVERNANCE_ASSEMBLY, message);
 
   const options: CreateTxOptions = {
     msgs: [executeMsg],
     gasPrices: [new Coin("uusd", 0.15)],
-    memo: ""
+    memo: "",
   };
 
   const tx = await wallet.createAndSignTx(options);

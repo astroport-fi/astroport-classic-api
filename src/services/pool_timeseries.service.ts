@@ -4,26 +4,23 @@ import { PoolTimeseries as PoolModel } from "../models/pool_timeseries.model";
 /**
  * Save pool_timeseries snapshot to db
  */
-export async function insertPoolTimeseries(
-  entries: PoolType[]
-) {
-  await PoolModel.insertMany(entries)
+export async function insertPoolTimeseries(entries: PoolType[]) {
+  await PoolModel.insertMany(entries);
 }
 
 export async function getPoolTimeseries(): Promise<any> {
-  const pools = await PoolModel.find({}, null, {limit: 100})
-  const result = []
+  const pools = await PoolModel.find({}, null, { limit: 100 });
+  const result = [];
 
   // map
-  for(const pool of pools) {
-    result.push(transformPoolModelToPoolType({ model: pool }))
+  for (const pool of pools) {
+    result.push(transformPoolModelToPoolType({ model: pool }));
   }
 
-  return result
+  return result;
 }
 
 function transformPoolModelToPoolType({ model }: { model: any }) {
-
   return {
     timestamp: model.timestamp,
     pool_address: model.metadata.pool_address,
@@ -56,6 +53,6 @@ function transformPoolModelToPoolType({ model }: { model: any }) {
       day: model.metadata.fees.total.day,
       apr: model.metadata.fees.total.apr,
       apy: model.metadata.fees.total.apy,
-    }
-  }
+    },
+  };
 }

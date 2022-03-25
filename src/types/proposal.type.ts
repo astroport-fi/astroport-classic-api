@@ -18,7 +18,7 @@ export type Proposal = {
   title: string;
   description: string;
   link: string;
-  messages: string|null;
+  messages: string | null;
   submitter: string;
   submitter_tokens_submitted: number;
 };

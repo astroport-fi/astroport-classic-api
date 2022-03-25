@@ -1,12 +1,12 @@
-import { Schema, model } from 'mongoose';
-import { Vote as VoteDocument } from '../types/vote.type';
+import { Schema, model } from "mongoose";
+import { Vote as VoteDocument } from "../types/vote.type";
 
 const voteSchema: Schema<VoteDocument> = new Schema(
   {
     voter: {
       type: Schema.Types.String,
       required: false,
-      trim: true
+      trim: true,
     },
     proposal_id: {
       type: Schema.Types.Number,
@@ -39,4 +39,4 @@ const voteSchema: Schema<VoteDocument> = new Schema(
   }
 );
 
-export const Vote = model('Vote', voteSchema);
+export const Vote = model("Vote", voteSchema);
