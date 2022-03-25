@@ -1,9 +1,9 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import { getBlock, updateBlock } from "../../services";
 import { CHAIN_COLLECT_BATCH_SIZE } from "../../constants";
 import { getTxBlock } from "../../lib/terra";
 import { runIndexers } from "./chainIndexer";
+import { getBlock, updateBlock } from "./testnetIndexerHelpers";
 
 dayjs.extend(utc);
 

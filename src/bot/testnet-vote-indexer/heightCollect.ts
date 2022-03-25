@@ -1,11 +1,12 @@
+import { createHeight, getLastHeight } from "./testnetIndexerHelpers";
 import { getChainBlock, getLatestBlock } from "../../lib/terra";
-import { getLastHeight } from "../../services";
 
 
 const waitFor = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 export async function heightCollect(): Promise<void> {
 
+  // hive response
   const { height: lastChainHeight } = await getLatestBlock();
 
   if (lastChainHeight < 1) {
@@ -30,7 +31,7 @@ export async function heightCollect(): Promise<void> {
     }
 
     const { height: value, time } = await getChainBlock(height);
-    await createHeight({ "bombay-12", value, createdAt: time });
+    await createHeight("bombay-12", value, time);
     await waitFor(1000);
   }
 }

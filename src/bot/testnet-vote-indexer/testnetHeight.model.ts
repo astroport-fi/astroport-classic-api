@@ -1,8 +1,8 @@
 import { Schema, model } from 'mongoose';
+import { Height } from "../../types";
 
-import { Height as HeightDocument } from '../types';
 
-const testnetHeightSchema: Schema<HeightDocument> = new Schema(
+const testnetHeightSchema: Schema<Height> = new Schema(
   {
     chainId: {
       type: Schema.Types.String,
@@ -19,4 +19,4 @@ const testnetHeightSchema: Schema<HeightDocument> = new Schema(
   }
 );
 
-export const Height = model('TestnetHeight', testnetHeightSchema, "testnet");
+export const TestnetHeight = model('TestnetHeight', testnetHeightSchema, "testnetHeight");

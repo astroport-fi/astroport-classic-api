@@ -3,14 +3,16 @@ import utc from "dayjs/plugin/utc";
 import { getTxBlock } from "../lib/terra";
 import { CHAIN_COLLECT_BATCH_SIZE, TERRA_CHAIN_ID } from "../constants";
 import { getBlock, updateBlock } from "../services";
+import { Pair } from "../types";
 import { runIndexers } from "./chainIndexer";
+import { PriceV2 } from "../types/priceV2.type";
 
 dayjs.extend(utc);
 
 
 const waitFor = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-export async function chainCollect(): Promise<void> {
+export async function chainCollect(pairMap: Map<string, Pair>, priceMap: Map<string, PriceV2>): Promise<void> {
   if (TERRA_CHAIN_ID == null) {
     return;
   }
@@ -31,7 +33,7 @@ export async function chainCollect(): Promise<void> {
       return;
     }
 
-    await runIndexers(block, height);
+    await runIndexers(block, height, pairMap, priceMap);
 
     await updateBlock(TERRA_CHAIN_ID, { hiveHeight: height });
 
