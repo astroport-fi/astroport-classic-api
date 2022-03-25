@@ -60,6 +60,7 @@ export const TOKEN_ADDRESS_MAP = new Map<string, string>([
   ["terra1gxjjrer8mywt4020xdl5e5x7n6ncn6w38gjzae", "LDO"],
   ["terra18dq84qfpz267xuu0k47066svuaez9hr4xvwlex", "LDO"],
   ["terra1edurrzv6hhd8u48engmydwhvz8qzmhhuakhwj3", "LDO"],
+  ["terra1repcset8dt8z9wm5s6x77n3sjg8hduem9tntd6", "LDO"],
   ["terra19wauh79y42u5vt62c5adt2g5h4exgh26t3rpds", "MARS"]
 ])
 
