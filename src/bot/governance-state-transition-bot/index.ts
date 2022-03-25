@@ -39,11 +39,18 @@ export async function run(
     const proposal_effective_delay = assembly_config.proposal_effective_delay
     const proposal_expiration_period = assembly_config.proposal_expiration_period
 
-    // ready_block is the block when a passed proposal is ready to execute
-    const ready_block = height - (proposal_effective_delay + proposal_expiration_period)
+    // execute_block is the block when a passed proposal is ready to execute
+    // height > end_block + proposal effective delay
+    const execute_block = height - (proposal_effective_delay)
 
-    const passed_proposals = await Proposal.find({ "state": "Passed", "end_block": { $gt: ready_block } })
-    const rejected_proposals = await Proposal.find({ "state": "Rejected", "end_block": { $gt: ready_block } })
+    // reject_block is the block when a rejected proposal is ready to expire
+    // height > end + delay + expir
+    const reject_block = height - (proposal_effective_delay + proposal_expiration_period)
+
+    const passed_proposals = await Proposal.find({ "state": "Passed", "end_block": { $gt: execute_block } })
+    const rejected_proposals = await Proposal.find({ "state": "Rejected", "end_block": { $gt: reject_block } })
+
+    await end_proposal_vote(active_proposals)
 
 
     console.log("end_proposal (Active -> Passed/Rejected)")
