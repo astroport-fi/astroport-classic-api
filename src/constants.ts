@@ -271,7 +271,6 @@ export const ASTRO_YEARLY_EMISSIONS = new Map<string, number>([
 /**
  * PoolCollect constants
  */
-export const ASTRO_PAIR_ADDRESS = "terra1l7xu2rl3c7qmtx3r5sd2tz25glf6jh8ul7aag7";
 
 // orion, wormhole
 export const POOLS_WITH_8_DIGIT_REWARD_TOKENS = new Set<string>([
@@ -311,6 +310,10 @@ export const STABLE_SWAP_POOLS = new Set<string>([
   "terra1cc6kqk0yl25hdpr5llxmx62mlyfdl7n0rwl3hq", // soUSDC ust
   "terra1x0ulpvp6m46c5j7t40nj24mjp900954ys2jsnu", // weUSDC ust
   "terra1qswfc7hmmsnwf7f2nyyx843sug60urnqgz75zu", // Luna LunaX
+  "terra18fl6aywx2c8xlfp5epl40dygqnrvqp9a678a9c", // aust ust
+  "terra1c868juk7lk9vuvetf0644qgxscsu4xwag6yaxs", // prism xprism
+  "terra1pxexyejamkg856vmspyttcy4sva84qgyaq445z", // avax wasAvax
+  "terra102t6psqa45ahfd7wjskk3gcnfev32wdngkcjzd", // cluna luna
 ]);
 
 // tokens that have 8 digits
@@ -328,6 +331,7 @@ export const TOKENS_WITH_8_DIGITS = new Set<string>([
   "terra133chr09wu8sakfte5v7vd8qzq9vghtkv4tn0ur", // wsteth
   "terra1fpfn2kkr8mv390wx4dtpfk3vkjx9ch3thvykl3", // gohm
   "terra1jxypgnfa07j6w92wazzyskhreq2ey2a5crgt6z", // wLDO
+  "terra1z3e2e4jpk4n0xzzwlkgcfvc95pc5ldq0xcny58" // wasAVAX
 ]);
 
 export interface CoingeckoValues {
@@ -401,4 +405,14 @@ export const PAIRS_WHITELIST = new Set<string>([
   "terra1qswfc7hmmsnwf7f2nyyx843sug60urnqgz75zu", // Luna LunaX
   "terra13yftwgefkggq3u627gphq98s6ufwh9u85h5kmg", // Orne UST
   "terra1repcset8dt8z9wm5s6x77n3sjg8hduem9tntd6", // wLDO stLuna
+  "terra1hasy32pvxmgu485x5tujylemqxynsv72lsu7ve", // kuji ust
+  "terra10nfk6fcz5nc5uru964qmpels9ctg6j0vczjgl7", // prism ust
+  "terra18fl6aywx2c8xlfp5epl40dygqnrvqp9a678a9c", // aust ust
+  "terra1hn8d8ldzu2v2td5uj335pz32phanm90a4kjfal", // avax ust
+  "terra1c868juk7lk9vuvetf0644qgxscsu4xwag6yaxs", // prism xprism
+  "terra1pxexyejamkg856vmspyttcy4sva84qgyaq445z", // avax wasAvax
+  "terra102t6psqa45ahfd7wjskk3gcnfev32wdngkcjzd", // cluna luna
+  "terra1tkcnky57lthm2w7xce9cj5jeu9hjtq427tpwxr", // cluna ust
+  "terra1r6fchdsr8k65082u3cyrdn6x2n8hrpyrp72je0", // pluna luna
+  "terra1aa68js6yxavg9zzzle2zaynem9cstvmaj3xyu3", // yluna luna
 ]);
