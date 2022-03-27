@@ -52,11 +52,7 @@ export async function supplyCollect(): Promise<void> {
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  const circulatingSupply =
-    (INITIAL_TOKEN_SUPPLY -
-      multisigResponse?.balance -
-      builderBalance?.balance -
-      JSON.parse(vesting.Result)?.balance) /
+  const circulatingSupply = (INITIAL_TOKEN_SUPPLY - multisigResponse?.balance - builderBalance?.balance - JSON.parse(vesting.Result)?.balance) /
     DIGITS;
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore

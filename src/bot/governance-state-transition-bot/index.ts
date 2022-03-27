@@ -63,8 +63,6 @@ export async function run(
       end_block: { $gt: reject_block },
     });
 
-    await end_proposal_vote(active_proposals);
-
     console.log("end_proposal (Active -> Passed/Rejected)");
     await end_proposal_vote(active_proposals);
 
