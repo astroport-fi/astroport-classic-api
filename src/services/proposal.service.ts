@@ -24,7 +24,6 @@ export async function saveProposals(proposals: any[]): Promise<any> {
     result.active = new Date(proposal.start_time * 1000);
     result.start_timestamp = new Date(proposal.start_time * 1000);
     const seconds = (proposal.end_block - proposal.start_block) * SECONDS_PER_BLOCK;
-
     result.end_timestamp = new Date(
       new Date(proposal.start_time * 1000).getTime() + new Date(seconds * 1000).getTime()
     );
@@ -48,5 +47,21 @@ export async function saveProposals(proposals: any[]): Promise<any> {
     return results;
   } catch (e) {
     console.log(e);
+  }
+}
+
+
+export async function hide_proposals(stale_passed_proposals: any[]): Promise<any> {
+  for(const proposal of stale_passed_proposals) {
+    await Proposal.updateOne(
+      {
+        proposal_id: Number(proposal.proposal_id),
+      },
+      {
+        $set: {
+          state: "Hidden",
+        },
+      }
+    );
   }
 }

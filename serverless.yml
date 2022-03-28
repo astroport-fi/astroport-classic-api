@@ -60,7 +60,7 @@ functions:
       TERRA_LCD: "https://bombay-lcd.terra.dev"
       TERRA_HIVE: "https://testnet-hive.terra.dev/graphql"
       GOVERNANCE_ASSEMBLY: "terra1ujc6hpxcnq9kcq4e5qttf0z5cz2zykhwff2zm7"
-  governance-testenet-vote-indexer: # TODO delete, do not deploy to prod
+  governance-testnet-vote-indexer: # TODO delete, do not deploy to prod
     handler: src/bot/testnet-vote-indexer/index.run
     events:
       - schedule: rate(1 minute)

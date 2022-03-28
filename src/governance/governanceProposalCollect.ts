@@ -7,7 +7,7 @@ import { getProposals as getSavedProposals, saveProposals } from "../services/pr
 import { proposalListToMap } from "../collector/helpers";
 import axios from "axios";
 import { generate_post_fields } from "./slackHelpers";
-import { update_proposal_timestamps } from "./proposalStateMachine";
+import { ProposalState, update_proposal_timestamps } from "./proposalStateMachine";
 
 dayjs.extend(utc);
 
@@ -32,7 +32,7 @@ export async function governanceProposalCollect(): Promise<void> {
   let offset = 0;
 
   while (continue_querying) {
-    const proposal_batch = await getProposals("terra1ujc6hpxcnq9kcq4e5qttf0z5cz2zykhwff2zm7", BATCH_SIZE, offset);
+    const proposal_batch = await getProposals(GOVERNANCE_ASSEMBLY, BATCH_SIZE, offset);
     proposals = proposals.concat(proposal_batch);
 
     continue_querying = proposal_batch.length >= BATCH_SIZE;
@@ -50,6 +50,11 @@ export async function governanceProposalCollect(): Promise<void> {
     if (savedProposalMap.has(Number(proposal.proposal_id))) {
       // check if existing proposal has changed status, voters
       const saved = savedProposalMap.get(Number(proposal.proposal_id));
+
+      if(saved.state == "Hidden" || saved.state == "Expired") {
+        continue
+      }
+
       if (
         proposal.status != saved.state ||
         Number(proposal.for_power) != Number(saved.votes_for_power) ||

@@ -15,6 +15,7 @@ import {
 import { end_proposal_vote, execute_proposal, expire_proposal } from "./triggers";
 import mongoose from "mongoose";
 import { Proposal } from "../../models/proposal.model";
+import { hide_proposals } from "../../services/proposal.service";
 
 bluebird.config({
   longStackTraces: true,
@@ -46,18 +47,21 @@ export async function run(
     const proposal_effective_delay = assembly_config.proposal_effective_delay;
     const proposal_expiration_period = assembly_config.proposal_expiration_period;
 
-    // execute_block is the block when a passed proposal is ready to execute
-    // height > end_block + proposal effective delay
+    // valid execution window
+    // end_block + proposal effective delay < height < end_block + proposal effective delay + expiration period
     const execute_block = height - proposal_effective_delay;
-
-    // reject_block is the block when a rejected proposal is ready to expire
-    // height > end + delay + expir
     const reject_block = height - (proposal_effective_delay + proposal_expiration_period);
 
     const passed_proposals = await Proposal.find({
       state: "Passed",
-      end_block: { $gt: execute_block },
+      end_block: { $lt: execute_block, $gt: reject_block },
     });
+
+    const stale_passed_proposals = await Proposal.find({
+      state: "Passed",
+      end_block: { $lt: reject_block },
+    });
+
     const rejected_proposals = await Proposal.find({
       state: "Rejected",
       end_block: { $gt: reject_block },
@@ -68,6 +72,9 @@ export async function run(
 
     console.log("execute_proposal (Passed -> Executed)");
     await execute_proposal(passed_proposals);
+
+    console.log("Hide passed proposals that went unexecuted (Passed -> Hidden")
+    await hide_proposals(stale_passed_proposals)
 
     console.log("remove_completed_proposal (Rejected -> Expired)");
     await expire_proposal(rejected_proposals);

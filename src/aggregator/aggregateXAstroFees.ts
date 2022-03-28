@@ -33,7 +33,6 @@ export async function aggregateXAstroFees(priceMap: Map<string, PriceV2>): Promi
   const startBlockHeight = latestHeight - Math.floor(BLOCKS_PER_YEAR / 365);
 
   // sum up the last 24h of xastro_fees
-  // TODO maybe go hour by hour
   const day_of_fees = await xAstroFee.find({
     block: { $gt: startBlockHeight, $lt: latestHeight },
   });

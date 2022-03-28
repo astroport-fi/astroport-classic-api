@@ -30,8 +30,7 @@ dayjs.extend(utc);
  */
 
 const poolTimeseriesResult: any[] = [];
-// TODO make this more legible
-// TODO double check math
+
 export async function poolCollect(): Promise<void> {
   // get all pairs
   const pairs = await getPairs();

@@ -9,22 +9,7 @@ export enum ProposalState {
   Rejected,
   Executed,
   Expired, // terminal
-}
-
-const VALID_TRANSITIONS: [ProposalState, ProposalState][] = [
-  [ProposalState.Active, ProposalState.Expired],
-  [ProposalState.Active, ProposalState.Rejected],
-  [ProposalState.Active, ProposalState.Passed],
-  [ProposalState.Rejected, ProposalState.Expired],
-  [ProposalState.Passed, ProposalState.Expired],
-  [ProposalState.Passed, ProposalState.Executed],
-  [ProposalState.Passed, ProposalState.Expired],
-];
-
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types,@typescript-eslint/ban-ts-comment
-// @ts-ignore
-export function isValidTransistion(from, to): boolean {
-  return VALID_TRANSITIONS.includes([from.state as ProposalState, to.status as ProposalState]);
+  Hidden // Passed proposals that were never executed
 }
 
 // update a proposal's state change timestamps
