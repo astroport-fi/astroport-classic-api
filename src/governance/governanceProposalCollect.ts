@@ -32,7 +32,7 @@ export async function governanceProposalCollect(): Promise<void> {
   let offset = 0;
 
   while (continue_querying) {
-    const proposal_batch = await getProposals(GOVERNANCE_ASSEMBLY, BATCH_SIZE, offset);
+    const proposal_batch = await getProposals("terra1ujc6hpxcnq9kcq4e5qttf0z5cz2zykhwff2zm7", BATCH_SIZE, offset);
     proposals = proposals.concat(proposal_batch);
 
     continue_querying = proposal_batch.length >= BATCH_SIZE;
@@ -95,8 +95,8 @@ export async function governanceProposalCollect(): Promise<void> {
           executed: updated.executed,
           rejected: updated.rejected,
           expired: updated.expired,
-          votes_for_power: updated.votes_for_power,
-          votes_against_power: updated.votes_against_power,
+          votes_for_power: updated.for_power,
+          votes_against_power: updated.against_power,
         },
       }
     );
