@@ -1,5 +1,6 @@
 export const typeDefs = /* GraphQL */ `
   scalar DateTime
+  scalar JSON
 
   type Airdrop {
     amount: Float
@@ -113,6 +114,15 @@ export const typeDefs = /* GraphQL */ `
     block: Float
     txn: String
   }
+  
+  type Snapshot {
+    block: Float
+    pool: JSON
+    price: JSON
+    stat: JSON
+    supply: JSON
+    xastro: JSON
+  }
 
   # The "Query" type lists all of the available queries that
   # clients can execute, along with the return type for each.
@@ -125,6 +135,7 @@ export const typeDefs = /* GraphQL */ `
     price(tokenAddress: String!): Price
     proposal(proposal_id: String!): Proposal
     proposals: [Proposal]
+    snapshot(offset: Int, limit: Int): [Snapshot]
     supply: Supply
     staking: Staking
     tokens: [Token]

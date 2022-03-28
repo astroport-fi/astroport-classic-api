@@ -11,8 +11,11 @@ import { getPriceByTokenAddress } from "../../services/priceV2.service";
 import { getStakingStats } from "../../services/xastro_fee_stat.service";
 import { getProposal, getProposals } from "../../services/proposal.service";
 import { getVotes } from "../../services/vote.service";
+import GraphQLJSON from "graphql-type-json";
+import { getSnapshots } from "../../services/snapshot.service";
 
 export const resolvers = {
+  JSON: GraphQLJSON,
   Query: {
     airdrop: async (_: any, { address }: any) => {
       const airdrops = await getAirdrops(address);
@@ -45,6 +48,10 @@ export const resolvers = {
     proposals: async () => {
       const proposals = await getProposals();
       return proposals;
+    },
+    snapshot: async (_: any, { limit, offset }: any) => {
+      const snapshots = await getSnapshots(limit, offset);
+      return snapshots;
     },
     supply: async () => {
       const supply = await getSupply();

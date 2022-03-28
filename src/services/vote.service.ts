@@ -2,13 +2,10 @@ import { Vote } from "../models/vote.model";
 
 export async function getVotes(
   proposal_id: number,
-  choice: string,
+  choice = null,
   limit = 10,
   offset = 0
 ): Promise<any[]> {
-  if (choice != "for" && choice != "against") {
-    return [];
-  }
 
   const query = {
     proposal_id: proposal_id,
