@@ -14,7 +14,7 @@ export async function getVotes(
     (query as any).vote = choice;
   }
 
-  const votes = await Vote.find(query).skip(offset).sort({ block: -1 }).limit(limit);
+  const votes = await Vote.find(query).skip(offset).sort({ voting_power: -1 }).limit(limit);
 
   return votes;
 }

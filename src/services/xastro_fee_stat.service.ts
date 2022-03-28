@@ -3,7 +3,7 @@ import { xAstroFeeStat } from "../models/xastro_fee_stat.model";
 import { XAstroFeeStat } from "../types/xastro_fee_stat.type";
 
 /**
- * Return the latest supply stats
+ * Return the latest staking stats
  */
 export async function getStakingStats(): Promise<XAstroFeeStat> {
   const result = await xAstroFeeStat.findOne({}).exec();
