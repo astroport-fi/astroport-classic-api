@@ -44,7 +44,7 @@ functions:
   governance-proposal-collector: # TODO change to prod values
     handler: src/governance/index.run
     events:
-      - schedule: rate(1 minutes)
+      - schedule: rate(1 minute)
     timeout: 55 # in seconds
     environment:
       MONGODB_URL: ${env:MONGODB_URL_RW}
