@@ -62,8 +62,8 @@ export const TOKEN_ADDRESS_MAP = new Map<string, string>([
   ["terra1edurrzv6hhd8u48engmydwhvz8qzmhhuakhwj3", "LDO"],
   ["terra1repcset8dt8z9wm5s6x77n3sjg8hduem9tntd6", "LDO"],
   ["terra19wauh79y42u5vt62c5adt2g5h4exgh26t3rpds", "MARS"],
-  ["terra13yftwgefkggq3u627gphq98s6ufwh9u85h5kmg", "ORNE"]
-
+  ["terra13yftwgefkggq3u627gphq98s6ufwh9u85h5kmg", "ORNE"],
+  ["terra14v9wrjs55qsn9lkvylsqela3w2ytwxzkycqzcr", "SAYVE"]
 ]);
 
 // map pool -> factory/proxy/pool/token attributes
@@ -237,6 +237,16 @@ export const GENERATOR_PROXY_CONTRACTS = new Map<string, any>([
       proxy: "terra1xf6dsqpqap3hczk9jd7938h5n8de8ap9ycxhvu",
       pool: "terra1repcset8dt8z9wm5s6x77n3sjg8hduem9tntd6",
       token: "terra1jxypgnfa07j6w92wazzyskhreq2ey2a5crgt6z",
+    },
+  ],
+  [
+    "terra1k8lvj3w7dxzd6zlyptcj086gfwms422xkqjmzx",
+    {
+      tokenName: "SAYVE-UST",
+      factory: "terra1tyjfrx40kgpmf6mq2kyv6njgg59fxpv7pk8dhd",
+      proxy: "terra1zgrx9jjqrfye8swykfgmd6hpde60j0nszzupp9",
+      pool: "terra1k8lvj3w7dxzd6zlyptcj086gfwms422xkqjmzx",
+      token: "terra1drradty46zqun4624p8a3sp9h5jfg9phwlgnm2",
     },
   ],
 ]);
@@ -416,4 +426,5 @@ export const PAIRS_WHITELIST = new Set<string>([
   "terra1tkcnky57lthm2w7xce9cj5jeu9hjtq427tpwxr", // cluna ust
   "terra1r6fchdsr8k65082u3cyrdn6x2n8hrpyrp72je0", // pluna luna
   "terra1aa68js6yxavg9zzzle2zaynem9cstvmaj3xyu3", // yluna luna
+  "terra14v9wrjs55qsn9lkvylsqela3w2ytwxzkycqzcr", // sayve ust
 ]);
