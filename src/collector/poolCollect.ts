@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import { getPairLiquidity } from "../lib/terra";
+import { getLatestBlock, getPairLiquidity } from "../lib/terra";
 import { getPairs } from "../services";
 import {
   ASTRO_TOKEN,
@@ -22,6 +22,7 @@ import { PoolVolume7d } from "../models/pool_volume_7d.model";
 import { PoolVolume24h } from "../models/pool_volume_24h.model";
 import { PoolProtocolRewardVolume24h } from "../models/pool_protocol_reward_volume_24hr.model";
 import { fetchExternalTokenPrice } from "./coingecko/client";
+import { calculateThirdPartyApr } from "./chainIndexer/calculateApr";
 
 dayjs.extend(utc);
 
@@ -60,6 +61,7 @@ export async function poolCollect(): Promise<void> {
 
   // generator rewards
   const astro_price = priceMap.get(ASTRO_TOKEN)?.price_ust as number;
+  const { height } = await getLatestBlock();
 
   for (const pair of pairs) {
     // TODO remove after batching
@@ -137,15 +139,21 @@ export async function poolCollect(): Promise<void> {
       protocolRewards7d = 0;
     }
 
+    let decimals = 6;
+
     // 8 digits for wormhole, orion TODO
     if (POOLS_WITH_8_DIGIT_REWARD_TOKENS.has(pair.contractAddr)) {
       protocolRewards24h = protocolRewards24h / 100;
       protocolRewards7d = protocolRewards7d / 100;
+      decimals = 8;
     }
 
     // TODO add config file for mapping and change price api
     // TODO also add a "standardize" function that changes the decimal to 6
+
     const rewardToken = GENERATOR_PROXY_CONTRACTS.get(pair.contractAddr)?.token;
+    const factoryContract = GENERATOR_PROXY_CONTRACTS.get(pair.contractAddr)?.factory;
+
     let nativeTokenPrice = 0;
     if (priceMap.has(rewardToken)) {
       nativeTokenPrice = priceMap.get(rewardToken)?.price_ust as number;
@@ -162,9 +170,22 @@ export async function poolCollect(): Promise<void> {
       nativeTokenPrice = 0;
     }
     result.metadata.fees.native.day = protocolRewards24h * nativeTokenPrice; // 24 hour fee amount, not rate
-    result.metadata.fees.native.apr =
-      (protocolRewards24h * nativeTokenPrice * 365) / pool_liquidity;
+    //
+
+    const nativeApr = calculateThirdPartyApr({
+      factoryContract,
+      tokenPrice: nativeTokenPrice,
+      totalValueLocked: pool_liquidity,
+      latestBlock: height,
+      decimals,
+    });
+    // const prevAPR = (protocolRewards24h * nativeTokenPrice * 365) / pool_liquidity;
+    //
+
+    result.metadata.fees.native.apr = nativeApr;
     // note: can overflow to Infinity
+    //
+
     if (
       Math.pow(1 + (protocolRewards24h * nativeTokenPrice) / pool_liquidity, 365) - 1 !=
       Infinity
