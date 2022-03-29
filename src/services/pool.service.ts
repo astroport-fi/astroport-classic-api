@@ -10,7 +10,6 @@ export async function getPool(address: string): Promise<any> {
 // TODO add filtering
 export async function getPools(): Promise<any[]> {
   const pools = await Pool.find({}, null, { limit: 500 });
-  console.log(JSON.stringify(pools, null, 2));
   const result = [];
 
   // map
