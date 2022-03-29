@@ -32,6 +32,8 @@ export async function runIndexers(
         // for spam tx
         if (event.attributes.length < 1800) {
 
+          let start = new Date().getTime()
+
           // createPair
           try {
             const createPairLF = createPairLogFinders(FACTORY_ADDRESS);
@@ -43,6 +45,9 @@ export async function runIndexers(
             console.log("Error during createPair: " + e)
           }
 
+          console.log("Create pair: " + (new Date().getTime() - start) / 1000)
+          start = new Date().getTime()
+
           // find events for APR
           try {
             await findProtocolRewardEmissions(event, height);
@@ -50,12 +55,18 @@ export async function runIndexers(
             console.log("Error during findProtocolRewardEmissions: " + e)
           }
 
+          console.log("Protocol reward emissions: " + (new Date().getTime() - start) / 1000)
+          start = new Date().getTime()
+
           try {
             // xAstro fees sent to maker
             await findXAstroFees(event, height);
           } catch(e) {
             console.log("Error during findXAstroFees: " + e)
           }
+
+          console.log("xAstro fees: " + (new Date().getTime() - start) / 1000)
+          start = new Date().getTime()
 
           try {
             // swaps from tx history
@@ -73,6 +84,9 @@ export async function runIndexers(
           } catch(e) {
             console.log("Error during finding swaps/volume: " + e)
           }
+
+          console.log("swaps: " + (new Date().getTime() - start) / 1000)
+
 
 
         }
