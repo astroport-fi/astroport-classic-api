@@ -62,6 +62,8 @@ export const TOKEN_ADDRESS_MAP = new Map<string, string>([
   ["terra1edurrzv6hhd8u48engmydwhvz8qzmhhuakhwj3", "LDO"],
   ["terra1repcset8dt8z9wm5s6x77n3sjg8hduem9tntd6", "LDO"],
   ["terra19wauh79y42u5vt62c5adt2g5h4exgh26t3rpds", "MARS"],
+  ["terra13yftwgefkggq3u627gphq98s6ufwh9u85h5kmg", "ORNE"]
+
 ]);
 
 // map pool -> factory/proxy/pool/token attributes
@@ -392,7 +394,6 @@ export const PAIRS_WHITELIST = new Set<string>([
   "terra18dq84qfpz267xuu0k47066svuaez9hr4xvwlex",
   "terra1edurrzv6hhd8u48engmydwhvz8qzmhhuakhwj3",
   "terra1mv04l9m4xc6fntxnty265rsqpnn0nk8aq0c9ge",
-  "terra13yftwgefkggq3u627gphq98s6ufwh9u85h5kmg",
   "terra1shgwa4xwdegsxvtr0qaergjq689sakzvn87fvy",
   "terra1qswfc7hmmsnwf7f2nyyx843sug60urnqgz75zu",
   "terra1lnr6aacxfng34m69076s2mdfjzt8nev2p6z5q0",
