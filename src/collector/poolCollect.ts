@@ -179,10 +179,12 @@ export async function poolCollect(): Promise<void> {
       latestBlock: height,
       decimals,
     });
-    // const prevAPR = (protocolRewards24h * nativeTokenPrice * 365) / pool_liquidity;
-    //
 
-    result.metadata.fees.native.apr = nativeApr;
+    result.metadata.fees.native.estimated_apr = nativeApr;
+
+    result.metadata.fees.native.apr =
+      (protocolRewards24h * nativeTokenPrice * 365) / pool_liquidity;
+
     // note: can overflow to Infinity
     //
 

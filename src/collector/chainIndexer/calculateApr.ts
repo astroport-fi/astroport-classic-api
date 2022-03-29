@@ -21,7 +21,6 @@ const getSchedule = (schedules: Schedules | undefined, latestBlock: number) => {
     if (type === "time") {
       const now = Math.floor(Number(new Date()) / 1000);
       if (now > start && now < end) {
-        console.log("found");
         index = i;
         break;
       }
@@ -34,14 +33,6 @@ const getSchedule = (schedules: Schedules | undefined, latestBlock: number) => {
   return schedules[index];
 };
 
-/**
- *
- * @param factoryContract
- * @param totalValueLocked
- * @param tokenPrice
- * @param decimals
- * @param latestBlock
- */
 export const calculateThirdPartyApr = ({
   factoryContract,
   totalValueLocked,

@@ -10,6 +10,7 @@ export async function getPool(address: string): Promise<any> {
 // TODO add filtering
 export async function getPools(): Promise<any[]> {
   const pools = await Pool.find({}, null, { limit: 500 });
+  console.log(JSON.stringify(pools, null, 2));
   const result = [];
 
   // map
@@ -54,6 +55,7 @@ function transformPoolModelToPoolType(model: any): PoolType {
       day: model.metadata.fees.native.day,
       apr: model.metadata.fees.native.apr,
       apy: model.metadata.fees.native.apy,
+      estimated_apr: model.metadata.fees.native.estimated_apr,
     },
     total_rewards: {
       day: model.metadata.fees.total.day,
