@@ -5,17 +5,17 @@ const xAstroFeeSchema: Schema = new Schema(
     block: {
       type: Schema.Types.Number,
       required: true,
-      trim: true
+      trim: true,
     },
     volume: {
       type: Schema.Types.Number,
       required: true,
-      trim: true
+      trim: true,
     },
     token: {
       type: Schema.Types.String,
       required: true,
-      trim: true
+      trim: true,
     },
   },
   {
@@ -23,4 +23,4 @@ const xAstroFeeSchema: Schema = new Schema(
   }
 );
 
-export const xAstroFee = model('XAstroFee', xAstroFeeSchema, 'xastro_fee');
+export const xAstroFee = model("XAstroFee", xAstroFeeSchema, "xastro_fee");

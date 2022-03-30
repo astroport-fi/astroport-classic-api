@@ -6,4 +6,5 @@ export type XAstroFeeStat = {
   _7d_fees_ust: number;
   _7d_apr: number;
   _7d_apy: number;
+  updatedAt: Date;
 };

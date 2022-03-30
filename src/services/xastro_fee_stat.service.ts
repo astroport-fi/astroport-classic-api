@@ -1,26 +1,25 @@
 import { Supply } from "../models/supply.model";
-import { Supply as SupplyType } from "../types/supply.type"
 import { xAstroFeeStat } from "../models/xastro_fee_stat.model";
 import { XAstroFeeStat } from "../types/xastro_fee_stat.type";
 
 /**
- * Return the latest supply stats
+ * Return the latest staking stats
  */
 export async function getStakingStats(): Promise<XAstroFeeStat> {
   const result = await xAstroFeeStat.findOne({}).exec();
 
-  if(!result) {
-    return Promise.reject()
+  if (!result) {
+    return Promise.reject();
   }
 
-  let apr = result?._24h_apr
-  if(isNaN(apr) || !isFinite(apr)) {
-    apr = 0
+  let apr = result?._24h_apr;
+  if (isNaN(apr) || !isFinite(apr)) {
+    apr = 0;
   }
 
-  let apy = result?._24h_apy
-  if(isNaN(apy) || !isFinite(apy)) {
-    apy = 0
+  let apy = result?._24h_apy;
+  if (isNaN(apy) || !isFinite(apy)) {
+    apy = 0;
   }
   return {
     _24h_fees_ust: result?._24h_fees_ust,
@@ -29,7 +28,8 @@ export async function getStakingStats(): Promise<XAstroFeeStat> {
     block: result?.block,
     _7d_fees_ust: 0,
     _7d_apr: 0,
-    _7d_apy: 0
+    _7d_apy: 0,
+    updatedAt: result?.updatedAt,
   };
 }
 
@@ -39,20 +39,18 @@ export async function getStakingStats(): Promise<XAstroFeeStat> {
 export async function insertSupply(
   timestamp: number,
   circulatingSupply?: number,
-  priceInUst?: number,
+  priceInUst?: number
   // dayVolumeUsd?: number,
   // totalValueLockedUST?: number,
 ): Promise<any> {
-  const supply = await Supply.create(
-    {
-      timestamp: timestamp,
-      metadata:
-        {
-          circulatingSupply: circulatingSupply,
-          priceInUst: priceInUst,
-          // totalValueLockedUst: totalValueLockedUST,
-          // dayVolumeUst: dayVolumeUsd
-        }
-    });
+  const supply = await Supply.create({
+    timestamp: timestamp,
+    metadata: {
+      circulatingSupply: circulatingSupply,
+      priceInUst: priceInUst,
+      // totalValueLockedUst: totalValueLockedUST,
+      // dayVolumeUst: dayVolumeUsd
+    },
+  });
   return supply;
 }

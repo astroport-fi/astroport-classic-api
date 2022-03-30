@@ -5,10 +5,10 @@ export type PriceV2 = {
   ust_usd: number;
   is_external: boolean;
   symbol: string;
-  source : {
+  source: {
     feed: string;
     category_id: string;
     name: string;
-  }
+  };
   block_last_updated: number;
 };

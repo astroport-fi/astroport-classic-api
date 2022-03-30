@@ -12,7 +12,6 @@ dayjs.extend(utc);
  * Update the pool_volume_24h table
  */
 
-const DIGITS = 1000000;
 const chainId = TERRA_CHAIN_ID
 const BLOCKS_PER_YEAR = 4656810;
 

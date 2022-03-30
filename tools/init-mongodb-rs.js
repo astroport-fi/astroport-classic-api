@@ -1,10 +1,10 @@
 /* eslint-disable no-undef */
 rs.initiate({
-  _id: 'rs0',
+  _id: "rs0",
   members: [
     {
       _id: 0,
-      host: 'host.docker.internal:27050',
+      host: "host.docker.internal:27050",
       priority: 10,
     },
   ],

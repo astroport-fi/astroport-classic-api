@@ -34,6 +34,13 @@ functions:
     timeout: 895 # in seconds
     environment:
       MONGODB_URL: ${env:MONGODB_URL_RW}
+  snapshot-bot:
+    handler: src/bot/stat-snapshotter/index.run
+    events:
+      - schedule: rate(5 minutes)
+    timeout: 55 # in seconds
+    environment:
+      MONGODB_URL: ${env:MONGODB_URL_RW}
   graphql:
     handler: src/graphql/index.run
     events:

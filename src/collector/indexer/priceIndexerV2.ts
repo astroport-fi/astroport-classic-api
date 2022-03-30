@@ -1,36 +1,31 @@
 import { fetchExternalTokenPrice } from "../coingecko/client";
 import { PriceV2 } from "../../models/price_v2.model";
+import { EXTERNAL_TOKENS } from "../../constants";
 
 /**
- * Currently only fetches LDO price TODO
  *
- * @param pairs
  * @param blockHeight
  */
-export async function priceIndexerV2(
-  blockHeight: number
-): Promise<void> {
+export async function priceIndexerV2(blockHeight: number): Promise<void> {
   // TODO fetch pair prices
 
-  // TODO fetch external prices
-  const LDOprice = await fetchExternalTokenPrice(
-    "ethereum",
-    "0x5a98fcbea516cf06857215779fd812ca3bef1b32",
-    "USD"
-  )
+  for (const [terraAddress, value] of EXTERNAL_TOKENS.entries()) {
+    try {
+      const tokenPrice = await fetchExternalTokenPrice(value.source, value.address, value.currency);
 
-  const LDOaddress = "terra1jxypgnfa07j6w92wazzyskhreq2ey2a5crgt6z"
-
-  // write to astroport_stats
-  await PriceV2.updateOne(
-    { token_address: LDOaddress },
-    { $set: {
-        token_address: LDOaddress,
-        price_ust: LDOprice,
-        block_last_updated: blockHeight
-      }},
-    {upsert: true})
-
-
-
+      await PriceV2.updateOne(
+        { token_address: terraAddress },
+        {
+          $set: {
+            token_address: terraAddress,
+            price_ust: tokenPrice,
+            block_last_updated: blockHeight,
+          },
+        },
+        { upsert: true }
+      );
+    } catch (e) {
+      console.log("Error during external price indexing: ", e);
+    }
+  }
 }

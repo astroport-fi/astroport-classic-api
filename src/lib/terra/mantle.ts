@@ -11,14 +11,14 @@ export function initMantle(URL: string): GraphQLClient {
   return mantle;
 }
 
-export async function getContractAddressStore<T>(address: string, query: string): Promise<T | undefined> {
+export async function getContractAddressStore<T>(
+  address: string,
+  query: string
+): Promise<T | undefined> {
   const response = await mantle.request(
     gql`
-      query($address: String!, $query: String!) {
-        WasmContractsContractAddressStore(
-          ContractAddress: $address
-          QueryMsg: $query
-        ) {
+      query ($address: String!, $query: String!) {
+        WasmContractsContractAddressStore(ContractAddress: $address, QueryMsg: $query) {
           Result
         }
       }
@@ -29,7 +29,19 @@ export async function getContractAddressStore<T>(address: string, query: string)
     }
   );
 
-  return response.WasmContractsContractAddressStore
+  return response.WasmContractsContractAddressStore;
+}
+
+export async function getLatestHeight() {
+  const response = await mantle.request(
+    gql`
+      {
+        LastSyncedHeight
+      }
+    `
+  );
+
+  return response?.LastSyncedHeight;
 }
 
 

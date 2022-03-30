@@ -15,7 +15,7 @@ export async function heightCollect(): Promise<void> {
     return;
   }
 
-  if (chainId === 'columbus-4' && lastChainHeight > columbus4EndHeight) {
+  if (chainId === "columbus-4" && lastChainHeight > columbus4EndHeight) {
     lastChainHeight = columbus4EndHeight;
   }
 
@@ -27,18 +27,14 @@ export async function heightCollect(): Promise<void> {
 
   const lastHeight = collectedHeight.value;
 
-  if (chainId === 'columbus-4' || lastHeight < columbus4EndHeight) {
-    console.log("heightcollect throw")
+  if (chainId === "columbus-4" || lastHeight < columbus4EndHeight) {
+    console.log("heightcollect throw");
     throw new Error(
-      'this version is for the columbus-5, you have to collect columbus-4 data by using columbus-4 version of terraswap-graph first'
+      "this version is for the columbus-5, you have to collect columbus-4 data by using columbus-4 version of terraswap-graph first"
     );
   }
 
-  for (
-    let height = lastHeight + 100;
-    height <= lastHeight + 2000;
-    height += 100
-  ) {
+  for (let height = lastHeight + 100; height <= lastHeight + 2000; height += 100) {
     if (height >= lastChainHeight) {
       return;
     }

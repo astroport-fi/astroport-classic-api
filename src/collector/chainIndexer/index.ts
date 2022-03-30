@@ -6,6 +6,8 @@ import { TxHistoryIndexer } from "./txHistoryIndexer";
 import { findProtocolRewardEmissions } from "./findProtocolRewardEmissions";
 import { PriceV2 } from "../../types/priceV2.type";
 import { findXAstroFees } from "./findXAstroFees";
+import { voteLogFinder } from "../logFinder/voteLogFinder";
+import { voteIndexer } from "./voteIndexer";
 
 /**
  * Indexes transactions for a single block
@@ -31,7 +33,6 @@ export async function runIndexers(
       for (const event of events) {
         // for spam tx
         if (event.attributes.length < 1800) {
-
           // createPair
           try {
             const createPairLF = createPairLogFinders(FACTORY_ADDRESS);
@@ -39,15 +40,33 @@ export async function runIndexers(
             if (createPairLogFounds.length > 0) {
               await createPairIndexer(createPairLogFounds, timestamp);
             }
-          } catch(e) {
-            console.log("Error during createPair: " + e)
+          } catch (e) {
+            console.log("Error during createPair: " + e);
+          }
+
+          // find votes
+          try {
+            const voteLF = voteLogFinder();
+            const voteLogFounds = voteLF(event);
+            if (voteLogFounds.length > 0) {
+              await voteIndexer(voteLogFounds, timestamp, height, txHash);
+            }
+          } catch (e) {
+            console.log("Error while indexing votes: " + e);
           }
 
           // find events for APR
           try {
             await findProtocolRewardEmissions(event, height);
-          } catch(e) {
-            console.log("Error during findProtocolRewardEmissions: " + e)
+          } catch (e) {
+            console.log("Error during findProtocolRewardEmissions: " + e);
+          }
+
+          try {
+            // xAstro fees sent to maker
+            await findXAstroFees(event, height);
+          } catch (e) {
+            console.log("Error during findXAstroFees: " + e);
           }
 
           try {
@@ -62,16 +81,16 @@ export async function runIndexers(
             const swapLogFinder = createSwapLogFinder(pairMap);
             const swapLogFound = swapLogFinder(event);
 
-            if(!swapLogFound) {
-              return
+            if (!swapLogFound) {
+              return;
             }
 
             // transform, sum, add volume to pool_volume
-            if(swapLogFound.length > 0) {
-              await TxHistoryIndexer(height, priceMap, swapLogFound)
+            if (swapLogFound.length > 0) {
+              await TxHistoryIndexer(height, priceMap, swapLogFound);
             }
-          } catch(e) {
-            console.log("Error during finding swaps/volume: " + e)
+          } catch (e) {
+            console.log("Error during finding swaps/volume: " + e);
           }
         }
       }

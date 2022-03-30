@@ -1,6 +1,6 @@
-import dayjs from 'dayjs';
-import { START_BLOCK_HEIGHT } from '../constants';
-import { Height } from '../models';
+import dayjs from "dayjs";
+import { START_BLOCK_HEIGHT } from "../constants";
+import { Height } from "../models";
 
 export async function getLastHeight(chainId: string): Promise<any> {
   const heights = await Height.find({ chainId }).sort({ value: -1 }).limit(1);
@@ -32,12 +32,9 @@ export async function getHeight({
   return height[0];
 }
 
-export async function getHeightByDate(
-  chainId: string,
-  date: string
-): Promise<any> {
-  const before = dayjs(date).utc().subtract(10, 'm').toISOString();
-  const after = dayjs(date).utc().add(10, 'm').toISOString();
+export async function getHeightByDate(chainId: string, date: string): Promise<any> {
+  const before = dayjs(date).utc().subtract(10, "m").toISOString();
+  const after = dayjs(date).utc().add(10, "m").toISOString();
 
   const height = await Height.find({
     chainId,
@@ -47,11 +44,7 @@ export async function getHeightByDate(
   return height[0];
 }
 
-export async function createHeight({
-  chainId,
-  value,
-  createdAt,
-}: any): Promise<any> {
+export async function createHeight({ chainId, value, createdAt }: any): Promise<any> {
   const height = await Height.create({
     chainId,
     value,

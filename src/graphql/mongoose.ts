@@ -1,15 +1,15 @@
-import * as mongoose from 'mongoose';
+import * as mongoose from "mongoose";
 
-import { MONGODB_URL } from '../constants';
+import { MONGODB_URL } from "../constants";
 
-mongoose.set('debug', true);
+mongoose.set("debug", true);
 let cachedConnection: any = null;
 
 export function initConnection() {
-  console.log('connecting to mongo');
+  console.log("connecting to mongo");
 
   if (MONGODB_URL == null) {
-    console.log('MONGODB_URL is undefined');
+    console.log("MONGODB_URL is undefined");
     return;
   }
 
@@ -17,10 +17,10 @@ export function initConnection() {
     const options: mongoose.ConnectOptions = {};
 
     cachedConnection = mongoose.createConnection(MONGODB_URL, options);
-    console.log('connected to mongo');
+    console.log("connected to mongo");
     return Promise.resolve(cachedConnection);
   }
 
-  console.log('using cached mongo');
+  console.log("using cached mongo");
   return Promise.resolve(cachedConnection);
 }

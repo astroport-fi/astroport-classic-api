@@ -3,4 +3,5 @@ export type Supply = {
   priceInUst: number;
   totalValueLockedUst: number;
   dayVolumeUst: number;
+  updatedAt: Date;
 };
