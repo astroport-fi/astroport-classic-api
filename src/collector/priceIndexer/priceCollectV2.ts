@@ -4,7 +4,7 @@ import { PriceGraphEdge } from "./price_graph_edge";
 import { getBlock } from "../../services";
 import { getPricesFromPool } from "../../modules/terra";
 import { getPool } from "../../lib/terra";
-import { PAIRS_WHITELIST, STABLE_SWAP_POOLS } from "../../constants";
+import { PAIRS_WHITELIST } from "../../constants";
 import { getExchangeRate } from "./util";
 import { PriceV2 } from "../../models/price_v2.model";
 
@@ -61,10 +61,8 @@ async function indexPrices(pairs: Pair[]): Promise<Map<string, PriceGraphNode>> 
 
     const { pool, time } = data;
 
-    let pool_type = "xyk";
-    if (STABLE_SWAP_POOLS.has(pair.contractAddr)) {
-      pool_type = "stable";
-    }
+    const pool_type: string = pair.type;
+
     const prices = await getPricesFromPool(
       pool,
       pair.contractAddr,

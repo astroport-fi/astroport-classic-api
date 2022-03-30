@@ -63,7 +63,7 @@ export const TOKEN_ADDRESS_MAP = new Map<string, string>([
   ["terra1repcset8dt8z9wm5s6x77n3sjg8hduem9tntd6", "LDO"],
   ["terra19wauh79y42u5vt62c5adt2g5h4exgh26t3rpds", "MARS"],
   ["terra13yftwgefkggq3u627gphq98s6ufwh9u85h5kmg", "ORNE"],
-  ["terra14v9wrjs55qsn9lkvylsqela3w2ytwxzkycqzcr", "SAYVE"]
+  ["terra14v9wrjs55qsn9lkvylsqela3w2ytwxzkycqzcr", "SAYVE"],
 ]);
 
 // map pool -> factory/proxy/pool/token attributes
@@ -312,22 +312,6 @@ export const EXTERNALLY_FETCHED_REWARDS = new Set<string>([
   "terra1edurrzv6hhd8u48engmydwhvz8qzmhhuakhwj3", // steth ust
 ]);
 
-// stableswap pools
-export const STABLE_SWAP_POOLS = new Set<string>([
-  "terra1j66jatn3k50hjtg2xemnjm8s7y8dws9xqa5y8w", // bluna luna
-  "terra1gxjjrer8mywt4020xdl5e5x7n6ncn6w38gjzae", // stluna luna
-  "terra1cevdyd0gvta3h79uh5t47kk235rvn42gzf0450", // whUSDC UST
-  "terra1szt6cq52akhmzcqw5jhkw3tvdjtl4kvyk3zkhx", // whBUSD ust
-  "terra1qmxkqcgcgq8ch72k6kwu3ztz6fh8tx2xd76ws7", // avUSDC ust
-  "terra1cc6kqk0yl25hdpr5llxmx62mlyfdl7n0rwl3hq", // soUSDC ust
-  "terra1x0ulpvp6m46c5j7t40nj24mjp900954ys2jsnu", // weUSDC ust
-  "terra1qswfc7hmmsnwf7f2nyyx843sug60urnqgz75zu", // Luna LunaX
-  "terra18fl6aywx2c8xlfp5epl40dygqnrvqp9a678a9c", // aust ust
-  "terra1c868juk7lk9vuvetf0644qgxscsu4xwag6yaxs", // prism xprism
-  "terra1pxexyejamkg856vmspyttcy4sva84qgyaq445z", // avax wasAvax
-  "terra102t6psqa45ahfd7wjskk3gcnfev32wdngkcjzd", // cluna luna
-]);
-
 // tokens that have 8 digits
 // TODO this should be picked up from create_pair
 export const TOKENS_WITH_8_DIGITS = new Set<string>([
@@ -343,7 +327,7 @@ export const TOKENS_WITH_8_DIGITS = new Set<string>([
   "terra133chr09wu8sakfte5v7vd8qzq9vghtkv4tn0ur", // wsteth
   "terra1fpfn2kkr8mv390wx4dtpfk3vkjx9ch3thvykl3", // gohm
   "terra1jxypgnfa07j6w92wazzyskhreq2ey2a5crgt6z", // wLDO
-  "terra1z3e2e4jpk4n0xzzwlkgcfvc95pc5ldq0xcny58" // wasAVAX
+  "terra1z3e2e4jpk4n0xzzwlkgcfvc95pc5ldq0xcny58", // wasAVAX
 ]);
 
 export interface CoingeckoValues {
