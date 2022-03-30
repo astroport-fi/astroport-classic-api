@@ -38,7 +38,7 @@ export async function runIndexers(
             const createPairLF = createPairLogFinders(FACTORY_ADDRESS);
             const createPairLogFounds = createPairLF(event);
             if (createPairLogFounds.length > 0) {
-              await createPairIndexer(createPairLogFounds, timestamp);
+              await createPairIndexer(createPairLogFounds, timestamp, txHash);
             }
           } catch (e) {
             console.log("Error during createPair: " + e);
