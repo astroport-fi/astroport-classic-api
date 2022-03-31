@@ -1,6 +1,6 @@
 import { gql, GraphQLClient } from "graphql-request";
 import { PriceV2 } from "../../types/priceV2.type";
-import { GOVERNANCE_ASSEMBLY, TOKENS_WITH_8_DIGITS, XASTRO_TOKEN } from "../../constants";
+import { GOVERNANCE_ASSEMBLY, TOKENS_WITH_8_DIGITS } from "../../constants";
 
 export let hive: GraphQLClient;
 

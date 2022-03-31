@@ -48,7 +48,6 @@ export function getExchangeRate(
     }
 
     // add neighbors to queue
-
     if (edges.has(curr_address)) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore

@@ -33,7 +33,6 @@ export async function swap(): Promise<void> {
 
   const wallet = terra.wallet(mk);
 
-  // TODO switch pair_addresses to WHITELISTED PAIRS for mainnet
   // create a message to a maker contract
   const msg = new MsgExecuteContract(wallet.key.accAddress, MAKER_CONTRACT, {
     collect: {

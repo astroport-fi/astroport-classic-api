@@ -196,6 +196,7 @@ export async function poolCollect(): Promise<void> {
     }
 
     poolTimeseriesResult.push(result);
+
   }
   await insertPoolTimeseries(poolTimeseriesResult);
 }

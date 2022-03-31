@@ -41,5 +41,5 @@ export async function getLatestHeight() {
     `
   );
 
-  return response?.LastSyncedHeight;
+  return response?.LastSyncedHeight
 }

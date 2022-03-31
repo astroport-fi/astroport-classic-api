@@ -1,3 +1,4 @@
+
 import {
   getAirdrops,
   getBlockResponse,
@@ -68,6 +69,6 @@ export const resolvers = {
     votes: async (_: any, { proposal_id, choice, limit, offset }: any) => {
       const votes = await getVotes(proposal_id, choice, limit, offset);
       return votes;
-    },
+    }
   },
 };

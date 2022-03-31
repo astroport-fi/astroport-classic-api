@@ -1,6 +1,6 @@
 import { num } from "../lib/num";
 import { getStableswapRelativePrice } from "../lib/terra";
-import { POOLS_WITH_8_DIGIT_REWARD_TOKENS, TOKENS_WITH_8_DIGITS } from "../constants";
+import { TOKENS_WITH_8_DIGITS } from "../constants";
 
 export const isNative = (token: string): boolean => {
   return token.slice(0, 6) !== "terra1";
@@ -65,7 +65,9 @@ export const getPricesFromPool = async (
       String(amount)
     );
 
-    if (TOKENS_WITH_8_DIGITS.has(token1)) token1_price *= 100;
+    if (TOKENS_WITH_8_DIGITS.has(token1)) {
+      token1_price *= 100;
+    }
 
     // TODO test with 0, 1, 2 tokens with 8 digits
 

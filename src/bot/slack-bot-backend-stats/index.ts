@@ -4,7 +4,6 @@ import {
   APIGatewayProxyEvent,
   APIGatewayProxyResult,
 } from "aws-lambda";
-
 import { getLatestHeight, initLCD, initMantle } from "../../lib/terra";
 import { TERRA_CHAIN_ID, TERRA_LCD } from "../../constants";
 

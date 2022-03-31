@@ -1,7 +1,6 @@
 import { createReturningLogFinder, ReturningLogFinderMapper } from "@terra-money/log-finder";
-import { TxHistoryTransformed, XAstroFeeTransformed } from "../../types";
-import { swapRule, xAstroCW20FeeRule } from "./logRules";
-import { Pair } from "../../types";
+import { XAstroFeeTransformed } from "../../types";
+import { xAstroCW20FeeRule } from "./logRules";
 
 export function createAstroCW20FeeLogFinder(): ReturningLogFinderMapper<
   XAstroFeeTransformed | undefined

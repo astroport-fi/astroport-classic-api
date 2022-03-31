@@ -8,6 +8,7 @@ const chainId = TERRA_CHAIN_ID;
 const waitFor = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 export async function heightCollect(): Promise<void> {
+
   let { height: lastChainHeight } = await getLatestBlock();
 
   if (lastChainHeight < 1 || chainId == null) {
