@@ -1,6 +1,6 @@
-import { BLOCKS_PER_YEAR } from "../../constants";
+import { BLOCKS_PER_YEAR, SECONDS_PER_YEAR } from "../../constants";
 import { DISTRIBUTION_SCHEDULES, Schedules } from "../../data/distributionSchedules";
-// import { getDistributionSchedule } from "../../lib/terra";
+import { ScheduleType } from "../../types/contracts";
 
 interface CalculateApr {
   factoryContract: string;
@@ -14,11 +14,10 @@ const getSchedule = (schedules: Schedules | undefined, latestBlock: number) => {
   let index = null;
   if (!schedules) return null;
 
-  for (const [i, item] of schedules.entries()) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [start, end, _, type] = item;
-
-    if (type === "time") {
+  const type = schedules.type;
+  for (const [i, item] of schedules.values.entries()) {
+    const [start, end] = item;
+    if (type === ScheduleType.UnixTime) {
       const now = Math.floor(Number(new Date()) / 1000);
       if (now > start && now < end) {
         index = i;
@@ -30,7 +29,7 @@ const getSchedule = (schedules: Schedules | undefined, latestBlock: number) => {
     }
   }
   if (index === null) return null;
-  return schedules[index];
+  return schedules.values[index];
 };
 
 export const calculateThirdPartyApr = ({
@@ -45,8 +44,8 @@ export const calculateThirdPartyApr = ({
 
   if (!schedule) return 0;
 
-  const [start, end, totalEmmision, type] = schedule;
-  const multiplyBy = type === "time" ? 31536000 : BLOCKS_PER_YEAR;
+  const [start, end, totalEmmision] = schedule;
+  const multiplyBy = schedules?.type === ScheduleType.UnixTime ? SECONDS_PER_YEAR : BLOCKS_PER_YEAR;
   const tokensPerTime = parseInt(totalEmmision) / (end - start);
   const totalTokensPerYear = (multiplyBy * tokensPerTime) / 10 ** decimals;
 

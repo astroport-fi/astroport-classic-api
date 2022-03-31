@@ -10,15 +10,14 @@ export enum Pools {
   PSI_NLUNA = "terra1v5ct2tuhfqd0tf8z0wwengh4fg77kaczgf6gtx",
 }
 
-// Factory contracts
-export enum Factory {
-  ANC = "terra1h3mf22jm68ddueryuv2yxwfmqxxadvjceuaqz6",
-  APOLLO = "terra1g7jjjkt5uvkjeyhp8ecdz4e4hvtn83sud3tmh2",
-  MIR = "terra17f7zu97865jmknk7p2glqvxzhduk78772ezac5",
-  ORION = "terra1cw00274wlje5z8vtlrpaqx5cwj29c5a5ku2zhv",
-  VKR = "terra1wjc6zd6ue5sqmyucdu8erxj5cdf783tqle6dja",
-  STT = "terra15p807wnm9q3dyw4rvfqsaukxqt6lkuqe62q3mp",
-  XDEFI = "terra12vu0rxec60rwg82hlkwdjnqwxrladt00rpllzl",
+export enum StakingContract {
+  ANC_UST = "terra1h3mf22jm68ddueryuv2yxwfmqxxadvjceuaqz6",
+  APOLLO_UST = "terra1g7jjjkt5uvkjeyhp8ecdz4e4hvtn83sud3tmh2",
+  MIR_UST = "terra17f7zu97865jmknk7p2glqvxzhduk78772ezac5",
+  ORION_UST = "terra1cw00274wlje5z8vtlrpaqx5cwj29c5a5ku2zhv",
+  VKR_UST = "terra1wjc6zd6ue5sqmyucdu8erxj5cdf783tqle6dja",
+  STT_UST = "terra15p807wnm9q3dyw4rvfqsaukxqt6lkuqe62q3mp",
+  XDEFI_UST = "terra12vu0rxec60rwg82hlkwdjnqwxrladt00rpllzl",
   PSI_nLUNA = "terra1sxzggeujnxrd7hsx7uf2l6axh2uuv4zz5jadyg",
   PSI_nETH = "terra13n2sqaj25ugkt79k3evhvua30ut9qt8q0268zc",
   PSI_UST = "terra1fmu29xhg5nk8jr0p603y5qugpk2r0ywcyxyv7k",
@@ -29,4 +28,10 @@ export enum Factory {
   MARS_UST = "terra1gmggdadphqxua2kewcgn2l57xxteafpne50je0",
   ORNE_UST = "terra1z5uvpz8ny5tz2lng30ff0aqnm5uuvxaat6lwxm",
   wLDO_stLUNA = "terra10t8rn7swtkmkfm56mmxwmk2v9xrv78fljsd3ez",
+  SAYVE_UST = "terra1tyjfrx40kgpmf6mq2kyv6njgg59fxpv7pk8dhd",
+}
+
+export enum ScheduleType {
+  UnixTime = "unix",
+  Block = "block",
 }
