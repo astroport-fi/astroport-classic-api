@@ -1,25 +1,11 @@
-import { LCDClient, MnemonicKey, MsgExecuteContract } from "@terra-money/terra.js";
-import whitelist from "./whitelist-prod.json";
+import { Coin, LCDClient, MnemonicKey, MsgExecuteContract } from "@terra-money/terra.js";
 import {
   MAKER_CONTRACT,
   MAKER_FEE_COLLECTOR_SEED,
   TERRA_CHAIN_ID,
   TERRA_LCD,
 } from "../../constants";
-
-// pairs to swap and distribute to xastro stakers
-
-// mainnet TODO uncomment for prod
-// const WHITELISTED_PAIRS = ['uusd']
-// whitelist.mainnet.pairs.forEach( (pair) => {
-//   WHITELISTED_PAIRS.push(pair.contract_addr)
-// })
-
-// testnet TODO delete
-export const WHITELISTED_PAIRS = [
-  "terra1ec0fnjk2u6mms05xyyrte44jfdgdaqnx0upesr", // astro ust testnet
-  "terra122ddg6rnvcvcwkt3xgxhh3j522993s5xxdqcm2",
-]; // anc ust testnet
+import { EXECUTE_MSG } from "./whitelist-prod";
 
 export async function swap(): Promise<void> {
   const mk = new MnemonicKey({
@@ -34,15 +20,15 @@ export async function swap(): Promise<void> {
   const wallet = terra.wallet(mk);
 
   // create a message to a maker contract
-  const msg = new MsgExecuteContract(wallet.key.accAddress, MAKER_CONTRACT, {
-    collect: {
-      pair_addresses: WHITELISTED_PAIRS,
-    },
-  });
+  const msg = new MsgExecuteContract(
+    wallet.key.accAddress,
+    MAKER_CONTRACT,
+    EXECUTE_MSG
+  );
 
   try {
     await wallet
-      .createAndSignTx({ msgs: [msg] })
+      .createAndSignTx({ msgs: [msg], gasPrices: [new Coin("uusd", 0.15)] })
       .then((tx) => terra.tx.broadcast(tx))
       .then((result) => {
         console.log(`TX hash: ${result.txhash}`);

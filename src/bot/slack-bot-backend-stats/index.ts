@@ -86,7 +86,7 @@ export async function run(
 
     const ust_raw = data["balance"]["amount"] as number;
     const ust_rounded = Math.round((ust_raw / 1000000) * 100) / 100;
-    const daily_gas = 1;
+    const daily_gas = .3;
 
     let message = "```";
     message += "--------------------------\n";
