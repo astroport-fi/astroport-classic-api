@@ -113,9 +113,7 @@ export async function poolCollect(): Promise<void> {
 
     // trading fees
     result.metadata.fees.trading.day = trading_fee_perc * dayVolume; // 24 hour fee amount, not rate
-    result.metadata.fees.trading.apr = (trading_fee_perc * dayVolume * 365) / pool_liquidity;
-    result.metadata.fees.trading.apy =
-      Math.pow(1 + (trading_fee_perc * dayVolume) / pool_liquidity, 365) - 1;
+    result.metadata.fees.trading.apy = (trading_fee_perc * dayVolume * 365) / pool_liquidity;
 
     let astro_yearly_emission = ASTRO_YEARLY_EMISSIONS.get(pair.contractAddr) ?? 0;
     astro_yearly_emission = astro_yearly_emission * astro_price;
@@ -186,11 +184,15 @@ export async function poolCollect(): Promise<void> {
     //   (protocolRewards7d * nativeTokenPrice)
 
     // total yearly fees / pool liquidity
-    result.metadata.fees.total.apr = (result.metadata.fees.total.day * 365) / pool_liquidity;
+    result.metadata.fees.total.apr =
+      result.metadata.fees.trading.apy +
+      result.metadata.fees.astro.apr +
+      result.metadata.fees.native.apr
 
-    if (Math.pow(1 + result.metadata.fees.total.day / pool_liquidity, 365) - 1 != Infinity) {
+
+    if (Math.pow(1 + (result.metadata.fees.total.apr / 365) / pool_liquidity, 365) - 1 != Infinity) {
       result.metadata.fees.total.apy =
-        Math.pow(1 + result.metadata.fees.total.day / pool_liquidity, 365) - 1;
+        Math.pow(1 + (result.metadata.fees.total.apr / 365) / pool_liquidity, 365) - 1;
     } else {
       result.metadata.fees.total.apy = 0;
     }
