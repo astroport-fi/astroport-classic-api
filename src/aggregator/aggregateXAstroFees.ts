@@ -80,7 +80,7 @@ export async function aggregateXAstroFees(priceMap: Map<string, PriceV2>): Promi
   const _24h_apr = (365 * total_astro_rewards) / total_astro_staked;
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  const _24h_apy = Math.pow((1 + total_astro_rewards) / total_astro_staked, 365);
+  const _24h_apy = Math.pow(1 + total_astro_rewards / total_astro_staked, 365) - 1;
 
   await xAstroFeeStatHistory.create({
     block: latestHeight,
