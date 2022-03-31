@@ -244,9 +244,9 @@ export const GENERATOR_PROXY_CONTRACTS = new Map<string, any>([
     {
       tokenName: "SAYVE-UST",
       factory: "terra1tyjfrx40kgpmf6mq2kyv6njgg59fxpv7pk8dhd",
-      proxy: "terra1zgrx9jjqrfye8swykfgmd6hpde60j0nszzupp9",
+      proxy: "terra1r9vxaprx2j2djyrse60yppawpuncm7wcujjc9w",
       pool: "terra1k8lvj3w7dxzd6zlyptcj086gfwms422xkqjmzx",
-      token: "terra1drradty46zqun4624p8a3sp9h5jfg9phwlgnm2",
+      token: "terra14v9wrjs55qsn9lkvylsqela3w2ytwxzkycqzcr",
     },
   ],
 ]);
