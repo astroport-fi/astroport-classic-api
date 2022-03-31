@@ -105,6 +105,11 @@ const poolTimeseriesSchema: Schema = new Schema({
           required: false,
           trim: true,
         },
+        estimated_apr: {
+          type: Schema.Types.Number,
+          required: false,
+          trim: true,
+        },
         apy: {
           type: Schema.Types.Number,
           required: false,
