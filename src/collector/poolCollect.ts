@@ -78,11 +78,7 @@ export async function poolCollect(): Promise<void> {
     // STOP CHANGING THIS VALUE
     if (isNaN(pool_liquidity) || pool_liquidity < 0.01) continue;
 
-    let pool_type: string = pair.type;
-
-    if (STABLE_SWAP_POOLS.has(pair.contractAddr)) {
-      pool_type = "stable";
-    }
+    const pool_type: string = pair.type;
 
     const dayVolume = dayVolumeMap.get(pair.contractAddr) ?? 0; // in UST
     const weekVolume = weekVolumeMap.get(pair.contractAddr) ?? 0;
