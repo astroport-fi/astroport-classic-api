@@ -1,4 +1,3 @@
-import { Supply } from "../models/supply.model";
 import { xAstroFeeStat } from "../models/xastro_fee_stat.model";
 import { XAstroFeeStat } from "../types/xastro_fee_stat.type";
 
@@ -31,26 +30,4 @@ export async function getStakingStats(): Promise<XAstroFeeStat> {
     _7d_apy: 0,
     updatedAt: result?.updatedAt,
   };
-}
-
-/**
- * Save supply snapshot to db
- */
-export async function insertSupply(
-  timestamp: number,
-  circulatingSupply?: number,
-  priceInUst?: number
-  // dayVolumeUsd?: number,
-  // totalValueLockedUST?: number,
-): Promise<any> {
-  const supply = await Supply.create({
-    timestamp: timestamp,
-    metadata: {
-      circulatingSupply: circulatingSupply,
-      priceInUst: priceInUst,
-      // totalValueLockedUst: totalValueLockedUST,
-      // dayVolumeUst: dayVolumeUsd
-    },
-  });
-  return supply;
 }
