@@ -372,3 +372,22 @@ export async function getAssemblyConfig() {
 
   return response?.wasm?.contractQuery;
 }
+
+export const getDistributionSchedule = async (contract: string): Promise<any> => {
+  try {
+    const response = await hive.request(
+      gql`
+        query ($contract: String!) {
+          wasm {
+            contractQuery(contractAddress: $contract, query: { config: {} })
+          }
+        }
+      `,
+      { contract: contract }
+    );
+
+    return response?.wasm?.contractQuery?.distribution_schedule;
+  } catch (e) {
+    return null;
+  }
+};

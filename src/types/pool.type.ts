@@ -26,6 +26,7 @@ export type Pool = {
     day: number;
     apr: number;
     apy: number;
+    estimated_apr: number;
   };
   total_rewards: {
     day: number;
