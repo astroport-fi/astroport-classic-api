@@ -66,7 +66,7 @@ export async function runIndexers(
             // xAstro fees sent to maker
             await findXAstroFees(event, height);
           } catch (e) {
-            console.log("Error during findXAstroFees: " + e)
+            console.log("Error during findXAstroFees: " + e);
           }
 
           try {
@@ -85,7 +85,6 @@ export async function runIndexers(
           } catch (e) {
             console.log("Error during finding swaps/volume: " + e);
           }
-          
         }
       }
     }

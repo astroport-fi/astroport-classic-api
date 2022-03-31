@@ -23,6 +23,7 @@ functions:
   aggregator:
     handler: src/aggregator/index.run
     events:
+<<<<<<< HEAD
       - schedule: rate(5 minutes)
     timeout: 295 # in seconds
     environment:
