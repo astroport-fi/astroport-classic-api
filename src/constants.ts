@@ -31,7 +31,7 @@ export const VESTING_ADDRESS = "terra1hncazf652xa0gpcwupxfj6k4kl4k4qg64yzjyf" as
 export const GENERATOR_ADDRESS = "terra1zgrx9jjqrfye8swykfgmd6hpde60j0nszzupp9" as string;
 export const FACTORY_ADDRESS = "terra1fnywlw4edny3vw44x04xd67uzkdqluymgreu7g" as string;
 export const MAKER_ADDRESS = "terra12u7hcmpltazmmnq0fvyl225usn3fy6qqlp05w0" as string;
-export const XASTRO_STAKING_ADDRESS = "terra1nq4aszdm82wujstxwpjxtvckg7ghu63mqkey33" as string;
+export const XASTRO_STAKING_ADDRESS = "terra1f68wt2ch3cx2g62dxtc8v68mkdh5wchdgdjwz7" as string;
 
 export const BLOCKS_PER_YEAR = 4656810;
 export const BLOCKS_PER_DAY = BLOCKS_PER_YEAR / 365;
