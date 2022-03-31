@@ -9,6 +9,7 @@ export const typeDefs = /* GraphQL */ `
     index: Int
     airdrop_series: Int
   }
+
   type Price {
     token_address: String
     price_ust: Float

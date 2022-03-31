@@ -1,5 +1,4 @@
 import { Schema, model } from "mongoose";
-import { PoolVolume as PoolVolumeDocument } from "../types/pool_volume.type";
 
 const poolVolume7dSchema: Schema = new Schema({
   pool_address: {

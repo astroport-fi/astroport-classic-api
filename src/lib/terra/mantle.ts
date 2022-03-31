@@ -41,18 +41,5 @@ export async function getLatestHeight() {
     `
   );
 
-  return response?.LastSyncedHeight;
-}
-
-
-export async function getLatestHeight() {
-  const response = await mantle.request(
-    gql`
-      {
-        LastSyncedHeight
-      }
-    `
-  );
-
   return response?.LastSyncedHeight
 }
