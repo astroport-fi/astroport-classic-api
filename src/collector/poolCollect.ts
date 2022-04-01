@@ -11,7 +11,6 @@ import {
   GENERATOR_PROXY_CONTRACTS,
   PAIRS_WHITELIST,
   POOLS_WITH_8_DIGIT_REWARD_TOKENS,
-  STABLE_SWAP_POOLS,
   TOKEN_ADDRESS_MAP,
 } from "../constants";
 import { insertPoolTimeseries } from "../services/pool_timeseries.service";

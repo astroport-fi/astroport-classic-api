@@ -33,7 +33,7 @@ export const FACTORY_ADDRESS = "terra1fnywlw4edny3vw44x04xd67uzkdqluymgreu7g" as
 export const MAKER_ADDRESS = "terra12u7hcmpltazmmnq0fvyl225usn3fy6qqlp05w0" as string;
 export const XASTRO_STAKING_ADDRESS = "terra1f68wt2ch3cx2g62dxtc8v68mkdh5wchdgdjwz7" as string;
 
-export const BLOCKS_PER_YEAR = 4656810;
+export const BLOCKS_PER_YEAR = 5256000; // assumes 6s block times
 export const BLOCKS_PER_DAY = BLOCKS_PER_YEAR / 365;
 export const SECONDS_PER_YEAR = 60 * 60 * 24 * 365;
 
