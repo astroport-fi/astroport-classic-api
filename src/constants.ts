@@ -7,7 +7,7 @@ export const START_BLOCK_HEIGHT = Number(process.env.START_BLOCK_HEIGHT);
 export const MONGODB_URL = process.env.MONGODB_URL as string;
 
 // seed for wallet that calls maker contract
-export const MAKER_FEE_COLLECTOR_SEED = process.env.TRIGGER_SEED as string;
+export const MAKER_FEE_COLLECTOR_SEED = process.env.MAKER_FEE_COLLECTOR_SEED as string;
 // trigger collect on this address
 export const MAKER_CONTRACT = process.env.MAKER_CONTRACT as string;
 
