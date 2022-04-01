@@ -44,7 +44,7 @@ functions:
   maker-fee-collector:
     handler: src/bot/maker-fee-collector/index.run
     events:
-      - schedule: rate(12 hours)
+      - schedule: rate(6 hours)
     timeout: 20 # in seconds
   graphql:
     handler: src/graphql/index.run

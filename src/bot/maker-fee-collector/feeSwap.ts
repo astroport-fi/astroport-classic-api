@@ -6,6 +6,12 @@ import {
   TERRA_LCD,
 } from "../../constants";
 import { EXECUTE_MSG } from "./whitelist-prod";
+import { generate_post_fields } from "../slack-bot-backend-stats/slackHelpers";
+import axios from "axios";
+
+const SLACK_WEBHOOK =
+  "https://hooks.slack.com/services/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";
+
 
 export async function swap(): Promise<void> {
   const mk = new MnemonicKey({
@@ -36,6 +42,19 @@ export async function swap(): Promise<void> {
           console.log("logs.events: ", result.logs[result.logs.length - 1].events);
         }
       });
+
+    const post_fields = generate_post_fields("Executed a buyback");
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        charset: "utf-8",
+      },
+    };
+
+    await axios.post(SLACK_WEBHOOK, post_fields, config);
+
+
   } catch (e) {
     console.log(e);
   }
