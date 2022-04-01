@@ -118,7 +118,7 @@ export async function poolCollect(): Promise<void> {
     result.metadata.fees.trading.apy =
       Math.pow(1 + (trading_fee_perc * dayVolume) / pool_liquidity, 365) - 1;
 
-    if(isNaN(result.metadata.fees.trading.apy)) {
+    if(result.metadata.fees.trading.apy == Infinity) {
       result.metadata.fees.trading.apy = 0
     }
 
