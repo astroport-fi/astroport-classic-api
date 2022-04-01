@@ -12,6 +12,7 @@ import axios from "axios";
 const SLACK_WEBHOOK =
   "https://hooks.slack.com/services/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";
 
+const waitFor = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 export async function swap(): Promise<void> {
   const mk = new MnemonicKey({
@@ -57,6 +58,7 @@ export async function swap(): Promise<void> {
 
       await axios.post(SLACK_WEBHOOK, post_fields, config);
 
+      await waitFor(1000)
 
     } catch (e) {
       console.log(e);
