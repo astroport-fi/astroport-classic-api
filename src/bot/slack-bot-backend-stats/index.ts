@@ -111,7 +111,7 @@ export async function run(
 
     message += "Maker Fee Bot - " + maker + "\n";
     message += "UST balance: " + maker_bot_balance + "\n";
-    message += "Days left  : " + Math.round(maker_bot_balance / .15) + "\n\n"; // 1x per day
+    message += "Days left  : " + Math.round(maker_bot_balance / .60) + "\n\n"; // 1x per day
 
     message += "Gov State Bot - " + gov + "\n";
     message += "UST balance: " + gov_bot_balance + "\n";
