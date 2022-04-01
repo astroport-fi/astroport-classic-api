@@ -278,13 +278,6 @@ export const EXECUTE_MSG = {
       {
         "info": {
           "token": {
-            "contract_addr": "terra1hnezwjqlhzawcrfysczcxs6xqxu2jawn729kkf" // TODO
-          }
-        }
-      },
-      {
-        "info": {
-          "token": {
             "contract_addr": "terra1296jw27cq8svlg4ywm8t84u448p3zs7mcqg9ra"
           }
         }
