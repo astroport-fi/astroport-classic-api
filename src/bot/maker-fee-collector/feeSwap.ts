@@ -10,7 +10,7 @@ import { generate_link_to_txn, generate_post_fields } from "../slack-bot-backend
 import axios from "axios";
 
 const SLACK_WEBHOOK =
-  "https://hooks.slack.com/services/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";
+  "https://hooks.slack.com/services/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";
 
 const waitFor = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
