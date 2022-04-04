@@ -44,32 +44,33 @@ export const typeDefs = /* GraphQL */ `
     astro_rewards: Fee
     protocol_rewards: Fee
     total_rewards: Fee
+    pool_type: String
   }
-  
+
   type PoolPrices {
     token1_address: String
     token1_price_ust: Float
     token2_address: String
     token2_price_ust: Float
   }
-  
+
   type AstroportStats {
     total_liquidity: Float
     total_volume_24h: Float
     astro_price: Float
   }
-  
+
   type Staking {
     _24h_fees_ust: Float
     _24h_apr: Float
     _24h_apy: Float
     block: Float
   }
-  
+
   type Block {
     height: Float
   }
-  
+
   type Token {
     tokenAddr: String
     symbol: String
@@ -146,7 +147,7 @@ export const typeDefs = /* GraphQL */ `
     block: Float
     txn: String
   }
-  
+
   type Snapshot {
     block: Float
     pool: JSON
@@ -225,7 +226,7 @@ export const typeDefs = /* GraphQL */ `
     block: Float
     txn: String
   }
-  
+
   type Snapshot {
     block: Float
     pool: JSON
@@ -233,6 +234,17 @@ export const typeDefs = /* GraphQL */ `
     stat: JSON
     supply: JSON
     xastro: JSON
+  }
+
+  enum PoolSortFields {
+    TVL
+    APR
+    VOLUME
+  }
+
+  enum SortDirections {
+    DESC
+    ASC
   }
 
   # The "Query" type lists all of the available queries that
@@ -242,7 +254,14 @@ export const typeDefs = /* GraphQL */ `
     block: Block
     stats: AstroportStats
     pool(address: String!): Pool
-    pools: [Pool]
+    pools(
+      poolAddress: String
+      tokenName: String
+      sortField: PoolSortFields
+      sortDirection: SortDirections
+      offset: Int
+      limit: Int
+    ): [Pool]
     price(tokenAddress: String!): Price
     proposal(proposal_id: String!): Proposal
     proposals: [Proposal]

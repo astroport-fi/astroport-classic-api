@@ -205,18 +205,16 @@ export async function poolCollect(): Promise<void> {
     result.metadata.fees.total.apr =
       result.metadata.fees.trading.apy +
       result.metadata.fees.astro.apr +
-      result.metadata.fees.native.apr
+      result.metadata.fees.native.apr;
 
-
-    if (Math.pow(1 + (result.metadata.fees.total.apr / 365) / pool_liquidity, 365) - 1 != Infinity) {
+    if (Math.pow(1 + result.metadata.fees.total.apr / 365 / pool_liquidity, 365) - 1 != Infinity) {
       result.metadata.fees.total.apy =
-        Math.pow(1 + (result.metadata.fees.total.apr / 365) / pool_liquidity, 365) - 1;
+        Math.pow(1 + result.metadata.fees.total.apr / 365 / pool_liquidity, 365) - 1;
     } else {
       result.metadata.fees.total.apy = 0;
     }
 
     poolTimeseriesResult.push(result);
-
   }
   await insertPoolTimeseries(poolTimeseriesResult);
 }
