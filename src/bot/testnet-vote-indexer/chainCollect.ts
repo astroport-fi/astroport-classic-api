@@ -26,6 +26,7 @@ export async function chainCollect(): Promise<void> {
       return;
     }
 
+    console.log("Running indexers")
     await runIndexers(block, height);
 
     await updateBlock("bombay-12", { hiveHeight: height });
