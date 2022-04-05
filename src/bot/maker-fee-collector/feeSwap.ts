@@ -5,7 +5,14 @@ import {
   TERRA_CHAIN_ID,
   TERRA_LCD,
 } from "../../constants";
-import { EXECUTE_MSG } from "./whitelist-prod";
+import { EXECUTE_MSGS } from "./whitelist-prod";
+import { generate_link_to_txn, generate_post_fields } from "../slack-bot-backend-stats/slackHelpers";
+import axios from "axios";
+
+const SLACK_WEBHOOK =
+  "https://hooks.slack.com/services/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";
+
+const waitFor = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 export async function swap(): Promise<void> {
   const mk = new MnemonicKey({
@@ -20,23 +27,41 @@ export async function swap(): Promise<void> {
   const wallet = terra.wallet(mk);
 
   // create a message to a maker contract
-  const msg = new MsgExecuteContract(
-    wallet.key.accAddress,
-    MAKER_CONTRACT,
-    EXECUTE_MSG
-  );
+  for(const swap_sublist of EXECUTE_MSGS) {
+    const msg = new MsgExecuteContract(
+      wallet.key.accAddress,
+      MAKER_CONTRACT,
+      swap_sublist
+    );
 
-  try {
-    await wallet
-      .createAndSignTx({ msgs: [msg], gasPrices: [new Coin("uusd", 0.15)] })
-      .then((tx) => terra.tx.broadcast(tx))
-      .then((result) => {
-        console.log(`TX hash: ${result.txhash}`);
-        if (result.logs.length >= 1) {
-          console.log("logs.events: ", result.logs[result.logs.length - 1].events);
-        }
-      });
-  } catch (e) {
-    console.log(e);
+    try {
+      let txhash = ""
+      await wallet
+        .createAndSignTx({ msgs: [msg], gasPrices: [new Coin("uusd", 0.15)] })
+        .then((tx) => terra.tx.broadcast(tx))
+        .then((result) => {
+          txhash = result.txhash
+          console.log(`TX hash: ${result.txhash}`);
+          if (result.logs.length >= 1) {
+            console.log("logs.events: ", result.logs[result.logs.length - 1].events);
+          }
+        });
+
+      const post_fields = generate_link_to_txn(txhash);
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          charset: "utf-8",
+        },
+      };
+
+      await axios.post(SLACK_WEBHOOK, post_fields, config);
+
+      await waitFor(1000)
+
+    } catch (e) {
+      console.log(e);
+    }
   }
 }

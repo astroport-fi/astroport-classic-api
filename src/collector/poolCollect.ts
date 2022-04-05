@@ -110,7 +110,14 @@ export async function poolCollect(): Promise<void> {
 
     // trading fees
     result.metadata.fees.trading.day = trading_fee_perc * dayVolume; // 24 hour fee amount, not rate
-    result.metadata.fees.trading.apy = (trading_fee_perc * dayVolume * 365) / pool_liquidity;
+    result.metadata.fees.trading.apr = (trading_fee_perc * dayVolume * 365) / pool_liquidity;
+
+    result.metadata.fees.trading.apy =
+      Math.pow(1 + (trading_fee_perc * dayVolume) / pool_liquidity, 365) - 1;
+
+    if(result.metadata.fees.trading.apy == Infinity) {
+      result.metadata.fees.trading.apy = 0
+    }
 
     let astro_yearly_emission = ASTRO_YEARLY_EMISSIONS.get(pair.contractAddr) ?? 0;
     astro_yearly_emission = astro_yearly_emission * astro_price;
