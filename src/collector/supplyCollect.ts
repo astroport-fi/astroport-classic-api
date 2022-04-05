@@ -3,6 +3,7 @@ import utc from "dayjs/plugin/utc";
 import { getContractAddressStore, getContractStore } from "../lib/terra";
 import { insertSupply } from "../services";
 import {
+  ASSEMBLY_TREASURY,
   ASTRO_TOKEN,
   ASTRO_UST_PAIR,
   BUILDER_UNLOCK,
@@ -37,6 +38,12 @@ export async function supplyCollect(): Promise<void> {
     '{"balance": { "address": "' + VESTING_ADDRESS + '" }}'
   );
 
+  // get treasury balance
+  const treasury = await getContractStore(
+    ASTRO_TOKEN,
+    JSON.parse('{"balance": { "address": "' + ASSEMBLY_TREASURY + '" }}')
+  );
+
   // TODO generator contract - test when it has tokens
   // GENERATOR_ADDRESS
   // const vesting = await getContractAddressStore(
@@ -51,7 +58,7 @@ export async function supplyCollect(): Promise<void> {
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  const circulatingSupply = (INITIAL_TOKEN_SUPPLY - multisigResponse?.balance - builderBalance?.balance - JSON.parse(vesting.Result)?.balance) /
+  const circulatingSupply = (INITIAL_TOKEN_SUPPLY - multisigResponse?.balance - builderBalance?.balance - JSON.parse(vesting.Result)?.balance - treasury?.balance) /
     DIGITS;
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore

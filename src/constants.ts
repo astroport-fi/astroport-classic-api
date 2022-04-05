@@ -26,6 +26,7 @@ export const ASTRO_TOKEN = "terra1xj49zyqrwpv5k928jwfpfy2ha668nwdgkwlrg3" as str
 export const XASTRO_TOKEN = "terra1cw7znqh9w5f2ryyskq76fmxhj9hdl06uv0j0cd" as string;
 export const BUILDER_UNLOCK = "terra1fh27l8h4s0tfx9ykqxq5efq4xx88f06x6clwmr" as string;
 export const MULTISIG = "terra1c7m6j8ya58a2fkkptn8fgudx8sqjqvc8azq0ex" as string;
+export const ASSEMBLY_TREASURY = "terra16m3runusa9csfev7ymj62e8lnswu8um29k5zky" as string;
 export const ASTRO_UST_PAIR = "terra1l7xu2rl3c7qmtx3r5sd2tz25glf6jh8ul7aag7" as string;
 export const VESTING_ADDRESS = "terra1hncazf652xa0gpcwupxfj6k4kl4k4qg64yzjyf" as string;
 export const GENERATOR_ADDRESS = "terra1zgrx9jjqrfye8swykfgmd6hpde60j0nszzupp9" as string;
