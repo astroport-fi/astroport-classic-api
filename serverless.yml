@@ -41,6 +41,22 @@ functions:
     timeout: 55 # in seconds
     environment:
       MONGODB_URL: ${env:MONGODB_URL_RW}
+  governance-proposal-collector:
+    handler: src/governance/index.run
+    events:
+      - schedule: rate(1 minute)
+    timeout: 55 # in seconds
+    environment:
+      MONGODB_URL: ${env:MONGODB_URL_RW}
+      GOVERNANCE_ASSEMBLY: "terra1sq9ppsvt4k378wwhvm2vyfg7kqrhtve8p0n3a6"
+  governance-state-transition-bot:
+    handler: src/bot/governance-state-transition-bot/index.run
+    events:
+      - schedule: rate(1 minute)
+    timeout: 55 # in seconds
+    environment:
+      MONGODB_URL: ${env:MONGODB_URL_RW}
+      GOVERNANCE_ASSEMBLY: "terra1sq9ppsvt4k378wwhvm2vyfg7kqrhtve8p0n3a6"
   maker-fee-collector:
     handler: src/bot/maker-fee-collector/index.run
     events:

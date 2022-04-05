@@ -293,9 +293,9 @@ export async function getStableswapRelativePrice(
 export async function getTotalVotingPowerAt(
   block: number,
   time: number,
-  xastro: string = "terra1yufp7cv85qrxrx56ulpfgstt2gxz905fgmysq0", // TODO testnet addresses remove
-  builder: string = "terra1hccg0cfrcu0nr4zgt5urmcgam9v88peg9s7h6j",
-  vxastro: string = "terra1pqr02fx4ulc2mzws7xlqh8hpwqx2ls5m4fk62j"
+  xastro: string,
+  builder: string,
+  vxastro: string
 ) {
   const response = await hive.request(
     gql`
