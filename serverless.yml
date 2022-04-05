@@ -41,32 +41,6 @@ functions:
     timeout: 55 # in seconds
     environment:
       MONGODB_URL: ${env:MONGODB_URL_RW}
-  governance-proposal-collector: # TODO change to prod values
-    handler: src/governance/index.run
-    events:
-      - schedule: rate(1 minute)
-    timeout: 55 # in seconds
-    environment:
-      MONGODB_URL: ${env:MONGODB_URL_RW}
-      GOVERNANCE_ASSEMBLY: "terra109039nj38vnzyryqvcjctdh33r4qlq5dmrzqn0"
-  governance-state-transition-bot: # TODO change to prod values
-    handler: src/bot/governance-state-transition-bot/index.run
-    events:
-      - schedule: rate(1 minute)
-    timeout: 30 # in seconds
-    environment:
-      MONGODB_URL: ${env:MONGODB_URL_RW}
-      TERRA_CHAIN_ID: "bombay-12"
-      TERRA_LCD: "https://bombay-lcd.terra.dev"
-      TERRA_HIVE: "https://testnet-hive.terra.dev/graphql"
-      GOVERNANCE_ASSEMBLY: "terra109039nj38vnzyryqvcjctdh33r4qlq5dmrzqn0"
-  governance-testnet-vote-indexer: # TODO delete, do not deploy to prod
-    handler: src/bot/testnet-vote-indexer/index.run
-    events:
-      - schedule: rate(1 minute)
-    timeout: 55 # in seconds
-    environment:
-      MONGODB_URL: ${env:MONGODB_URL_RW}
   slack-bot-backend-stats:
     handler: src/bot/slack-bot-backend-stats/index.run
     events:
