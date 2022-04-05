@@ -45,6 +45,8 @@ export const typeDefs = /* GraphQL */ `
     protocol_rewards: Fee
     total_rewards: Fee
     pool_type: String
+    reward_proxy_address: String
+    alloc_point: Int
   }
 
   type PoolPrices {

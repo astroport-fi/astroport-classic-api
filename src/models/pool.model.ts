@@ -42,6 +42,16 @@ const poolSchema: Schema = new Schema({
       required: false,
       trim: true,
     },
+    alloc_point: {
+      type: Schema.Types.Number,
+      required: false,
+      trim: true,
+    },
+    reward_proxy_address: {
+      type: Schema.Types.String,
+      required: false,
+      trim: true,
+    },
     prices: {
       token1_address: {
         type: Schema.Types.String,

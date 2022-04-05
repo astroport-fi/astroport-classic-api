@@ -5,4 +5,6 @@ export type Pair = {
   token2: string;
   type: string;
   deregistered: boolean;
+  alloc_point: number;
+  reward_proxy_address: string;
 };
