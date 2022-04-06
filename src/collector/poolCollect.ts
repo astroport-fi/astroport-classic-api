@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import { getLatestBlock, getPairLiquidity } from "../lib/terra";
+import { getGeneratorPoolInfo, getLatestBlock, getPairLiquidity } from "../lib/terra";
 import { getPairs } from "../services";
 import {
   ASTRO_TOKEN,
@@ -153,6 +153,14 @@ export async function poolCollect(): Promise<void> {
 
     const rewardToken = GENERATOR_PROXY_CONTRACTS.get(pair.contractAddr)?.token;
     const factoryContract = GENERATOR_PROXY_CONTRACTS.get(pair.contractAddr)?.factory;
+    const lpTokenAddress = GENERATOR_PROXY_CONTRACTS.get(pair.contractAddr)?.lpToken;
+    const reward_proxy_address = GENERATOR_PROXY_CONTRACTS.get(pair.contractAddr)?.proxy;
+
+    const poolInfo = await getGeneratorPoolInfo(lpTokenAddress);
+    const alloc_point = poolInfo?.alloc_point;
+
+    result.metadata.alloc_point = alloc_point;
+    result.metadata.reward_proxy_address = reward_proxy_address;
 
     let nativeTokenPrice = 0;
     if (priceMap.has(rewardToken)) {
@@ -209,18 +217,17 @@ export async function poolCollect(): Promise<void> {
     result.metadata.fees.total.apr =
       result.metadata.fees.trading.apy +
       result.metadata.fees.astro.apr +
-      result.metadata.fees.native.apr
+      result.metadata.fees.native.apr;
 
     // TODO delete total APY in next release
     if (Math.pow(1 + (result.metadata.fees.total.apr / 365) / pool_liquidity, 365) - 1 != Infinity) {
       result.metadata.fees.total.apy =
-        Math.pow(1 + (result.metadata.fees.total.apr / 365) / pool_liquidity, 365) - 1;
+        Math.pow(1 + result.metadata.fees.total.apr / 365 / pool_liquidity, 365) - 1;
     } else {
       result.metadata.fees.total.apy = 0;
     }
 
     poolTimeseriesResult.push(result);
-
   }
   await insertPoolTimeseries(poolTimeseriesResult);
 }

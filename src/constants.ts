@@ -5,6 +5,7 @@ export const TERRA_MANTLE = process.env.TERRA_MANTLE as string;
 export const TERRA_CHAIN_ID = process.env.TERRA_CHAIN_ID as string;
 export const START_BLOCK_HEIGHT = Number(process.env.START_BLOCK_HEIGHT);
 export const MONGODB_URL = process.env.MONGODB_URL as string;
+export const GENERATOR_ADDRESS = process.env.GENERATOR_ADDRESS;
 
 // seed for wallet that calls maker contract
 export const MAKER_FEE_COLLECTOR_SEED = process.env.MAKER_FEE_COLLECTOR_SEED as string;
@@ -30,7 +31,7 @@ export const MULTISIG = "terra1c7m6j8ya58a2fkkptn8fgudx8sqjqvc8azq0ex" as string
 export const ASSEMBLY_TREASURY = "terra16m3runusa9csfev7ymj62e8lnswu8um29k5zky" as string;
 export const ASTRO_UST_PAIR = "terra1l7xu2rl3c7qmtx3r5sd2tz25glf6jh8ul7aag7" as string;
 export const VESTING_ADDRESS = "terra1hncazf652xa0gpcwupxfj6k4kl4k4qg64yzjyf" as string;
-export const GENERATOR_ADDRESS = "terra1zgrx9jjqrfye8swykfgmd6hpde60j0nszzupp9" as string;
+
 export const FACTORY_ADDRESS = "terra1fnywlw4edny3vw44x04xd67uzkdqluymgreu7g" as string;
 export const MAKER_ADDRESS = "terra12u7hcmpltazmmnq0fvyl225usn3fy6qqlp05w0" as string;
 export const XASTRO_STAKING_ADDRESS = "terra1f68wt2ch3cx2g62dxtc8v68mkdh5wchdgdjwz7" as string;
@@ -65,10 +66,10 @@ export const TOKEN_ADDRESS_MAP = new Map<string, string>([
   ["terra1repcset8dt8z9wm5s6x77n3sjg8hduem9tntd6", "LDO"],
   ["terra19wauh79y42u5vt62c5adt2g5h4exgh26t3rpds", "MARS"],
   ["terra13yftwgefkggq3u627gphq98s6ufwh9u85h5kmg", "ORNE"],
-  ["terra14v9wrjs55qsn9lkvylsqela3w2ytwxzkycqzcr", "SAYVE"]
+  ["terra14v9wrjs55qsn9lkvylsqela3w2ytwxzkycqzcr", "SAYVE"],
 ]);
 
-// map pool -> factory/proxy/pool/token attributes
+// map pool -> factory/proxy/pool/token/lp attributes
 // used for native protocol rewards
 export const GENERATOR_PROXY_CONTRACTS = new Map<string, any>([
   [
@@ -79,6 +80,7 @@ export const GENERATOR_PROXY_CONTRACTS = new Map<string, any>([
       proxy: "terra1v2wez00fyy8ajxgkh2jcx82haqfudvxcs5sdzr", // to
       pool: "terra1qr2k6yjjd5p2kaewqvg93ag74k6gyjr7re37fs", // pool
       token: "terra14z56l0fp2lsf86zy3hty2z47ezkhnthtr9yq76", // what is sent
+      lpToken: "terra1wmaty65yt7mjw6fjfymkd9zsm6atsq82d9arcd",
     },
   ],
   [
@@ -89,6 +91,7 @@ export const GENERATOR_PROXY_CONTRACTS = new Map<string, any>([
       proxy: "terra1e5zw6ujvzcmmgh8rxlttddlk2t62j2lh5jtwe8",
       pool: "terra1zpnhtf9h5s7ze2ewlqyer83sr4043qcq64zfc4",
       token: "terra100yeqvww74h4yaejj6h733thgcafdaukjtw397",
+      lpToken: "terra1zuktmswe9zjck0xdpw2k79t0crjk86fljv2rm0",
     },
   ],
   [
@@ -99,6 +102,7 @@ export const GENERATOR_PROXY_CONTRACTS = new Map<string, any>([
       proxy: "terra15g9we4hs03zv5lkmkpm3gk6vr5tfq8c6egxss6",
       pool: "terra143xxfw5xf62d5m32k3t4eu9s82ccw80lcprzl9",
       token: "terra15gwkyepfc6xgca5t5zefzwy42uts8l2m4g40k6",
+      lpToken: "terra17trxzqjetl0q6xxep0s2w743dhw2cay0x47puc",
     },
   ],
   [
@@ -109,6 +113,7 @@ export const GENERATOR_PROXY_CONTRACTS = new Map<string, any>([
       proxy: "terra12z0q65r2y3y56g970fghfderncf4a2nurta0sc",
       pool: "terra1mxyp5z27xxgmv70xpqjk7jvfq54as9dfzug74m",
       token: "terra1mddcdx0ujx89f38gu7zspk2r2ffdl5enyz2u03",
+      lpToken: "terra1w80npmymwhdtvcmrg44xmqqdnufu3gyfaytr9z",
     },
   ],
   [
@@ -119,6 +124,7 @@ export const GENERATOR_PROXY_CONTRACTS = new Map<string, any>([
       proxy: "terra1px6vx9uegszfycw9z75dfpmzqtwjtrpm20qck2",
       pool: "terra15s2wgdeqhuc4gfg7sfjyaep5cch38mwtzmwqrx",
       token: "terra1dy9kmlm4anr92e42mrkjwzyvfqwz66un00rwr5",
+      lpToken: "terra1lw36qqz72mxajrfgkv24lahudq3ehmkpc305yc",
     },
   ],
   [
@@ -126,9 +132,10 @@ export const GENERATOR_PROXY_CONTRACTS = new Map<string, any>([
     {
       tokenName: "STT",
       factory: "terra15p807wnm9q3dyw4rvfqsaukxqt6lkuqe62q3mp",
-      proxy: "terra16pnm59kxmgnp9kv6ye3ejnpevfmzdlllx0pake",
+      proxy: "terra16pnm59kxmgnp9kv6ye3ejnpevfmzdlllx0pake", //reward proxy
       pool: "terra1m95udvvdame93kl6j2mk8d03kc982wqgr75jsr",
       token: "terra13xujxcrc9dqft4p9a8ls0w3j0xnzm6y2uvve8n",
+      lpToken: "terra14p4srhzd5zng8vghly5artly0s53dmryvg3qc6",
     },
   ],
   [
@@ -139,6 +146,7 @@ export const GENERATOR_PROXY_CONTRACTS = new Map<string, any>([
       proxy: "terra1wranc9ta64f0nwdyv842d7kdm7ae80kdl5tvne",
       pool: "terra1476fucrvu5tuga2nx28r3fctd34xhksc2gckgf",
       token: "terra169edevav3pdrtjcx35j6pvzuv54aevewar4nlh",
+      lpToken: "terra1krvq5hk3a37yeydzfrgjj00d8xygk5um9jas8p",
     },
   ],
   [
@@ -149,6 +157,7 @@ export const GENERATOR_PROXY_CONTRACTS = new Map<string, any>([
       proxy: "terra17jm985ql5plu8ytakpfz6kjyag87m9f3l3aqfn",
       pool: "terra10lv5wz84kpwxys7jeqkfxx299drs3vnw0lj8mz",
       token: "terra12897djskt9rge8dtmm86w654g7kzckkd698608",
+      lpToken: "terra1t53c8p0zwvj5xx7sxh3qtse0fq5765dltjrg33",
     },
   ],
   [
@@ -159,6 +168,7 @@ export const GENERATOR_PROXY_CONTRACTS = new Map<string, any>([
       proxy: "terra14fjehqxs03mad28tflkk7lqdru64h9cdsdm923",
       pool: "terra18hjdxnnkv8ewqlaqj3zpn0vsfpzdt3d0y2ufdz",
       token: "terra12897djskt9rge8dtmm86w654g7kzckkd698608",
+      lpToken: "terra1pjfqacx7k6dg63v2h5q96zjg7w5q25093wnkjc",
     },
   ],
   [
@@ -168,7 +178,8 @@ export const GENERATOR_PROXY_CONTRACTS = new Map<string, any>([
       factory: "terra1fmu29xhg5nk8jr0p603y5qugpk2r0ywcyxyv7k",
       proxy: "terra1vtqv4j5v04x5ka5f84v9zuvt604u2rsqhjnpk8",
       pool: "terra1v5ct2tuhfqd0tf8z0wwengh4fg77kaczgf6gtx",
-      token: "terra12897djskt9rge8dtmm86w654g7kzckkd698608",
+      token: "terra12897djskt9rge8dtmm86w654g7kzckkd698608", //reward
+      lpToken: "terra1cspx9menzglmn7xt3tcn8v8lg6gu9r50d7lnve",
     },
   ],
   [
@@ -179,6 +190,7 @@ export const GENERATOR_PROXY_CONTRACTS = new Map<string, any>([
       proxy: "terra1gty5d3hmegmrzu7uyrrm6mcksus5cumkrxxg0z",
       pool: "terra134m8n2epp0n40qr08qsvvrzycn2zq4zcpmue48",
       token: "terra1kcthelkax4j9x8d3ny6sdag0qmxxynl3qtcrpy",
+      lpToken: "terra16unvjel8vvtanxjpw49ehvga5qjlstn8c826qe",
     },
   ],
   [
@@ -189,6 +201,7 @@ export const GENERATOR_PROXY_CONTRACTS = new Map<string, any>([
       proxy: "terra1hzkn3wr8qhmml6yu575tlz48j2lhgdahvx2ruk",
       pool: "terra1gxjjrer8mywt4020xdl5e5x7n6ncn6w38gjzae",
       token: "terra1jxypgnfa07j6w92wazzyskhreq2ey2a5crgt6z",
+      lpToken: "terra1h2lasu3a5207yt7decg0s09z5ltw953nrgj820",
     },
   ],
   [
@@ -199,6 +212,7 @@ export const GENERATOR_PROXY_CONTRACTS = new Map<string, any>([
       proxy: "terra19ganxu5n5xghz0ftp6jfczl5yf38yryctprmd2",
       pool: "terra18dq84qfpz267xuu0k47066svuaez9hr4xvwlex",
       token: "terra1jxypgnfa07j6w92wazzyskhreq2ey2a5crgt6z",
+      lpToken: "terra1cgvlpz6vltqa49jlj3yr2ddnwy22xw62k4433t",
     },
   ],
   [
@@ -209,6 +223,7 @@ export const GENERATOR_PROXY_CONTRACTS = new Map<string, any>([
       proxy: "terra15re9z6l28vf4dfeu8zyfe8ax8cvjdxkfnmuwne",
       pool: "terra1edurrzv6hhd8u48engmydwhvz8qzmhhuakhwj3",
       token: "terra1jxypgnfa07j6w92wazzyskhreq2ey2a5crgt6z",
+      lpToken: "terra1qz4cv5lsfw4k2266q52z9rtz64n58paxy9d476",
     },
   ],
   [
@@ -219,6 +234,7 @@ export const GENERATOR_PROXY_CONTRACTS = new Map<string, any>([
       proxy: "terra1aqehsnrdadp7s8exny69h5vln3llp38wttv0cr",
       pool: "terra19wauh79y42u5vt62c5adt2g5h4exgh26t3rpds",
       token: "terra12hgwnpupflfpuual532wgrxu2gjp0tcagzgx4n",
+      lpToken: "terra1ww6sqvfgmktp0afcmvg78st6z89x5zr3tmvpss",
     },
   ],
   [
@@ -229,6 +245,7 @@ export const GENERATOR_PROXY_CONTRACTS = new Map<string, any>([
       proxy: "terra1dyuvfvjpuhqrmjly0xh3fhk207cyx8yrw2n736",
       pool: "terra13yftwgefkggq3u627gphq98s6ufwh9u85h5kmg",
       token: "terra1hnezwjqlhzawcrfysczcxs6xqxu2jawn729kkf",
+      lpToken: "terra16zy9g2eym8rghxx95ny60c3dyrwqsfx0ypmu5y",
     },
   ],
   [
@@ -239,6 +256,7 @@ export const GENERATOR_PROXY_CONTRACTS = new Map<string, any>([
       proxy: "terra1xf6dsqpqap3hczk9jd7938h5n8de8ap9ycxhvu",
       pool: "terra1repcset8dt8z9wm5s6x77n3sjg8hduem9tntd6",
       token: "terra1jxypgnfa07j6w92wazzyskhreq2ey2a5crgt6z",
+      lpToken: "terra1yfwpk58tlvgzxx7zfrutlskgcp0cdqxtngpp6y",
     },
   ],
   [
@@ -249,6 +267,7 @@ export const GENERATOR_PROXY_CONTRACTS = new Map<string, any>([
       proxy: "terra1r9vxaprx2j2djyrse60yppawpuncm7wcujjc9w",
       pool: "terra1k8lvj3w7dxzd6zlyptcj086gfwms422xkqjmzx",
       token: "terra14v9wrjs55qsn9lkvylsqela3w2ytwxzkycqzcr",
+      lpToken: "terra1drradty46zqun4624p8a3sp9h5jfg9phwlgnm2",
     },
   ],
 ]);
@@ -329,7 +348,7 @@ export const TOKENS_WITH_8_DIGITS = new Set<string>([
   "terra133chr09wu8sakfte5v7vd8qzq9vghtkv4tn0ur", // wsteth
   "terra1fpfn2kkr8mv390wx4dtpfk3vkjx9ch3thvykl3", // gohm
   "terra1jxypgnfa07j6w92wazzyskhreq2ey2a5crgt6z", // wLDO
-  "terra1z3e2e4jpk4n0xzzwlkgcfvc95pc5ldq0xcny58" // wasAVAX
+  "terra1z3e2e4jpk4n0xzzwlkgcfvc95pc5ldq0xcny58", // wasAVAX
 ]);
 
 export interface CoingeckoValues {

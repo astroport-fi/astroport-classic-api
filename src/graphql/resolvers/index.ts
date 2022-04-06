@@ -1,4 +1,5 @@
-
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   getAirdrops,
   getBlockResponse,
@@ -14,6 +15,7 @@ import { getProposal, getProposals } from "../../services/proposal.service";
 import { getVotes } from "../../services/vote.service";
 import GraphQLJSON from "graphql-type-json";
 import { getSnapshots } from "../../services/snapshot.service";
+import { Pool } from "../../types/pool.type";
 
 export const resolvers = {
   JSON: GraphQLJSON,
@@ -38,8 +40,18 @@ export const resolvers = {
       const pools = await getPool(address);
       return pools;
     },
-    pools: async () => {
-      const pools = await getPools();
+    pools: async (
+      _: any,
+      { poolAddress, tokenSymbol, limit, offset, sortField, sortDirection }: any
+    ): Promise<Pool[]> => {
+      const pools = await getPools({
+        poolAddress,
+        tokenSymbol,
+        limit,
+        offset,
+        sortField,
+        sortDirection,
+      });
       return pools;
     },
     proposal: async (_: any, { proposal_id }: any) => {
@@ -69,6 +81,6 @@ export const resolvers = {
     votes: async (_: any, { proposal_id, choice, limit, offset }: any) => {
       const votes = await getVotes(proposal_id, choice, limit, offset);
       return votes;
-    }
+    },
   },
 };
