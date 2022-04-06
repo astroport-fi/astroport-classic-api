@@ -6,7 +6,7 @@ import {
   initHive,
   initMantle,
 } from "../../../src/lib/terra";
-import { MONGODB_URL } from "../../../src/constants";
+import { GENERATOR_ADDRESS, MONGODB_URL } from "../../../src/constants";
 import { expect } from "chai";
 import { getPairs } from "../../../src/services";
 
@@ -25,8 +25,7 @@ describe("Hive", function () {
 
   it("fetches alloc points", async () => {
     const poolInfo = await getGeneratorPoolInfo("terra1cspx9menzglmn7xt3tcn8v8lg6gu9r50d7lnve");
-    expect(poolInfo?.alloc_point).to.be.a.string;
-    console.log(poolInfo?.alloc_point);
+    expect(poolInfo?.alloc_point).to.be.a("string");
   });
 
   it("fetches contract config", async () => {

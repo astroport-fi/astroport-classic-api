@@ -5,6 +5,7 @@ export const TERRA_MANTLE = process.env.TERRA_MANTLE as string;
 export const TERRA_CHAIN_ID = process.env.TERRA_CHAIN_ID as string;
 export const START_BLOCK_HEIGHT = Number(process.env.START_BLOCK_HEIGHT);
 export const MONGODB_URL = process.env.MONGODB_URL as string;
+export const GENERATOR_ADDRESS = process.env.GENERATOR_ADDRESS;
 
 // seed for wallet that calls maker contract
 export const MAKER_FEE_COLLECTOR_SEED = process.env.MAKER_FEE_COLLECTOR_SEED as string;
@@ -30,7 +31,7 @@ export const MULTISIG = "terra1c7m6j8ya58a2fkkptn8fgudx8sqjqvc8azq0ex" as string
 export const ASSEMBLY_TREASURY = "terra16m3runusa9csfev7ymj62e8lnswu8um29k5zky" as string;
 export const ASTRO_UST_PAIR = "terra1l7xu2rl3c7qmtx3r5sd2tz25glf6jh8ul7aag7" as string;
 export const VESTING_ADDRESS = "terra1hncazf652xa0gpcwupxfj6k4kl4k4qg64yzjyf" as string;
-export const GENERATOR_ADDRESS = "terra1zgrx9jjqrfye8swykfgmd6hpde60j0nszzupp9" as string;
+
 export const FACTORY_ADDRESS = "terra1fnywlw4edny3vw44x04xd67uzkdqluymgreu7g" as string;
 export const MAKER_ADDRESS = "terra12u7hcmpltazmmnq0fvyl225usn3fy6qqlp05w0" as string;
 export const XASTRO_STAKING_ADDRESS = "terra1f68wt2ch3cx2g62dxtc8v68mkdh5wchdgdjwz7" as string;
@@ -65,7 +66,7 @@ export const TOKEN_ADDRESS_MAP = new Map<string, string>([
   ["terra1repcset8dt8z9wm5s6x77n3sjg8hduem9tntd6", "LDO"],
   ["terra19wauh79y42u5vt62c5adt2g5h4exgh26t3rpds", "MARS"],
   ["terra13yftwgefkggq3u627gphq98s6ufwh9u85h5kmg", "ORNE"],
-  ["terra14v9wrjs55qsn9lkvylsqela3w2ytwxzkycqzcr", "SAYVE"]
+  ["terra14v9wrjs55qsn9lkvylsqela3w2ytwxzkycqzcr", "SAYVE"],
 ]);
 
 // map pool -> factory/proxy/pool/token/lp attributes
@@ -347,7 +348,7 @@ export const TOKENS_WITH_8_DIGITS = new Set<string>([
   "terra133chr09wu8sakfte5v7vd8qzq9vghtkv4tn0ur", // wsteth
   "terra1fpfn2kkr8mv390wx4dtpfk3vkjx9ch3thvykl3", // gohm
   "terra1jxypgnfa07j6w92wazzyskhreq2ey2a5crgt6z", // wLDO
-  "terra1z3e2e4jpk4n0xzzwlkgcfvc95pc5ldq0xcny58" // wasAVAX
+  "terra1z3e2e4jpk4n0xzzwlkgcfvc95pc5ldq0xcny58", // wasAVAX
 ]);
 
 export interface CoingeckoValues {
