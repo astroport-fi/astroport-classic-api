@@ -48,6 +48,7 @@ function transformPoolModelToPoolType({ model }: { model: any }) {
       day: model.metadata.fees.native.day,
       apr: model.metadata.fees.native.apr,
       apy: model.metadata.fees.native.apy,
+      estimated_apr: model.metadata.fees.native.estimated_apr,
     },
     total_rewards: {
       day: model.metadata.fees.total.day,

@@ -20,6 +20,7 @@ import { getPrices } from "../services/priceV2.service";
 import { priceListToMap } from "../collector/helpers";
 import { aggregateXAstroFees } from "./aggregateXAstroFees";
 import { aggregateVotes } from "./aggregateVotes";
+import { aggregateXAstroFees7d } from "./aggregateXAstroFees7d";
 
 bluebird.config({
   longStackTraces: true,
@@ -62,8 +63,11 @@ export async function run(
     console.log("Aggregating astroport global stats...");
     await astroportStatsCollect();
 
-    console.log("Aggregating xAstro fees...");
+    console.log("Aggregating 24h xAstro fees...");
     await aggregateXAstroFees(priceMap);
+
+    console.log("Aggregating 7d xAstro fees...");
+    await aggregateXAstroFees7d(priceMap);
 
     console.log("Aggregating vote counts...");
     await aggregateVotes();

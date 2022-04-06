@@ -10,6 +10,7 @@ import { TERRA_CHAIN_ID, TERRA_LCD } from "../../constants";
 import { gql, GraphQLClient } from "graphql-request";
 import axios from "axios";
 import { generate_post_fields } from "./slackHelpers";
+import { get_ust_balance } from "./helpers";
 
 bluebird.config({
   longStackTraces: true,
@@ -78,6 +79,10 @@ export async function run(
 
     // bots
     // maker bot address - mainnet
+    const maker = "terra1lz4pz06aa3e5f70u2pcc3u754n847lk9cww05r"
+    const gov = "terra1jy093k4nsyfma0q87mhsu3p08dc4fpt4zur7hr"
+    const maker_bot_balance = await get_ust_balance(maker)
+    const gov_bot_balance = await get_ust_balance(gov)
     const wallet = "terra1lz4pz06aa3e5f70u2pcc3u754n847lk9cww05r";
     const url =
       "https://lcd.terra.dev/cosmos/bank/v1beta1/balances/" + wallet + "/by_denom?denom=uusd";
@@ -110,12 +115,16 @@ export async function run(
     message += "Fees 24h: " + dayFees + "\n\n";
 
     message += "--------------------------\n";
-    message += "|          Bots          |\n";
+    message += "|       Bots (prod)      |\n";
     message += "--------------------------\n";
 
-    message += "Maker Fee Swapper - " + wallet + "\n";
-    message += "UST balance: " + ust_rounded + "\n";
-    message += "Days left  : " + Math.round(ust_rounded / daily_gas) + "\n";
+    message += "Maker Fee Bot - " + maker + "\n";
+    message += "UST balance: " + maker_bot_balance + "\n";
+    message += "Days left  : " + Math.round(maker_bot_balance / 16) + "\n\n"; // 1x per day
+
+    message += "Gov State Bot - " + gov + "\n";
+    message += "UST balance: " + gov_bot_balance + "\n";
+    message += "Days left  : " + Math.round(gov_bot_balance / .30) + "\n"; // 2x per day
     message += "```";
 
     const post_fields = generate_post_fields(message);

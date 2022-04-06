@@ -28,6 +28,7 @@ export const typeDefs = /* GraphQL */ `
     day: Float
     apr: Float
     apy: Float
+    estimated_apr: Float
   }
 
   type Pool {
@@ -173,6 +174,9 @@ export const typeDefs = /* GraphQL */ `
     _24h_fees_ust: Float
     _24h_apr: Float
     _24h_apy: Float
+    _7d_fees_ust: Float
+    _7d_apr: Float
+    _7d_apy: Float
     block: Float
     updatedAt: DateTime
   }

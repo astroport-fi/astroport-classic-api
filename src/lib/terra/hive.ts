@@ -91,6 +91,31 @@ export async function getTokenInfo(tokenAddr: string) {
   }
 }
 
+export async function getPairMessages(txHash: string) {
+  try {
+    const response = await hive.request(
+      gql`
+        query ($txHash: String!) {
+          tx {
+            txInfo(txHash: $txHash) {
+              tx {
+                body {
+                  messages
+                }
+              }
+            }
+          }
+        }
+      `,
+      { txHash }
+    );
+    return response?.tx?.txInfo?.tx?.body.messages;
+  } catch (e) {
+    console.log("Error fetching transaction messages: ", e);
+    return [];
+  }
+}
+
 export async function getTxBlock(height: number) {
   try {
     const response = await hive.request(
@@ -293,9 +318,9 @@ export async function getStableswapRelativePrice(
 export async function getTotalVotingPowerAt(
   block: number,
   time: number,
-  xastro: string,
-  builder: string,
-  vxastro: string
+  xastro: string = "terra1yufp7cv85qrxrx56ulpfgstt2gxz905fgmysq0", // TODO testnet addresses remove
+  builder: string = "terra1hccg0cfrcu0nr4zgt5urmcgam9v88peg9s7h6j",
+  vxastro: string = "terra1pqr02fx4ulc2mzws7xlqh8hpwqx2ls5m4fk62j"
 ) {
   const response = await hive.request(
     gql`
@@ -347,3 +372,22 @@ export async function getAssemblyConfig() {
 
   return response?.wasm?.contractQuery;
 }
+
+export const getDistributionSchedule = async (contract: string): Promise<any> => {
+  try {
+    const response = await hive.request(
+      gql`
+        query ($contract: String!) {
+          wasm {
+            contractQuery(contractAddress: $contract, query: { config: {} })
+          }
+        }
+      `,
+      { contract: contract }
+    );
+
+    return response?.wasm?.contractQuery?.distribution_schedule;
+  } catch (e) {
+    return null;
+  }
+};

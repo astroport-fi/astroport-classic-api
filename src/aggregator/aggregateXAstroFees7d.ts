@@ -17,31 +17,31 @@ import { xAstroFeeStatHistory } from "../models/xastro_fee_stat_history.model";
 dayjs.extend(utc);
 
 /**
- * Combine fees for the last 24 hours from the xastro_fee table
+ * Combine fees for the last 7 days from the xastro_fee table
  * Calculate APR/APY using price data and the amount of xastro staked
  *
  * Caveat: does not work for token prices that we don't have.  Ignores those.
  */
 
-export async function aggregateXAstroFees(priceMap: Map<string, PriceV2>): Promise<void> {
+export async function aggregateXAstroFees7d(priceMap: Map<string, PriceV2>): Promise<void> {
   // get latest block height
   const { height, time } = await getLatestBlock();
   const latestHeight = Number(height);
 
-  // get block height 24hrs ago
-  const startBlockHeight = latestHeight - Math.floor(BLOCKS_PER_YEAR / 365);
+  // get block height 7 days ago
+  const startBlockHeight = latestHeight - Math.floor(BLOCKS_PER_YEAR / 52);
 
-  // sum up the last 24h of xastro_fees
-  const day_of_fees = await xAstroFee.find({
+  // sum up the last 7d of xastro_fees
+  const week_of_fees = await xAstroFee.find({
     block: { $gt: startBlockHeight, $lt: latestHeight },
   });
 
   const astro_price = priceMap.get(ASTRO_TOKEN)?.price_ust as number;
 
-  let _24h_fees_ust = 0;
+  let _7d_fees_ust = 0;
   let fees_with_no_price_count = 0
 
-  for (const fee of day_of_fees) {
+  for (const fee of week_of_fees) {
     const price = priceMap.get(fee.token)?.price_ust as number;
 
     if(price != null) {
@@ -53,7 +53,7 @@ export async function aggregateXAstroFees(priceMap: Map<string, PriceV2>): Promi
 
       amount /= 1000000
 
-      _24h_fees_ust += (price * amount);
+      _7d_fees_ust += (price * amount);
     } else {
       fees_with_no_price_count += 1
     }
@@ -62,7 +62,7 @@ export async function aggregateXAstroFees(priceMap: Map<string, PriceV2>): Promi
 
   console.log("Prices not found for " + fees_with_no_price_count + " fees")
 
-  const total_astro_rewards = _24h_fees_ust / astro_price;
+  const total_astro_rewards = _7d_fees_ust / astro_price;
 
   // calculate apr, apy
   let total_astro_staked = await getContractAddressStore(
@@ -76,16 +76,16 @@ export async function aggregateXAstroFees(priceMap: Map<string, PriceV2>): Promi
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  const _24h_apr = (365 * total_astro_rewards) / total_astro_staked;
+  const _7d_apr = (52 * total_astro_rewards) / total_astro_staked;
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  const _24h_apy = Math.pow(1 + total_astro_rewards / total_astro_staked, 365) - 1;
+  const _7d_apy = Math.pow(1 + total_astro_rewards / total_astro_staked, 52) - 1;
 
   await xAstroFeeStatHistory.create({
     block: latestHeight,
-    _24h_fees_ust: _24h_fees_ust,
-    _24h_apr: _24h_apr,
-    _24h_apy: _24h_apy,
+    _7d_fees_ust: _7d_fees_ust,
+    _7d_apr: _7d_apr,
+    _7d_apy: _7d_apy,
   });
 
   await xAstroFeeStat.updateOne(
@@ -93,9 +93,9 @@ export async function aggregateXAstroFees(priceMap: Map<string, PriceV2>): Promi
     {
       $set: {
         block: latestHeight,
-        _24h_fees_ust: _24h_fees_ust,
-        _24h_apr: _24h_apr,
-        _24h_apy: _24h_apy,
+        _7d_fees_ust: _7d_fees_ust,
+        _7d_apr: _7d_apr,
+        _7d_apy: _7d_apy,
       },
     },
     { upsert: true }

@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import { getPairLiquidity } from "../lib/terra";
+import { getLatestBlock, getPairLiquidity } from "../lib/terra";
 import { getPairs } from "../services";
 import {
   ASTRO_TOKEN,
@@ -11,8 +11,7 @@ import {
   GENERATOR_PROXY_CONTRACTS,
   PAIRS_WHITELIST,
   POOLS_WITH_8_DIGIT_REWARD_TOKENS,
-  STABLE_SWAP_POOLS,
-  TOKEN_ADDRESS_MAP,
+  TOKEN_ADDRESS_MAP
 } from "../constants";
 import { insertPoolTimeseries } from "../services/pool_timeseries.service";
 import { PoolTimeseries } from "../models/pool_timeseries.model";
@@ -22,6 +21,7 @@ import { PoolVolume7d } from "../models/pool_volume_7d.model";
 import { PoolVolume24h } from "../models/pool_volume_24h.model";
 import { PoolProtocolRewardVolume24h } from "../models/pool_protocol_reward_volume_24hr.model";
 import { fetchExternalTokenPrice } from "./coingecko/client";
+import { calculateThirdPartyApr } from "./chainIndexer/calculateApr";
 
 dayjs.extend(utc);
 
@@ -31,6 +31,7 @@ dayjs.extend(utc);
 
 const poolTimeseriesResult: any[] = [];
 
+// TODO this file is a mess, refactor
 export async function poolCollect(): Promise<void> {
   // get all pairs
   const pairs = await getPairs();
@@ -59,6 +60,7 @@ export async function poolCollect(): Promise<void> {
 
   // generator rewards
   const astro_price = priceMap.get(ASTRO_TOKEN)?.price_ust as number;
+  const { height } = await getLatestBlock();
 
   for (const pair of pairs) {
     // TODO remove after batching
@@ -78,11 +80,7 @@ export async function poolCollect(): Promise<void> {
     // STOP CHANGING THIS VALUE
     if (isNaN(pool_liquidity) || pool_liquidity < 0.01) continue;
 
-    let pool_type: string = pair.type;
-
-    if (STABLE_SWAP_POOLS.has(pair.contractAddr)) {
-      pool_type = "stable";
-    }
+    const pool_type: string = pair.type;
 
     const dayVolume = dayVolumeMap.get(pair.contractAddr) ?? 0; // in UST
     const weekVolume = weekVolumeMap.get(pair.contractAddr) ?? 0;
@@ -141,15 +139,21 @@ export async function poolCollect(): Promise<void> {
       protocolRewards7d = 0;
     }
 
+    let decimals = 6;
+
     // 8 digits for wormhole, orion TODO
     if (POOLS_WITH_8_DIGIT_REWARD_TOKENS.has(pair.contractAddr)) {
       protocolRewards24h = protocolRewards24h / 100;
       protocolRewards7d = protocolRewards7d / 100;
+      decimals = 8;
     }
 
     // TODO add config file for mapping and change price api
     // TODO also add a "standardize" function that changes the decimal to 6
+
     const rewardToken = GENERATOR_PROXY_CONTRACTS.get(pair.contractAddr)?.token;
+    const factoryContract = GENERATOR_PROXY_CONTRACTS.get(pair.contractAddr)?.factory;
+
     let nativeTokenPrice = 0;
     if (priceMap.has(rewardToken)) {
       nativeTokenPrice = priceMap.get(rewardToken)?.price_ust as number;
@@ -166,8 +170,19 @@ export async function poolCollect(): Promise<void> {
       nativeTokenPrice = 0;
     }
     result.metadata.fees.native.day = protocolRewards24h * nativeTokenPrice; // 24 hour fee amount, not rate
-    result.metadata.fees.native.apr =
-      (protocolRewards24h * nativeTokenPrice * 365) / pool_liquidity;
+
+    // estimate 3rd party rewards from distribution schedules
+    const nativeApr = calculateThirdPartyApr({
+      factoryContract,
+      tokenPrice: nativeTokenPrice,
+      totalValueLocked: pool_liquidity,
+      latestBlock: height,
+      decimals,
+    });
+
+    result.metadata.fees.native.estimated_apr = nativeApr;
+    result.metadata.fees.native.apr = nativeApr;
+
     // note: can overflow to Infinity
     if (
       Math.pow(1 + (protocolRewards24h * nativeTokenPrice) / pool_liquidity, 365) - 1 !=
@@ -183,7 +198,7 @@ export async function poolCollect(): Promise<void> {
     result.metadata.fees.total.day =
       result.metadata.fees.trading.day +
       result.metadata.fees.astro.day +
-      result.metadata.fees.native.day;
+      result.metadata.fees.native.apr / 365;
 
     // weekly fees
     // const weekTotalFees = (trading_fee_perc * weekVolume) +
@@ -191,11 +206,15 @@ export async function poolCollect(): Promise<void> {
     //   (protocolRewards7d * nativeTokenPrice)
 
     // total yearly fees / pool liquidity
-    result.metadata.fees.total.apr = (result.metadata.fees.total.day * 365) / pool_liquidity;
+    result.metadata.fees.total.apr =
+      result.metadata.fees.trading.apy +
+      result.metadata.fees.astro.apr +
+      result.metadata.fees.native.apr
 
-    if (Math.pow(1 + result.metadata.fees.total.day / pool_liquidity, 365) - 1 != Infinity) {
+    // TODO delete total APY in next release
+    if (Math.pow(1 + (result.metadata.fees.total.apr / 365) / pool_liquidity, 365) - 1 != Infinity) {
       result.metadata.fees.total.apy =
-        Math.pow(1 + result.metadata.fees.total.day / pool_liquidity, 365) - 1;
+        Math.pow(1 + (result.metadata.fees.total.apr / 365) / pool_liquidity, 365) - 1;
     } else {
       result.metadata.fees.total.apy = 0;
     }
