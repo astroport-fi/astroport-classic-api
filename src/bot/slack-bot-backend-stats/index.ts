@@ -9,7 +9,7 @@ import { TERRA_CHAIN_ID, TERRA_LCD } from "../../constants";
 
 import { gql, GraphQLClient } from "graphql-request";
 import axios from "axios";
-import { generate_post_fields } from "./helpers";
+import { generate_post_fields } from "./slackHelpers";
 import { get_ust_balance } from "./helpers";
 
 bluebird.config({
@@ -83,6 +83,15 @@ export async function run(
     const gov = "terra1jy093k4nsyfma0q87mhsu3p08dc4fpt4zur7hr"
     const maker_bot_balance = await get_ust_balance(maker)
     const gov_bot_balance = await get_ust_balance(gov)
+    const wallet = "terra1lz4pz06aa3e5f70u2pcc3u754n847lk9cww05r";
+    const url =
+      "https://lcd.terra.dev/cosmos/bank/v1beta1/balances/" + wallet + "/by_denom?denom=uusd";
+
+    const data = await axios.get(url).then((response) => response.data);
+
+    const ust_raw = data["balance"]["amount"] as number;
+    const ust_rounded = Math.round((ust_raw / 1000000) * 100) / 100;
+    const daily_gas = .3;
 
     let message = "```";
     message += "--------------------------\n";

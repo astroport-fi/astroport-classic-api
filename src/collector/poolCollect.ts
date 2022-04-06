@@ -11,7 +11,7 @@ import {
   GENERATOR_PROXY_CONTRACTS,
   PAIRS_WHITELIST,
   POOLS_WITH_8_DIGIT_REWARD_TOKENS,
-  TOKEN_ADDRESS_MAP,
+  TOKEN_ADDRESS_MAP
 } from "../constants";
 import { insertPoolTimeseries } from "../services/pool_timeseries.service";
 import { PoolTimeseries } from "../models/pool_timeseries.model";
@@ -31,6 +31,7 @@ dayjs.extend(utc);
 
 const poolTimeseriesResult: any[] = [];
 
+// TODO this file is a mess, refactor
 export async function poolCollect(): Promise<void> {
   // get all pairs
   const pairs = await getPairs();
@@ -110,7 +111,14 @@ export async function poolCollect(): Promise<void> {
 
     // trading fees
     result.metadata.fees.trading.day = trading_fee_perc * dayVolume; // 24 hour fee amount, not rate
-    result.metadata.fees.trading.apy = (trading_fee_perc * dayVolume * 365) / pool_liquidity;
+    result.metadata.fees.trading.apr = (trading_fee_perc * dayVolume * 365) / pool_liquidity;
+
+    result.metadata.fees.trading.apy =
+      Math.pow(1 + (trading_fee_perc * dayVolume) / pool_liquidity, 365) - 1;
+
+    if(result.metadata.fees.trading.apy == Infinity) {
+      result.metadata.fees.trading.apy = 0
+    }
 
     let astro_yearly_emission = ASTRO_YEARLY_EMISSIONS.get(pair.contractAddr) ?? 0;
     astro_yearly_emission = astro_yearly_emission * astro_price;
@@ -170,8 +178,8 @@ export async function poolCollect(): Promise<void> {
       nativeTokenPrice = 0;
     }
     result.metadata.fees.native.day = protocolRewards24h * nativeTokenPrice; // 24 hour fee amount, not rate
-    //
 
+    // estimate 3rd party rewards from distribution schedules
     const nativeApr = calculateThirdPartyApr({
       factoryContract,
       tokenPrice: nativeTokenPrice,
@@ -181,13 +189,9 @@ export async function poolCollect(): Promise<void> {
     });
 
     result.metadata.fees.native.estimated_apr = nativeApr;
-
-    result.metadata.fees.native.apr =
-      (protocolRewards24h * nativeTokenPrice * 365) / pool_liquidity;
+    result.metadata.fees.native.apr = nativeApr;
 
     // note: can overflow to Infinity
-    //
-
     if (
       Math.pow(1 + (protocolRewards24h * nativeTokenPrice) / pool_liquidity, 365) - 1 !=
       Infinity
@@ -202,7 +206,7 @@ export async function poolCollect(): Promise<void> {
     result.metadata.fees.total.day =
       result.metadata.fees.trading.day +
       result.metadata.fees.astro.day +
-      result.metadata.fees.native.day;
+      result.metadata.fees.native.apr / 365;
 
     // weekly fees
     // const weekTotalFees = (trading_fee_perc * weekVolume) +
@@ -215,7 +219,8 @@ export async function poolCollect(): Promise<void> {
       result.metadata.fees.astro.apr +
       result.metadata.fees.native.apr;
 
-    if (Math.pow(1 + result.metadata.fees.total.apr / 365 / pool_liquidity, 365) - 1 != Infinity) {
+    // TODO delete total APY in next release
+    if (Math.pow(1 + (result.metadata.fees.total.apr / 365) / pool_liquidity, 365) - 1 != Infinity) {
       result.metadata.fees.total.apy =
         Math.pow(1 + result.metadata.fees.total.apr / 365 / pool_liquidity, 365) - 1;
     } else {

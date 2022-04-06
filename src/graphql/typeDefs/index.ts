@@ -177,6 +177,9 @@ export const typeDefs = /* GraphQL */ `
     _24h_fees_ust: Float
     _24h_apr: Float
     _24h_apy: Float
+    _7d_fees_ust: Float
+    _7d_apr: Float
+    _7d_apy: Float
     block: Float
     updatedAt: DateTime
   }

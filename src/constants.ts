@@ -7,7 +7,7 @@ export const START_BLOCK_HEIGHT = Number(process.env.START_BLOCK_HEIGHT);
 export const MONGODB_URL = process.env.MONGODB_URL as string;
 
 // seed for wallet that calls maker contract
-export const MAKER_FEE_COLLECTOR_SEED = process.env.TRIGGER_SEED as string;
+export const MAKER_FEE_COLLECTOR_SEED = process.env.MAKER_FEE_COLLECTOR_SEED as string;
 // trigger collect on this address
 export const MAKER_CONTRACT = process.env.MAKER_CONTRACT as string;
 
@@ -17,15 +17,17 @@ export const GOVERNANCE_TRIGGER_BOT_SEED = process.env.GOVERNANCE_TRIGGER_BOT_SE
 // trigger messages on this address
 export const GOVERNANCE_ASSEMBLY = process.env.GOVERNANCE_ASSEMBLY as string;
 
-// TODO change these to prod once gov is shipped
+// TODO testnet values
 export const GOV_XASTRO = "terra1yufp7cv85qrxrx56ulpfgstt2gxz905fgmysq0" as string;
 export const GOV_BUILDER_UNLOCK = "terra1hccg0cfrcu0nr4zgt5urmcgam9v88peg9s7h6j" as string;
 export const GOV_VXASTRO = "terra1pqr02fx4ulc2mzws7xlqh8hpwqx2ls5m4fk62j" as string;
 
 export const ASTRO_TOKEN = "terra1xj49zyqrwpv5k928jwfpfy2ha668nwdgkwlrg3" as string;
 export const XASTRO_TOKEN = "terra1cw7znqh9w5f2ryyskq76fmxhj9hdl06uv0j0cd" as string;
+
 export const BUILDER_UNLOCK = "terra1fh27l8h4s0tfx9ykqxq5efq4xx88f06x6clwmr" as string;
 export const MULTISIG = "terra1c7m6j8ya58a2fkkptn8fgudx8sqjqvc8azq0ex" as string;
+export const ASSEMBLY_TREASURY = "terra16m3runusa9csfev7ymj62e8lnswu8um29k5zky" as string;
 export const ASTRO_UST_PAIR = "terra1l7xu2rl3c7qmtx3r5sd2tz25glf6jh8ul7aag7" as string;
 export const VESTING_ADDRESS = "terra1hncazf652xa0gpcwupxfj6k4kl4k4qg64yzjyf" as string;
 export const GENERATOR_ADDRESS = "terra1zgrx9jjqrfye8swykfgmd6hpde60j0nszzupp9" as string;
@@ -63,7 +65,7 @@ export const TOKEN_ADDRESS_MAP = new Map<string, string>([
   ["terra1repcset8dt8z9wm5s6x77n3sjg8hduem9tntd6", "LDO"],
   ["terra19wauh79y42u5vt62c5adt2g5h4exgh26t3rpds", "MARS"],
   ["terra13yftwgefkggq3u627gphq98s6ufwh9u85h5kmg", "ORNE"],
-  ["terra14v9wrjs55qsn9lkvylsqela3w2ytwxzkycqzcr", "SAYVE"],
+  ["terra14v9wrjs55qsn9lkvylsqela3w2ytwxzkycqzcr", "SAYVE"]
 ]);
 
 // map pool -> factory/proxy/pool/token/lp attributes
@@ -345,7 +347,7 @@ export const TOKENS_WITH_8_DIGITS = new Set<string>([
   "terra133chr09wu8sakfte5v7vd8qzq9vghtkv4tn0ur", // wsteth
   "terra1fpfn2kkr8mv390wx4dtpfk3vkjx9ch3thvykl3", // gohm
   "terra1jxypgnfa07j6w92wazzyskhreq2ey2a5crgt6z", // wLDO
-  "terra1z3e2e4jpk4n0xzzwlkgcfvc95pc5ldq0xcny58", // wasAVAX
+  "terra1z3e2e4jpk4n0xzzwlkgcfvc95pc5ldq0xcny58" // wasAVAX
 ]);
 
 export interface CoingeckoValues {

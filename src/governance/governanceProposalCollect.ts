@@ -74,13 +74,14 @@ export async function governanceProposalCollect(): Promise<void> {
       );
 
       new_proposals.push(proposal);
-      await notifySlack(
-        "*New on-chain governance proposal: #" + proposal.proposal_id + "*",
-        "https://apeboard.finance/dashboard/" + proposal.submitter,
-        proposal.title,
-        proposal.description,
-        proposal.link
-      );
+      // disabled for testnet
+      // await notifySlack(
+      //   "*New on-chain governance proposal: #" + proposal.proposal_id + "*",
+      //   "https://apeboard.finance/dashboard/" + proposal.submitter,
+      //   proposal.title,
+      //   proposal.description,
+      //   proposal.link
+      // );
     }
   }
 

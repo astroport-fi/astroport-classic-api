@@ -16,7 +16,7 @@ declare module "dayjs" {
 }
 describe("Index new pairs", function () {
   beforeEach(async function () {
-    await mongoose.connect(MONGODB_URL);
+    // await mongoose.connect(MONGODB_URL);
     await initHive(TERRA_HIVE);
     await initMantle(TERRA_MANTLE);
   });
@@ -44,18 +44,16 @@ describe("Index new pairs", function () {
       //remove items if exist to be re indexed by createPair
       for (const log of createPairLogFounds) {
         const transformed = log.transformed;
-        console.log(transformed);
-
         try {
-          console.log(createPairLogFounds);
+          console.log(transformed);
 
           // await Token.findByIdAndDelete(transformed?.token1);
           // await Token.findByIdAndDelete(transformed?.token2);
           // await Pair.findByIdAndDelete(transformed?.contractAddr);
-          await createPairIndexer(createPairLogFounds, timestamp, txHash);
-          // const token1 = await getToken(transformed?.token1 as string);
-          // const token2 = await getToken(transformed?.token2 as string);
-          // expect(token1).to.have.property("name");
+          await createPairIndexer(createPairLogFounds, timestamp);
+          const token1 = await getToken(transformed?.token1 as string);
+          const token2 = await getToken(transformed?.token2 as string);
+          expect(token1).to.have.property("name");
           // expect(token2).to.have.property("name");
         } catch (e) {
           console.log(e);
@@ -71,7 +69,6 @@ async function getEvent(height: number, txnHash: string, type: string) {
     const Logs = tx.logs;
     const timestamp = tx.timestamp;
     const txHash = tx.txhash;
-    // console.log(timestamp);
 
     for (const log of Logs) {
       const events = log.events;
