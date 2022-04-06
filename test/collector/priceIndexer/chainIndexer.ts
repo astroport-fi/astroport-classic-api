@@ -32,7 +32,7 @@ describe("Index new pairs", function () {
         "wasm"
       );
 
-        const messages = await getPairMessages(txHash);
+      const messages = await getPairMessages(txHash);
       const pair_type = messages.find(() => true)?.execute_msg?.create_pair?.pair_type || {};
       const type = Object.keys(pair_type).find(() => true);
 
@@ -54,7 +54,7 @@ describe("Index new pairs", function () {
           const token1 = await getToken(transformed?.token1 as string);
           const token2 = await getToken(transformed?.token2 as string);
           expect(token1).to.have.property("name");
-          // expZect(token2).to.have.property("name");
+          // expect(token2).to.have.property("name");
         } catch (e) {
           console.log(e);
         }

@@ -11,7 +11,7 @@ import {
   GENERATOR_PROXY_CONTRACTS,
   PAIRS_WHITELIST,
   POOLS_WITH_8_DIGIT_REWARD_TOKENS,
-  TOKEN_ADDRESS_MAP,
+  TOKEN_ADDRESS_MAP
 } from "../constants";
 import { insertPoolTimeseries } from "../services/pool_timeseries.service";
 import { PoolTimeseries } from "../models/pool_timeseries.model";
@@ -30,7 +30,6 @@ dayjs.extend(utc);
  */
 
 const poolTimeseriesResult: any[] = [];
-
 
 // TODO this file is a mess, refactor
 export async function poolCollect(): Promise<void> {
@@ -114,7 +113,6 @@ export async function poolCollect(): Promise<void> {
     result.metadata.fees.trading.day = trading_fee_perc * dayVolume; // 24 hour fee amount, not rate
     result.metadata.fees.trading.apr = (trading_fee_perc * dayVolume * 365) / pool_liquidity;
 
-    // TODO delete trading APY in next release
     result.metadata.fees.trading.apy =
       Math.pow(1 + (trading_fee_perc * dayVolume) / pool_liquidity, 365) - 1;
 
