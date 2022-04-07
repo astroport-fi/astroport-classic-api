@@ -66,7 +66,7 @@ export const TOKEN_ADDRESS_MAP = new Map<string, string>([
   ["terra1repcset8dt8z9wm5s6x77n3sjg8hduem9tntd6", "LDO"],
   ["terra19wauh79y42u5vt62c5adt2g5h4exgh26t3rpds", "MARS"],
   ["terra13yftwgefkggq3u627gphq98s6ufwh9u85h5kmg", "ORNE"],
-  ["terra14v9wrjs55qsn9lkvylsqela3w2ytwxzkycqzcr", "SAYVE"],
+  ["terra1k8lvj3w7dxzd6zlyptcj086gfwms422xkqjmzx", "SAYVE"],
 ]);
 
 // map pool -> factory/proxy/pool/token/lp attributes
