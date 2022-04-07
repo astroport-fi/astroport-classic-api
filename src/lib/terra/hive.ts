@@ -1,6 +1,7 @@
 import { gql, GraphQLClient } from "graphql-request";
 import { PriceV2 } from "../../types/priceV2.type";
-import { GOVERNANCE_ASSEMBLY, TOKENS_WITH_8_DIGITS } from "../../constants";
+import { GOVERNANCE_ASSEMBLY, TOKENS_WITH_8_DIGITS, GENERATOR_ADDRESS } from "../../constants";
+import { PoolInfo } from "../../types/hive.type";
 
 export let hive: GraphQLClient;
 
@@ -387,6 +388,45 @@ export const getDistributionSchedule = async (contract: string): Promise<any> =>
     );
 
     return response?.wasm?.contractQuery?.distribution_schedule;
+  } catch (e) {
+    return null;
+  }
+};
+
+export const getGeneratorPoolInfo = async (contract: string): Promise<PoolInfo | null> => {
+  try {
+    const response = await hive.request(
+      gql`
+        query ($contract: String!, $generator: String!) {
+          wasm {
+            contractQuery(
+              contractAddress: $generator
+              query: { pool_info: { lp_token: $contract } }
+            )
+          }
+        }
+      `,
+      { contract: contract, generator: GENERATOR_ADDRESS }
+    );
+    return response?.wasm?.contractQuery;
+  } catch (e) {
+    return null;
+  }
+};
+
+export const getContractConfig = async (contract: string): Promise<any> => {
+  try {
+    const response = await hive.request(
+      gql`
+        query ($contract: String!) {
+          wasm {
+            contractQuery(contractAddress: $contract, query: { config: {} })
+          }
+        }
+      `,
+      { contract: contract }
+    );
+    return response?.wasm?.contractQuery;
   } catch (e) {
     return null;
   }
