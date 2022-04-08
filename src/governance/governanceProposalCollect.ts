@@ -28,6 +28,9 @@ const WEBHOOK_URL =
   "https://hooks.slack.com/services/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";
 
 export async function governanceProposalCollect(): Promise<void> {
+  console.log("ENABLE_FEE_SWAP_NOTIFICATION: " + ENABLE_FEE_SWAP_NOTIFICATION)
+  console.log(ENABLE_FEE_SWAP_NOTIFICATION == true)
+
   // get proposals from db
   const savedProposals = await getSavedProposals();
   const savedProposalMap = proposalListToMap(savedProposals);
