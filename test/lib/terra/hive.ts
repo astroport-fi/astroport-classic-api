@@ -1,31 +1,11 @@
-import "dotenv/config";
-import mongoose from "mongoose";
-import {
-  getContractConfig,
-  getGeneratorPoolInfo,
-  initHive,
-  initMantle,
-} from "../../../src/lib/terra";
-import { GENERATOR_ADDRESS, MONGODB_URL } from "../../../src/constants";
+import { getContractConfig, getGeneratorPoolInfo } from "../../../src/lib/terra";
 import { expect } from "chai";
-import { getPairs } from "../../../src/services";
-
-declare module "dayjs" {
-  interface Dayjs {
-    utc(): any;
-  }
-}
 
 describe("Hive", function () {
-  beforeEach(async function () {
-    await mongoose.connect(MONGODB_URL);
-    await initHive("https://hive.terra.dev/graphql");
-    await initMantle("https://mantle.terra.dev/graphql");
-  });
-
   it("fetches alloc points", async () => {
     const poolInfo = await getGeneratorPoolInfo("terra1cspx9menzglmn7xt3tcn8v8lg6gu9r50d7lnve");
     expect(poolInfo?.alloc_point).to.be.a("string");
+    expect(poolInfo).to.haveOwnProperty("accumulated_rewards_per_share");
   });
 
   it("fetches contract config", async () => {

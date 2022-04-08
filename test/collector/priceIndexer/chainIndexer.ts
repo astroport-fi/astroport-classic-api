@@ -1,5 +1,3 @@
-import "dotenv/config";
-import mongoose from "mongoose";
 import { expect } from "chai";
 import { getPairMessages, getTxBlock, initHive, initMantle } from "../../../src/lib/terra";
 import { getPair, getToken } from "../../../src/services";
@@ -9,59 +7,47 @@ import { createPairLogFinders } from "../../../src/collector/logFinder";
 // import { LogFragment } from "@terra-money/log-finder";
 import { createPairIndexer } from "../../../src/collector/chainIndexer/createPairIndex";
 
-declare module "dayjs" {
-  interface Dayjs {
-    utc(): any;
-  }
-}
-describe("Index new pairs", function () {
-  beforeEach(async function () {
-    // await mongoose.connect(MONGODB_URL);
-    await initHive(TERRA_HIVE);
-    await initMantle(TERRA_MANTLE);
-  });
-
-  describe("Create pair and tokens on create_pair event", async () => {
-    it("Should get transaction and index coin data", async () => {
-      const createPairLF = createPairLogFinders(FACTORY_ADDRESS);
-
-      //TODO keep same event with create_pair or mock an event
-      const { event, timestamp, txHash } = await getEvent(
-        5838825,
-        "4BC31A9FF21E27539A5E6C944442952C454A48F18061B4FDF525B68C395EE743",
-        "wasm"
-      );
-
-      const messages = await getPairMessages(txHash);
-      const pair_type = messages.find(() => true)?.execute_msg?.create_pair?.pair_type || {};
-      const type = Object.keys(pair_type).find(() => true);
-
-      console.log("pair_type", pair_type);
-      console.log("type", type);
-
-      const createPairLogFounds = createPairLF(event);
-
-      //remove items if exist to be re indexed by createPair
-      for (const log of createPairLogFounds) {
-        const transformed = log.transformed;
-        try {
-          console.log(transformed);
-
-          // await Token.findByIdAndDelete(transformed?.token1);
-          // await Token.findByIdAndDelete(transformed?.token2);
-          // await Pair.findByIdAndDelete(transformed?.contractAddr);
-          await createPairIndexer(createPairLogFounds, timestamp);
-          const token1 = await getToken(transformed?.token1 as string);
-          const token2 = await getToken(transformed?.token2 as string);
-          expect(token1).to.have.property("name");
-          // expect(token2).to.have.property("name");
-        } catch (e) {
-          console.log(e);
-        }
-      }
-    });
+describe("getPairMessage", () => {
+  it("gets pair message and return pool type", async () => {
+    const { txHash } = await getEvent(
+      5838825,
+      "4BC31A9FF21E27539A5E6C944442952C454A48F18061B4FDF525B68C395EE743",
+      "wasm"
+    );
+    const messages = await getPairMessages(txHash);
+    const pair_type = messages.find(() => true)?.execute_msg?.create_pair?.pair_type || {};
+    const type = Object.keys(pair_type).find(() => true);
+    expect(type).to.be.eq("xyk");
   });
 });
+
+// describe("Index new pairs", function () {
+//   describe("Create pair and tokens on create_pair event", async () => {
+//     it("Should get transaction and index coin data", async () => {
+//       const createPairLF = createPairLogFinders(FACTORY_ADDRESS);
+
+//       //TODO keep same event with create_pair or mock an event
+
+//       const createPairLogFounds = createPairLF(event);
+
+//       //remove items if exist to be re indexed by createPair
+//       for (const log of createPairLogFounds) {
+//         const transformed = log.transformed;
+//         try {
+//           // await Token.findByIdAndDelete(transformed?.token1);
+//           // await Token.findByIdAndDelete(transformed?.token2);
+//           // await Pair.findByIdAndDelete(transformed?.contractAddr);
+//           // await createPairIndexer(createPairLogFounds, timestamp);
+//           const token1 = await getToken(transformed?.token1 as string);
+//           expect(token1).to.have.property("name");
+//           // expect(token2).to.have.property("name");
+//         } catch (e) {
+//           console.log(e);
+//         }
+//       }
+//     });
+//   });
+// });
 
 async function getEvent(height: number, txnHash: string, type: string) {
   const txs = await getTxBlock(height);
