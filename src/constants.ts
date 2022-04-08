@@ -11,6 +11,8 @@ export const GENERATOR_ADDRESS = process.env.GENERATOR_ADDRESS;
 export const MAKER_FEE_COLLECTOR_SEED = process.env.MAKER_FEE_COLLECTOR_SEED as string;
 // trigger collect on this address
 export const MAKER_CONTRACT = process.env.MAKER_CONTRACT as string;
+// whether to notify slack when a fee swap happens
+export const ENABLE_FEE_SWAP_NOTIFICATION = process.env.ENABLE_FEE_SWAP_NOTIFICATION == "true"
 
 // governance
 // seed for wallet that triggers governance state transitions

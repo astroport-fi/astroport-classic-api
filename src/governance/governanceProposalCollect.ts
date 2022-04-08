@@ -1,6 +1,12 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import { GOV_BUILDER_UNLOCK, GOV_VXASTRO, GOV_XASTRO, GOVERNANCE_ASSEMBLY } from "../constants";
+import {
+  ENABLE_FEE_SWAP_NOTIFICATION,
+  GOV_BUILDER_UNLOCK,
+  GOV_VXASTRO,
+  GOV_XASTRO,
+  GOVERNANCE_ASSEMBLY,
+} from "../constants";
 import { Proposal } from "../models/proposal.model";
 import { getProposals, getTotalVotingPowerAt } from "../lib/terra";
 import { getProposals as getSavedProposals, saveProposals } from "../services/proposal.service";
@@ -74,14 +80,17 @@ export async function governanceProposalCollect(): Promise<void> {
       );
 
       new_proposals.push(proposal);
-      // disabled for testnet
-      // await notifySlack(
-      //   "*New on-chain governance proposal: #" + proposal.proposal_id + "*",
-      //   "https://apeboard.finance/dashboard/" + proposal.submitter,
-      //   proposal.title,
-      //   proposal.description,
-      //   proposal.link
-      // );
+
+      // notify slack for mainnet
+      if(ENABLE_FEE_SWAP_NOTIFICATION) {
+        await notifySlack(
+          "*New on-chain governance proposal: #" + proposal.proposal_id + "*",
+          "https://apeboard.finance/dashboard/" + proposal.submitter,
+          proposal.title,
+          proposal.description,
+          proposal.link
+        );
+      }
     }
   }
 
