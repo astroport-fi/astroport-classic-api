@@ -1,5 +1,11 @@
 import { Pool } from "../models/pool.model";
-import { Pool as PoolType } from "../types/pool.type";
+import {
+  Pool as PoolType,
+  PoolSortFields,
+  SortDirections,
+  fieldsObj,
+  GetPools,
+} from "../types/pool.type";
 import { TOKEN_ADDRESS_MAP } from "../constants";
 
 export async function getPool(address: string): Promise<any> {
@@ -7,20 +13,33 @@ export async function getPool(address: string): Promise<any> {
   return transformPoolModelToPoolType(pool);
 }
 
-// TODO add filtering
-export async function getPools(): Promise<any[]> {
-  const pools = await Pool.find({}, null, { limit: 500 });
-  const result = [];
+export async function getPools({
+  tokenSymbol,
+  poolAddress,
+  limit = 50,
+  offset = 0,
+  sortField = PoolSortFields.VOLUME,
+  sortDirection = SortDirections.DESC,
+}: GetPools): Promise<PoolType[]> {
+  const filter = {
+    ...(poolAddress && { "metadata.pool_address": poolAddress }),
+    ...(tokenSymbol && { "metadata.token_symbol": tokenSymbol }),
+  };
 
-  // map
-  for (const pool of pools) {
-    result.push(transformPoolModelToPoolType(pool));
-  }
+  const direction = sortDirection === SortDirections.DESC ? "-" : "";
+  const sort = `${direction}${fieldsObj[sortField]}`;
 
+  const pools = await Pool.find(filter, null, {
+    limit,
+    skip: offset,
+    sort,
+  });
+
+  const result = pools.map((pool) => transformPoolModelToPoolType(pool));
   return result;
 }
 
-function transformPoolModelToPoolType(model: any): PoolType {
+export function transformPoolModelToPoolType(model: any): PoolType {
   // TODO remove
   const symbol = TOKEN_ADDRESS_MAP.get(model.metadata.pool_address);
 
@@ -30,6 +49,9 @@ function transformPoolModelToPoolType(model: any): PoolType {
     lp_address: model.metadata.lp_address,
     trading_fee: model.metadata.trading_fee_rate_bp,
     pool_liquidity: model.metadata.pool_liquidity,
+    pool_type: model.metadata.pool_type,
+    reward_proxy_address: model.metadata.reward_proxy_address,
+    alloc_point: model.metadata.alloc_point,
     _24hr_volume: model.metadata.day_volume_ust,
     prices: {
       token1_address: model.metadata.prices.token1_address,

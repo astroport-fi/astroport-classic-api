@@ -6,6 +6,7 @@ export type Pool = {
   pool_liquidity: number;
   _24hr_volume: number;
   token_symbol: string;
+  pool_type: string;
   prices: {
     token1_address: string;
     token1_price_ust: number;
@@ -34,3 +35,29 @@ export type Pool = {
     apy: number;
   };
 };
+
+export enum PoolSortFields {
+  TVL = "TVL",
+  APR = "APR",
+  VOLUME = "VOLUME",
+}
+
+export enum SortDirections {
+  DESC = "DESC",
+  ASC = "ASC",
+}
+
+export const fieldsObj = {
+  [PoolSortFields.TVL]: "metadata.pool_liquidity",
+  [PoolSortFields.APR]: "metadata.fees.total.apr",
+  [PoolSortFields.VOLUME]: "metadata.fees.total.day",
+};
+
+export interface GetPools {
+  tokenSymbol?: string;
+  poolAddress?: string;
+  limit?: number;
+  offset?: number;
+  sortField?: PoolSortFields;
+  sortDirection?: SortDirections;
+}
