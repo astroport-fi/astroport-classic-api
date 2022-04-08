@@ -78,7 +78,11 @@ export async function poolCollect(): Promise<void> {
     );
 
     // STOP CHANGING THIS VALUE
-    if (isNaN(pool_liquidity) || pool_liquidity < 0.01) continue;
+    if (isNaN(pool_liquidity) || pool_liquidity < 0.01) {
+      result.metadata.pool_liquidity = 0;
+    } else {
+      result.metadata.pool_liquidity = pool_liquidity;
+    }
 
     const pool_type: string = pair.type;
 
@@ -93,7 +97,6 @@ export async function poolCollect(): Promise<void> {
     result.metadata.trading_fee_rate_bp = FEES.get(pool_type);
     result.metadata.pool_address = pair.contractAddr;
     result.metadata.lp_address = pair.liquidityToken;
-    result.metadata.pool_liquidity = pool_liquidity;
     result.metadata.day_volume_ust = dayVolume;
     result.metadata.week_volume_ust = weekVolume;
 
