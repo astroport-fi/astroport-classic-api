@@ -1,9 +1,9 @@
 import "dotenv/config";
 import mongoose from "mongoose";
 import { expect } from "chai";
-import { getLatestBlock, initHive, initMantle } from "../../src/lib/terra";
+import { getLatestBlock, initHive } from "../../src/lib/terra";
 
-import { MONGODB_URL, TERRA_HIVE, TERRA_MANTLE } from "../../src/constants";
+import { MONGODB_URL, TERRA_HIVE } from "../../src/constants";
 // import { priceCollectV2 } from "../../../src/collector/priceIndexer/priceCollectV2";
 
 import { calculateThirdPartyApr } from "../../src/collector/chainIndexer/calculateApr";
@@ -12,7 +12,6 @@ describe("Index new pairs", function () {
   beforeEach(async function () {
     await mongoose.connect(MONGODB_URL);
     await initHive(TERRA_HIVE);
-    await initMantle(TERRA_MANTLE);
   });
 
   describe("Create pair and tokens on create_pair event", async () => {

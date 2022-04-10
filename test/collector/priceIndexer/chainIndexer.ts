@@ -1,9 +1,9 @@
 import "dotenv/config";
 import mongoose from "mongoose";
 import { expect } from "chai";
-import { getPairMessages, getTxBlock, initHive, initMantle } from "../../../src/lib/terra";
+import { getPairMessages, getTxBlock, initHive } from "../../../src/lib/terra";
 import { getPair, getToken } from "../../../src/services";
-import { FACTORY_ADDRESS, MONGODB_URL, TERRA_HIVE, TERRA_MANTLE } from "../../../src/constants";
+import { FACTORY_ADDRESS, MONGODB_URL, TERRA_HIVE } from "../../../src/constants";
 // import { priceCollectV2 } from "../../../src/collector/priceIndexer/priceCollectV2";
 import { createPairLogFinders } from "../../../src/collector/logFinder";
 // import { LogFragment } from "@terra-money/log-finder";
@@ -18,7 +18,6 @@ describe("Index new pairs", function () {
   beforeEach(async function () {
     // await mongoose.connect(MONGODB_URL);
     await initHive(TERRA_HIVE);
-    await initMantle(TERRA_MANTLE);
   });
 
   describe("Create pair and tokens on create_pair event", async () => {
@@ -50,7 +49,7 @@ describe("Index new pairs", function () {
           // await Token.findByIdAndDelete(transformed?.token1);
           // await Token.findByIdAndDelete(transformed?.token2);
           // await Pair.findByIdAndDelete(transformed?.contractAddr);
-          await createPairIndexer(createPairLogFounds, timestamp);
+          // await createPairIndexer(createPairLogFounds, timestamp);
           const token1 = await getToken(transformed?.token1 as string);
           const token2 = await getToken(transformed?.token2 as string);
           expect(token1).to.have.property("name");

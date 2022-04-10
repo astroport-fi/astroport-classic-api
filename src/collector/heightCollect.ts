@@ -1,5 +1,5 @@
 import { getChainBlock, getLatestBlock } from "../lib/terra";
-import { TERRA_CHAIN_ID, TERRA_HIVE, TERRA_LCD, TERRA_MANTLE } from "../constants";
+import { TERRA_CHAIN_ID, TERRA_HIVE, TERRA_LCD } from "../constants";
 import { createHeight, getLastHeight } from "../services";
 
 const columbus4EndHeight = 4_724_000;
@@ -8,7 +8,6 @@ const chainId = TERRA_CHAIN_ID;
 const waitFor = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 export async function heightCollect(): Promise<void> {
-
   let { height: lastChainHeight } = await getLatestBlock();
 
   if (lastChainHeight < 1 || chainId == null) {
