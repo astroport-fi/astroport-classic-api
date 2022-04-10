@@ -435,4 +435,5 @@ export const PAIRS_WHITELIST = new Set<string>([
   "terra1aa68js6yxavg9zzzle2zaynem9cstvmaj3xyu3", // yluna luna
   "terra1k8lvj3w7dxzd6zlyptcj086gfwms422xkqjmzx", // sayve ust
   "terra1hlq6ye6km5sq2pcnmrvlf784gs9zygt0akwvsu", // kuji skuji
+  "terra170x0m3vmc7s5pdvpt5lh9n6wfmsz6wcykcr0vg", // Bro ust
 ]);
