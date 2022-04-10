@@ -12,7 +12,7 @@ export const MAKER_FEE_COLLECTOR_SEED = process.env.MAKER_FEE_COLLECTOR_SEED as 
 // trigger collect on this address
 export const MAKER_CONTRACT = process.env.MAKER_CONTRACT as string;
 // whether to notify slack when a fee swap happens
-export const ENABLE_FEE_SWAP_NOTIFICATION = process.env.ENABLE_FEE_SWAP_NOTIFICATION == "true"
+export const ENABLE_FEE_SWAP_NOTIFICATION = process.env.ENABLE_FEE_SWAP_NOTIFICATION == "true";
 
 // governance
 // seed for wallet that triggers governance state transitions
@@ -434,4 +434,5 @@ export const PAIRS_WHITELIST = new Set<string>([
   "terra1r6fchdsr8k65082u3cyrdn6x2n8hrpyrp72je0", // pluna luna
   "terra1aa68js6yxavg9zzzle2zaynem9cstvmaj3xyu3", // yluna luna
   "terra1k8lvj3w7dxzd6zlyptcj086gfwms422xkqjmzx", // sayve ust
+  "terra1hlq6ye6km5sq2pcnmrvlf784gs9zygt0akwvsu", // kuji skuji
 ]);
