@@ -17,7 +17,7 @@ export async function createPairIndexer(
     const transformed = logFound.transformed;
 
     const messages = await getPairMessages(txHash);
-    const pair_type = messages.find(() => true)?.execute_msg?.create_pair?.pair_type || {};
+    const pair_type = messages?.create_pair?.pair_type || {};
     const type = Object.keys(pair_type).find(() => true);
 
     if (transformed) {
