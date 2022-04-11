@@ -1,8 +1,4 @@
-import mongoose from "mongoose";
 import { expect } from "chai";
-import { initHive, initMantle } from "../../src/lib/terra";
-
-import { MONGODB_URL, TERRA_HIVE, TERRA_MANTLE } from "../../src/constants";
 import { getPools } from "../../src/services";
 import { PoolSortFields } from "../../src/types/pool.type";
 

@@ -4,14 +4,8 @@ import {
   APIGatewayProxyEvent,
   APIGatewayProxyResult,
 } from "aws-lambda";
-import { getAssemblyConfig, getLatestBlock, initHive, initLCD, initMantle } from "../../lib/terra";
-import {
-  TERRA_CHAIN_ID,
-  MONGODB_URL,
-  TERRA_HIVE,
-  TERRA_MANTLE,
-  TERRA_LCD,
-} from "../../../src/constants";
+import { getAssemblyConfig, getLatestBlock, initHive, initLCD } from "../../lib/terra";
+import { TERRA_CHAIN_ID, MONGODB_URL, TERRA_HIVE, TERRA_LCD } from "../../../src/constants";
 import { end_proposal_vote, execute_proposal, expire_proposal } from "./triggers";
 import mongoose from "mongoose";
 import { Proposal } from "../../models/proposal.model";
@@ -73,8 +67,8 @@ export async function run(
     console.log("execute_proposal (Passed -> Executed)");
     await execute_proposal(passed_proposals);
 
-    console.log("Hide passed proposals that went unexecuted (Passed -> Hidden")
-    await hide_proposals(stale_passed_proposals)
+    console.log("Hide passed proposals that went unexecuted (Passed -> Hidden");
+    await hide_proposals(stale_passed_proposals);
 
     console.log("remove_completed_proposal (Rejected -> Expired)");
     await expire_proposal(rejected_proposals);

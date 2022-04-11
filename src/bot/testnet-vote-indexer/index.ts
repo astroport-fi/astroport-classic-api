@@ -5,7 +5,7 @@ import {
   APIGatewayProxyResult,
 } from "aws-lambda";
 import { connectToDatabase } from "../../modules/db";
-import { initHive, initLCD, initMantle } from "../../lib/terra";
+import { initHive, initLCD } from "../../lib/terra";
 import { heightCollect } from "./heightCollect";
 import { chainCollect } from "./chainCollect";
 
@@ -23,7 +23,6 @@ export async function run(
 
   await connectToDatabase();
   await initHive("https://testnet-hive.terra.dev/graphql");
-  await initMantle("https://bombay-mantle.terra.dev/");
   await initLCD("https://bombay-lcd.terra.dev", "bombay-12");
 
   try {

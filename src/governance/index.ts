@@ -5,7 +5,7 @@ import {
   APIGatewayProxyResult,
 } from "aws-lambda";
 
-import { initHive, initLCD, initMantle } from "../lib/terra";
+import { initHive, initLCD } from "../lib/terra";
 import { connectToDatabase } from "../modules/db";
 import { governanceProposalCollect } from "./governanceProposalCollect";
 

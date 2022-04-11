@@ -4,7 +4,7 @@ import {
   APIGatewayProxyEvent,
   APIGatewayProxyResult,
 } from "aws-lambda";
-import { getLatestHeight, initLCD, initMantle } from "../../lib/terra";
+import { initLCD, getLatestBlock } from "../../lib/terra";
 import { TERRA_CHAIN_ID, TERRA_LCD } from "../../constants";
 
 import { gql, GraphQLClient } from "graphql-request";
@@ -39,7 +39,6 @@ export async function run(
       keepalive: true,
     });
 
-    await initMantle("https://mantle.terra.dev/graphql");
     await initLCD(TERRA_LCD, TERRA_CHAIN_ID);
 
     // blocks
@@ -53,7 +52,7 @@ export async function run(
       `
     );
     const devHeight = devHeightRaw?.block?.height;
-    const mantleHeight = await getLatestHeight();
+    const latestHeight = (await getLatestBlock()).height;
     const prodHeightRaw = await prod.request(
       gql`
         query {
@@ -79,10 +78,10 @@ export async function run(
 
     // bots
     // maker bot address - mainnet
-    const maker = "terra1lz4pz06aa3e5f70u2pcc3u754n847lk9cww05r"
-    const gov = "terra1jy093k4nsyfma0q87mhsu3p08dc4fpt4zur7hr"
-    const maker_bot_balance = await get_ust_balance(maker)
-    const gov_bot_balance = await get_ust_balance(gov)
+    const maker = "terra1lz4pz06aa3e5f70u2pcc3u754n847lk9cww05r";
+    const gov = "terra1jy093k4nsyfma0q87mhsu3p08dc4fpt4zur7hr";
+    const maker_bot_balance = await get_ust_balance(maker);
+    const gov_bot_balance = await get_ust_balance(gov);
     const wallet = "terra1lz4pz06aa3e5f70u2pcc3u754n847lk9cww05r";
     const url =
       "https://lcd.terra.dev/cosmos/bank/v1beta1/balances/" + wallet + "/by_denom?denom=uusd";
@@ -91,24 +90,24 @@ export async function run(
 
     const ust_raw = data["balance"]["amount"] as number;
     const ust_rounded = Math.round((ust_raw / 1000000) * 100) / 100;
-    const daily_gas = .3;
+    const daily_gas = 0.3;
 
     let message = "```";
     message += "--------------------------\n";
     message += "|         Blocks         |\n";
     message += "--------------------------\n";
 
-    message += "Realtime     : " + mantleHeight + "\n";
+    message += "Realtime     : " + latestHeight + "\n";
     message += "Dev          : " + devHeight + "\n";
-    message += "Blocks behind: " + (mantleHeight - devHeight) + "\n";
+    message += "Blocks behind: " + (latestHeight - devHeight) + "\n";
     message +=
-      "Hours behind : " + Math.round(((mantleHeight - devHeight) / 600) * 100) / 100 + "\n";
+      "Hours behind : " + Math.round(((latestHeight - devHeight) / 600) * 100) / 100 + "\n";
     message += "\n";
-    message += "Realtime     : " + mantleHeight + "\n";
+    message += "Realtime     : " + latestHeight + "\n";
     message += "Prod         : " + prodHeight + "\n";
-    message += "Blocks behind: " + (mantleHeight - prodHeight) + "\n";
+    message += "Blocks behind: " + (latestHeight - prodHeight) + "\n";
     message +=
-      "Hours behind : " + Math.round(((mantleHeight - prodHeight) / 600) * 100) / 100 + "\n\n";
+      "Hours behind : " + Math.round(((latestHeight - prodHeight) / 600) * 100) / 100 + "\n\n";
     message += "--------------------------\n";
     message += "|          Stats         |\n";
     message += "--------------------------\n";
@@ -124,7 +123,7 @@ export async function run(
 
     message += "Gov State Bot - " + gov + "\n";
     message += "UST balance: " + gov_bot_balance + "\n";
-    message += "Days left  : " + Math.round(gov_bot_balance / .30) + "\n"; // 2x per day
+    message += "Days left  : " + Math.round(gov_bot_balance / 0.3) + "\n"; // 2x per day
     message += "```";
 
     const post_fields = generate_post_fields(message);
