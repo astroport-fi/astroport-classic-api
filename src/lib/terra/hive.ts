@@ -317,44 +317,77 @@ export async function getStableswapRelativePrice(
   return response?.wasm?.contractQuery?.return_amount;
 }
 
+// TODO switch to this query when vx astro address is added
+// export async function getTotalVotingPowerAt(
+//   block: number,
+//   time: number,
+//   xastro: string,
+//   builder: string,
+//   vxastro: string
+// ) {
+//   const response = await hive.request(
+//     gql`
+//       query ($block: Int!, $time: Int!, $xastro: String!, $builder: String!, $vxastro: String!) {
+//         x: wasm {
+//           contractQuery(contractAddress: $xastro, query: { total_supply_at: { block: $block } })
+//         }
+//         builder: wasm {
+//           contractQuery(contractAddress: $builder, query: { state: {} })
+//         }
+//         vx: wasm {
+//           contractQuery(
+//             contractAddress: $vxastro
+//             query: { total_voting_power_at: { time: $time } }
+//           )
+//         }
+//       }
+//     `,
+//     {
+//       block: block,
+//       time: time,
+//       xastro: xastro,
+//       builder: builder,
+//       vxastro: vxastro,
+//     }
+//   );
+//
+//   // TODO double check numbers for prod
+//   return (
+//     Number(response?.x?.contractQuery) +
+//     Number(response?.builder?.contractQuery?.remaining_astro_tokens) +
+//     Number(response?.vx?.contractQuery?.voting_power) / 1000000
+//   );
+// }
+
+
 export async function getTotalVotingPowerAt(
   block: number,
-  time: number,
-  xastro: string = "terra1yufp7cv85qrxrx56ulpfgstt2gxz905fgmysq0", // TODO testnet addresses remove
-  builder: string = "terra1hccg0cfrcu0nr4zgt5urmcgam9v88peg9s7h6j",
-  vxastro: string = "terra1pqr02fx4ulc2mzws7xlqh8hpwqx2ls5m4fk62j"
+  _time: number,
+  xastro: string,
+  builder: string,
+  _vxastro: string
 ) {
   const response = await hive.request(
     gql`
-      query ($block: Int!, $time: Int!, $xastro: String!, $builder: String!, $vxastro: String!) {
+      query ($block: Int!, $xastro: String!, $builder: String!) {
         x: wasm {
           contractQuery(contractAddress: $xastro, query: { total_supply_at: { block: $block } })
         }
         builder: wasm {
           contractQuery(contractAddress: $builder, query: { state: {} })
         }
-        vx: wasm {
-          contractQuery(
-            contractAddress: $vxastro
-            query: { total_voting_power_at: { time: $time } }
-          )
-        }
       }
     `,
     {
       block: block,
-      time: time,
       xastro: xastro,
-      builder: builder,
-      vxastro: vxastro,
+      builder: builder
     }
   );
 
-  // TODO double check numbers for prod
   return (
     Number(response?.x?.contractQuery) +
-    Number(response?.builder?.contractQuery?.remaining_astro_tokens) +
-    Number(response?.vx?.contractQuery?.voting_power) / 1000000
+    Number(response?.builder?.contractQuery?.remaining_astro_tokens)
   );
 }
 
