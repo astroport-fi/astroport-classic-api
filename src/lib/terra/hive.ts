@@ -69,6 +69,7 @@ export const getProposals = async (contract: string, limit = 100, offset = 0): P
 
     return response?.wasm?.contractQuery?.proposal_list;
   } catch (e) {
+    console.log(e)
     return [];
   }
 };

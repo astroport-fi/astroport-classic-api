@@ -32,6 +32,7 @@ export async function governanceProposalCollect(): Promise<void> {
   let offset = 0;
 
   while (continue_querying) {
+    console.log("Governance assembly: " + GOVERNANCE_ASSEMBLY)
     const proposal_batch = await getProposals(GOVERNANCE_ASSEMBLY, BATCH_SIZE, offset);
     proposals = proposals.concat(proposal_batch);
 
