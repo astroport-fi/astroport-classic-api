@@ -46,7 +46,6 @@ export async function runIndexers(
 
           // find votes
           try {
-            console.log("Governance assembly: " + GOVERNANCE_ASSEMBLY)
             const voteLF = voteLogFinder();
             const voteLogFounds = voteLF(event);
             if (voteLogFounds.length > 0) {
