@@ -4,8 +4,8 @@ import {
   APIGatewayProxyEvent,
   APIGatewayProxyResult,
 } from "aws-lambda";
-import { initLCD, getLatestBlock } from "../../lib/terra";
-import { TERRA_CHAIN_ID, TERRA_LCD } from "../../constants";
+import { initLCD, getLatestBlock, initHive } from "../../lib/terra";
+import { TERRA_CHAIN_ID, TERRA_HIVE, TERRA_LCD } from "../../constants";
 
 import { gql, GraphQLClient } from "graphql-request";
 import axios from "axios";
@@ -40,6 +40,7 @@ export async function run(
     });
 
     await initLCD(TERRA_LCD, TERRA_CHAIN_ID);
+    await initHive(TERRA_HIVE);
 
     // blocks
     const devHeightRaw = await dev.request(
