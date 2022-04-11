@@ -351,7 +351,6 @@ export async function getStableswapRelativePrice(
 //     }
 //   );
 //
-//   // TODO double check numbers for prod
 //   return (
 //     Number(response?.x?.contractQuery) +
 //     Number(response?.builder?.contractQuery?.remaining_astro_tokens) +
