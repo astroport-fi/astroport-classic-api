@@ -1,6 +1,6 @@
 import { createPairLogFinders, createSwapLogFinder } from "../logFinder";
 import { createPairIndexer } from "./createPairIndex";
-import { FACTORY_ADDRESS } from "../../constants";
+import { FACTORY_ADDRESS, GOVERNANCE_ASSEMBLY } from "../../constants";
 import { Pair } from "../../types";
 import { TxHistoryIndexer } from "./txHistoryIndexer";
 import { findProtocolRewardEmissions } from "./findProtocolRewardEmissions";
@@ -46,6 +46,7 @@ export async function runIndexers(
 
           // find votes
           try {
+            console.log("Governance assembly: " + GOVERNANCE_ASSEMBLY)
             const voteLF = voteLogFinder();
             const voteLogFounds = voteLF(event);
             if (voteLogFounds.length > 0) {
