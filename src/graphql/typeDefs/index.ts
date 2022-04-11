@@ -232,6 +232,18 @@ export const typeDefs = /* GraphQL */ `
     txn: String
   }
 
+  type VotingPower {
+    from_xastro: Float
+    from_builder: Float
+    from_vxastro: Float
+    total: Float
+  }
+
+  type User {
+    address: String!
+    voting_power: VotingPower
+  }
+
   type Snapshot {
     block: Float
     pool: JSON
@@ -275,5 +287,6 @@ export const typeDefs = /* GraphQL */ `
     staking: Staking
     tokens: [Token]
     votes(proposal_id: String!, choice: String, offset: Int, limit: Int): [Vote]
+    user(address: String!): User
   }
 `;
