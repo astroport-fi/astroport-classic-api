@@ -8,6 +8,7 @@ import {
 import { initHive, initLCD, initMantle } from "../lib/terra";
 import { connectToDatabase } from "../modules/db";
 import { governanceProposalCollect } from "./governanceProposalCollect";
+import { TERRA_HIVE } from "../constants";
 
 bluebird.config({
   longStackTraces: true,
@@ -22,7 +23,7 @@ export async function run(
   context.callbackWaitsForEmptyEventLoop = false;
 
   await connectToDatabase();
-  await initHive("https://testnet-hive.terra.dev/graphql"); // TODO change
+  await initHive(TERRA_HIVE); // TODO change
 
   try {
     const start = new Date().getTime();
