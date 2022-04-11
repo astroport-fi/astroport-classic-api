@@ -1,37 +1,17 @@
-import "dotenv/config";
-import mongoose from "mongoose";
 import {
   getContractConfig,
   getContractStore,
   getGeneratorPoolInfo,
   getLatestBlock,
-  initHive,
 } from "../../../src/lib/terra";
-import {
-  GENERATOR_ADDRESS,
-  MONGODB_URL,
-  ASSEMBLY_TREASURY,
-  ASTRO_TOKEN,
-  XASTRO_STAKING_ADDRESS,
-} from "../../../src/constants";
+import { ASSEMBLY_TREASURY, ASTRO_TOKEN, XASTRO_STAKING_ADDRESS } from "../../../src/constants";
 import { expect } from "chai";
-import { getPairs } from "../../../src/services";
-
-declare module "dayjs" {
-  interface Dayjs {
-    utc(): any;
-  }
-}
 
 describe("Hive", function () {
-  beforeEach(async function () {
-    await mongoose.connect(MONGODB_URL);
-    await initHive("https://hive.terra.dev/graphql");
-  });
-
   it("fetches alloc points", async () => {
     const poolInfo = await getGeneratorPoolInfo("terra1cspx9menzglmn7xt3tcn8v8lg6gu9r50d7lnve");
     expect(poolInfo?.alloc_point).to.be.a("string");
+    expect(poolInfo).to.haveOwnProperty("accumulated_rewards_per_share");
   });
 
   it("fetches contract config", async () => {
