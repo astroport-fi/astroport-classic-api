@@ -5,8 +5,8 @@ import {
   APIGatewayProxyResult,
 } from "aws-lambda";
 
-import { initHive, initLCD, initMantle } from "../../lib/terra";
-import { TERRA_CHAIN_ID, TERRA_HIVE, TERRA_LCD, TERRA_MANTLE } from "../../constants";
+import { initHive, initLCD } from "../../lib/terra";
+import { TERRA_CHAIN_ID, TERRA_HIVE, TERRA_LCD } from "../../constants";
 import { swap } from "./feeSwap";
 
 bluebird.config({
@@ -22,7 +22,6 @@ export async function run(
   context.callbackWaitsForEmptyEventLoop = false;
 
   await initHive(TERRA_HIVE);
-  await initMantle(TERRA_MANTLE);
   await initLCD(TERRA_LCD, TERRA_CHAIN_ID);
 
   try {
