@@ -1,4 +1,4 @@
-import { BUILDER_UNLOCK, TERRA_HIVE, VXASTRO_TOKEN } from "../constants";
+import { BUILDER_UNLOCK, TERRA_HIVE, VXASTRO_TOKEN, XASTRO_TOKEN } from "../constants";
 import {
   getBuilderAllocationForWallet,
   getTokenHolding,
@@ -22,10 +22,7 @@ export async function getVotingPower(address: string): Promise<VotingPower> {
   initHive(TERRA_HIVE);
 
   // Voting power from xAstro holdings
-  const xAstroBalance = await getTokenHolding(
-    "terra14lpnyzc9z4g3ugr4lhm8s4nle0tq8vcltkhzh7", // XASTRO_TOKEN on mainnet, to be confirmed in constants.ts
-    address
-  );
+  const xAstroBalance = await getTokenHolding(XASTRO_TOKEN, address);
 
   // Voting power from builder unlock
   const builderAllocation = await getBuilderAllocationForWallet(BUILDER_UNLOCK, address);
