@@ -53,7 +53,7 @@ export const fieldsObj = {
   [PoolSortFields.VOLUME]: "metadata.fees.total.day",
 };
 export interface GetPools {
-  tokenSymbol?: string;
+  tokenName?: string;
   poolAddress?: string;
   limit?: number;
   offset?: number;

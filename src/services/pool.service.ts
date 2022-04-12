@@ -14,7 +14,7 @@ export async function getPool(address: string): Promise<any> {
 }
 
 export async function getPools({
-  tokenSymbol,
+  tokenName,
   poolAddress,
   limit = 50,
   offset = 0,
@@ -23,7 +23,7 @@ export async function getPools({
 }: GetPools): Promise<PoolType[]> {
   const filter = {
     ...(poolAddress && { "metadata.pool_address": poolAddress }),
-    ...(tokenSymbol && { "metadata.token_symbol": tokenSymbol }),
+    ...(tokenName && { "metadata.token_symbol": tokenName }),
   };
 
   const direction = sortDirection === SortDirections.DESC ? "-" : "";
