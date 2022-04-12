@@ -30,9 +30,12 @@ export async function getVotingPower(address: string): Promise<VotingPower> {
   // Voting power from builder unlock
   const builderAllocation = await getBuilderAllocationForWallet(BUILDER_UNLOCK, address);
 
-  const totalAllocated = +builderAllocation.params.amount;
-  const totalWithdrawn = +builderAllocation.status.astro_withdrawn;
-  const builderTotal = totalAllocated - totalWithdrawn;
+  let builderTotal: number = 0;
+  if (builderAllocation) {
+    const totalAllocated = +builderAllocation.params.amount;
+    const totalWithdrawn = +builderAllocation.status.astro_withdrawn;
+    builderTotal = totalAllocated - totalWithdrawn;
+  }
 
   // Voting power from vxAstro holdings
   let vxAstroVotingPower: number = 0;
