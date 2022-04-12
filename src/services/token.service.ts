@@ -1,6 +1,7 @@
 import { Token } from "../models";
-import { isNative } from "../modules/terra";
-import { getTokenInfo } from "../lib/terra";
+import { isIBCToken, isNative } from "../modules/terra";
+import { getIBCDenom, getTokenInfo, initLCD } from "../lib/terra";
+import { IBC_DENOM_MAP, TERRA_CHAIN_ID, TERRA_LCD } from "../constants";
 
 export async function getTokens(): Promise<any[]> {
   const tokens = await Token.find();
@@ -17,6 +18,25 @@ export async function createToken(tokenAddr: string): Promise<any> {
     const options = {
       tokenAddr: tokenAddr,
       symbol: tokenAddr,
+      icon: "",
+      decimals: 6,
+    };
+
+    try {
+      const token = await Token.create(options);
+      return token;
+    } catch (e) {
+      console.log(e);
+    }
+  }
+  if (isIBCToken(tokenAddr)) {
+    initLCD(TERRA_LCD, TERRA_CHAIN_ID);
+    const denom = await getIBCDenom(tokenAddr);
+
+    const options = {
+      tokenAddr: tokenAddr,
+      name: IBC_DENOM_MAP.get(denom)?.name || denom,
+      symbol: IBC_DENOM_MAP.get(denom)?.symbol || tokenAddr,
       icon: "",
       decimals: 6,
     };

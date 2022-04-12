@@ -438,3 +438,34 @@ export const PAIRS_WHITELIST = new Set<string>([
   "terra1hlq6ye6km5sq2pcnmrvlf784gs9zygt0akwvsu", // kuji skuji
   "terra170x0m3vmc7s5pdvpt5lh9n6wfmsz6wcykcr0vg", // Bro ust
 ]);
+
+// TODO - This should be queried from each token's native chain in future
+/**
+ * IBC_DENOM_MAP maps the IBC denomination values to symbols
+ * These values are taken from ibcTransfer.denomTraces from LCD
+ */
+export const IBC_DENOM_MAP = new Map<string, any>([
+  ["cusdc", { symbol: "CUSDC", name: "Compound USD Coin" }],
+  ["cwbtc", { symbol: "CWBTC", name: "Compound Wrapped BTC" }],
+  ["gravity0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", { symbol: "gUSDC", name: "gUSDC" }],
+  ["inj", { symbol: "INJ", name: "INJ" }],
+  ["orai", { symbol: "ORAI", name: "Oraichain" }],
+  ["uakt", { symbol: "AKT", name: "Akash" }],
+  ["uatolo", { symbol: "ATOLO", name: "Rizon" }],
+  ["uatom", { symbol: "ATOM", name: "Cosmos" }],
+  ["uaxl", { symbol: "AXL", name: "AXL" }],
+  ["udvpn", { symbol: "DVPN", name: "Sentinel" }],
+  ["ugraviton", { symbol: "GRAV", name: "Graviton" }],
+  ["uhuahua", { symbol: "HUAHUA", name: "Chihuahu" }],
+  ["uiris", { symbol: "IRIS", name: "Iris" }],
+  ["ujuno", { symbol: "JUNO", name: "Juno" }],
+  ["ukava", { symbol: "KAVA", name: "Kava" }],
+  ["uluna", { symbol: "LUNA", name: "Luna" }],
+  ["uosmo", { symbol: "OSMO", name: "Osmosis" }],
+  ["uregen", { symbol: "REGEN", name: "Regen" }],
+  ["uscrt", { symbol: "SCRT", name: "Secret" }],
+  ["uumee", { symbol: "UMEE", name: "UMEE" }],
+  ["uusd", { symbol: "UST", name: "UST" }],
+  ["xrowan", { symbol: "ROWAN", name: "ROWAN" }],
+  ["xust", { symbol: "UST", name: "UST" }],
+]);

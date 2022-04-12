@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { getPairMessages } from "../../../src/lib/terra";
+import { getIBCDenom, getPairMessages } from "../../../src/lib/terra";
 
 describe("LCD CLient", function () {
   it("fetches transaction from lcd and gets pair type of xyk", async () => {
@@ -8,5 +8,11 @@ describe("LCD CLient", function () {
     const pair_type = messages?.create_pair?.pair_type || {};
     const type = Object.keys(pair_type).find(() => true);
     expect(type).to.be.eq("xyk");
+  });
+
+  it("fetches the denomination of an IBC token", async () => {
+    const ibcAddress = "ibc/0471F1C4E7AFD3F07702BEF6DC365268D64570F7C1FDC98EA6098DD6DE59817B";
+    const denom = await getIBCDenom(ibcAddress);
+    expect(denom).to.be.eq("uosmo");
   });
 });
