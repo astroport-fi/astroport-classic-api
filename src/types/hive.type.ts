@@ -19,3 +19,11 @@ export interface PoolConfig {
   reward_contract_addr: string;
   reward_token_addr: string;
 }
+
+export interface TokenInfo {
+  name: string;
+  symbol: string;
+  decimals: number;
+  total_supply: string;
+  address: string;
+}

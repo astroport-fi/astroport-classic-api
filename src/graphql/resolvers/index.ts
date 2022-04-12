@@ -42,11 +42,10 @@ export const resolvers = {
     },
     pools: async (
       _: any,
-      { poolAddress, tokenSymbol, limit, offset, sortField, sortDirection }: any
+      { search, limit, offset, sortField, sortDirection }: any
     ): Promise<Pool[]> => {
       const pools = await getPools({
-        poolAddress,
-        tokenSymbol,
+        search,
         limit,
         offset,
         sortField,

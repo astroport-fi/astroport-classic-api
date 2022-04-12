@@ -1,6 +1,7 @@
 import { Token } from "../models";
 import { isNative } from "../modules/terra";
 import { getTokenInfo } from "../lib/terra";
+import { TokenInfo } from "../types/hive.type";
 
 export async function getTokens(): Promise<any[]> {
   const tokens = await Token.find();
@@ -12,11 +13,11 @@ export async function getToken(tokenAddr: string): Promise<any> {
   return token;
 }
 
-export async function createToken(tokenAddr: string): Promise<any> {
-  if (isNative(tokenAddr)) {
+export async function createToken(tokenInfo: TokenInfo): Promise<any> {
+  if (isNative(tokenInfo.address)) {
     const options = {
-      tokenAddr: tokenAddr,
-      symbol: tokenAddr,
+      tokenAddr: tokenInfo.address,
+      symbol: tokenInfo.address,
       icon: "",
       decimals: 6,
     };
@@ -29,13 +30,11 @@ export async function createToken(tokenAddr: string): Promise<any> {
     }
   }
 
-  const response = await getTokenInfo(tokenAddr);
-
   const options = {
-    tokenAddr: tokenAddr,
-    symbol: response?.symbol || tokenAddr,
-    decimals: response?.decimals || 0,
-    name: response?.name || "",
+    tokenAddr: tokenInfo.address,
+    symbol: tokenInfo?.symbol || tokenInfo.address,
+    decimals: tokenInfo?.decimals || 0,
+    name: tokenInfo?.name || "",
     icon: "",
   };
 

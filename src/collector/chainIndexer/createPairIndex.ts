@@ -1,6 +1,11 @@
 import { ReturningLogFinderResult } from "@terra-money/log-finder";
-import { getPairMessages } from "../../lib/terra";
+import { getPairMessages, getTokenInfo } from "../../lib/terra";
 import { createPair, createToken } from "../../services";
+import { TokenInfo } from "../../types/hive.type";
+
+export const generateDescription = (token1: TokenInfo, token2: TokenInfo): string => {
+  return `${token1?.name} - ${token2?.name} , ${token1?.symbol} - ${token2?.symbol}`;
+};
 
 export async function createPairIndexer(
   founds: ReturningLogFinderResult<{
@@ -16,14 +21,18 @@ export async function createPairIndexer(
   for (const logFound of founds) {
     const transformed = logFound.transformed;
 
-    const messages = await getPairMessages(txHash);
-    const pair_type = messages?.create_pair?.pair_type || {};
-    const type = Object.keys(pair_type).find(() => true);
-
     if (transformed) {
-      await createPair({ ...transformed, createdAt: timestamp, type });
-      await createToken(transformed.token1);
-      await createToken(transformed.token2);
+      const messages = await getPairMessages(txHash);
+      const pair_type = messages?.create_pair?.pair_type || {};
+      const type = Object.keys(pair_type).find(() => true);
+
+      const token1Info = await getTokenInfo(transformed.token1);
+      const token2Info = await getTokenInfo(transformed.token2);
+      const description = generateDescription(token1Info as TokenInfo, token2Info as TokenInfo);
+
+      await createPair({ ...transformed, createdAt: timestamp, type, description });
+      await createToken(token1Info as TokenInfo);
+      await createToken(token2Info as TokenInfo);
     }
   }
 }
