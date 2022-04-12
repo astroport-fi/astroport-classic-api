@@ -3,7 +3,11 @@ import { getStableswapRelativePrice } from "../lib/terra";
 import { TOKENS_WITH_8_DIGITS } from "../constants";
 
 export const isNative = (token: string): boolean => {
-  return token.slice(0, 6) !== "terra1";
+  return token.slice(0, 6) !== "terra1" && token.slice(0, 3) !== "ibc";
+};
+
+export const isIBCToken = (token: string): boolean => {
+  return token.slice(0, 3) === "ibc";
 };
 
 export const isNativeToken = (token: any): boolean => {
