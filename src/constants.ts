@@ -71,6 +71,27 @@ export const TOKEN_ADDRESS_MAP = new Map<string, string>([
   ["terra1k8lvj3w7dxzd6zlyptcj086gfwms422xkqjmzx", "SAYVE"],
 ]);
 
+const allowed_reward_proxies = [
+  "terra1wranc9ta64f0nwdyv842d7kdm7ae80kdl5tvne",
+  "terra1e5zw6ujvzcmmgh8rxlttddlk2t62j2lh5jtwe8",
+  "terra1v2wez00fyy8ajxgkh2jcx82haqfudvxcs5sdzr",
+  "terra15g9we4hs03zv5lkmkpm3gk6vr5tfq8c6egxss6",
+  "terra12z0q65r2y3y56g970fghfderncf4a2nurta0sc",
+  "terra16pnm59kxmgnp9kv6ye3ejnpevfmzdlllx0pake",
+  "terra1px6vx9uegszfycw9z75dfpmzqtwjtrpm20qck2",
+  "terra1gty5d3hmegmrzu7uyrrm6mcksus5cumkrxxg0z",
+  "terra1vtqv4j5v04x5ka5f84v9zuvt604u2rsqhjnpk8",
+  "terra14fjehqxs03mad28tflkk7lqdru64h9cdsdm923",
+  "terra17jm985ql5plu8ytakpfz6kjyag87m9f3l3aqfn",
+  "terra19ganxu5n5xghz0ftp6jfczl5yf38yryctprmd2",
+  "terra15re9z6l28vf4dfeu8zyfe8ax8cvjdxkfnmuwne",
+  "terra1hzkn3wr8qhmml6yu575tlz48j2lhgdahvx2ruk",
+  "terra1aqehsnrdadp7s8exny69h5vln3llp38wttv0cr",
+  "terra1dyuvfvjpuhqrmjly0xh3fhk207cyx8yrw2n736",
+  "terra1xf6dsqpqap3hczk9jd7938h5n8de8ap9ycxhvu",
+  "terra1r9vxaprx2j2djyrse60yppawpuncm7wcujjc9w",
+];
+
 // map pool -> factory/proxy/pool/token/lp attributes
 // used for native protocol rewards
 export const GENERATOR_PROXY_CONTRACTS = new Map<string, any>([
@@ -265,11 +286,11 @@ export const GENERATOR_PROXY_CONTRACTS = new Map<string, any>([
     "terra1k8lvj3w7dxzd6zlyptcj086gfwms422xkqjmzx",
     {
       tokenName: "SAYVE-UST",
-      factory: "terra1tyjfrx40kgpmf6mq2kyv6njgg59fxpv7pk8dhd",
-      proxy: "terra1r9vxaprx2j2djyrse60yppawpuncm7wcujjc9w",
-      pool: "terra1k8lvj3w7dxzd6zlyptcj086gfwms422xkqjmzx",
-      token: "terra14v9wrjs55qsn9lkvylsqela3w2ytwxzkycqzcr",
-      lpToken: "terra1drradty46zqun4624p8a3sp9h5jfg9phwlgnm2",
+      factory: "terra1tyjfrx40kgpmf6mq2kyv6njgg59fxpv7pk8dhd", //reward_contract_addr
+      proxy: "terra1r9vxaprx2j2djyrse60yppawpuncm7wcujjc9w", // proxy address
+      pool: "terra1k8lvj3w7dxzd6zlyptcj086gfwms422xkqjmzx", //pair_addr
+      token: "terra14v9wrjs55qsn9lkvylsqela3w2ytwxzkycqzcr", //reward_token_addr
+      lpToken: "terra1drradty46zqun4624p8a3sp9h5jfg9phwlgnm2", //lp_token_addr
     },
   ],
 ]);

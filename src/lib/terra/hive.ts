@@ -406,3 +406,21 @@ export const getContractConfig = async (contract: string): Promise<any> => {
     return null;
   }
 };
+
+export const getGeneratorConfig = async (): Promise<PoolInfo | null> => {
+  try {
+    const response = await hive.request(
+      gql`
+        query ($contract: String!, $generator: String!) {
+          wasm {
+            contractQuery(contractAddress: $generator, query: { config: {} })
+          }
+        }
+      `,
+      { generator: GENERATOR_ADDRESS }
+    );
+    return response?.wasm?.contractQuery;
+  } catch (e) {
+    return null;
+  }
+};

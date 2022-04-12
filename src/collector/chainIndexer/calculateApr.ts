@@ -3,7 +3,8 @@ import { DISTRIBUTION_SCHEDULES, Schedules } from "../../data/distributionSchedu
 import { ScheduleType } from "../../types/contracts";
 
 interface CalculateApr {
-  factoryContract: string;
+  factoryContract?: string;
+  schedules?: Schedules;
   totalValueLocked: number;
   tokenPrice: number;
   decimals?: number;
@@ -39,7 +40,7 @@ export const calculateThirdPartyApr = ({
   decimals = 6,
   latestBlock,
 }: CalculateApr): number => {
-  const schedules = DISTRIBUTION_SCHEDULES.get(factoryContract);
+  const schedules = DISTRIBUTION_SCHEDULES.get(factoryContract as string);
   const schedule = getSchedule(schedules, latestBlock);
 
   if (!schedule) return 0;
@@ -49,5 +50,21 @@ export const calculateThirdPartyApr = ({
   const tokensPerTime = parseInt(totalEmmision) / (end - start);
   const totalTokensPerYear = (multiplyBy * tokensPerTime) / 10 ** decimals;
 
+  return (totalTokensPerYear * tokenPrice) / totalValueLocked;
+};
+
+export const calculateThirdPartyAprV2 = ({
+  schedules,
+  totalValueLocked,
+  tokenPrice,
+  decimals = 6,
+  latestBlock,
+}: CalculateApr): number => {
+  const schedule = getSchedule(schedules, latestBlock);
+  if (!schedule) return 0;
+  const [start, end, totalEmmision] = schedule;
+  const multiplyBy = schedules?.type === ScheduleType.UnixTime ? SECONDS_PER_YEAR : BLOCKS_PER_YEAR;
+  const tokensPerTime = parseInt(totalEmmision) / (end - start);
+  const totalTokensPerYear = (multiplyBy * tokensPerTime) / 10 ** decimals;
   return (totalTokensPerYear * tokenPrice) / totalValueLocked;
 };
