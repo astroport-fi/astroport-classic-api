@@ -1,8 +1,8 @@
 import "dotenv/config";
 import "dayjs";
 import mongoose from "mongoose";
-import { initHive } from "../src/lib/terra";
-import { MONGODB_URL, TERRA_HIVE, TERRA_MANTLE } from "../src/constants";
+import { initHive, initLCD } from "../src/lib/terra";
+import { MONGODB_URL, TERRA_CHAIN_ID, TERRA_HIVE, TERRA_LCD } from "../src/constants";
 
 //setup any configuration that run before or after all tests
 
@@ -16,5 +16,6 @@ export const mochaHooks = {
   async beforeEach(): Promise<void> {
     await mongoose.connect(MONGODB_URL);
     await initHive(TERRA_HIVE);
+    await initLCD(TERRA_LCD, TERRA_CHAIN_ID);
   },
 };
