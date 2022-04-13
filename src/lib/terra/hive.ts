@@ -1,7 +1,7 @@
 import { gql, GraphQLClient } from "graphql-request";
 import { PriceV2 } from "../../types/priceV2.type";
 import { GOVERNANCE_ASSEMBLY, TOKENS_WITH_8_DIGITS, GENERATOR_ADDRESS } from "../../constants";
-import { PoolInfo } from "../../types/hive.type";
+import { PoolInfo, TokenInfo } from "../../types/hive.type";
 
 export let hive: GraphQLClient;
 
@@ -73,7 +73,7 @@ export const getProposals = async (contract: string, limit = 100, offset = 0): P
   }
 };
 
-export async function getTokenInfo(tokenAddr: string) {
+export async function getTokenInfo(tokenAddr: string): Promise<TokenInfo | null> {
   try {
     const response = await hive.request(
       gql`
@@ -86,7 +86,7 @@ export async function getTokenInfo(tokenAddr: string) {
       { tokenAddr }
     );
 
-    return response.wasm.contractQuery;
+    return { ...response.wasm.contractQuery, address: tokenAddr };
   } catch (e) {
     return null;
   }

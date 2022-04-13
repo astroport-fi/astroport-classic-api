@@ -272,8 +272,7 @@ export const typeDefs = /* GraphQL */ `
     stats: AstroportStats
     pool(address: String!): Pool
     pools(
-      poolAddress: String
-      tokenName: String
+      search: String
       sortField: PoolSortFields
       sortDirection: SortDirections
       offset: Int
