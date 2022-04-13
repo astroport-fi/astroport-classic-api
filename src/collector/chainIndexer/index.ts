@@ -68,23 +68,6 @@ export async function runIndexers(
           } catch (e) {
             console.log("Error during findXAstroFees: " + e);
           }
-
-          try {
-            // swaps from tx history
-            const swapLogFinder = createSwapLogFinder(pairMap);
-            const swapLogFound = swapLogFinder(event);
-
-            if (!swapLogFound) {
-              return;
-            }
-
-            // transform, sum, add volume to pool_volume
-            if (swapLogFound.length > 0) {
-              await TxHistoryIndexer(height, priceMap, swapLogFound);
-            }
-          } catch (e) {
-            console.log("Error during finding swaps/volume: " + e);
-          }
         }
       }
     }
