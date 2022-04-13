@@ -24,9 +24,8 @@ export async function TxHistoryIndexer(
       if (transformed.action === "swap") {
         // get UST value of swap (from asset)
         const val: number = getUSTSwapValue(transformed, priceMap);
-        console.log()
+
         poolVolumeMap.set(transformed.pair, (poolVolumeMap.get(transformed.pair) || 0) + val)
-        console.log()
       }
     }
   }

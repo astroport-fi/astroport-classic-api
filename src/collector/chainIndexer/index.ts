@@ -18,9 +18,7 @@ import { voteIndexer } from "./voteIndexer";
  */
 export async function runIndexers(
   txs: any,
-  height: number,
-  pairMap: Map<string, Pair>,
-  priceMap: Map<string, PriceV2>
+  height: number
 ): Promise<void> {
   for (const tx of txs) {
     const Logs = tx.logs;

@@ -36,7 +36,7 @@ export async function chainCollect(
       return;
     }
 
-    await runIndexers(block, height, pairMap, priceMap);
+    await runIndexers(block, height);
     await runSwapIndexer(block, height, pairMap, priceMap);
 
     await updateBlock(TERRA_CHAIN_ID, { hiveHeight: height });
