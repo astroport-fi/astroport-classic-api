@@ -29,7 +29,7 @@ export const generateScheduleType = (schedules: Schedules["values"] = []): Sched
 /**
  * Formats all contract emmision schedules to a standardized format
  *
- * @param distributionSchedule token emmision schdeles
+ * @param distributionSchedule token emmision schedules
  * @param rewardConfig configuration from contract query
  * @returns schedule in format [[number, number, string]]
  */
