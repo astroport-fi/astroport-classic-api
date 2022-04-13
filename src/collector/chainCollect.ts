@@ -6,6 +6,7 @@ import { getBlock, updateBlock } from "../services";
 import { Pair } from "../types";
 import { runIndexers } from "./chainIndexer";
 import { PriceV2 } from "../types/priceV2.type";
+import { runSwapIndexer } from "./chainIndexer/swapIndex";
 
 dayjs.extend(utc);
 
@@ -35,7 +36,8 @@ export async function chainCollect(
       return;
     }
 
-    await runIndexers(block, height, pairMap, priceMap);
+    await runIndexers(block, height);
+    await runSwapIndexer(block, height, pairMap, priceMap);
 
     await updateBlock(TERRA_CHAIN_ID, { hiveHeight: height });
 

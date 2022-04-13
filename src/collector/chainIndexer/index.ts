@@ -18,9 +18,7 @@ import { voteIndexer } from "./voteIndexer";
  */
 export async function runIndexers(
   txs: any,
-  height: number,
-  pairMap: Map<string, Pair>,
-  priceMap: Map<string, PriceV2>
+  height: number
 ): Promise<void> {
   for (const tx of txs) {
     const Logs = tx.logs;
@@ -67,23 +65,6 @@ export async function runIndexers(
             await findXAstroFees(event, height);
           } catch (e) {
             console.log("Error during findXAstroFees: " + e);
-          }
-
-          try {
-            // swaps from tx history
-            const swapLogFinder = createSwapLogFinder(pairMap);
-            const swapLogFound = swapLogFinder(event);
-
-            if (!swapLogFound) {
-              return;
-            }
-
-            // transform, sum, add volume to pool_volume
-            if (swapLogFound.length > 0) {
-              await TxHistoryIndexer(height, priceMap, swapLogFound);
-            }
-          } catch (e) {
-            console.log("Error during finding swaps/volume: " + e);
           }
         }
       }
