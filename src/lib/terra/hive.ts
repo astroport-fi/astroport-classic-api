@@ -180,22 +180,26 @@ export async function getChainBlock(height: number): Promise<{
   };
 }
 
-export async function getContractStore<T>(address: string, query: JSON): Promise<T | undefined> {
-  const response = await hive.request(
-    gql`
-      query ($address: String!, $query: JSON!) {
-        wasm {
-          contractQuery(contractAddress: $address, query: $query)
+export async function getContractStore<T>(address: string, query: JSON): Promise<T | null> {
+  try {
+    const response = await hive.request(
+      gql`
+        query ($address: String!, $query: JSON!) {
+          wasm {
+            contractQuery(contractAddress: $address, query: $query)
+          }
         }
+      `,
+      {
+        address,
+        query,
       }
-    `,
-    {
-      address,
-      query,
-    }
-  );
+    );
 
-  return response.wasm.contractQuery;
+    return response.wasm.contractQuery;
+  } catch (e) {
+    return null;
+  }
 }
 
 // return pair liquidity in UST for a pair

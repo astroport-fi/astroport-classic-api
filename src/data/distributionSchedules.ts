@@ -1,11 +1,5 @@
 import { StakingContract, ScheduleType } from "../types/contracts";
 
-/**
- * most schedules have blocks, in the case we g
- * ad as the forth entry to schedule array
- * can be and array of [block, block, total] or total]
- */
-
 export type Schedules = {
   type: ScheduleType;
   values: [number, number, string][];

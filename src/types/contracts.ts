@@ -35,3 +35,8 @@ export enum ScheduleType {
   UnixTime = "unix",
   Block = "block",
 }
+
+export type Schedules = {
+  type: ScheduleType;
+  values: [number, number, string][];
+};
