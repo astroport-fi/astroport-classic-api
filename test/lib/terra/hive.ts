@@ -54,74 +54,88 @@ describe("Hive", function () {
 
   it("fetches config from generator contract", async () => {
     const config = await getContractConfig(GENERATOR_ADDRESS as string);
+    const totalAllocPoint = config.total_alloc_point;
     const rewardProxyAddresses: string[] = config.allowed_reward_proxies;
+    const vestingContract = config.vesting_contract;
+
+    const vestingSchedule: any = await getContractStore(
+      vestingContract,
+      JSON.parse('{"vesting_accounts": { }}')
+    );
+
+    console.log("total Alloc point", totalAllocPoint);
+
+    console.log(
+      "vesting schedule",
+      vestingSchedule.vesting_accounts.find(() => true)?.info.schedules
+    );
 
     const entries = [];
     const failedEntries = [];
 
-    for (const address of rewardProxyAddresses) {
-      const addressConfig = await getContractConfig(address);
-      const poolInfo: any = await getGeneratorPoolInfo(addressConfig.lp_token_addr);
-      let rewardConfig = await getContractConfig(addressConfig.reward_contract_addr);
-      let dist = null;
+    // for (const address of rewardProxyAddresses) {
+    //   const addressConfig = await getContractConfig(address);
+    //   const poolInfo: any = await getGeneratorPoolInfo(addressConfig.lp_token_addr);
+    //   let rewardConfig = await getContractConfig(addressConfig.reward_contract_addr);
+    //   let dist = null;
 
-      if (!rewardConfig) {
-        rewardConfig = await getContractStore(
-          addressConfig.reward_contract_addr,
-          JSON.parse('{"get_config": { }}')
-        );
-      }
+    //   if (!rewardConfig) {
+    //     rewardConfig = await getContractStore(
+    //       addressConfig.reward_contract_addr,
+    //       JSON.parse('{"get_config": { }}')
+    //     );
+    //   }
 
-      if (!rewardConfig?.distribution_schedule) {
-        //TODO temporary values for mars token
-        if (rewardConfig?.mars_token) {
-          dist = [[1646650800, 1678186800, "10000000000000"]];
-          //TODO temporary values for mirror token
-        } else if (Object.keys(rewardConfig).includes("mirror_token")) {
-          dist = [
-            [21600, 31557600, "20587500000000"],
-            [31557600, 63093600, "10293700000000"],
-            [63093600, 94629600, "5146800000000"],
-            [94629600, 126165600, "2573400000000"],
-          ];
-        } else {
-          failedEntries.push({
-            reward_contract_addr: addressConfig.reward_contract_addr,
-            ...rewardConfig,
-          });
-        }
-      } else {
-        const singleSchedule = rewardConfig?.distribution_schedule.find(() => true);
-        if (Array.isArray(singleSchedule)) {
-          dist = rewardConfig?.distribution_schedule;
-        } else if (singleSchedule?.start_time) {
-          dist = rewardConfig?.distribution_schedule.map((i: any) => [
-            i.start_time,
-            i.end_time,
-            i.amount,
-          ]);
-        }
-      }
+    //   if (!rewardConfig?.distribution_schedule) {
+    //     //TODO temporary values for mars token
+    //     if (rewardConfig?.mars_token) {
+    //       dist = [[1646650800, 1678186800, "10000000000000"]];
+    //       //TODO temporary values for mirror token
+    //     } else if (Object.keys(rewardConfig).includes("mirror_token")) {
+    //       dist = [
+    //         [21600, 31557600, "20587500000000"],
+    //         [31557600, 63093600, "10293700000000"],
+    //         [63093600, 94629600, "5146800000000"],
+    //         [94629600, 126165600, "2573400000000"],
+    //       ];
+    //     } else {
+    //       failedEntries.push({
+    //         reward_contract_addr: addressConfig.reward_contract_addr,
+    //         ...rewardConfig,
+    //       });
+    //     }
+    //   } else {
+    //     const singleSchedule = rewardConfig?.distribution_schedule.find(() => true);
+    //     if (Array.isArray(singleSchedule)) {
+    //       dist = rewardConfig?.distribution_schedule;
+    //     } else if (singleSchedule?.start_time) {
+    //       dist = rewardConfig?.distribution_schedule.map((i: any) => [
+    //         i.start_time,
+    //         i.end_time,
+    //         i.amount,
+    //       ]);
+    //     }
+    //   }
 
-      const rewardTokenInfo: any = {
-        factory: addressConfig.reward_contract_addr, //reward_contract_addr
-        proxy: address, // proxy address
-        pool: addressConfig.pair_addr, //pair_addr
-        token: addressConfig.reward_token_addr, //reward_token_addr
-        lpToken: addressConfig.lp_token_addr, //lp_token_addr
-        pending_astro_rewards: parseInt(poolInfo.pending_astro_rewards),
-        alloc_point: parseInt(poolInfo.alloc_point),
-        yearly_astro_emmissions: poolInfo.alloc_point * 1000,
-        distribution_schedule: dist,
-      };
-      entries.push(rewardTokenInfo);
-    }
+    //   const rewardTokenInfo: any = {
+    //     factory: addressConfig.reward_contract_addr, //reward_contract_addr
+    //     proxy: address, // proxy address
+    //     pool: addressConfig.pair_addr, //pair_addr
+    //     token: addressConfig.reward_token_addr, //reward_token_addr
+    //     lpToken: addressConfig.lp_token_addr, //lp_token_addr
+    //     pending_astro_rewards: parseInt(poolInfo.pending_astro_rewards),
+    //     alloc_point: parseInt(poolInfo.alloc_point),
+    //     yearly_astro_emmissions: poolInfo.alloc_point * 1000,
+    //     distribution_schedule: dist,
+    //   };
+    //   entries.push(rewardTokenInfo);
+    // }
 
-    const total = entries.reduce((acc, entry) => acc + entry.alloc_point, 0);
-    console.log("Total alloc points", total);
+    // const total = entries.reduce((acc, entry) => acc + entry.alloc_point, 0);
+    // console.log("Total alloc points", total);
 
-    await fs.writeFileSync("myjsonfile.json", JSON.stringify(entries), "utf8");
-    await fs.writeFileSync("myjsonfileFailed.json", JSON.stringify(failedEntries), "utf8");
-    console.log("########DONE");
+    // await fs.writeFileSync("myjsonfile.json", JSON.stringify(entries), "utf8");
+    // await fs.writeFileSync("myjsonfileFailed.json", JSON.stringify(failedEntries), "utf8");
+    // console.log("########DONE");
   });
 });
