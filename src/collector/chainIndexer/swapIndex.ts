@@ -63,7 +63,6 @@ export async function runSwapIndexer(
   const dbOps: Promise<any>[] = []
 
   poolVolumeMap.forEach((volume: number, pool: string) => {
-    console.log(pool, volume)
     dbOps.push(
       PoolVolume.create({
         poolAddress: pool,
@@ -71,7 +70,6 @@ export async function runSwapIndexer(
         volume: volume
       })
     )
-    console.log()
   })
 
   await Promise.all(dbOps)
