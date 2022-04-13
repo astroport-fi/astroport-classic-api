@@ -23,4 +23,18 @@ describe("services/pool.service", function () {
     expect(volumeArr[0]).to.be.greaterThan(volumeArr[1]);
     expect(volumeArr[1]).to.be.greaterThan(volumeArr[2]);
   });
+
+  it("checks whether search term is address, searches by pool adress", async () => {
+    const orneUstPoolAddress = "terra13yftwgefkggq3u627gphq98s6ufwh9u85h5kmg";
+    const pools = await getPools({ search: orneUstPoolAddress });
+    const orneUstPool = pools.find(() => true);
+    expect(pools).to.have.lengthOf(1);
+    expect(orneUstPool?.pool_address).to.be.eq(orneUstPoolAddress);
+  });
+
+  it("serches for pools containing any token with sol", async () => {
+    const pools = await getPools({ search: "sol" });
+    //TOD add more checks
+    expect(pools.length).to.be.greaterThan(1);
+  });
 });
