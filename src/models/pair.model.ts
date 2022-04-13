@@ -38,6 +38,11 @@ const pairSchema: Schema<PairDocument> = new Schema(
       trim: true,
       default: false,
     },
+    description: {
+      type: Schema.Types.String,
+      required: false,
+      trim: true,
+    },
   },
   {
     timestamps: true,

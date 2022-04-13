@@ -11,7 +11,7 @@ import {
   GENERATOR_PROXY_CONTRACTS,
   PAIRS_WHITELIST,
   POOLS_WITH_8_DIGIT_REWARD_TOKENS,
-  TOKEN_ADDRESS_MAP
+  TOKEN_ADDRESS_MAP,
 } from "../constants";
 import { insertPoolTimeseries } from "../services/pool_timeseries.service";
 import { PoolTimeseries } from "../models/pool_timeseries.model";
@@ -96,6 +96,7 @@ export async function poolCollect(): Promise<void> {
     result.metadata.pool_liquidity = pool_liquidity;
     result.metadata.day_volume_ust = dayVolume;
     result.metadata.week_volume_ust = weekVolume;
+    result.metadata.pool_description = pair.description;
 
     result.metadata.prices = {
       token1_address: pair.token1,
@@ -116,8 +117,8 @@ export async function poolCollect(): Promise<void> {
     result.metadata.fees.trading.apy =
       Math.pow(1 + (trading_fee_perc * dayVolume) / pool_liquidity, 365) - 1;
 
-    if(result.metadata.fees.trading.apy == Infinity) {
-      result.metadata.fees.trading.apy = 0
+    if (result.metadata.fees.trading.apy == Infinity) {
+      result.metadata.fees.trading.apy = 0;
     }
 
     let astro_yearly_emission = ASTRO_YEARLY_EMISSIONS.get(pair.contractAddr) ?? 0;
@@ -220,7 +221,7 @@ export async function poolCollect(): Promise<void> {
       result.metadata.fees.native.apr;
 
     // TODO delete total APY in next release
-    if (Math.pow(1 + (result.metadata.fees.total.apr / 365) / pool_liquidity, 365) - 1 != Infinity) {
+    if (Math.pow(1 + result.metadata.fees.total.apr / 365 / pool_liquidity, 365) - 1 != Infinity) {
       result.metadata.fees.total.apy =
         Math.pow(1 + result.metadata.fees.total.apr / 365 / pool_liquidity, 365) - 1;
     } else {

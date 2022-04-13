@@ -13,17 +13,27 @@ export async function getPool(address: string): Promise<any> {
   return transformPoolModelToPoolType(pool);
 }
 
+const isValidAddress = (address: string): boolean => {
+  // check the string format:
+  // - starts with "terra1"
+  // - length == 44 ("terra1" + 38)
+  // - contains only numbers and lower case letters
+  return /(terra1[a-z0-9]{38})/g.test(address);
+};
+
 export async function getPools({
-  tokenName,
-  poolAddress,
+  search,
   limit = 50,
   offset = 0,
   sortField = PoolSortFields.VOLUME,
   sortDirection = SortDirections.DESC,
 }: GetPools): Promise<PoolType[]> {
   const filter = {
-    ...(poolAddress && { "metadata.pool_address": poolAddress }),
-    ...(tokenName && { "metadata.token_symbol": tokenName }),
+    ...(search && isValidAddress(search)
+      ? {
+          "metadata.pool_address": search,
+        }
+      : search && { "metadata.pool_description": { $regex: search, $options: "i" } }),
   };
 
   const direction = sortDirection === SortDirections.DESC ? "-" : "";

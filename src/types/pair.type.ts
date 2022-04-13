@@ -7,4 +7,5 @@ export type Pair = {
   deregistered: boolean;
   alloc_point: number;
   reward_proxy_address: string;
+  description: string;
 };
