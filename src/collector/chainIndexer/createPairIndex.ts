@@ -11,7 +11,7 @@ export const generateDescription = async (
   address1: string,
   address2: string
 ): Promise<string> => {
-  // check in db mostly for native assets.
+  // check in db for native assets.
   if (!token1) {
     token1 = await Token.findOne({ tokenAddr: address1 });
   }
@@ -19,9 +19,11 @@ export const generateDescription = async (
     token2 = await Token.findOne({ tokenAddr: address2 });
   }
 
-  return `${token1?.name || ""} - ${token2?.name || ""} , ${token1?.symbol || ""} - ${
+  const description = `${token1?.name || ""} - ${token2?.name || ""} ,  ${token1?.symbol || ""} - ${
     token2?.symbol || ""
   }`;
+
+  return `${description} , ${description.toLowerCase()}`;
 };
 
 export async function createPairIndexer(

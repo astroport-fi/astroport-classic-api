@@ -33,9 +33,7 @@ export async function getPools({
       ? {
           "metadata.pool_address": search,
         }
-      : search && {
-          $text: { $search: search },
-        }),
+      : search && { "metadata.pool_description": { $regex: search, $options: "i" } }),
   };
 
   const direction = sortDirection === SortDirections.DESC ? "-" : "";

@@ -32,9 +32,19 @@ describe("services/pool.service", function () {
     expect(orneUstPool?.pool_address).to.be.eq(orneUstPoolAddress);
   });
 
-  it("serches for pools containing any token with sol", async () => {
+  it("searches for pools containing any token with sol", async () => {
     const pools = await getPools({ search: "sol" });
     //TOD add more checks
+    expect(pools.length).to.be.greaterThan(1);
+  });
+
+  it("searches for pools containing any token with eth", async () => {
+    const pools = await getPools({ search: "eth" });
+    expect(pools.length).to.be.greaterThan(1);
+  });
+
+  it("searches for pools containing any token with psi", async () => {
+    const pools = await getPools({ search: "psi" });
     expect(pools.length).to.be.greaterThan(1);
   });
 });
