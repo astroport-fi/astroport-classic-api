@@ -1,18 +1,9 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import { getLastHeight } from "../services";
-import {
-  ASTRO_TOKEN,
-  BLOCKS_PER_YEAR,
-  TERRA_CHAIN_ID,
-  TOKENS_WITH_8_DIGITS,
-  XASTRO_STAKING_ADDRESS,
-} from "../constants";
+import { TOKENS_WITH_8_DIGITS } from "../constants";
 import { xAstroFee } from "../models/xastro_fee.model";
 import { PriceV2 } from "../types/priceV2.type";
-import { getContractStore, getLatestBlock } from "../lib/terra";
-import { xAstroFeeStat } from "../models/xastro_fee_stat.model";
-import { xAstroFeeStatHistory } from "../models/xastro_fee_stat_history.model";
+import { getLatestBlock } from "../lib/terra";
 import { xAstroFeeStatMonth } from "../models/xastro_fee_stat_month.model";
 
 dayjs.extend(utc);
@@ -34,7 +25,7 @@ export async function aggregateXAstroFeesMonthly(priceMap: Map<string, PriceV2>)
     (dayjs.utc().unix() - dayjs.utc().startOf("month").unix()) / 6
   );
 
-  // get block height 30 days ago
+  // get block height at start of month
   const startBlockHeight = latestHeight - blocksSinceMonthStart;
 
   // sum up the xastro_fees for this month
@@ -69,6 +60,7 @@ export async function aggregateXAstroFeesMonthly(priceMap: Map<string, PriceV2>)
   const currentYearMonthDate = dayjs.utc().format("YYYY-MM");
   const previousYearMonthDate = dayjs.utc().subtract(1, "month").format("YYYY-MM");
 
+  // If we don't have a previous month, we set the change percent to 0
   let month_change = 0;
   const previousMonth = await xAstroFeeStatMonth.findOne({
     month: previousYearMonthDate,

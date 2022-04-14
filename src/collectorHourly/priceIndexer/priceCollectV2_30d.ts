@@ -1,13 +1,13 @@
 import { Pair } from "../../types";
-import { PriceGraphNode } from "./price_graph_node";
 import { getBlock } from "../../services";
 import { BLOCKS_PER_DAY } from "../../constants";
 import { PriceV2_30d } from "../../models/price_v2_30d.model";
-import { indexPrices } from "./priceCollectV2";
+import { indexPrices } from "../../collector/priceIndexer/priceCollectV2";
+import { PriceGraphNode } from "../../collector/priceIndexer/price_graph_node";
 
 /**
  * priceCollectV230d collects historic (specifically 30 days ago)
- * prices for all tokens in current pairs
+ * prices via indexPrices
  *
  * @returns
  */
