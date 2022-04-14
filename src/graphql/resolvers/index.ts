@@ -18,6 +18,11 @@ import { getSnapshots } from "../../services/snapshot.service";
 import { Pool } from "../../types/pool.type";
 import { getVotingPower } from "../../services/user.service";
 import { User } from "../../types/user.type";
+import { parseResolveInfo } from "../../lib/graphql-parse-resolve-info";
+import { getTokenHolding, hive } from "../../lib/terra";
+import { Token } from "../../models";
+import { add, isNative } from "lodash";
+import { isIBCToken } from "../../modules/terra";
 
 export const resolvers = {
   JSON: GraphQLJSON,
@@ -83,13 +88,45 @@ export const resolvers = {
       const votes = await getVotes(proposal_id, choice, limit, offset);
       return votes;
     },
-    user: async (_: any, { address }: any) => {
-      const voting_power = await getVotingPower(address);
-
+    user: async (_: any, { address }: any, ctx: any, resolveInfo: any) => {
       const user: User = {
         address,
-        voting_power,
       };
+
+      // parseResolveInfo helps us determine which fields were requested
+      // and aids in skipping long-running fields if not requested
+      const resolvedInfo: any = parseResolveInfo(resolveInfo);
+      if (!resolvedInfo) {
+        // Unable to parse the query
+        return user;
+      }
+
+      // Was voting power requested?
+      if (resolvedInfo.fieldsByTypeName.User.voting_power) {
+        const voting_power = await getVotingPower(address);
+        user.voting_power = voting_power;
+      }
+
+      // Was tokens requested?
+      if (resolvedInfo.fieldsByTypeName.User.tokens) {
+        // Get all tokens we have indexed which is any token a pair was created for
+        const capturedTokens = await getTokens();
+
+        // TODO: Batch these holdings requests
+        for (const capturedToken of capturedTokens) {
+          if (isNative(capturedToken.tokenAddr)) {
+            // TODO Get Native holdings
+          } else if (isIBCToken(capturedToken.tokenAddr)) {
+            // TODO Get IBC holdings
+          } else {
+            // TODO Get CW20 holdings
+          }
+        }
+
+        // Get wallet values for each token
+
+        // // Get prices for tokens that are non-zero
+      }
 
       return user;
     },
