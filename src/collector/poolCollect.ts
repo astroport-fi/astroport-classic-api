@@ -186,7 +186,7 @@ export async function poolCollect(): Promise<void> {
     if (isNaN(nativeTokenPrice)) {
       nativeTokenPrice = 0;
     }
-    result.metadata.fees.native.day = nativeApr / 365; // 24 hour fee amount, not rate
+    result.metadata.fees.native.day = nativeApr * pool_liquidity / 365; // 24 hour fee amount, not rate
 
     // note: can overflow to Infinity
     if (
