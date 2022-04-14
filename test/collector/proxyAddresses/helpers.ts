@@ -60,11 +60,11 @@ describe("get proxyAddresses helpers", function () {
     expect(schedules[0][2]).to.be.a("string");
   });
 
-  // it("gets reward proxy infos", async () => {
-  //   const start = Date.now();
-  //   const address = await getProxyAddressesInfo();
-  //   console.log(address);
-  //   const duration = Date.now() - start;
-  //   console.log(duration);
-  // });
+  it("gets reward proxy infos", async () => {
+    const start = Date.now();
+    const address = await getProxyAddressesInfo();
+    console.log(address);
+    const duration = Date.now() - start;
+    console.log(duration);
+  });
 });

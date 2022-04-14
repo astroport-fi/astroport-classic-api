@@ -20,22 +20,22 @@ interface TokenInfo {
  * Gets all proxy addresses from generator contract
  * Gets reward information. and values required to calculate apr.
  *
- * @returns schedule in format [[number, number, string]]
+ * @returns a map with pairAddress -> TokenInformation
  */
 export const getProxyAddressesInfo = async (): Promise<Map<string, TokenInfo>> => {
   const config = await getContractConfig(GENERATOR_ADDRESS as string);
-  const totalAllocPoint = config.total_alloc_point;
-  const rewardProxyAddresses: string[] = config.allowed_reward_proxies;
+  const totalAllocPoint = config?.total_alloc_point;
+  const rewardProxyAddresses: string[] = config?.allowed_reward_proxies;
   // const vestingContract = config.vesting_contract;
-  const tokensPerBlock = config.tokens_per_block;
+  const tokensPerBlock = config?.tokens_per_block;
   const totalTokensPerYear = (tokensPerBlock * BLOCKS_PER_YEAR) / 10 ** 6;
 
   const proxyAddressesInfo = new Map<string, TokenInfo>();
 
   for (const address of rewardProxyAddresses) {
     const addressConfig = await getContractConfig(address);
-    const poolInfo = await getGeneratorPoolInfo(addressConfig.lp_token_addr);
-    let rewardConfig = await getContractConfig(addressConfig.reward_contract_addr);
+    const poolInfo = await getGeneratorPoolInfo(addressConfig?.lp_token_addr);
+    let rewardConfig = await getContractConfig(addressConfig?.reward_contract_addr);
 
     const alloc_point = parseInt(poolInfo?.alloc_point || "0");
 

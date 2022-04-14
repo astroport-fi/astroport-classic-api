@@ -5,7 +5,7 @@ import { Schedules, ScheduleType } from "../../types/contracts";
  * Figures out what the distribution schedule is, can be block or unix time
  *
  * @param schedules token emmision schedules
- * @returns schedule type string: block or unix
+ * @returns schedule type string as "block" or "unix"
  */
 export const generateScheduleType = (schedules: Schedules["values"] = []): ScheduleType => {
   let type = ScheduleType.Block;
