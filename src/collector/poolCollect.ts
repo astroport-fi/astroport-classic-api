@@ -190,11 +190,10 @@ export async function poolCollect(): Promise<void> {
 
     // note: can overflow to Infinity
     if (
-      Math.pow(1 + (protocolRewards24h * nativeTokenPrice) / pool_liquidity, 365) - 1 !=
-      Infinity
+      Math.pow(1 + result.metadata.fees.native.day / pool_liquidity, 365) - 1 != Infinity
     ) {
       result.metadata.fees.native.apy =
-        Math.pow(1 + (protocolRewards24h * nativeTokenPrice) / pool_liquidity, 365) - 1;
+        Math.pow(1 + result.metadata.fees.native.day / pool_liquidity, 365) - 1;
     } else {
       result.metadata.fees.native.apy = 0;
     }
