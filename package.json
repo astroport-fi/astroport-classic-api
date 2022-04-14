@@ -16,7 +16,8 @@
     "database:init": "mongo --port 27050 tools/init-mongodb-rs.js",
     "eslint": "eslint --quiet --max-warnings 0 --ext .tsx --ext .ts --ext .js --ext .jsx .",
     "prettier": "prettier --list-different '**/*.{ts,tsx,js,jsx,json,css,md}'",
-    "test": "mocha --timeout 10000 -r ts-node/register test/**/*.ts",
+    "test": "mocha",
+    "test-watch": "mocha --watch",
     "typescript": "tsc --noEmit"
   },
   "dependencies": {

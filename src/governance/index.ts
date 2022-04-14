@@ -5,7 +5,7 @@ import {
   APIGatewayProxyResult,
 } from "aws-lambda";
 
-import { initHive, initLCD, initMantle } from "../lib/terra";
+import { initHive, initLCD } from "../lib/terra";
 import { connectToDatabase } from "../modules/db";
 import { governanceProposalCollect } from "./governanceProposalCollect";
 import { TERRA_HIVE } from "../constants";
@@ -23,7 +23,7 @@ export async function run(
   context.callbackWaitsForEmptyEventLoop = false;
 
   await connectToDatabase();
-  await initHive(TERRA_HIVE); // TODO change
+  await initHive(TERRA_HIVE);
 
   try {
     const start = new Date().getTime();

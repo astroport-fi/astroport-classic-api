@@ -232,6 +232,21 @@ export const typeDefs = /* GraphQL */ `
     txn: String
   }
 
+<<<<<<< HEAD
+=======
+  type VotingPower {
+    from_xastro: Float
+    from_builder: Float
+    from_vxastro: Float
+    total: Float
+  }
+
+  type User {
+    address: String!
+    voting_power: VotingPower
+  }
+
+>>>>>>> develop
   type Snapshot {
     block: Float
     pool: JSON
@@ -250,6 +265,7 @@ export const typeDefs = /* GraphQL */ `
   enum SortDirections {
     DESC
     ASC
+<<<<<<< HEAD
   }
   
   type PoolPrices {
@@ -442,6 +458,8 @@ export const typeDefs = /* GraphQL */ `
     stat: JSON
     supply: JSON
     xastro: JSON
+=======
+>>>>>>> develop
   }
 
   # The "Query" type lists all of the available queries that
@@ -452,8 +470,12 @@ export const typeDefs = /* GraphQL */ `
     stats: AstroportStats
     pool(address: String!): Pool
     pools(
+<<<<<<< HEAD
       poolAddress: String
       tokenName: String
+=======
+      search: String
+>>>>>>> develop
       sortField: PoolSortFields
       sortDirection: SortDirections
       offset: Int
@@ -467,5 +489,9 @@ export const typeDefs = /* GraphQL */ `
     staking: Staking
     tokens: [Token]
     votes(proposal_id: String!, choice: String, offset: Int, limit: Int): [Vote]
+<<<<<<< HEAD
+=======
+    user(address: String!): User
+>>>>>>> develop
   }
 `;

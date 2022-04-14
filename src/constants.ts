@@ -11,6 +11,8 @@ export const GENERATOR_ADDRESS = process.env.GENERATOR_ADDRESS;
 export const MAKER_FEE_COLLECTOR_SEED = process.env.MAKER_FEE_COLLECTOR_SEED as string;
 // trigger collect on this address
 export const MAKER_CONTRACT = process.env.MAKER_CONTRACT as string;
+// whether to notify slack when a fee swap happens
+export const ENABLE_FEE_SWAP_NOTIFICATION = process.env.ENABLE_FEE_SWAP_NOTIFICATION == "true";
 
 // governance
 // seed for wallet that triggers governance state transitions
@@ -24,6 +26,7 @@ export const GOV_VXASTRO = "terra1pqr02fx4ulc2mzws7xlqh8hpwqx2ls5m4fk62j" as str
 
 export const ASTRO_TOKEN = "terra1xj49zyqrwpv5k928jwfpfy2ha668nwdgkwlrg3" as string;
 export const XASTRO_TOKEN = "terra14lpnyzc9z4g3ugr4lhm8s4nle0tq8vcltkhzh7" as string;
+export const VXASTRO_TOKEN = null;
 
 export const BUILDER_UNLOCK = "terra1fh27l8h4s0tfx9ykqxq5efq4xx88f06x6clwmr" as string;
 export const MULTISIG = "terra1c7m6j8ya58a2fkkptn8fgudx8sqjqvc8azq0ex" as string;
@@ -431,4 +434,37 @@ export const PAIRS_WHITELIST = new Set<string>([
   "terra1r6fchdsr8k65082u3cyrdn6x2n8hrpyrp72je0", // pluna luna
   "terra1aa68js6yxavg9zzzle2zaynem9cstvmaj3xyu3", // yluna luna
   "terra1k8lvj3w7dxzd6zlyptcj086gfwms422xkqjmzx", // sayve ust
+  "terra1hlq6ye6km5sq2pcnmrvlf784gs9zygt0akwvsu", // kuji skuji
+  "terra170x0m3vmc7s5pdvpt5lh9n6wfmsz6wcykcr0vg", // Bro ust
+]);
+
+// TODO - This should be queried from each token's native chain in future
+/**
+ * IBC_DENOM_MAP maps the IBC denomination values to symbols
+ * These values are taken from ibcTransfer.denomTraces from LCD
+ */
+export const IBC_DENOM_MAP = new Map<string, any>([
+  ["cusdc", { symbol: "CUSDC", name: "Compound USD Coin" }],
+  ["cwbtc", { symbol: "CWBTC", name: "Compound Wrapped BTC" }],
+  ["gravity0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", { symbol: "gUSDC", name: "gUSDC" }],
+  ["inj", { symbol: "INJ", name: "INJ" }],
+  ["orai", { symbol: "ORAI", name: "Oraichain" }],
+  ["uakt", { symbol: "AKT", name: "Akash" }],
+  ["uatolo", { symbol: "ATOLO", name: "Rizon" }],
+  ["uatom", { symbol: "ATOM", name: "Cosmos" }],
+  ["uaxl", { symbol: "AXL", name: "AXL" }],
+  ["udvpn", { symbol: "DVPN", name: "Sentinel" }],
+  ["ugraviton", { symbol: "GRAV", name: "Graviton" }],
+  ["uhuahua", { symbol: "HUAHUA", name: "Chihuahu" }],
+  ["uiris", { symbol: "IRIS", name: "Iris" }],
+  ["ujuno", { symbol: "JUNO", name: "Juno" }],
+  ["ukava", { symbol: "KAVA", name: "Kava" }],
+  ["uluna", { symbol: "LUNA", name: "Luna" }],
+  ["uosmo", { symbol: "OSMO", name: "Osmosis" }],
+  ["uregen", { symbol: "REGEN", name: "Regen" }],
+  ["uscrt", { symbol: "SCRT", name: "Secret" }],
+  ["uumee", { symbol: "UMEE", name: "UMEE" }],
+  ["uusd", { symbol: "UST", name: "UST" }],
+  ["xrowan", { symbol: "ROWAN", name: "ROWAN" }],
+  ["xust", { symbol: "UST", name: "UST" }],
 ]);

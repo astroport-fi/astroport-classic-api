@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import { getContractAddressStore, getContractStore } from "../lib/terra";
+import { getContractStore } from "../lib/terra";
 import { insertSupply } from "../services";
 import {
   ASSEMBLY_TREASURY,
@@ -33,9 +33,9 @@ export async function supplyCollect(): Promise<void> {
   );
 
   // get vestingAddress
-  const vesting = await getContractAddressStore(
+  const vesting = await getContractStore(
     ASTRO_TOKEN,
-    '{"balance": { "address": "' + VESTING_ADDRESS + '" }}'
+    JSON.parse('{"balance": { "address": "' + VESTING_ADDRESS + '" }}')
   );
 
   // get treasury balance
@@ -46,9 +46,9 @@ export async function supplyCollect(): Promise<void> {
 
   // TODO generator contract - test when it has tokens
   // GENERATOR_ADDRESS
-  // const vesting = await getContractAddressStore(
+  // const vesting = await getContractStore(
   //   ASTRO_TOKEN,
-  //   '{"balance": { "address": "' + GENERATOR_ADDRESS + '" }}');
+  //   JSON.parse('{"balance": { "address": "' + GENERATOR_ADDRESS + '" }}'));
 
   // get astro pool balance
   const astroPool = await getContractStore(
@@ -58,7 +58,7 @@ export async function supplyCollect(): Promise<void> {
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  const circulatingSupply = (INITIAL_TOKEN_SUPPLY - multisigResponse?.balance - builderBalance?.balance - JSON.parse(vesting.Result)?.balance - treasury?.balance) /
+  const circulatingSupply = (INITIAL_TOKEN_SUPPLY - multisigResponse?.balance - builderBalance?.balance - vesting?.balance - treasury?.balance) /
     DIGITS;
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore

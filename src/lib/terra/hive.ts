@@ -1,7 +1,7 @@
 import { gql, GraphQLClient } from "graphql-request";
 import { PriceV2 } from "../../types/priceV2.type";
 import { GOVERNANCE_ASSEMBLY, TOKENS_WITH_8_DIGITS, GENERATOR_ADDRESS } from "../../constants";
-import { PoolInfo } from "../../types/hive.type";
+import { PoolInfo, TokenInfo } from "../../types/hive.type";
 
 export let hive: GraphQLClient;
 
@@ -69,12 +69,11 @@ export const getProposals = async (contract: string, limit = 100, offset = 0): P
 
     return response?.wasm?.contractQuery?.proposal_list;
   } catch (e) {
-    console.log(e)
     return [];
   }
 };
 
-export async function getTokenInfo(tokenAddr: string) {
+export async function getTokenInfo(tokenAddr: string): Promise<TokenInfo | null> {
   try {
     const response = await hive.request(
       gql`
@@ -87,7 +86,7 @@ export async function getTokenInfo(tokenAddr: string) {
       { tokenAddr }
     );
 
-    return response.wasm.contractQuery;
+    return { ...response.wasm.contractQuery, address: tokenAddr };
   } catch (e) {
     return null;
   }
@@ -462,5 +461,97 @@ export const getContractConfig = async (contract: string): Promise<any> => {
     return response?.wasm?.contractQuery;
   } catch (e) {
     return null;
+  }
+};
+
+/**
+ * Retrieve the current holding of a wallet for the given token
+ *
+ * @param tokenContract The address of the CW20 token
+ * @param walletAddress The address of the wallet
+ * @returns The current balance of tokenContract in walletAddress
+ */
+export const getTokenHolding = async (
+  tokenContract: string,
+  walletAddress: string
+): Promise<number> => {
+  try {
+    const response = await hive.request(
+      gql`
+        query ($tokenContract: String!, $walletAddress: String!) {
+          wasm {
+            contractQuery(
+              contractAddress: $tokenContract
+              query: { balance: { address: $walletAddress } }
+            )
+          }
+        }
+      `,
+      { tokenContract, walletAddress }
+    );
+    return +response?.wasm?.contractQuery.balance;
+  } catch (e) {
+    return 0;
+  }
+};
+
+/**
+ * Retrieve the current allocation for a given wallet
+ *
+ * @param walletAddress The address to retrieve the allocation for
+ * @returns The allocation information for the address
+ */
+export const getBuilderAllocationForWallet = async (
+  builderUnlockContact: string,
+  walletAddress: string
+): Promise<any> => {
+  try {
+    const response = await hive.request(
+      gql`
+        query ($builderUnlockContact: String!, $walletAddress: String!) {
+          wasm {
+            contractQuery(
+              contractAddress: $builderUnlockContact
+              query: { allocation: { account: $walletAddress } }
+>>>>>>> develop
+            )
+          }
+        }
+      `,
+      { builderUnlockContact, walletAddress }
+    );
+    return response?.wasm?.contractQuery;
+  } catch (e) {
+    return null;
+  }
+};
+
+/**
+ * Retrieve the current voting power from vxAstro for a user
+ *
+ * @param walletAddress The address to retrieve the voting power for
+ * @returns The voting power of the user
+ */
+export const getvxAstroVotingPower = async (
+  vxAstroContact: string,
+  walletAddress: string
+): Promise<number> => {
+  try {
+    const response = await hive.request(
+      gql`
+        query ($vxAstroContact: String!, $walletAddress: String!) {
+          wasm {
+            contractQuery(
+              contractAddress: $vxAstroContact
+              query: { user_voting_power: { user: $walletAddress } }
+            )
+          }
+        }
+      `,
+      { vxAstroContact, walletAddress }
+    );
+    return +response?.wasm?.contractQuery.voting_power;
+  } catch (e) {
+    return 0;
   }
 };

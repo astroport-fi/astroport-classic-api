@@ -52,6 +52,12 @@ const poolSchema: Schema = new Schema({
       required: false,
       trim: true,
     },
+    pool_description: {
+      type: Schema.Types.String,
+      required: true,
+      trim: true,
+      default: "",
+    },
     prices: {
       token1_address: {
         type: Schema.Types.String,

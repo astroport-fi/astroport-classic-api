@@ -1,6 +1,12 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import { GOV_BUILDER_UNLOCK, GOV_VXASTRO, GOV_XASTRO, GOVERNANCE_ASSEMBLY } from "../constants";
+import {
+  ENABLE_FEE_SWAP_NOTIFICATION,
+  GOV_BUILDER_UNLOCK,
+  GOV_VXASTRO,
+  GOV_XASTRO,
+  GOVERNANCE_ASSEMBLY,
+} from "../constants";
 import { Proposal } from "../models/proposal.model";
 import { getProposals, getTotalVotingPowerAt } from "../lib/terra";
 import { getProposals as getSavedProposals, saveProposals } from "../services/proposal.service";
@@ -22,6 +28,9 @@ const WEBHOOK_URL =
   "https://hooks.slack.com/services/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";
 
 export async function governanceProposalCollect(): Promise<void> {
+  console.log("ENABLE_FEE_SWAP_NOTIFICATION: " + ENABLE_FEE_SWAP_NOTIFICATION)
+  console.log(ENABLE_FEE_SWAP_NOTIFICATION == true)
+
   // get proposals from db
   const savedProposals = await getSavedProposals();
   const savedProposalMap = proposalListToMap(savedProposals);
@@ -74,13 +83,17 @@ export async function governanceProposalCollect(): Promise<void> {
       );
 
       new_proposals.push(proposal);
-      await notifySlack(
-        "*New on-chain governance proposal: #" + proposal.proposal_id + "*",
-        "https://apeboard.finance/dashboard/" + proposal.submitter,
-        proposal.title,
-        proposal.description,
-        proposal.link
-      );
+
+      // notify slack for mainnet
+      if(ENABLE_FEE_SWAP_NOTIFICATION) {
+        await notifySlack(
+          "*New on-chain governance proposal: #" + proposal.proposal_id + "*",
+          "https://apeboard.finance/dashboard/" + proposal.submitter,
+          proposal.title,
+          proposal.description,
+          proposal.link
+        );
+      }
     }
   }
 

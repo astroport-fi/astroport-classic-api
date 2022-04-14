@@ -5,9 +5,9 @@ import {
   APIGatewayProxyResult,
 } from "aws-lambda";
 
-import { initHive, initLCD, initMantle } from "../lib/terra";
+import { initHive, initLCD } from "../lib/terra";
 import { connectToDatabase } from "../modules/db";
-import { TERRA_CHAIN_ID, TERRA_HIVE, TERRA_LCD, TERRA_MANTLE } from "../constants";
+import { TERRA_CHAIN_ID, TERRA_HIVE, TERRA_LCD } from "../constants";
 import { heightCollect } from "./heightCollect";
 import { chainCollect } from "./chainCollect";
 import { supplyCollect } from "./supplyCollect";
@@ -32,7 +32,7 @@ export async function run(
 
   await connectToDatabase();
   await initHive(TERRA_HIVE);
-  await initMantle(TERRA_MANTLE);
+
   await initLCD(TERRA_LCD, TERRA_CHAIN_ID);
 
   // get pairs

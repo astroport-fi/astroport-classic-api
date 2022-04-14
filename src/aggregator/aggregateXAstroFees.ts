@@ -10,7 +10,7 @@ import {
 } from "../constants";
 import { xAstroFee } from "../models/xastro_fee.model";
 import { PriceV2 } from "../types/priceV2.type";
-import { getContractAddressStore, getLatestBlock } from "../lib/terra";
+import { getContractStore, getLatestBlock } from "../lib/terra";
 import { xAstroFeeStat } from "../models/xastro_fee_stat.model";
 import { xAstroFeeStatHistory } from "../models/xastro_fee_stat_history.model";
 
@@ -39,40 +39,39 @@ export async function aggregateXAstroFees(priceMap: Map<string, PriceV2>): Promi
   const astro_price = priceMap.get(ASTRO_TOKEN)?.price_ust as number;
 
   let _24h_fees_ust = 0;
-  let fees_with_no_price_count = 0
+  let fees_with_no_price_count = 0;
 
   for (const fee of day_of_fees) {
     const price = priceMap.get(fee.token)?.price_ust as number;
 
-    if(price != null) {
+    if (price != null) {
       let amount = fee.volume;
       // normalize amount
       if (TOKENS_WITH_8_DIGITS.has(fee.token)) {
         amount /= 100;
       }
 
-      amount /= 1000000
+      amount /= 1000000;
 
-      _24h_fees_ust += (price * amount);
+      _24h_fees_ust += price * amount;
     } else {
-      fees_with_no_price_count += 1
+      fees_with_no_price_count += 1;
     }
-
   }
 
-  console.log("Prices not found for " + fees_with_no_price_count + " fees")
+  console.log("Prices not found for " + fees_with_no_price_count + " fees");
 
   const total_astro_rewards = _24h_fees_ust / astro_price;
 
   // calculate apr, apy
-  let total_astro_staked = await getContractAddressStore(
+  let total_astro_staked = await getContractStore(
     ASTRO_TOKEN,
-    '{"balance": { "address": "' + XASTRO_STAKING_ADDRESS + '" }}'
+    JSON.parse('{"balance": { "address": "' + XASTRO_STAKING_ADDRESS + '" }}')
   );
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  total_astro_staked = JSON.parse(total_astro_staked?.Result)?.balance / 1000000;
+  total_astro_staked = total_astro_staked?.balance / 1000000;
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore

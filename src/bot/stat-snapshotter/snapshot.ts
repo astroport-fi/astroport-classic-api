@@ -7,7 +7,6 @@ import { getBlock, getPools, getSupply } from "../../services";
 import { TERRA_CHAIN_ID } from "../../constants";
 
 export async function snapshot(): Promise<void> {
-
   // get all info
   const height = await getBlock(TERRA_CHAIN_ID);
   const pool = await getPools({});

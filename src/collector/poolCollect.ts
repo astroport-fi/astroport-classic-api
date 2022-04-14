@@ -11,7 +11,7 @@ import {
   GENERATOR_PROXY_CONTRACTS,
   PAIRS_WHITELIST,
   POOLS_WITH_8_DIGIT_REWARD_TOKENS,
-  TOKEN_ADDRESS_MAP
+  TOKEN_ADDRESS_MAP,
 } from "../constants";
 import { insertPoolTimeseries } from "../services/pool_timeseries.service";
 import { PoolTimeseries } from "../models/pool_timeseries.model";
@@ -96,6 +96,7 @@ export async function poolCollect(): Promise<void> {
     result.metadata.pool_liquidity = pool_liquidity;
     result.metadata.day_volume_ust = dayVolume;
     result.metadata.week_volume_ust = weekVolume;
+    result.metadata.pool_description = pair.description;
 
     result.metadata.prices = {
       token1_address: pair.token1,
@@ -111,13 +112,10 @@ export async function poolCollect(): Promise<void> {
 
     // trading fees
     result.metadata.fees.trading.day = trading_fee_perc * dayVolume; // 24 hour fee amount, not rate
-    result.metadata.fees.trading.apr = (trading_fee_perc * dayVolume * 365) / pool_liquidity;
+    result.metadata.fees.trading.apy = (trading_fee_perc * dayVolume * 365) / pool_liquidity;
 
-    result.metadata.fees.trading.apy =
-      Math.pow(1 + (trading_fee_perc * dayVolume) / pool_liquidity, 365) - 1;
-
-    if(result.metadata.fees.trading.apy == Infinity) {
-      result.metadata.fees.trading.apy = 0
+    if (result.metadata.fees.trading.apy == Infinity) {
+      result.metadata.fees.trading.apy = 0;
     }
 
     let astro_yearly_emission = ASTRO_YEARLY_EMISSIONS.get(pair.contractAddr) ?? 0;
@@ -173,10 +171,6 @@ export async function poolCollect(): Promise<void> {
     } else {
       // no reward token listed - null
     }
-
-    if (isNaN(nativeTokenPrice)) {
-      nativeTokenPrice = 0;
-    }
     result.metadata.fees.native.day = protocolRewards24h * nativeTokenPrice; // 24 hour fee amount, not rate
 
     // estimate 3rd party rewards from distribution schedules
@@ -190,14 +184,17 @@ export async function poolCollect(): Promise<void> {
 
     result.metadata.fees.native.estimated_apr = nativeApr;
     result.metadata.fees.native.apr = nativeApr;
+    if (isNaN(nativeTokenPrice)) {
+      nativeTokenPrice = 0;
+    }
+    result.metadata.fees.native.day = nativeApr * pool_liquidity / 365; // 24 hour fee amount, not rate
 
     // note: can overflow to Infinity
     if (
-      Math.pow(1 + (protocolRewards24h * nativeTokenPrice) / pool_liquidity, 365) - 1 !=
-      Infinity
+      Math.pow(1 + result.metadata.fees.native.day / pool_liquidity, 365) - 1 != Infinity
     ) {
       result.metadata.fees.native.apy =
-        Math.pow(1 + (protocolRewards24h * nativeTokenPrice) / pool_liquidity, 365) - 1;
+        Math.pow(1 + result.metadata.fees.native.day / pool_liquidity, 365) - 1;
     } else {
       result.metadata.fees.native.apy = 0;
     }
@@ -218,14 +215,6 @@ export async function poolCollect(): Promise<void> {
       result.metadata.fees.trading.apy +
       result.metadata.fees.astro.apr +
       result.metadata.fees.native.apr;
-
-    // TODO delete total APY in next release
-    if (Math.pow(1 + (result.metadata.fees.total.apr / 365) / pool_liquidity, 365) - 1 != Infinity) {
-      result.metadata.fees.total.apy =
-        Math.pow(1 + result.metadata.fees.total.apr / 365 / pool_liquidity, 365) - 1;
-    } else {
-      result.metadata.fees.total.apy = 0;
-    }
 
     poolTimeseriesResult.push(result);
   }

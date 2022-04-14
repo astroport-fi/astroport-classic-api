@@ -16,6 +16,8 @@ import { getVotes } from "../../services/vote.service";
 import GraphQLJSON from "graphql-type-json";
 import { getSnapshots } from "../../services/snapshot.service";
 import { Pool } from "../../types/pool.type";
+import { getVotingPower } from "../../services/user.service";
+import { User } from "../../types/user.type";
 
 export const resolvers = {
   JSON: GraphQLJSON,
@@ -42,11 +44,10 @@ export const resolvers = {
     },
     pools: async (
       _: any,
-      { poolAddress, tokenSymbol, limit, offset, sortField, sortDirection }: any
+      { search, limit, offset, sortField, sortDirection }: any
     ): Promise<Pool[]> => {
       const pools = await getPools({
-        poolAddress,
-        tokenSymbol,
+        search,
         limit,
         offset,
         sortField,
@@ -77,6 +78,16 @@ export const resolvers = {
     tokens: async () => {
       const pools = await getTokens();
       return pools;
+    },
+    user: async (_: any, { address }: any) => {
+      const voting_power = await getVotingPower(address);
+
+      const user: User = {
+        address,
+        voting_power,
+      };
+
+      return user;
     },
     votes: async (_: any, { proposal_id, choice, limit, offset }: any) => {
       const votes = await getVotes(proposal_id, choice, limit, offset);
