@@ -60,6 +60,11 @@ const xAstroFeeStatSchema: Schema = new Schema(
       required: false,
       trim: true,
     },
+    _365d_fees_ust: {
+      type: Schema.Types.Number,
+      required: false,
+      trim: true,
+    },
   },
   {
     timestamps: true,

@@ -40,7 +40,7 @@ export async function aggregateXAstroFees30dChange(
   });
 
   let _previous_30d_fees_ust = 0;
-  let previous_fees_with_no_price_count = 0;
+  let fees_with_no_price_count = 0;
 
   for (const fee of previous_30d_of_fees) {
     const price = historicPriceMap.get(fee.token)?.price_ust as number;
@@ -56,11 +56,11 @@ export async function aggregateXAstroFees30dChange(
 
       _previous_30d_fees_ust += price * amount;
     } else {
-      previous_fees_with_no_price_count += 1;
+      fees_with_no_price_count += 1;
     }
   }
 
-  console.log("Prices not found for " + previous_fees_with_no_price_count + " fees (historic)");
+  console.log("Prices not found for " + fees_with_no_price_count + " fees (historic)");
 
   // Fetch current rolling 30 day fees
   const currentFees = await xAstroFeeStat.findOne();

@@ -32,7 +32,7 @@ export async function aggregateXAstroFees30d(priceMap: Map<string, PriceV2>): Pr
   const startBlockHeight = latestHeight - Math.floor(BLOCKS_PER_YEAR / 12);
 
   // sum up the last 30d of xastro_fees
-  const rolling_30d_of_fees = await xAstroFee.find({
+  const _30d_of_fees = await xAstroFee.find({
     block: { $gt: startBlockHeight, $lt: latestHeight },
   });
 
@@ -41,7 +41,7 @@ export async function aggregateXAstroFees30d(priceMap: Map<string, PriceV2>): Pr
   let _30d_fees_ust = 0;
   let fees_with_no_price_count = 0;
 
-  for (const fee of rolling_30d_of_fees) {
+  for (const fee of _30d_of_fees) {
     const price = priceMap.get(fee.token)?.price_ust as number;
 
     if (price != null) {

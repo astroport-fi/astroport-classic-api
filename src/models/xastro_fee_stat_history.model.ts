@@ -55,6 +55,11 @@ const xAstroFeeStatHistorySchema: Schema = new Schema(
       required: false,
       trim: true,
     },
+    _365d_fees_ust: {
+      type: Schema.Types.Number,
+      required: false,
+      trim: true,
+    },
     astro_price: {
       type: Schema.Types.Number,
       required: false,
