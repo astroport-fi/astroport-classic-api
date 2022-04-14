@@ -232,8 +232,6 @@ export const typeDefs = /* GraphQL */ `
     txn: String
   }
 
-<<<<<<< HEAD
-=======
   type VotingPower {
     from_xastro: Float
     from_builder: Float
@@ -246,7 +244,6 @@ export const typeDefs = /* GraphQL */ `
     voting_power: VotingPower
   }
 
->>>>>>> develop
   type Snapshot {
     block: Float
     pool: JSON
@@ -265,201 +262,6 @@ export const typeDefs = /* GraphQL */ `
   enum SortDirections {
     DESC
     ASC
-<<<<<<< HEAD
-  }
-  
-  type PoolPrices {
-    token1_address: String
-    token1_price_ust: Float
-    token2_address: String
-    token2_price_ust: Float
-  }
-  
-  type AstroportStats {
-    total_liquidity: Float
-    total_volume_24h: Float
-    astro_price: Float
-  }
-  
-  type Staking {
-    _24h_fees_ust: Float
-    _24h_apr: Float
-    _24h_apy: Float
-    block: Float
-  }
-  
-  type Block {
-    height: Float
-  }
-  
-  type Token {
-    tokenAddr: String
-    symbol: String
-    icon: String
-    decimals: Float
-  }
-
-  type PoolPrices {
-    token1_address: String
-    token1_price_ust: Float
-    token2_address: String
-    token2_price_ust: Float
-  }
-
-  type AstroportStats {
-    total_liquidity: Float
-    total_volume_24h: Float
-    astro_price: Float
-    updatedAt: DateTime
-  }
-
-  type Staking {
-    _24h_fees_ust: Float
-    _24h_apr: Float
-    _24h_apy: Float
-    block: Float
-    updatedAt: DateTime
-  }
-
-  type Block {
-    height: Float
-    updatedAt: DateTime
-  }
-
-  type Token {
-    tokenAddr: String
-    symbol: String
-    icon: String
-    name: String
-    decimals: Float
-  }
-
-  type Proposal {
-    proposal_id: Float
-    state: String
-    created: DateTime
-    active: DateTime
-    passed: DateTime
-    executed: DateTime
-    rejected: DateTime
-    expired: DateTime
-    start_timestamp: DateTime
-    end_timestamp: DateTime
-    start_block: Float
-    end_block: Float
-    votes_for: Float
-    votes_against: Float
-    votes_for_power: Float
-    votes_against_power: Float
-    total_voting_power: Float
-    title: String
-    description: String
-    link: String
-    messages: String
-    submitter: String
-    submitter_tokens_submitted: Float
-  }
-
-  type Vote {
-    voter: String
-    proposal_id: Float
-    vote: String
-    voting_power: Float
-    block: Float
-    txn: String
-  }
-  
-  type Snapshot {
-    block: Float
-    pool: JSON
-    price: JSON
-    stat: JSON
-    supply: JSON
-    xastro: JSON
-  }
-
-  type PoolPrices {
-    token1_address: String
-    token1_price_ust: Float
-    token2_address: String
-    token2_price_ust: Float
-  }
-
-  type AstroportStats {
-    total_liquidity: Float
-    total_volume_24h: Float
-    astro_price: Float
-    updatedAt: DateTime
-  }
-
-  type Staking {
-    _24h_fees_ust: Float
-    _24h_apr: Float
-    _24h_apy: Float
-    _7d_fees_ust: Float
-    _7d_apr: Float
-    _7d_apy: Float
-    block: Float
-    updatedAt: DateTime
-  }
-
-  type Block {
-    height: Float
-    updatedAt: DateTime
-  }
-
-  type Token {
-    tokenAddr: String
-    symbol: String
-    icon: String
-    name: String
-    decimals: Float
-  }
-
-  type Proposal {
-    proposal_id: Float
-    state: String
-    created: DateTime
-    active: DateTime
-    passed: DateTime
-    executed: DateTime
-    rejected: DateTime
-    expired: DateTime
-    start_timestamp: DateTime
-    end_timestamp: DateTime
-    start_block: Float
-    end_block: Float
-    votes_for: Float
-    votes_against: Float
-    votes_for_power: Float
-    votes_against_power: Float
-    total_voting_power: Float
-    title: String
-    description: String
-    link: String
-    messages: String
-    submitter: String
-    submitter_tokens_submitted: Float
-  }
-
-  type Vote {
-    voter: String
-    proposal_id: Float
-    vote: String
-    voting_power: Float
-    block: Float
-    txn: String
-  }
-  
-  type Snapshot {
-    block: Float
-    pool: JSON
-    price: JSON
-    stat: JSON
-    supply: JSON
-    xastro: JSON
-=======
->>>>>>> develop
   }
 
   # The "Query" type lists all of the available queries that
@@ -470,12 +272,7 @@ export const typeDefs = /* GraphQL */ `
     stats: AstroportStats
     pool(address: String!): Pool
     pools(
-<<<<<<< HEAD
-      poolAddress: String
-      tokenName: String
-=======
       search: String
->>>>>>> develop
       sortField: PoolSortFields
       sortDirection: SortDirections
       offset: Int
@@ -489,9 +286,6 @@ export const typeDefs = /* GraphQL */ `
     staking: Staking
     tokens: [Token]
     votes(proposal_id: String!, choice: String, offset: Int, limit: Int): [Vote]
-<<<<<<< HEAD
-=======
     user(address: String!): User
->>>>>>> develop
   }
 `;

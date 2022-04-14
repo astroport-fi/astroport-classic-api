@@ -513,7 +513,6 @@ export const getBuilderAllocationForWallet = async (
             contractQuery(
               contractAddress: $builderUnlockContact
               query: { allocation: { account: $walletAddress } }
->>>>>>> develop
             )
           }
         }
