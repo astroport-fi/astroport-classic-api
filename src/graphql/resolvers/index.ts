@@ -16,7 +16,7 @@ import { getVotes } from "../../services/vote.service";
 import GraphQLJSON from "graphql-type-json";
 import { getSnapshots } from "../../services/snapshot.service";
 import { Pool } from "../../types/pool.type";
-import { getVotingPower } from "../../services/user.service";
+import { getVotingPower, getBlunaUstRewards } from "../../services/user.service";
 import { User } from "../../types/user.type";
 
 export const resolvers = {
@@ -85,10 +85,14 @@ export const resolvers = {
     },
     user: async (_: any, { address }: any) => {
       const voting_power = await getVotingPower(address);
+      const bluna_ust_rewards = await getBlunaUstRewards(address);
 
       const user: User = {
         address,
         voting_power,
+        rewards: {
+          bluna_ust: bluna_ust_rewards,
+        },
       };
 
       return user;

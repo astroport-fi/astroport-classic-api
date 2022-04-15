@@ -242,6 +242,11 @@ export const typeDefs = /* GraphQL */ `
   type User {
     address: String!
     voting_power: VotingPower
+    rewards: Rewards
+  }
+
+  type Rewards {
+    bluna_ust: number
   }
 
   type Snapshot {
