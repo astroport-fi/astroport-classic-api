@@ -190,7 +190,13 @@ export const DISTRIBUTION_SCHEDULES = new Map<string, Schedules>([
   ],
   [
     StakingContract.wLDO_stLUNA,
-    { type: ScheduleType.Block, values: [[6868500, 7276000, "1000000000000"]] },
+    {
+      type: ScheduleType.Block,
+      values: [
+        [6868500, 7276000, "1000000000000"],
+        [7276000, 7683500, "1000000000000"],
+      ],
+    },
   ],
   [
     StakingContract.SAYVE_UST,
