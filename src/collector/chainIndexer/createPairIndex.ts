@@ -23,7 +23,7 @@ export const generateDescription = async (
   }
 
   if (isIBCToken(address2)) {
-    const denom = await getIBCDenom(address1);
+    const denom = await getIBCDenom(address2);
     token1 = {
       name: IBC_DENOM_MAP.get(denom)?.name,
       symbol: IBC_DENOM_MAP.get(denom)?.symbol,
