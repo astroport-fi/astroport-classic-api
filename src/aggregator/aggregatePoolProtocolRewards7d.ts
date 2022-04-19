@@ -1,11 +1,12 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import { getLastHeight } from "../services";
-import { BLOCKS_PER_YEAR, GENERATOR_PROXY_CONTRACTS, TERRA_CHAIN_ID } from "../constants";
+import { BLOCKS_PER_YEAR, TERRA_CHAIN_ID } from "../constants";
 import { PoolProtocolReward } from "../models/pool_protocol_reward.model";
 import { PoolProtocolRewardVolume24h } from "../models/pool_protocol_reward_volume_24hr.model";
 import { PoolProtocolRewardVolume7d } from "../models/pool_protocol_reward_volume_7d.model";
 import { PoolVolume7d } from "../models/pool_volume_7d.model";
+import { ProxyAddressInfo } from "../types/contracts";
 
 dayjs.extend(utc);
 
@@ -14,7 +15,9 @@ dayjs.extend(utc);
  * Update the pool_protocol_rewards_7d table
  */
 
-export async function aggregatePoolProtocolRewards7d(): Promise<void> {
+export async function aggregatePoolProtocolRewards7d(
+  generatorProxyContracts: Map<string, ProxyAddressInfo>
+): Promise<void> {
   // get latest block height
   const latestHeight = await getLastHeight(TERRA_CHAIN_ID);
 
@@ -27,7 +30,7 @@ export async function aggregatePoolProtocolRewards7d(): Promise<void> {
   //   dayjs().utc().subtract(1, 'y').toISOString());
 
   // retrieve weekly sums per pair and write to pool_protocol_rewards_7d
-  for (const value of GENERATOR_PROXY_CONTRACTS.values()) {
+  for (const value of generatorProxyContracts.values()) {
     const pool_reward_volumes = await PoolProtocolReward.find({
       pool: value.pool,
       block: { $gt: startBlockHeight, $lt: latestHeight.value },
