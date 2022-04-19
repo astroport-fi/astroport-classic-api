@@ -1,6 +1,6 @@
 import { BLOCKS_PER_YEAR, SECONDS_PER_YEAR } from "../../constants";
-import { DISTRIBUTION_SCHEDULES, Schedules } from "../../data/distributionSchedules";
-import { ScheduleType } from "../../types/contracts";
+// import { DISTRIBUTION_SCHEDULES, Schedules } from "../../data/distributionSchedules";
+import { Schedules, ScheduleType } from "../../types/contracts";
 
 interface CalculateApr {
   factoryContract?: string;
@@ -34,26 +34,6 @@ const getSchedule = (schedules: Schedules | undefined, latestBlock: number) => {
 };
 
 export const calculateThirdPartyApr = ({
-  factoryContract,
-  totalValueLocked,
-  tokenPrice,
-  decimals = 6,
-  latestBlock,
-}: CalculateApr): number => {
-  const schedules = DISTRIBUTION_SCHEDULES.get(factoryContract as string);
-  const schedule = getSchedule(schedules, latestBlock);
-
-  if (!schedule) return 0;
-
-  const [start, end, totalEmmision] = schedule;
-  const multiplyBy = schedules?.type === ScheduleType.UnixTime ? SECONDS_PER_YEAR : BLOCKS_PER_YEAR;
-  const tokensPerTime = parseInt(totalEmmision) / (end - start);
-  const totalTokensPerYear = (multiplyBy * tokensPerTime) / 10 ** decimals;
-
-  return (totalTokensPerYear * tokenPrice) / totalValueLocked;
-};
-
-export const calculateThirdPartyAprV2 = ({
   schedules,
   totalValueLocked,
   tokenPrice,
@@ -62,9 +42,9 @@ export const calculateThirdPartyAprV2 = ({
 }: CalculateApr): number => {
   const schedule = getSchedule(schedules, latestBlock);
   if (!schedule) return 0;
-  const [start, end, totalEmmision] = schedule;
+  const [start, end, totalEmission] = schedule;
   const multiplyBy = schedules?.type === ScheduleType.UnixTime ? SECONDS_PER_YEAR : BLOCKS_PER_YEAR;
-  const tokensPerTime = parseInt(totalEmmision) / (end - start);
+  const tokensPerTime = parseInt(totalEmission) / (end - start);
   const totalTokensPerYear = (multiplyBy * tokensPerTime) / 10 ** decimals;
   return (totalTokensPerYear * tokenPrice) / totalValueLocked;
 };

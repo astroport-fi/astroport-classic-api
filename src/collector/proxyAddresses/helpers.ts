@@ -4,7 +4,7 @@ import { Schedules, ScheduleType } from "../../types/contracts";
 /**
  * Figures out what the distribution schedule is, can be block or unix time
  *
- * @param schedules token emmision schedules
+ * @param schedules token emission schedules
  * @returns schedule type string as "block" or "unix"
  */
 export const generateScheduleType = (schedules: Schedules["values"] = []): ScheduleType => {
@@ -27,13 +27,13 @@ export const generateScheduleType = (schedules: Schedules["values"] = []): Sched
 };
 
 /**
- * Formats all contract emmision schedules to a standardized format
+ * Formats contract emission schedules to a standardized format
  *
- * @param distributionSchedule token emmision schedules
+ * @param distributionSchedule token emission schedules from staking contract
  * @param rewardConfig configuration from contract query
- * @returns schedule in format [[number, number, string]]
+ * @returns schedules in format [[number, number, string]]
  */
-export const formatSchedule = (
+export const formatSchedules = (
   distributionSchedule: any[] | undefined,
   rewardConfig: { mars_token?: string; mirror_token?: string }
 ): Schedules["values"] => {
@@ -51,6 +51,8 @@ export const formatSchedule = (
         [63093600, 94629600, "5146800000000"],
         [94629600, 126165600, "2573400000000"],
       ];
+    } else {
+      console.log("Distribution schedule not found");
     }
   } else {
     const singleSchedule = distributionSchedule.find(() => true);
@@ -58,9 +60,11 @@ export const formatSchedule = (
     if (Array.isArray(singleSchedule)) {
       schedule = distributionSchedule;
     } else if (singleSchedule?.start_time) {
-      schedule = distributionSchedule.map((i: any) => [i.start_time, i.end_time, i.amount]);
+      schedule = distributionSchedule.map((i) => [i.start_time, i.end_time, i.amount]);
     } else if (typeof singleSchedule === "number") {
       schedule = [distributionSchedule];
+    } else {
+      console.log("Can not match distribution schedule");
     }
   }
   return schedule;

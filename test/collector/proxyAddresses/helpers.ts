@@ -1,11 +1,11 @@
 import "dotenv/config";
 import { expect } from "chai";
 import {
-  formatSchedule,
+  formatSchedules,
   generateScheduleType,
 } from "../../../src/collector/proxyAddresses/helpers";
 import { ScheduleType } from "../../../src/types/contracts";
-import { getProxyAddressesInfo } from "../../../src/collector/proxyAddresses";
+// import { getProxyAddressesInfo } from "../../../src/collector/proxyAddresses";
 
 describe("get proxyAddresses helpers", function () {
   it("generates schedule type equal to unix", async () => {
@@ -37,14 +37,14 @@ describe("get proxyAddresses helpers", function () {
   });
 
   it("Formats [[number, number, string]] schedule to the expected format", () => {
-    const schedules = formatSchedule([[6018800, 6850000, "19753544179118"]], {});
+    const schedules = formatSchedules([[6018800, 6850000, "19753544179118"]], {});
     expect(schedules[0][0]).to.be.a("number");
     expect(schedules[0][1]).to.be.a("number");
     expect(schedules[0][2]).to.be.a("string");
   });
 
   it("Formats [{start_time: number, end_time: number}] schedule to the expected format", () => {
-    const schedules = formatSchedule(
+    const schedules = formatSchedules(
       [{ start_time: 1642104349, end_time: 1642104361, amount: "0" }],
       {}
     );
@@ -54,17 +54,16 @@ describe("get proxyAddresses helpers", function () {
   });
 
   it("Formats [number, number, string] schedule to the expected format", () => {
-    const schedules = formatSchedule([1647446401, 1650038400, "15000000000000"], {});
+    const schedules = formatSchedules([1647446401, 1650038400, "15000000000000"], {});
     expect(schedules[0][0]).to.be.a("number");
     expect(schedules[0][1]).to.be.a("number");
     expect(schedules[0][2]).to.be.a("string");
   });
 
-  it("gets reward proxy infos", async () => {
-    const start = Date.now();
-    const address = await getProxyAddressesInfo();
-    console.log(address);
-    const duration = Date.now() - start;
-    console.log(duration);
-  });
+  // it("getProxyAddressesInfo", async () => {
+  //   const start = Date.now();
+  //   const address = await getProxyAddressesInfo();
+  //   const duration = Date.now() - start;
+  //   console.log(duration);
+  // });
 });

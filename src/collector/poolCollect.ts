@@ -7,7 +7,6 @@ import {
   CoingeckoValues,
   EXTERNAL_TOKENS,
   FEES,
-  // GENERATOR_PROXY_CONTRACTS,
   PAIRS_WHITELIST,
   POOLS_WITH_8_DIGIT_REWARD_TOKENS,
   TOKEN_ADDRESS_MAP,
@@ -20,7 +19,7 @@ import { PoolVolume7d } from "../models/pool_volume_7d.model";
 import { PoolVolume24h } from "../models/pool_volume_24h.model";
 import { PoolProtocolRewardVolume24h } from "../models/pool_protocol_reward_volume_24hr.model";
 import { fetchExternalTokenPrice } from "./coingecko/client";
-import { calculateThirdPartyAprV2 } from "./chainIndexer/calculateApr";
+import { calculateThirdPartyApr } from "./chainIndexer/calculateApr";
 import { getProxyAddressesInfo } from "./proxyAddresses";
 
 dayjs.extend(utc);
@@ -35,7 +34,7 @@ const poolTimeseriesResult: any[] = [];
 export async function poolCollect(): Promise<void> {
   // get all pairs
   const pairs = await getPairs();
-  const GENERATOR_PROXY_CONTRACTS = await getProxyAddressesInfo();
+  const generatorProxyContracts = await getProxyAddressesInfo();
 
   // map pair address -> 24h, 7d pool volume
   const dayVolumeResponse = await PoolVolume24h.find();
@@ -71,10 +70,9 @@ export async function poolCollect(): Promise<void> {
 
     const result = new PoolTimeseries();
 
-    const proxyInfo = GENERATOR_PROXY_CONTRACTS.get(pair.contractAddr);
+    const proxyInfo = generatorProxyContracts.get(pair.contractAddr);
     const rewardToken = proxyInfo?.token;
     const lpTokenAddress = proxyInfo?.lpToken;
-    const reward_proxy_address = proxyInfo?.proxy;
 
     // TODO batch hive requests
     const pool_liquidity = await getPairLiquidity(
@@ -127,7 +125,7 @@ export async function poolCollect(): Promise<void> {
       result.metadata.fees.trading.apy = 0;
     }
 
-    let astro_yearly_emission = proxyInfo?.astro_yearly_emmissions || 0;
+    let astro_yearly_emission = proxyInfo?.astro_yearly_emissions || 0;
     astro_yearly_emission = astro_yearly_emission * astro_price;
     result.metadata.fees.astro.day = astro_yearly_emission / 365; // 24 hour fee amount, not rate
     result.metadata.fees.astro.apr = astro_yearly_emission / pool_liquidity;
@@ -159,10 +157,9 @@ export async function poolCollect(): Promise<void> {
     // TODO also add a "standardize" function that changes the decimal to 6
 
     const poolInfo = await getGeneratorPoolInfo(lpTokenAddress as string);
-    const alloc_point = poolInfo?.alloc_point;
 
-    result.metadata.alloc_point = alloc_point;
-    result.metadata.reward_proxy_address = reward_proxy_address;
+    result.metadata.alloc_point = poolInfo?.alloc_point;
+    result.metadata.reward_proxy_address = proxyInfo?.proxy;
 
     let nativeTokenPrice = 0;
     if (priceMap.has(rewardToken)) {
@@ -184,7 +181,7 @@ export async function poolCollect(): Promise<void> {
     result.metadata.fees.native.day = protocolRewards24h * nativeTokenPrice; // 24 hour fee amount, not rate
 
     // estimate 3rd party rewards from distribution schedules
-    const nativeApr = calculateThirdPartyAprV2({
+    const nativeApr = calculateThirdPartyApr({
       schedules: proxyInfo?.distribution_schedule,
       tokenPrice: nativeTokenPrice,
       totalValueLocked: pool_liquidity,
