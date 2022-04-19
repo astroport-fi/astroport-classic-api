@@ -15,15 +15,26 @@ import { PriceV2 } from "../../models/price_v2.model";
  * @param pairs
  */
 export async function priceCollectV2(pairs: Pair[]): Promise<void> {
+  const block = await getBlock("columbus-5");
+  const height = block.hiveHeight;
   // get/calculate prices
-  const prices = await indexPrices(pairs);
+  const prices = await indexPrices(pairs, height);
   // update prices
   await savePrices(prices);
 }
-async function indexPrices(pairs: Pair[]): Promise<Map<string, PriceGraphNode>> {
-  const block = await getBlock("columbus-5");
-  const height = block.hiveHeight;
 
+/**
+ * Determines prices for the given list of pairs at the
+ * provided block height
+ *
+ * @param pairs The pairs to determine prices for
+ * @param height The height of the chain to work at
+ * @returns The prices for the pairs
+ */
+export async function indexPrices(
+  pairs: Pair[],
+  height: number = 0
+): Promise<Map<string, PriceGraphNode>> {
   // map token addresses to nodes
   const nodes = new Map<string, PriceGraphNode>();
   // adjacency list - maps token address to a node's edges

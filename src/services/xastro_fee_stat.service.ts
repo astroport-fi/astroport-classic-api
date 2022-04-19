@@ -31,6 +31,16 @@ export async function getStakingStats(): Promise<XAstroFeeStat> {
     _7d_apy = 0;
   }
 
+  let _30d_apr = result?._30d_apr;
+  if (isNaN(_30d_apr) || !isFinite(_30d_apr)) {
+    _30d_apr = 0;
+  }
+
+  let _30d_apy = result?._30d_apy;
+  if (isNaN(_30d_apy) || !isFinite(_30d_apy)) {
+    _30d_apy = 0;
+  }
+
   return {
     _24h_fees_ust: result?._24h_fees_ust,
     _24h_apr: _24h_apr,
@@ -39,6 +49,9 @@ export async function getStakingStats(): Promise<XAstroFeeStat> {
     _7d_fees_ust: result?._7d_fees_ust,
     _7d_apr: _7d_apr,
     _7d_apy: _7d_apy,
+    _30d_fees_ust: result?._30d_fees_ust,
+    _30d_apr: _30d_apr,
+    _30d_apy: _30d_apy,
     updatedAt: result?.updatedAt,
   };
 }
