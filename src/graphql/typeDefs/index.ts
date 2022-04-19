@@ -242,9 +242,16 @@ export const typeDefs = /* GraphQL */ `
     total: Float
   }
 
+  type UserTokenHolding {
+    token: Token!
+    amount: Float
+    valueUST: Float
+  }
+
   type User {
     address: String!
     voting_power: VotingPower
+    tokens: [UserTokenHolding]
   }
 
   type Snapshot {
