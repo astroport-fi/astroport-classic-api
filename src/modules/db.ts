@@ -37,21 +37,21 @@ export const connectToDatabase = (): Promise<void> => {
   return cached.conn;
 };
 
-mongoose.Promise = global.Promise;
-let isConnected: number;
+// mongoose.Promise = global.Promise;
+// let isConnected: number;
 
-export const connectToDatabasev1 = (): Promise<void> => {
-  if (MONGODB_URL == null) {
-    return Promise.reject();
-  }
+// export const connectToDatabasev1 = (): Promise<void> => {
+//   if (MONGODB_URL == null) {
+//     return Promise.reject();
+//   }
 
-  if (isConnected) {
-    console.log("=> using existing database connection");
-    return Promise.resolve();
-  }
+//   if (isConnected) {
+//     console.log("=> using existing database connection");
+//     return Promise.resolve();
+//   }
 
-  console.log("=> using new database connection");
-  return mongoose.connect(MONGODB_URL).then((db) => {
-    isConnected = db.connections[0].readyState;
-  });
-};
+//   console.log("=> using new database connection");
+//   return mongoose.connect(MONGODB_URL).then((db) => {
+//     isConnected = db.connections[0].readyState;
+//   });
+// };
