@@ -40,6 +40,31 @@ const xAstroFeeStatSchema: Schema = new Schema(
       required: false,
       trim: true,
     },
+    _30d_fees_ust: {
+      type: Schema.Types.Number,
+      required: false,
+      trim: true,
+    },
+    _30d_apr: {
+      type: Schema.Types.Number,
+      required: false,
+      trim: true,
+    },
+    _30d_apy: {
+      type: Schema.Types.Number,
+      required: false,
+      trim: true,
+    },
+    _30d_fees_ust_change: {
+      type: Schema.Types.Number,
+      required: false,
+      trim: true,
+    },
+    _365d_fees_ust: {
+      type: Schema.Types.Number,
+      required: false,
+      trim: true,
+    },
   },
   {
     timestamps: true,

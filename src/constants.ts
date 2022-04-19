@@ -233,6 +233,12 @@ export const PAIRS_WHITELIST = new Set<string>([
   "terra1k8lvj3w7dxzd6zlyptcj086gfwms422xkqjmzx", // sayve ust
   "terra1hlq6ye6km5sq2pcnmrvlf784gs9zygt0akwvsu", // kuji skuji
   "terra170x0m3vmc7s5pdvpt5lh9n6wfmsz6wcykcr0vg", // Bro ust
+  "terra15rx5ghq4nxrv62fqvdvm78kuasfkl95c6mcmqs", // kUST-UST
+  "terra14sal7lg7ny207yz0ue4dc02mdqs03zytegsn2r", // KNTC-UST
+  "terra1dawj5mr2qt2nlurge30lfgjg6ly4ls99yeyd25", // mars-xmars
+  "terra1ngs0xlmxan6ktqwtcj8c2l2ddp3z00wpxt43vr", // osmo-ust
+  "terra12k8d0uzrgcqn4ge4k8ntr4aaycpwunz7pu2umj", // scrt-ust
+  "terra14rnschsdlllt00yk8fxvxmcqgzhme3cx06t2x4", // atom-ust
 ]);
 
 // TODO - This should be queried from each token's native chain in future

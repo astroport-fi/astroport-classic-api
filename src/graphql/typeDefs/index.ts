@@ -180,6 +180,9 @@ export const typeDefs = /* GraphQL */ `
     _7d_fees_ust: Float
     _7d_apr: Float
     _7d_apy: Float
+    _30d_fees_ust: Float
+    _30d_apr: Float
+    _30d_apy: Float
     block: Float
     updatedAt: DateTime
   }
@@ -239,9 +242,16 @@ export const typeDefs = /* GraphQL */ `
     total: Float
   }
 
+  type UserTokenHolding {
+    token: Token!
+    amount: Float
+    valueUST: Float
+  }
+
   type User {
     address: String!
     voting_power: VotingPower
+    tokens: [UserTokenHolding]
   }
 
   type Snapshot {

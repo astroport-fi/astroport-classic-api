@@ -116,10 +116,7 @@ export async function poolCollect(): Promise<void> {
 
     // trading fees
     result.metadata.fees.trading.day = trading_fee_perc * dayVolume; // 24 hour fee amount, not rate
-    result.metadata.fees.trading.apr = (trading_fee_perc * dayVolume * 365) / pool_liquidity;
-
-    result.metadata.fees.trading.apy =
-      Math.pow(1 + (trading_fee_perc * dayVolume) / pool_liquidity, 365) - 1;
+    result.metadata.fees.trading.apy = (trading_fee_perc * dayVolume * 365) / pool_liquidity;
 
     if (result.metadata.fees.trading.apy == Infinity) {
       result.metadata.fees.trading.apy = 0;
@@ -175,11 +172,6 @@ export async function poolCollect(): Promise<void> {
       // no reward token listed - null
     }
 
-    if (isNaN(nativeTokenPrice)) {
-      nativeTokenPrice = 0;
-    }
-    result.metadata.fees.native.day = protocolRewards24h * nativeTokenPrice; // 24 hour fee amount, not rate
-
     // estimate 3rd party rewards from distribution schedules
     const nativeApr = calculateThirdPartyApr({
       schedules: proxyInfo?.distribution_schedule,
@@ -191,14 +183,17 @@ export async function poolCollect(): Promise<void> {
 
     result.metadata.fees.native.estimated_apr = nativeApr;
     result.metadata.fees.native.apr = nativeApr;
+    if (isNaN(nativeTokenPrice)) {
+      nativeTokenPrice = 0;
+    }
+    result.metadata.fees.native.day = nativeApr * pool_liquidity / 365; // 24 hour fee amount, not rate
 
     // note: can overflow to Infinity
     if (
-      Math.pow(1 + (protocolRewards24h * nativeTokenPrice) / pool_liquidity, 365) - 1 !=
-      Infinity
+      Math.pow(1 + result.metadata.fees.native.day / pool_liquidity, 365) - 1 != Infinity
     ) {
       result.metadata.fees.native.apy =
-        Math.pow(1 + (protocolRewards24h * nativeTokenPrice) / pool_liquidity, 365) - 1;
+        Math.pow(1 + result.metadata.fees.native.day / pool_liquidity, 365) - 1;
     } else {
       result.metadata.fees.native.apy = 0;
     }
@@ -219,14 +214,6 @@ export async function poolCollect(): Promise<void> {
       result.metadata.fees.trading.apy +
       result.metadata.fees.astro.apr +
       result.metadata.fees.native.apr;
-
-    // TODO delete total APY in next release
-    if (Math.pow(1 + result.metadata.fees.total.apr / 365 / pool_liquidity, 365) - 1 != Infinity) {
-      result.metadata.fees.total.apy =
-        Math.pow(1 + result.metadata.fees.total.apr / 365 / pool_liquidity, 365) - 1;
-    } else {
-      result.metadata.fees.total.apy = 0;
-    }
 
     poolTimeseriesResult.push(result);
   }
