@@ -7,7 +7,7 @@
  * https://www.npmjs.com/package/graphql-parse-resolve-info
  *
  * If we want to add it as a package instead, we need to verify no unneeded
- * dependencies arte added from
+ * dependencies are added from
  * https://github.com/graphile/graphile-engine/blob/v4/packages/graphql-parse-resolve-info/package.json
  */
 import * as assert from "assert";

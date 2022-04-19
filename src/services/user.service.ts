@@ -78,7 +78,7 @@ export async function getAllTokenHoldings(address: string): Promise<UserTokenHol
 
   const userTokens: UserTokenHolding[] = [];
 
-  // Get native token balances for address (includes IBC tokens)
+  // Get native and IBC token balances for address
   const [balance] = await lcd.bank.balance(address);
   if (balance) {
     for (const coin of balance.toData()) {
