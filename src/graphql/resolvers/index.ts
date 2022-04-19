@@ -17,13 +17,9 @@ import { getVotes } from "../../services/vote.service";
 import GraphQLJSON from "graphql-type-json";
 import { getSnapshots } from "../../services/snapshot.service";
 import { Pool } from "../../types/pool.type";
-import { getVotingPower } from "../../services/user.service";
+import { getAllTokenHoldings, getVotingPower } from "../../services/user.service";
 import { User } from "../../types/user.type";
 import { parseResolveInfo } from "../../lib/graphql-parse-resolve-info";
-import { getTokenHoldings, initHive, initLCD, lcd } from "../../lib/terra";
-import { isIBCToken, isNative } from "../../modules/terra";
-import { UserTokenHolding } from "../../types/user_token_holding.type";
-import { TERRA_CHAIN_ID, TERRA_HIVE, TERRA_LCD } from "../../constants";
 
 export const resolvers = {
   JSON: GraphQLJSON,
@@ -109,68 +105,8 @@ export const resolvers = {
       }
 
       // Was tokens requested?
-      const userTokens: UserTokenHolding[] = [];
       if (resolvedInfo.fieldsByTypeName.User.tokens) {
-        initHive(TERRA_HIVE);
-        initLCD(TERRA_LCD, TERRA_CHAIN_ID);
-
-        // Get native token balances for address (includes IBC tokens)
-        const [balance] = await lcd.bank.balance(address);
-        if (balance) {
-          for (const coin of balance.toData()) {
-            // Get the token price, if no price is available in UST, we
-            // assume 0
-            let tokenPrice = 0.0;
-            const price = await getPriceByTokenAddress(coin.denom);
-            if (price) {
-              tokenPrice = price.price_ust;
-            }
-
-            // Only add it to the list if we have metadata for the token
-            const token = await getToken(coin.denom);
-            if (token) {
-              const amount = +coin.amount / 10 ** 6; // 6 decimals for native tokens
-              userTokens.push({
-                token,
-                amount,
-                valueUST: tokenPrice * amount,
-              });
-            }
-          }
-        }
-
-        // Get all tokens we have indexed which is any token a pair was created for
-        const capturedTokens = await getTokens();
-
-        // Extract CW20 token addresses from list
-        const cw20Tokens = capturedTokens
-          .filter((token) => {
-            // Filter out native and IBC as they're already fetched
-            if (isNative(token.tokenAddr)) return false;
-            if (isIBCToken(token.tokenAddr)) return false;
-            return true;
-          })
-          .map((token) => token.tokenAddr);
-
-        const holdings = await getTokenHoldings(cw20Tokens, address);
-        for (let [address, holding] of holdings) {
-          const token = capturedTokens.find((token) => token.tokenAddr === address);
-          if (holding > 0) {
-            let tokenPrice = 0.0;
-            const price = await getPriceByTokenAddress(token.tokenAddr);
-            if (price) {
-              tokenPrice = price.price_ust;
-            }
-
-            const amount = holding / 10 ** token.decimals;
-            userTokens.push({
-              token,
-              amount,
-              valueUST: amount * tokenPrice,
-            });
-          }
-        }
-        user.tokens = userTokens;
+        user.tokens = await getAllTokenHoldings(address);
       }
 
       return user;

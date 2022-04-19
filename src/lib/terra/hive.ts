@@ -439,18 +439,18 @@ export const getTokenHolding = async (
 };
 
 /**
- * Retrieve the current holding of a wallet for the given list of tokens
- * by using batched requests in groups of 20
+ * Retrieve the current CW20 holdings of a wallet for the given list of tokens
+ * by using batched requests in groups of 30
  *
  * @param tokenContracts The list of addresses of the CW20 tokens
  * @param walletAddress The address of the wallet
- * @param batchSize The default amount of contracts to query at a time
+ * @param batchSize The amount of contracts to query in a request, default to 30
  * @returns The current balances of tokenContracts in walletAddress in key value pairs
  */
-export const getTokenHoldings = async (
+export const getCW20TokenHoldings = async (
   tokenContracts: string[],
   walletAddress: string,
-  batchSize: number = 20
+  batchSize: number = 30
 ): Promise<Map<string, number>> => {
   // Break tokenContacts into batches of batchSize
   const batchItems = (items: string[]) =>
