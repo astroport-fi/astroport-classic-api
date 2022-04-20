@@ -10,7 +10,7 @@ import { VotingPower } from "./voting_power.type";
 export type User = {
   address: string;
   voting_power: VotingPower;
-  rewards: Rewards;
+  pending_rewards: Rewards;
 };
 
 interface Rewards {

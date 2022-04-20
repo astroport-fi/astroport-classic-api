@@ -95,7 +95,7 @@ export const getBlunaUstRewards = async (address: string): Promise<number> => {
     }
   }
 
-  let blunLockdropRewards = 0;
+  let blunaLockdropRewards = 0;
   if (lockUpDuration) {
     const response = await getLockDropRewards({
       userAddress: address,
@@ -104,8 +104,8 @@ export const getBlunaUstRewards = async (address: string): Promise<number> => {
       duration: lockUpDuration,
     });
     console.log(response);
-    blunLockdropRewards = response;
+    blunaLockdropRewards = response;
   }
 
-  return parseInt(bLunaPendingRewards) + blunLockdropRewards;
+  return parseInt(bLunaPendingRewards) + blunaLockdropRewards;
 };

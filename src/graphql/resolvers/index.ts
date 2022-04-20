@@ -90,7 +90,7 @@ export const resolvers = {
       const user: User = {
         address,
         voting_power,
-        rewards: {
+        pending_rewards: {
           bluna_ust: bluna_ust_rewards,
         },
       };

@@ -242,7 +242,7 @@ export const typeDefs = /* GraphQL */ `
   type User {
     address: String!
     voting_power: VotingPower
-    rewards: Rewards
+    pending_rewards: Rewards
   }
 
   type Rewards {
