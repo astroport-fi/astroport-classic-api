@@ -94,7 +94,7 @@ export async function backfillxAstroFeesAndPairsTokens() {
         ).toFixed(3)} ms per block)`
       );
       blocksToProcess -= batchSize;
-      // Report every 100 blocks
+      // Report every 200 blocks
       if (totalBlocksProcessed % 200 === 0) {
         const averageRatePerBlockSeconds = elapsedTotal / totalBlocksProcessed / 1000;
         console.log(
