@@ -24,13 +24,15 @@ bluebird.config({
 });
 global.Promise = bluebird as any;
 
+const connectToDbPromise = connectToDatabase();
+
 export async function run(
   _: APIGatewayProxyEvent,
   context: APIGatewayAuthorizerResultContext
 ): Promise<APIGatewayProxyResult> {
   context.callbackWaitsForEmptyEventLoop = false;
 
-  await connectToDatabase();
+  await connectToDbPromise;
   await initHive(TERRA_HIVE);
 
   await initLCD(TERRA_LCD, TERRA_CHAIN_ID);
