@@ -21,19 +21,24 @@ if (!cached) {
 
 export const connectToDatabase = async (): Promise<void> => {
   if (cached.conn) {
+    console.log("=> using existing database connection");
     return cached.conn;
   }
 
   if (!cached.promise) {
     const opts: mongoose.ConnectOptions = {
       bufferCommands: false,
+      serverSelectionTimeoutMS: 5000,
     };
 
-    cached.promise = await mongoose.connect(MONGODB_URL, opts).then((mongoose) => {
+    console.log("=> using new database connection");
+
+    cached.promise = mongoose.connect(MONGODB_URL, opts).then((mongoose) => {
       return mongoose;
     });
   }
-  cached.conn = cached.promise;
+
+  cached.conn = await cached.promise;
   return cached.conn;
 };
 
