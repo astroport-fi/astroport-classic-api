@@ -6,6 +6,7 @@ import {
   getPool,
   getPools,
   getSupply,
+  getToken,
   getTokens,
 } from "../../services";
 import { getStats } from "../../services/astroport_stats.service";
@@ -16,8 +17,13 @@ import { getVotes } from "../../services/vote.service";
 import GraphQLJSON from "graphql-type-json";
 import { getSnapshots } from "../../services/snapshot.service";
 import { Pool } from "../../types/pool.type";
-import { getVotingPower, getBlunaUstRewards } from "../../services/user.service";
+import {
+  getAllTokenHoldings,
+  getVotingPower,
+  getBlunaUstRewards,
+} from "../../services/user.service";
 import { User } from "../../types/user.type";
+import { parseResolveInfo } from "../../lib/graphql-parse-resolve-info";
 
 export const resolvers = {
   JSON: GraphQLJSON,
@@ -83,17 +89,38 @@ export const resolvers = {
       const votes = await getVotes(proposal_id, choice, limit, offset);
       return votes;
     },
-    user: async (_: any, { address }: any) => {
-      const voting_power = await getVotingPower(address);
-      const bluna_ust_rewards = await getBlunaUstRewards(address);
-
+    user: async (_: any, { address }: any, ctx: any, resolveInfo: any) => {
       const user: User = {
         address,
-        voting_power,
-        pending_rewards: {
-          bluna_ust: bluna_ust_rewards,
-        },
       };
+
+      // parseResolveInfo helps us determine which fields were requested
+      // and aids in skipping long-running fields if not requested
+      const resolvedInfo: any = parseResolveInfo(resolveInfo);
+      if (!resolvedInfo) {
+        // Unable to parse the query
+        return user;
+      }
+
+      // Was voting power requested?
+      if (resolvedInfo.fieldsByTypeName.User.voting_power) {
+        const voting_power = await getVotingPower(address);
+        user.voting_power = voting_power;
+      }
+
+      // Was tokens requested?
+      if (resolvedInfo.fieldsByTypeName.User.tokens) {
+        user.tokens = await getAllTokenHoldings(address);
+      }
+
+      // was pending_rewards requested?
+      // to be extended with other pending rewards
+      if (resolvedInfo.fieldsByTypeName.User.pending_rewards) {
+        const bluna_ust_rewards = await getBlunaUstRewards(address);
+        user.pending_rewards = {
+          bluna_ust: bluna_ust_rewards,
+        };
+      }
 
       return user;
     },

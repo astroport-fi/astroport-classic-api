@@ -6,7 +6,7 @@ import {
 } from "aws-lambda";
 
 import { initHive, initLCD } from "../lib/terra";
-import { connectToDatabase } from "../modules/db";
+import { connectToDatabase, disconnectDatabase } from "../modules/db";
 import { TERRA_CHAIN_ID, TERRA_HIVE, TERRA_LCD } from "../constants";
 import { heightCollect } from "./heightCollect";
 import { chainCollect } from "./chainCollect";
@@ -67,8 +67,11 @@ export async function run(
 
     console.log("Total time elapsed: " + (new Date().getTime() - start) / 1000);
   } catch (e) {
+    await disconnectDatabase();
     throw new Error("Error while running indexer: " + e);
   }
+
+  await disconnectDatabase();
 
   return {
     statusCode: 200,

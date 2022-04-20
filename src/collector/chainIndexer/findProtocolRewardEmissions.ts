@@ -1,13 +1,17 @@
 import { createWithdrawLogFinder } from "../logFinder";
 import { PoolProtocolReward } from "../../models/pool_protocol_reward.model";
-import { GENERATOR_PROXY_CONTRACTS } from "../../constants";
+import { getProxyAddressesInfo } from "../proxyAddresses";
+import { ProxyAddressInfo } from "../../types/contracts";
 
-export async function findProtocolRewardEmissions(event: any, height: number): Promise<void> {
+export async function findProtocolRewardEmissions(
+  event: any,
+  height: number,
+  generatorProxyContracts: Map<string, ProxyAddressInfo>
+): Promise<void> {
   const poolTotal = new Map<string, any>();
-
-  for (const value of GENERATOR_PROXY_CONTRACTS.values()) {
+  for (const value of generatorProxyContracts.values()) {
     const withdrawLogFinder = createWithdrawLogFinder(
-      GENERATOR_PROXY_CONTRACTS,
+      generatorProxyContracts,
       value.token,
       value.proxy,
       value.factory
@@ -20,8 +24,8 @@ export async function findProtocolRewardEmissions(event: any, height: number): P
         const transformed = found.transformed;
 
         if (transformed != null) {
-          const rewardEntry = value;
-          rewardEntry.block = height;
+          const rewardEntry: any = { ...value, block: height };
+
           if (poolTotal.has(value.proxy)) {
             rewardEntry.value = poolTotal.get(value.proxy) + transformed?.amount;
             poolTotal.set(value.proxy, rewardEntry);
@@ -36,14 +40,18 @@ export async function findProtocolRewardEmissions(event: any, height: number): P
 
   // save to db
   for (const [key, value] of poolTotal) {
-    await PoolProtocolReward.create({
-      pool: value.pool,
-      factory: value.factory,
-      proxy: value.proxy,
-      token: value.token,
-      tokenName: value.tokenName,
-      block: height,
-      volume: value.value,
-    });
+    try {
+      await PoolProtocolReward.create({
+        pool: value.pool,
+        factory: value.factory,
+        proxy: value.proxy,
+        token: value.token,
+        tokenName: value.tokenName,
+        block: height,
+        volume: value.value,
+      });
+    } catch (e) {
+      console.log("Failed to create pool protocol rewards:", e);
+    }
   }
 }

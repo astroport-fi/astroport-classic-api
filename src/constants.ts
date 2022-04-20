@@ -75,236 +75,11 @@ export const TOKEN_ADDRESS_MAP = new Map<string, string>([
   ["terra1k8lvj3w7dxzd6zlyptcj086gfwms422xkqjmzx", "SAYVE"],
 ]);
 
-// map pool -> factory/proxy/pool/token/lp attributes
-// used for native protocol rewards
-export const GENERATOR_PROXY_CONTRACTS = new Map<string, any>([
-  [
-    "terra1qr2k6yjjd5p2kaewqvg93ag74k6gyjr7re37fs",
-    {
-      tokenName: "ANC",
-      factory: "terra1h3mf22jm68ddueryuv2yxwfmqxxadvjceuaqz6", // from
-      proxy: "terra1v2wez00fyy8ajxgkh2jcx82haqfudvxcs5sdzr", // to
-      pool: "terra1qr2k6yjjd5p2kaewqvg93ag74k6gyjr7re37fs", // pool
-      token: "terra14z56l0fp2lsf86zy3hty2z47ezkhnthtr9yq76", // what is sent
-      lpToken: "terra1wmaty65yt7mjw6fjfymkd9zsm6atsq82d9arcd",
-    },
-  ],
-  [
-    "terra1zpnhtf9h5s7ze2ewlqyer83sr4043qcq64zfc4",
-    {
-      tokenName: "APOLLO",
-      factory: "terra1g7jjjkt5uvkjeyhp8ecdz4e4hvtn83sud3tmh2",
-      proxy: "terra1e5zw6ujvzcmmgh8rxlttddlk2t62j2lh5jtwe8",
-      pool: "terra1zpnhtf9h5s7ze2ewlqyer83sr4043qcq64zfc4",
-      token: "terra100yeqvww74h4yaejj6h733thgcafdaukjtw397",
-      lpToken: "terra1zuktmswe9zjck0xdpw2k79t0crjk86fljv2rm0",
-    },
-  ],
-  [
-    "terra143xxfw5xf62d5m32k3t4eu9s82ccw80lcprzl9",
-    {
-      tokenName: "MIR",
-      factory: "terra17f7zu97865jmknk7p2glqvxzhduk78772ezac5",
-      proxy: "terra15g9we4hs03zv5lkmkpm3gk6vr5tfq8c6egxss6",
-      pool: "terra143xxfw5xf62d5m32k3t4eu9s82ccw80lcprzl9",
-      token: "terra15gwkyepfc6xgca5t5zefzwy42uts8l2m4g40k6",
-      lpToken: "terra17trxzqjetl0q6xxep0s2w743dhw2cay0x47puc",
-    },
-  ],
-  [
-    "terra1mxyp5z27xxgmv70xpqjk7jvfq54as9dfzug74m",
-    {
-      tokenName: "ORION",
-      factory: "terra1cw00274wlje5z8vtlrpaqx5cwj29c5a5ku2zhv",
-      proxy: "terra12z0q65r2y3y56g970fghfderncf4a2nurta0sc",
-      pool: "terra1mxyp5z27xxgmv70xpqjk7jvfq54as9dfzug74m",
-      token: "terra1mddcdx0ujx89f38gu7zspk2r2ffdl5enyz2u03",
-      lpToken: "terra1w80npmymwhdtvcmrg44xmqqdnufu3gyfaytr9z",
-    },
-  ],
-  [
-    "terra15s2wgdeqhuc4gfg7sfjyaep5cch38mwtzmwqrx",
-    {
-      tokenName: "VKR",
-      factory: "terra1wjc6zd6ue5sqmyucdu8erxj5cdf783tqle6dja",
-      proxy: "terra1px6vx9uegszfycw9z75dfpmzqtwjtrpm20qck2",
-      pool: "terra15s2wgdeqhuc4gfg7sfjyaep5cch38mwtzmwqrx",
-      token: "terra1dy9kmlm4anr92e42mrkjwzyvfqwz66un00rwr5",
-      lpToken: "terra1lw36qqz72mxajrfgkv24lahudq3ehmkpc305yc",
-    },
-  ],
-  [
-    "terra1m95udvvdame93kl6j2mk8d03kc982wqgr75jsr",
-    {
-      tokenName: "STT",
-      factory: "terra15p807wnm9q3dyw4rvfqsaukxqt6lkuqe62q3mp",
-      proxy: "terra16pnm59kxmgnp9kv6ye3ejnpevfmzdlllx0pake", //reward proxy
-      pool: "terra1m95udvvdame93kl6j2mk8d03kc982wqgr75jsr",
-      token: "terra13xujxcrc9dqft4p9a8ls0w3j0xnzm6y2uvve8n",
-      lpToken: "terra14p4srhzd5zng8vghly5artly0s53dmryvg3qc6",
-    },
-  ],
-  [
-    "terra1476fucrvu5tuga2nx28r3fctd34xhksc2gckgf",
-    {
-      tokenName: "XDEFI",
-      factory: "terra12vu0rxec60rwg82hlkwdjnqwxrladt00rpllzl",
-      proxy: "terra1wranc9ta64f0nwdyv842d7kdm7ae80kdl5tvne",
-      pool: "terra1476fucrvu5tuga2nx28r3fctd34xhksc2gckgf",
-      token: "terra169edevav3pdrtjcx35j6pvzuv54aevewar4nlh",
-      lpToken: "terra1krvq5hk3a37yeydzfrgjj00d8xygk5um9jas8p",
-    },
-  ],
-  [
-    "terra10lv5wz84kpwxys7jeqkfxx299drs3vnw0lj8mz",
-    {
-      tokenName: "PSI-nLUNA",
-      factory: "terra1sxzggeujnxrd7hsx7uf2l6axh2uuv4zz5jadyg",
-      proxy: "terra17jm985ql5plu8ytakpfz6kjyag87m9f3l3aqfn",
-      pool: "terra10lv5wz84kpwxys7jeqkfxx299drs3vnw0lj8mz",
-      token: "terra12897djskt9rge8dtmm86w654g7kzckkd698608",
-      lpToken: "terra1t53c8p0zwvj5xx7sxh3qtse0fq5765dltjrg33",
-    },
-  ],
-  [
-    "terra18hjdxnnkv8ewqlaqj3zpn0vsfpzdt3d0y2ufdz",
-    {
-      tokenName: "PSI-nETH",
-      factory: "terra13n2sqaj25ugkt79k3evhvua30ut9qt8q0268zc",
-      proxy: "terra14fjehqxs03mad28tflkk7lqdru64h9cdsdm923",
-      pool: "terra18hjdxnnkv8ewqlaqj3zpn0vsfpzdt3d0y2ufdz",
-      token: "terra12897djskt9rge8dtmm86w654g7kzckkd698608",
-      lpToken: "terra1pjfqacx7k6dg63v2h5q96zjg7w5q25093wnkjc",
-    },
-  ],
-  [
-    "terra1v5ct2tuhfqd0tf8z0wwengh4fg77kaczgf6gtx",
-    {
-      tokenName: "PSI-UST",
-      factory: "terra1fmu29xhg5nk8jr0p603y5qugpk2r0ywcyxyv7k",
-      proxy: "terra1vtqv4j5v04x5ka5f84v9zuvt604u2rsqhjnpk8",
-      pool: "terra1v5ct2tuhfqd0tf8z0wwengh4fg77kaczgf6gtx",
-      token: "terra12897djskt9rge8dtmm86w654g7kzckkd698608", //reward
-      lpToken: "terra1cspx9menzglmn7xt3tcn8v8lg6gu9r50d7lnve",
-    },
-  ],
-  [
-    "terra134m8n2epp0n40qr08qsvvrzycn2zq4zcpmue48",
-    {
-      tokenName: "MINE-UST",
-      factory: "terra19nek85kaqrvzlxygw20jhy08h3ryjf5kg4ep3l",
-      proxy: "terra1gty5d3hmegmrzu7uyrrm6mcksus5cumkrxxg0z",
-      pool: "terra134m8n2epp0n40qr08qsvvrzycn2zq4zcpmue48",
-      token: "terra1kcthelkax4j9x8d3ny6sdag0qmxxynl3qtcrpy",
-      lpToken: "terra16unvjel8vvtanxjpw49ehvga5qjlstn8c826qe",
-    },
-  ],
-  [
-    "terra1gxjjrer8mywt4020xdl5e5x7n6ncn6w38gjzae",
-    {
-      tokenName: "stLUNA-LUNA",
-      factory: "terra1r2ucpn7j8qcgvsvkzxr3x0698megrn2kn9nfwq",
-      proxy: "terra1hzkn3wr8qhmml6yu575tlz48j2lhgdahvx2ruk",
-      pool: "terra1gxjjrer8mywt4020xdl5e5x7n6ncn6w38gjzae",
-      token: "terra1jxypgnfa07j6w92wazzyskhreq2ey2a5crgt6z",
-      lpToken: "terra1h2lasu3a5207yt7decg0s09z5ltw953nrgj820",
-    },
-  ],
-  [
-    "terra18dq84qfpz267xuu0k47066svuaez9hr4xvwlex",
-    {
-      tokenName: "stSOL-UST",
-      factory: "terra188xjhn8h39ert7ezs0m2dlgsqd4vf6k6hmv4jw",
-      proxy: "terra19ganxu5n5xghz0ftp6jfczl5yf38yryctprmd2",
-      pool: "terra18dq84qfpz267xuu0k47066svuaez9hr4xvwlex",
-      token: "terra1jxypgnfa07j6w92wazzyskhreq2ey2a5crgt6z",
-      lpToken: "terra1cgvlpz6vltqa49jlj3yr2ddnwy22xw62k4433t",
-    },
-  ],
-  [
-    "terra1edurrzv6hhd8u48engmydwhvz8qzmhhuakhwj3",
-    {
-      tokenName: "stETH-UST",
-      factory: "terra1za0ltkcxjpvfw8wnwhetj5mr5r05pl6dgy936g",
-      proxy: "terra15re9z6l28vf4dfeu8zyfe8ax8cvjdxkfnmuwne",
-      pool: "terra1edurrzv6hhd8u48engmydwhvz8qzmhhuakhwj3",
-      token: "terra1jxypgnfa07j6w92wazzyskhreq2ey2a5crgt6z",
-      lpToken: "terra1qz4cv5lsfw4k2266q52z9rtz64n58paxy9d476",
-    },
-  ],
-  [
-    "terra19wauh79y42u5vt62c5adt2g5h4exgh26t3rpds",
-    {
-      tokenName: "Mars-UST",
-      factory: "terra1gmggdadphqxua2kewcgn2l57xxteafpne50je0",
-      proxy: "terra1aqehsnrdadp7s8exny69h5vln3llp38wttv0cr",
-      pool: "terra19wauh79y42u5vt62c5adt2g5h4exgh26t3rpds",
-      token: "terra12hgwnpupflfpuual532wgrxu2gjp0tcagzgx4n",
-      lpToken: "terra1ww6sqvfgmktp0afcmvg78st6z89x5zr3tmvpss",
-    },
-  ],
-  [
-    "terra13yftwgefkggq3u627gphq98s6ufwh9u85h5kmg",
-    {
-      tokenName: "Orne-UST",
-      factory: "terra1z5uvpz8ny5tz2lng30ff0aqnm5uuvxaat6lwxm",
-      proxy: "terra1dyuvfvjpuhqrmjly0xh3fhk207cyx8yrw2n736",
-      pool: "terra13yftwgefkggq3u627gphq98s6ufwh9u85h5kmg",
-      token: "terra1hnezwjqlhzawcrfysczcxs6xqxu2jawn729kkf",
-      lpToken: "terra16zy9g2eym8rghxx95ny60c3dyrwqsfx0ypmu5y",
-    },
-  ],
-  [
-    "terra1repcset8dt8z9wm5s6x77n3sjg8hduem9tntd6",
-    {
-      tokenName: "wLDO-stLuna",
-      factory: "terra10t8rn7swtkmkfm56mmxwmk2v9xrv78fljsd3ez",
-      proxy: "terra1xf6dsqpqap3hczk9jd7938h5n8de8ap9ycxhvu",
-      pool: "terra1repcset8dt8z9wm5s6x77n3sjg8hduem9tntd6",
-      token: "terra1jxypgnfa07j6w92wazzyskhreq2ey2a5crgt6z",
-      lpToken: "terra1yfwpk58tlvgzxx7zfrutlskgcp0cdqxtngpp6y",
-    },
-  ],
-  [
-    "terra1k8lvj3w7dxzd6zlyptcj086gfwms422xkqjmzx",
-    {
-      tokenName: "SAYVE-UST",
-      factory: "terra1tyjfrx40kgpmf6mq2kyv6njgg59fxpv7pk8dhd",
-      proxy: "terra1r9vxaprx2j2djyrse60yppawpuncm7wcujjc9w",
-      pool: "terra1k8lvj3w7dxzd6zlyptcj086gfwms422xkqjmzx",
-      token: "terra14v9wrjs55qsn9lkvylsqela3w2ytwxzkycqzcr",
-      lpToken: "terra1drradty46zqun4624p8a3sp9h5jfg9phwlgnm2",
-    },
-  ],
-]);
-
 // TODO get from pair registration
 // fees basis points.  30 = 0.3%, 5 = 0.05%
 export const FEES = new Map<string, number>([
   ["xyk", 20],
   ["stable", 2.5],
-]);
-
-// TODO get from contract
-// map pair address to yearly emissions for year 1
-export const ASTRO_YEARLY_EMISSIONS = new Map<string, number>([
-  ["terra1j66jatn3k50hjtg2xemnjm8s7y8dws9xqa5y8w", 25000000], // bluna luna
-  ["terra1l7xu2rl3c7qmtx3r5sd2tz25glf6jh8ul7aag7", 15000000], // astro ust
-  ["terra1m6ywlgn6wrjuagcmmezzz2a029gtldhey5k552", 13000000], // luna ust
-  ["terra1qr2k6yjjd5p2kaewqvg93ag74k6gyjr7re37fs", 10444444], // anc ust
-  ["terra1gxjjrer8mywt4020xdl5e5x7n6ncn6w38gjzae", 9400000], // stluna luna
-  ["terra134m8n2epp0n40qr08qsvvrzycn2zq4zcpmue48", 3655556], // mine ust
-  ["terra143xxfw5xf62d5m32k3t4eu9s82ccw80lcprzl9", 3394444], // mir ust
-  ["terra1m95udvvdame93kl6j2mk8d03kc982wqgr75jsr", 3394444], // stt ust
-  ["terra1mxyp5z27xxgmv70xpqjk7jvfq54as9dfzug74m", 2611111], // orion ust
-  ["terra1v5ct2tuhfqd0tf8z0wwengh4fg77kaczgf6gtx", 2350000], // psi ust
-  ["terra1zpnhtf9h5s7ze2ewlqyer83sr4043qcq64zfc4", 1827778], // apollo ust
-  ["terra15s2wgdeqhuc4gfg7sfjyaep5cch38mwtzmwqrx", 1827778], // vkr ust
-  ["terra1476fucrvu5tuga2nx28r3fctd34xhksc2gckgf", 1566667], // xdefi ust
-  ["terra10lv5wz84kpwxys7jeqkfxx299drs3vnw0lj8mz", 1827778], // nluna psi
-  ["terra18hjdxnnkv8ewqlaqj3zpn0vsfpzdt3d0y2ufdz", 1566667], // neth psi
-  ["terra1edurrzv6hhd8u48engmydwhvz8qzmhhuakhwj3", 1566667], // steth ust
-  ["terra18dq84qfpz267xuu0k47066svuaez9hr4xvwlex", 1566667], // stsol ust
 ]);
 
 /**
@@ -440,6 +215,12 @@ export const PAIRS_WHITELIST = new Set<string>([
   "terra1k8lvj3w7dxzd6zlyptcj086gfwms422xkqjmzx", // sayve ust
   "terra1hlq6ye6km5sq2pcnmrvlf784gs9zygt0akwvsu", // kuji skuji
   "terra170x0m3vmc7s5pdvpt5lh9n6wfmsz6wcykcr0vg", // Bro ust
+  "terra15rx5ghq4nxrv62fqvdvm78kuasfkl95c6mcmqs", // kUST-UST
+  "terra14sal7lg7ny207yz0ue4dc02mdqs03zytegsn2r", // KNTC-UST
+  "terra1dawj5mr2qt2nlurge30lfgjg6ly4ls99yeyd25", // mars-xmars
+  "terra1ngs0xlmxan6ktqwtcj8c2l2ddp3z00wpxt43vr", // osmo-ust
+  "terra12k8d0uzrgcqn4ge4k8ntr4aaycpwunz7pu2umj", // scrt-ust
+  "terra14rnschsdlllt00yk8fxvxmcqgzhme3cx06t2x4", // atom-ust
 ]);
 
 // TODO - This should be queried from each token's native chain in future

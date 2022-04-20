@@ -139,14 +139,14 @@ export const EXECUTE_MSGS = [{
         },
         "limit": "500000000000"
       },
-      {
-        "info": {
-          "token": {
-            "contract_addr": "terra1z3e2e4jpk4n0xzzwlkgcfvc95pc5ldq0xcny58"
-          }
-        },
-        "limit": "500000000000"
-      },
+      // {
+      //   "info": {
+      //     "token": {
+      //       "contract_addr": "terra1z3e2e4jpk4n0xzzwlkgcfvc95pc5ldq0xcny58"
+      //     }
+      //   },
+      //   "limit": "500000000000"
+      // },
       {
         "info": {
           "token": {
