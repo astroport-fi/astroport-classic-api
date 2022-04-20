@@ -72,5 +72,6 @@ export const connectToDatabase = async (): Promise<void> => {
 
 export const disconnectDatabase = async (): Promise<void> => {
   console.log("=> disconnecting database");
+  cached = global.mongoose = { conn: null, promise: null };
   await db.connection.close();
 };
