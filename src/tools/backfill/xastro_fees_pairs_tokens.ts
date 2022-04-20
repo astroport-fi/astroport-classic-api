@@ -6,7 +6,6 @@ import { createPairLogFinders } from "../../collector/logFinder";
 import { createPairIndexer } from "../../collector/chainIndexer/createPairIndex";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import { getPairs } from "../../services";
 
 dayjs.extend(utc);
 
@@ -20,11 +19,9 @@ export async function backfillxAstroFeesAndPairsTokens() {
   initLCD(TERRA_LCD, TERRA_CHAIN_ID);
   await connectToDatabase();
 
+  const startBlock = 5839180; // First fees collected 2021-12-27T09:54:10.828Z
   // const startBlock = 5650000; // 2021-12-12T17:12:36.085Z
   // const endBlock = 7308286; // 2022.04.19 11:02:12+02:00
-  // const startBlock = 5650000; // Jan 31
-  // const endBlock = 7308286; // March 8
-  const startBlock = 5650000; // 2021-12-12T17:12:36.085Z
   const endBlock = 6754720; // 2022-03-07T18:04:51.973Z (xastro_fee start)
   const totalBlocks = endBlock - startBlock;
   let blocksToProcess = totalBlocks;
