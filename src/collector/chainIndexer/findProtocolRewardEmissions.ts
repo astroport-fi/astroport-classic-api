@@ -24,8 +24,8 @@ export async function findProtocolRewardEmissions(
         const transformed = found.transformed;
 
         if (transformed != null) {
-          const rewardEntry: any = { ...value };
-          rewardEntry.block = height;
+          const rewardEntry: any = { ...value, block: height };
+
           if (poolTotal.has(value.proxy)) {
             rewardEntry.value = poolTotal.get(value.proxy) + transformed?.amount;
             poolTotal.set(value.proxy, rewardEntry);
