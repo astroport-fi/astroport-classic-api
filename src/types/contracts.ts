@@ -35,3 +35,21 @@ export enum ScheduleType {
   UnixTime = "unix",
   Block = "block",
 }
+
+export type Schedules = {
+  type: ScheduleType;
+  values: [number, number, string][];
+};
+
+export interface ProxyAddressInfo {
+  factory: string;
+  proxy: string;
+  pool: string;
+  token: string; //reward_token_addr
+  lpToken: string; //lp_token_addr
+  pending_astro_rewards: number;
+  alloc_point: number;
+  percentage_distribution: number;
+  astro_yearly_emissions: number;
+  distribution_schedule: Schedules;
+}

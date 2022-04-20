@@ -1,13 +1,14 @@
 import { createWithdrawLogFinder } from "../logFinder";
 import { PoolProtocolReward } from "../../models/pool_protocol_reward.model";
-import { GENERATOR_PROXY_CONTRACTS } from "../../constants";
+import { getProxyAddressesInfo } from "../proxyAddresses";
 
 export async function findProtocolRewardEmissions(event: any, height: number): Promise<void> {
+  const generatorProxyContracts = await getProxyAddressesInfo();
   const poolTotal = new Map<string, any>();
 
-  for (const value of GENERATOR_PROXY_CONTRACTS.values()) {
+  for (const value of generatorProxyContracts.values()) {
     const withdrawLogFinder = createWithdrawLogFinder(
-      GENERATOR_PROXY_CONTRACTS,
+      generatorProxyContracts,
       value.token,
       value.proxy,
       value.factory
@@ -20,7 +21,7 @@ export async function findProtocolRewardEmissions(event: any, height: number): P
         const transformed = found.transformed;
 
         if (transformed != null) {
-          const rewardEntry = value;
+          const rewardEntry: any = { ...value };
           rewardEntry.block = height;
           if (poolTotal.has(value.proxy)) {
             rewardEntry.value = poolTotal.get(value.proxy) + transformed?.amount;

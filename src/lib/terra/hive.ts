@@ -1,4 +1,4 @@
-import { gql, GraphQLClient } from "graphql-request";
+import { BatchRequestDocument, gql, GraphQLClient } from "graphql-request";
 import { PriceV2 } from "../../types/priceV2.type";
 import { GOVERNANCE_ASSEMBLY, TOKENS_WITH_8_DIGITS, GENERATOR_ADDRESS } from "../../constants";
 import { PoolInfo, TokenInfo } from "../../types/hive.type";
@@ -205,22 +205,27 @@ export async function getChainBlock(height: number): Promise<{
   };
 }
 
-export async function getContractStore<T>(address: string, query: JSON): Promise<T | undefined> {
-  const response = await hive.request(
-    gql`
-      query ($address: String!, $query: JSON!) {
-        wasm {
-          contractQuery(contractAddress: $address, query: $query)
+export async function getContractStore<T>(address: string, query: JSON): Promise<T | null> {
+  try {
+    const response = await hive.request(
+      gql`
+        query ($address: String!, $query: JSON!) {
+          wasm {
+            contractQuery(contractAddress: $address, query: $query)
+          }
         }
+      `,
+      {
+        address,
+        query,
       }
-    `,
-    {
-      address,
-      query,
-    }
-  );
+    );
 
-  return response.wasm.contractQuery;
+    return response.wasm.contractQuery;
+  } catch (e) {
+    console.log("Error fetching contract store: ", e);
+    return null;
+  }
 }
 
 // return pair liquidity in UST for a pair
@@ -316,76 +321,44 @@ export async function getStableswapRelativePrice(
   return response?.wasm?.contractQuery?.return_amount;
 }
 
-// TODO switch to this query when vx astro address is added
-// export async function getTotalVotingPowerAt(
-//   block: number,
-//   time: number,
-//   xastro: string,
-//   builder: string,
-//   vxastro: string
-// ) {
-//   const response = await hive.request(
-//     gql`
-//       query ($block: Int!, $time: Int!, $xastro: String!, $builder: String!, $vxastro: String!) {
-//         x: wasm {
-//           contractQuery(contractAddress: $xastro, query: { total_supply_at: { block: $block } })
-//         }
-//         builder: wasm {
-//           contractQuery(contractAddress: $builder, query: { state: {} })
-//         }
-//         vx: wasm {
-//           contractQuery(
-//             contractAddress: $vxastro
-//             query: { total_voting_power_at: { time: $time } }
-//           )
-//         }
-//       }
-//     `,
-//     {
-//       block: block,
-//       time: time,
-//       xastro: xastro,
-//       builder: builder,
-//       vxastro: vxastro,
-//     }
-//   );
-//
-//   return (
-//     Number(response?.x?.contractQuery) +
-//     Number(response?.builder?.contractQuery?.remaining_astro_tokens) +
-//     Number(response?.vx?.contractQuery?.voting_power) / 1000000
-//   );
-// }
-
-
 export async function getTotalVotingPowerAt(
   block: number,
-  _time: number,
-  xastro: string,
-  builder: string,
-  _vxastro: string
+  time: number,
+  xastro: string = "terra1yufp7cv85qrxrx56ulpfgstt2gxz905fgmysq0", // TODO testnet addresses remove
+  builder: string = "terra1hccg0cfrcu0nr4zgt5urmcgam9v88peg9s7h6j",
+  vxastro: string = "terra1pqr02fx4ulc2mzws7xlqh8hpwqx2ls5m4fk62j"
 ) {
   const response = await hive.request(
     gql`
-      query ($block: Int!, $xastro: String!, $builder: String!) {
+      query ($block: Int!, $time: Int!, $xastro: String!, $builder: String!, $vxastro: String!) {
         x: wasm {
           contractQuery(contractAddress: $xastro, query: { total_supply_at: { block: $block } })
         }
         builder: wasm {
           contractQuery(contractAddress: $builder, query: { state: {} })
         }
+        vx: wasm {
+          contractQuery(
+            contractAddress: $vxastro
+            query: { total_voting_power_at: { time: $time } }
+          )
+        }
       }
     `,
     {
       block: block,
+      time: time,
       xastro: xastro,
-      builder: builder
+      builder: builder,
+      vxastro: vxastro,
     }
   );
 
+  // TODO double check numbers for prod
   return (
     Number(response?.x?.contractQuery) +
-    Number(response?.builder?.contractQuery?.remaining_astro_tokens)
+    Number(response?.builder?.contractQuery?.remaining_astro_tokens) +
+    Number(response?.vx?.contractQuery?.voting_power) / 1000000
   );
 }
 
@@ -493,6 +466,70 @@ export const getTokenHolding = async (
   } catch (e) {
     return 0;
   }
+};
+
+/**
+ * Retrieve the current CW20 holdings of a wallet for the given list of tokens
+ * by using batched requests in groups of 30
+ *
+ * @param tokenContracts The list of addresses of the CW20 tokens
+ * @param walletAddress The address of the wallet
+ * @param batchSize The amount of contracts to query in a request, default to 30
+ * @returns The current balances of tokenContracts in walletAddress in key value pairs
+ */
+export const getCW20TokenHoldings = async (
+  tokenContracts: string[],
+  walletAddress: string,
+  batchSize: number = 30
+): Promise<Map<string, number>> => {
+  // Break tokenContacts into batches of batchSize
+  const batchItems = (items: string[]) =>
+    items.reduce((batches: string[][], item: string, index) => {
+      const batch = Math.floor(index / batchSize);
+      batches[batch] = ([] as string[]).concat(batches[batch] || [], item);
+      return batches;
+    }, []);
+
+  // Construct the batch requests and compile the results
+  const batches = batchItems(tokenContracts);
+  const tokenHoldings: Map<string, number> = new Map();
+  for (const batch of batches) {
+    // For batchRequest you need to specify a GraphQL document and variables
+    // for each query in the batch. The query document stays static in this case
+    // with only the tokenContract variable changing
+    const queries: BatchRequestDocument[] = [];
+    for (const tokenContract of batch) {
+      queries.push({
+        document: gql`
+          query ($tokenContract: String!, $walletAddress: String!) {
+            wasm {
+              contractQuery(
+                contractAddress: $tokenContract
+                query: { balance: { address: $walletAddress } }
+              )
+            }
+          }
+        `,
+        variables: { tokenContract, walletAddress },
+      });
+    }
+    try {
+      // Map the resulting balances back to the original contract addresses
+      const responses = await hive.batchRequests(queries);
+      for (const [index, item] of responses.entries()) {
+        if (queries[index]) {
+          tokenHoldings.set(
+            queries[index].variables?.tokenContract,
+            item.data.wasm.contractQuery.balance
+          );
+        }
+      }
+    } catch (e) {
+      // If we fail, return what we have
+      return tokenHoldings;
+    }
+  }
+  return tokenHoldings;
 };
 
 /**

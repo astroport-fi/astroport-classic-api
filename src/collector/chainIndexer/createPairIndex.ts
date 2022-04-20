@@ -1,6 +1,8 @@
 import { ReturningLogFinderResult } from "@terra-money/log-finder";
-import { getPairMessages, getTokenInfo } from "../../lib/terra";
+import { IBC_DENOM_MAP } from "../../constants";
+import { getIBCDenom, getPairMessages, getTokenInfo } from "../../lib/terra";
 import { Token } from "../../models";
+import { isIBCToken } from "../../modules/terra";
 import { createPair, createToken } from "../../services";
 import { TokenInfo } from "../../types/hive.type";
 
@@ -11,6 +13,23 @@ export const generateDescription = async (
   address1: string,
   address2: string
 ): Promise<string> => {
+  // check for ibcToken
+  if (isIBCToken(address1)) {
+    const denom = await getIBCDenom(address1);
+    token1 = {
+      name: IBC_DENOM_MAP.get(denom)?.name,
+      symbol: IBC_DENOM_MAP.get(denom)?.symbol,
+    };
+  }
+
+  if (isIBCToken(address2)) {
+    const denom = await getIBCDenom(address2);
+    token1 = {
+      name: IBC_DENOM_MAP.get(denom)?.name,
+      symbol: IBC_DENOM_MAP.get(denom)?.symbol,
+    };
+  }
+
   // check in db for native assets.
   if (!token1) {
     token1 = await Token.findOne({ tokenAddr: address1 });
