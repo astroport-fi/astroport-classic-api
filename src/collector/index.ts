@@ -6,7 +6,7 @@ import {
 } from "aws-lambda";
 
 import { initHive, initLCD } from "../lib/terra";
-import { connectToDatabase } from "../modules/db";
+import { connectToDatabase, disconnectDatabase } from "../modules/db";
 import { TERRA_CHAIN_ID, TERRA_HIVE, TERRA_LCD } from "../constants";
 import { heightCollect } from "./heightCollect";
 import { chainCollect } from "./chainCollect";
@@ -24,18 +24,13 @@ bluebird.config({
 });
 global.Promise = bluebird as any;
 
-// CRITICAL: You must call connect() outside the handler so that the client
-// can be reused across function invocations.
-const connectToDbPromise = connectToDatabase();
-
 export async function run(
   _: APIGatewayProxyEvent,
   context: APIGatewayAuthorizerResultContext
 ): Promise<APIGatewayProxyResult> {
   context.callbackWaitsForEmptyEventLoop = false;
 
-  // Because this is a promise, it will only resolve once.
-  await connectToDbPromise;
+  await connectToDatabase();
   await initHive(TERRA_HIVE);
 
   await initLCD(TERRA_LCD, TERRA_CHAIN_ID);
@@ -72,8 +67,11 @@ export async function run(
 
     console.log("Total time elapsed: " + (new Date().getTime() - start) / 1000);
   } catch (e) {
+    await disconnectDatabase();
     throw new Error("Error while running indexer: " + e);
   }
+
+  await disconnectDatabase();
 
   return {
     statusCode: 200,
