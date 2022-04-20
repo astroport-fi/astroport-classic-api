@@ -128,6 +128,9 @@ export async function getTxBlock(height: number) {
 /**
  * Fetch transactions by height in batches
  *
+ * If the caller requires the block height for the blocks returned, it is
+ * available in tx.height
+ *
  * @param height The height to start at
  * @param blockCount The amount of blocks to retrieve in a single batch, defaults to 20
  * @returns The transactions for all blocks retrieved
