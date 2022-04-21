@@ -3,9 +3,10 @@ useDotenv: true
 variablesResolutionMode: 20210326
 
 plugins:
-  - serverless-offline
   - serverless-dotenv-plugin
   - serverless-plugin-typescript
+  - serverless-plugin-conditional-functions
+  - serverless-offline
 
 provider:
   name: aws
@@ -81,6 +82,7 @@ functions:
     environment:
       MONGODB_URL: ${env:MONGODB_URL_RW}
   slack-bot-backend-stats:
+    enabled: '"${env:NODE_ENV}" == "production"'
     handler: src/bot/slack-bot-backend-stats/index.run
     events:
       - schedule: rate(5 minutes)
