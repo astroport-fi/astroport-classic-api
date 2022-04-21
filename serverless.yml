@@ -16,7 +16,6 @@ provider:
     START_BLOCK_HEIGHT: ${env:START_BLOCK_HEIGHT}
     TERRA_LCD: ${env:TERRA_LCD}
     TERRA_HIVE: ${env:TERRA_HIVE}
-    TERRA_MANTLE: ${env:TERRA_MANTLE}
     TERRA_CHAIN_ID: ${env:TERRA_CHAIN_ID}
 
 functions:
@@ -101,7 +100,6 @@ functions:
       MONGODB_URL: ${env:MONGODB_URL_R}
 
 custom:
-  environment: ${file(.env)}
   serverlessPluginTypescript:
     tsConfigFileLocation: "./tsconfig.serverless.json"
   serverless-offline:

@@ -10,7 +10,7 @@
   },
   "type": "commonjs",
   "scripts": {
-    "dev": "serverless offline --useChildProcesses",
+    "dev": "serverless offline --stage dev --useChildProcesses",
     "database:clean": "rimraf mongodb_data",
     "database": "mkdir -p mongodb_data/rs0-0 ; mongod --dbpath=mongodb_data/rs0-0 --replSet rs0 --port 27050 --oplogSize 128 --profile=1 --slowms=1",
     "database:init": "mongo --port 27050 tools/init-mongodb-rs.js",
