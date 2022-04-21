@@ -40,6 +40,20 @@ export function xAstroCW20FeeRule(): LogFinderRule {
 // match native terra asset fees sent to maker
 export function xAstroNativeFeeRule(): LogFinderRule {
   return {
+    type: "transfer",
+    attributes: [
+      ["sender"],
+      ["amount"],
+      ["recipient", MAKER_ADDRESS],
+      ["sender"],
+      ["amount"], // << fee amount i.e. "21221uluna"
+    ],
+  };
+}
+
+// match native terra asset fees sent to maker
+export function xAstroNativeFeeRule1(): LogFinderRule {
+  return {
     type: "wasm",
     attributes: [
       ["ask_asset"],
