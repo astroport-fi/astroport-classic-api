@@ -7,17 +7,17 @@ import { getTxBlock } from "../../../src/lib/terra";
 import { ScheduleType } from "../../../src/types/contracts";
 
 describe("findXAstroFees", function () {
-  it("Should get XAstroFees", async () => {
+  it("Should get XAstroFees event from transfer log", async () => {
     const event = await getEvent(
-      7329203,
-      "B83170A6C28E7B981B0259BDA1555CB15BE68D6CB2E9BC7A12C71E1EFC0BA79A",
-      "wasm"
+      7335769,
+      "F62C899AF33BC5490FE09C37B31ED743CD2B84EBBA6CD0AC82CFD2341254AA01",
+      "transfer"
     );
     const astroNativeFeeLogFinder = createAstroNativeFeeLogFinder();
-    await fs.writeFileSync("file2.json", JSON.stringify(event));
     const astroNativeFeeLogFound = astroNativeFeeLogFinder(event);
-    await fs.writeFileSync("file.json", JSON.stringify(astroNativeFeeLogFound));
-    console.log(astroNativeFeeLogFound);
+    const foundLog = astroNativeFeeLogFound.find(() => true)?.transformed;
+    expect(foundLog?.amount).to.be.a("number");
+    expect(foundLog?.token).to.be.a("string");
   });
 });
 

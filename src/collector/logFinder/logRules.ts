@@ -46,13 +46,13 @@ export function xAstroNativeFeeRule(): LogFinderRule {
       ["amount"],
       ["recipient", MAKER_ADDRESS],
       ["sender"],
-      ["amount"], // << fee amount i.e. "21221uluna"
+      ["amount"], 
     ],
   };
 }
 
 // match native terra asset fees sent to maker
-export function xAstroNativeFeeRule1(): LogFinderRule {
+export function xAstroNativeFeeRuleV1(): LogFinderRule {
   return {
     type: "wasm",
     attributes: [

@@ -6,12 +6,16 @@ export function createAstroNativeFeeLogFinder(): ReturningLogFinderMapper<
   XAstroFeeTransformed | undefined
 > {
   return createReturningLogFinder(xAstroNativeFeeRule(), (_, match) => {
-    const token = match[0].value;
-    const amount = match[6].value;
+    //amount returns value: '9176uusd'
+    const amount = match[4].value;
+    //parses the amount it to 9176
+    const parsedAmount = parseInt(amount);
+    //turns '9176uusd' to [ '', 'uusd' ]
+    const token = amount.split("" + parsedAmount)[1];
 
     const transformed = {
-      token: token,
-      amount: Number(amount),
+      token,
+      amount: parsedAmount,
     };
     return transformed;
   });
