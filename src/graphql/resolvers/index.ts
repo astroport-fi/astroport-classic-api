@@ -97,7 +97,7 @@ export const resolvers = {
       // parseResolveInfo helps us determine which fields were requested
       // and aids in skipping long-running fields if not requested
       const resolvedInfo: any = parseResolveInfo(resolveInfo);
-      console.log(resolvedInfo);
+
       if (!resolvedInfo) {
         // Unable to parse the query
         return user;
