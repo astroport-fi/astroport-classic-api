@@ -19,8 +19,9 @@ import { getSnapshots } from "../../services/snapshot.service";
 import { Pool } from "../../types/pool.type";
 import {
   getAllTokenHoldings,
-  getUserStakedLpTokens,
   getVotingPower,
+  getBlunaUstRewards,
+  getUserStakedLpTokens,
 } from "../../services/user.service";
 import { User } from "../../types/user.type";
 import { parseResolveInfo } from "../../lib/graphql-parse-resolve-info";
@@ -112,6 +113,15 @@ export const resolvers = {
       // Was tokens requested?
       if (resolvedInfo.fieldsByTypeName.User.tokens) {
         user.tokens = await getAllTokenHoldings(address);
+      }
+
+      // was pending_rewards requested?
+      // to be extended with other pending rewards
+      if (resolvedInfo.fieldsByTypeName.User.pending_rewards) {
+        const bluna_ust_rewards = await getBlunaUstRewards(address);
+        user.pending_rewards = {
+          bluna_ust: bluna_ust_rewards,
+        };
       }
 
       // Was staked_lp_tokens requested?

@@ -262,7 +262,12 @@ export const typeDefs = /* GraphQL */ `
     address: String!
     voting_power: VotingPower
     tokens: [UserTokenHolding]
+    pending_rewards: Rewards
     staked_lp_tokens: [UserStakedLpTokens]
+  }
+
+  type Rewards {
+    bluna_ust: Int
   }
 
   type Snapshot {

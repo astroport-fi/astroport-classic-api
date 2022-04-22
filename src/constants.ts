@@ -5,7 +5,10 @@ export const TERRA_MANTLE = process.env.TERRA_MANTLE as string;
 export const TERRA_CHAIN_ID = process.env.TERRA_CHAIN_ID as string;
 export const START_BLOCK_HEIGHT = Number(process.env.START_BLOCK_HEIGHT);
 export const MONGODB_URL = process.env.MONGODB_URL as string;
-export const GENERATOR_ADDRESS = process.env.GENERATOR_ADDRESS;
+export const GENERATOR_ADDRESS = process.env.GENERATOR_ADDRESS as string;
+export const BLUNA_PAIR_CONTRACT = process.env.BLUNA_PAIR_CONTRACT as string;
+export const LOCKDROP_CONTRACT = process.env.LOCKDROP_CONTRACT as string;
+export const BLUNA_TERRASWAP_LP_CONTRACT = process.env.BLUNA_TERRASWAP_LP_CONTRACT as string;
 
 // seed for wallet that calls maker contract
 export const MAKER_FEE_COLLECTOR_SEED = process.env.MAKER_FEE_COLLECTOR_SEED as string;

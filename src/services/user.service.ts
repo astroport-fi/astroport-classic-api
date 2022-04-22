@@ -1,7 +1,10 @@
 import {
+  BLUNA_PAIR_CONTRACT,
+  BLUNA_TERRASWAP_LP_CONTRACT,
   BUILDER_UNLOCK,
   FACTORY_ADDRESS,
   GENERATOR_ADDRESS,
+  LOCKDROP_CONTRACT,
   TERRA_CHAIN_ID,
   TERRA_HIVE,
   TERRA_LCD,
@@ -17,6 +20,8 @@ import {
   initHive,
   getStakedBalances,
   getContractConfig,
+  getContractStore,
+  getLockDropRewards,
 } from "../lib/terra/hive";
 import { isIBCToken, isNative } from "../modules/terra";
 import { PairType, UserLpToken } from "../types/user_lp.type";
@@ -25,6 +30,7 @@ import { VotingPower } from "../types/voting_power.type";
 import { getPairs } from "./pair.service";
 import { getPriceByTokenAddress } from "./priceV2.service";
 import { getToken, getTokens } from "./token.service";
+import { BlunaPendingRewards, LockUpInfoList } from "../types/user.type";
 
 /**
  * Calculate this wallet's voting power at this moment
@@ -213,4 +219,54 @@ export const getUserStakedLpTokens = async (address: string): Promise<UserLpToke
     };
   });
   return response;
+};
+
+/**
+ * Gets bluna UST rewards that can be claimed by both lockdrop participants and by normal LPs
+ *
+ * Voting power is calculated as follows:
+ * voting power = token allocation (in builder unlock) - astro withdrawn (from builder unlock) + current xAstro holding
+ *
+ *
+ * @param address user wallet addres
+ * @returns Pending rewards ust
+ */
+export const getBlunaUstRewards = async (address: string): Promise<number> => {
+  //TODO reuse connection between requests
+  await initHive(TERRA_HIVE);
+  const bLunaRewardsResponse: BlunaPendingRewards | null = await getContractStore(
+    BLUNA_PAIR_CONTRACT,
+    JSON.parse(`{"pending_reward": { "user": "${address}" }}`)
+  );
+  const bLunaPendingRewards = bLunaRewardsResponse?.amount || "0";
+
+  //check lockupList for bluna terraswap pool_address
+  const lockUpList: LockUpInfoList | null = await getContractStore(
+    LOCKDROP_CONTRACT,
+    JSON.parse(`{"user_info_with_lockups_list": { "address": "${address}" }}`)
+  );
+
+  let lockUpDuration = undefined;
+  if (lockUpList) {
+    for (const item of lockUpList.lockup_infos) {
+      if (item.pool_address === BLUNA_TERRASWAP_LP_CONTRACT) {
+        lockUpDuration = item.duration;
+        break;
+      }
+    }
+  }
+
+  let blunaLockdropRewards = 0;
+  if (lockUpDuration) {
+    const response = await getLockDropRewards({
+      userAddress: address,
+      lockDropContract: LOCKDROP_CONTRACT,
+      blunaTerraswapLp: BLUNA_TERRASWAP_LP_CONTRACT,
+      duration: lockUpDuration,
+    });
+    // console.log(response);
+    blunaLockdropRewards = response;
+  }
+
+  return parseInt(bLunaPendingRewards) + blunaLockdropRewards;
 };

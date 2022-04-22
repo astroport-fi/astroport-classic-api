@@ -673,3 +673,55 @@ export const getStakedBalances = async (
     return [];
   }
 };
+
+/**
+ * Retrieves rewards from lockdrop contract
+ *
+ * @param lockDropContract Address for lockdrop rewards
+ * @param userAddress user whose address is being checked for.
+ * @param blunaTerraswapLp terraswap lp address
+ * @param duration number of weeks locked
+ * @returns rewards
+ */
+export const getLockDropRewards = async ({
+  lockDropContract,
+  userAddress,
+  blunaTerraswapLp,
+  duration,
+}: {
+  lockDropContract: string;
+  userAddress: string;
+  blunaTerraswapLp: string;
+  duration?: number;
+}): Promise<number> => {
+  try {
+    const response = await hive.request(
+      gql`
+        query (
+          $userAddress: String!
+          $lockDropContract: String!
+          $blunaTerraswapLp: String!
+          $duration: Int!
+        ) {
+          wasm {
+            contractQuery(
+              contractAddress: $lockDropContract
+              query: {
+                pending_asset_reward: {
+                  user_address: $userAddress
+                  terraswap_lp_token: $blunaTerraswapLp
+                  duration: $duration
+                }
+              }
+            )
+          }
+        }
+      `,
+      { lockDropContract, userAddress, blunaTerraswapLp, duration }
+    );
+    return +response?.wasm?.contractQuery?.amount;
+  } catch (e) {
+    console.log(e);
+    return 0;
+  }
+};
