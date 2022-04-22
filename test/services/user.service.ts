@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { getCW20TokenHoldings } from "../../src/lib/terra";
-import { getVotingPower } from "../../src/services/user.service";
+import { getUserStakedLpTokens, getVotingPower } from "../../src/services/user.service";
 
 describe("services/user.service", function () {
   it("get a valid user's voting power", async () => {
@@ -51,5 +51,18 @@ describe("services/user.service", function () {
     expect(holding.size).to.equal(2);
     expect(holding.get("terra1xj49zyqrwpv5k928jwfpfy2ha668nwdgkwlrg3")).to.not.be.undefined;
     expect(holding.get("terra14lpnyzc9z4g3ugr4lhm8s4nle0tq8vcltkhzh7")).to.not.be.undefined;
+  });
+
+  it("gets users staked lp balance", async () => {
+    const stakedLpTokens = await getUserStakedLpTokens(
+      "terra1z5k2ln76p5xh63k6q50egnpz54pxqq2e2tppl6"
+    );
+    console.log(stakedLpTokens);
+    const singleStaked = stakedLpTokens.find(() => true);
+    expect(singleStaked).to.haveOwnProperty("pool_address");
+    expect(singleStaked).to.haveOwnProperty("lp_token_address");
+    expect(singleStaked).to.haveOwnProperty("pool_type");
+    expect(singleStaked).to.haveOwnProperty("pool_fees");
+    expect(singleStaked?.pool_fees).to.be.a("number");
   });
 });

@@ -248,11 +248,22 @@ export const typeDefs = /* GraphQL */ `
     valueUST: Float
   }
 
+  type UserStakedLpTokens {
+    token1: String
+    token2: String
+    lp_token_address: String
+    pool_address: String
+    pool_type: String
+    pool_fees: Float
+    staked_balance: String
+  }
+
   type User {
     address: String!
     voting_power: VotingPower
     tokens: [UserTokenHolding]
     pending_rewards: Rewards
+    staked_lp_tokens: [UserStakedLpTokens]
   }
 
   type Rewards {
