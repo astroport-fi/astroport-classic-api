@@ -57,7 +57,7 @@ describe("services/user.service", function () {
     const stakedLpTokens = await getUserStakedLpTokens(
       "terra1z5k2ln76p5xh63k6q50egnpz54pxqq2e2tppl6"
     );
-    console.log(stakedLpTokens);
+    // console.log(stakedLpTokens);
     const singleStaked = stakedLpTokens.find(() => true);
     expect(singleStaked).to.haveOwnProperty("pool_address");
     expect(singleStaked).to.haveOwnProperty("lp_token_address");

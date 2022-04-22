@@ -267,7 +267,7 @@ export const typeDefs = /* GraphQL */ `
   }
 
   type Rewards {
-    bluna_ust: number
+    bluna_ust: Int
   }
 
   type Snapshot {

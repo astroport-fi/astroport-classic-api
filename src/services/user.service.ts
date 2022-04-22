@@ -232,6 +232,8 @@ export const getUserStakedLpTokens = async (address: string): Promise<UserLpToke
  * @returns Pending rewards ust
  */
 export const getBlunaUstRewards = async (address: string): Promise<number> => {
+  //TODO reuse connection between requests
+  await initHive(TERRA_HIVE);
   const bLunaRewardsResponse: BlunaPendingRewards | null = await getContractStore(
     BLUNA_PAIR_CONTRACT,
     JSON.parse(`{"pending_reward": { "user": "${address}" }}`)
