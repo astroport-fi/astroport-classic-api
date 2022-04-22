@@ -168,6 +168,7 @@ function sliceIntoChunks<T = any>(arr: T[], chunkSize: number) {
  * @returns information about staked tokens.
  */
 export const getUserStakedLpTokens = async (address: string): Promise<UserLpToken[]> => {
+  //TODO reuse connection between requests
   await initHive(TERRA_HIVE);
   const factoryConfig = await getContractConfig(FACTORY_ADDRESS);
   const pairs = await getPairs();
