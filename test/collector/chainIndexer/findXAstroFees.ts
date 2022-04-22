@@ -9,9 +9,9 @@ import { ScheduleType } from "../../../src/types/contracts";
 describe("findXAstroFees", function () {
   it("Should get XAstroFees event from transfer log", async () => {
     const event = await getEvent(
-      7335769,
-      "F62C899AF33BC5490FE09C37B31ED743CD2B84EBBA6CD0AC82CFD2341254AA01",
-      "transfer"
+      7347001,
+      "70BD4D64467FAD9631EC4A42AAC59F9D833105ACF9F6C4F62E9E96C1491D9EF3",
+      "wasm"
     );
     const astroNativeFeeLogFinder = createAstroNativeFeeLogFinder();
     const astroNativeFeeLogFound = astroNativeFeeLogFinder(event);
@@ -21,6 +21,7 @@ describe("findXAstroFees", function () {
   });
 });
 
+//TOD simplify and make reusable for other tests
 async function getEvent(height: number, txnHash: string, type: string) {
   const txs = await getTxBlock(height);
   for (const tx of txs) {
