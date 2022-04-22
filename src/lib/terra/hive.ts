@@ -619,3 +619,57 @@ export const getvxAstroVotingPower = async (
     return 0;
   }
 };
+
+/**
+ * Fetches staked balances from multiple generators at a time in one hive query
+ * the request maps out multiple queries with a unique key here liquidityToken is
+ * the key.
+ *
+ * @example
+ *
+ * `
+ * {
+ * terra1cxmdyn5srv8uwvhgz5ckqf28zf8c7uwyz08f2j: wasm { },
+ * terra1m24f7k4g66gnh9f7uncp32p722v0kyt3q4l3u5: wasm { },
+ * terra1gxqhpka432v9zqktvkney2anvpx5kem7ws0g60: wasm { }
+ * }
+ * `
+ *
+ * @param pairs pair object with { liquidityToken } addresses
+ * @param address user address to check for staked lp tokens
+ * @param generator astro generator contract
+ * @returns The voting power of the user
+ */
+export const getStakedBalances = async (
+  pairs: { liquidityToken: string }[],
+  address: any,
+  generator: any
+) => {
+  try {
+    const request = gql`
+    {
+      ${pairs.map(({ liquidityToken }) => {
+        return `
+        ${liquidityToken}: wasm {
+            contractQuery(
+              contractAddress: "${generator}"
+              query: {
+                deposit: {
+                  lp_token: "${liquidityToken}"
+                  user: "${address}"
+                }
+              }
+            )
+          }
+        `;
+      })}
+    }
+`;
+
+    const response = await hive.request(request);
+    return response;
+  } catch (e) {
+    console.log(e);
+    return [];
+  }
+};
