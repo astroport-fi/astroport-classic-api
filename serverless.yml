@@ -3,9 +3,10 @@ useDotenv: true
 variablesResolutionMode: 20210326
 
 plugins:
-  - serverless-offline
   - serverless-dotenv-plugin
   - serverless-plugin-typescript
+  - serverless-plugin-conditional-functions
+  - serverless-offline
 
 provider:
   name: aws
@@ -16,7 +17,6 @@ provider:
     START_BLOCK_HEIGHT: ${env:START_BLOCK_HEIGHT}
     TERRA_LCD: ${env:TERRA_LCD}
     TERRA_HIVE: ${env:TERRA_HIVE}
-    TERRA_MANTLE: ${env:TERRA_MANTLE}
     TERRA_CHAIN_ID: ${env:TERRA_CHAIN_ID}
 
 functions:
@@ -82,6 +82,7 @@ functions:
     environment:
       MONGODB_URL: ${env:MONGODB_URL_RW}
   slack-bot-backend-stats:
+    enabled: '"${env:NODE_ENV}" == "production"'
     handler: src/bot/slack-bot-backend-stats/index.run
     events:
       - schedule: rate(5 minutes)
@@ -101,7 +102,6 @@ functions:
       MONGODB_URL: ${env:MONGODB_URL_R}
 
 custom:
-  environment: ${file(.env)}
   serverlessPluginTypescript:
     tsConfigFileLocation: "./tsconfig.serverless.json"
   serverless-offline:

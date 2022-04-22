@@ -1,7 +1,6 @@
 export const DECIMALS = 6;
 export const TERRA_LCD = process.env.TERRA_LCD as string;
 export const TERRA_HIVE = process.env.TERRA_HIVE as string;
-export const TERRA_MANTLE = process.env.TERRA_MANTLE as string;
 export const TERRA_CHAIN_ID = process.env.TERRA_CHAIN_ID as string;
 export const START_BLOCK_HEIGHT = Number(process.env.START_BLOCK_HEIGHT);
 export const MONGODB_URL = process.env.MONGODB_URL as string;
