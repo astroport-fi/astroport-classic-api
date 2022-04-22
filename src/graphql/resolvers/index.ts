@@ -17,7 +17,11 @@ import { getVotes } from "../../services/vote.service";
 import GraphQLJSON from "graphql-type-json";
 import { getSnapshots } from "../../services/snapshot.service";
 import { Pool } from "../../types/pool.type";
-import { getAllTokenHoldings, getVotingPower } from "../../services/user.service";
+import {
+  getAllTokenHoldings,
+  getUserStakedLpTokens,
+  getVotingPower,
+} from "../../services/user.service";
 import { User } from "../../types/user.type";
 import { parseResolveInfo } from "../../lib/graphql-parse-resolve-info";
 
@@ -93,6 +97,7 @@ export const resolvers = {
       // parseResolveInfo helps us determine which fields were requested
       // and aids in skipping long-running fields if not requested
       const resolvedInfo: any = parseResolveInfo(resolveInfo);
+      console.log(resolvedInfo);
       if (!resolvedInfo) {
         // Unable to parse the query
         return user;
@@ -107,6 +112,11 @@ export const resolvers = {
       // Was tokens requested?
       if (resolvedInfo.fieldsByTypeName.User.tokens) {
         user.tokens = await getAllTokenHoldings(address);
+      }
+
+      // Was staked_lp_tokens requested?
+      if (resolvedInfo.fieldsByTypeName.User.staked_lp_tokens) {
+        user.staked_lp_tokens = await getUserStakedLpTokens(address);
       }
 
       return user;

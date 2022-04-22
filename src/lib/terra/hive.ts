@@ -566,3 +566,36 @@ export const getvxAstroVotingPower = async (
     return 0;
   }
 };
+
+export const getStakedBalances = async (
+  pairs: { liquidityToken: string }[],
+  address: any,
+  generator: any
+) => {
+  try {
+    const request = gql`
+    {
+      ${pairs.map(({ liquidityToken }) => {
+        return `
+        ${liquidityToken}: wasm {
+            contractQuery(
+              contractAddress: "${generator}"
+              query: {
+                deposit: {
+                  lp_token: "${liquidityToken}"
+                  user: "${address}"
+                }
+              }
+            )
+          }
+        `;
+      })}
+    }
+`;
+    const response = await hive.request(request);
+    return response;
+  } catch (e) {
+    console.log(e);
+    return [];
+  }
+};

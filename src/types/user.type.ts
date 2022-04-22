@@ -1,5 +1,6 @@
 import { VotingPower } from "./voting_power.type";
 import { UserTokenHolding } from "./user_token_holding.type";
+import { UserLpToken } from "./user_lp.type";
 
 /**
  * Type User holds the core user construct.
@@ -12,4 +13,5 @@ export type User = {
   address: string;
   voting_power?: VotingPower;
   tokens?: UserTokenHolding[];
+  staked_lp_tokens?: UserLpToken[];
 };
