@@ -1,4 +1,6 @@
 import { createReturningLogFinder, ReturningLogFinderMapper } from "@terra-money/log-finder";
+import { isNative } from "../../modules/terra";
+
 import { XAstroFeeTransformed } from "../../types";
 import { xAstroNativeFeeRule } from "./logRules";
 
@@ -6,16 +8,17 @@ export function createAstroNativeFeeLogFinder(): ReturningLogFinderMapper<
   XAstroFeeTransformed | undefined
 > {
   return createReturningLogFinder(xAstroNativeFeeRule(), (_, match) => {
-    //amount returns value: '9176uusd'
-    const amount = match[4].value;
-    //parses the amount it to 9176
-    const parsedAmount = parseInt(amount);
-    //turns '9176uusd' to [ '', 'uusd' ]
-    const token = amount.split("" + parsedAmount)[1];
+    const token = match[0].value;
+    const amount = match[6].value;
+
+    // // filter out cw20 token fees
+    if (!isNative(token)) {
+      return undefined;
+    }
 
     const transformed = {
-      token,
-      amount: parsedAmount,
+      token: token,
+      amount: Number(amount),
     };
     return transformed;
   });
