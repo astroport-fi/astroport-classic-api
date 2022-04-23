@@ -8,22 +8,31 @@ export class DevelopmentEnvironment {
   /**
    * From .env
    */
-  TERRA_CHAIN_ID = process.env.TERRA_CHAIN_ID as string;
-  TERRA_LCD_ENDPOINT = process.env.TERRA_LCD as string;
-  TERRA_HIVE_ENDPOINT = process.env.TERRA_HIVE as string;
   COINGECKO_API_KEY = process.env.COINGECKO_API_KEY as string;
   MONGODB_URL = process.env.MONGODB_URL as string;
+  MONGODB_URL_R = process.env.MONGODB_URL_R as string;
+  MONGODB_URL_RW = process.env.MONGODB_URL_RW as string;
 
-  START_BLOCK_HEIGHT = Number(process.env.START_BLOCK_HEIGHT);
+  // Seed for wallet that calls maker contract
+  MAKER_FEE_COLLECTOR_SEED = process.env.MAKER_FEE_COLLECTOR_SEED as string;
+  // Seed for wallet that triggers governance state transitions
+  GOVERNANCE_TRIGGER_BOT_SEED = process.env.GOVERNANCE_TRIGGER_BOT_SEED as string;
 
   /**
    * Operational constants
    */
 
+  // Indexer start
+  START_BLOCK_HEIGHT = 5968589;
+
+  // Chain config
+  TERRA_CHAIN_ID = "columbus-5";
+  TERRA_LCD_ENDPOINT = "https://lcd-terra.everstake.one/";
+  TERRA_HIVE_ENDPOINT = "https://hive-terra.everstake.one/graphql";
   // Maximum amount of blocks to collect during an indexer invocation
   CHAIN_COLLECT_BATCH_SIZE = 150;
   // Whether to notify Slack when a fee swap happens
-  ENABLE_FEE_SWAP_NOTIFICATION = process.env.ENABLE_FEE_SWAP_NOTIFICATION == "true";
+  ENABLE_FEE_SWAP_NOTIFICATION = "false";
   ENABLE_DEBUG: boolean = true;
   ENABLE_GRAPHQL_INTROSPECTION: boolean = true;
 
@@ -45,21 +54,12 @@ export class DevelopmentEnvironment {
     ["stable", 2.5],
   ]);
 
-  GENERATOR_ADDRESS = process.env.GENERATOR_ADDRESS as string;
-  BLUNA_PAIR_CONTRACT = process.env.BLUNA_PAIR_CONTRACT as string;
-  LOCKDROP_CONTRACT = process.env.LOCKDROP_CONTRACT as string;
-  BLUNA_TERRASWAP_LP_CONTRACT = process.env.BLUNA_TERRASWAP_LP_CONTRACT as string;
-
-  // seed for wallet that calls maker contract
-  MAKER_FEE_COLLECTOR_SEED = process.env.MAKER_FEE_COLLECTOR_SEED as string;
   // trigger collect on this address
-  MAKER_CONTRACT = process.env.MAKER_CONTRACT as string;
+  MAKER_CONTRACT = "terra14906rw2kyu50cdw25x0uymkrlqtgqxjemdfd0n";
 
   // Governance
-  // seed for wallet that triggers governance state transitions
-  GOVERNANCE_TRIGGER_BOT_SEED = process.env.GOVERNANCE_TRIGGER_BOT_SEED as string;
-  // trigger messages on this address
-  GOVERNANCE_ASSEMBLY = process.env.GOVERNANCE_ASSEMBLY as string;
+  // Trigger messages on this address
+  GOVERNANCE_ASSEMBLY = "terra109039nj38vnzyryqvcjctdh33r4qlq5dmrzqn0";
 
   // Governance addresses
   GOV_XASTRO = "terra1yufp7cv85qrxrx56ulpfgstt2gxz905fgmysq0" as string;
@@ -81,6 +81,11 @@ export class DevelopmentEnvironment {
   FACTORY_ADDRESS = "terra1fnywlw4edny3vw44x04xd67uzkdqluymgreu7g" as string;
   MAKER_ADDRESS = "terra12u7hcmpltazmmnq0fvyl225usn3fy6qqlp05w0" as string;
   XASTRO_STAKING_ADDRESS = "terra1f68wt2ch3cx2g62dxtc8v68mkdh5wchdgdjwz7" as string;
+
+  GENERATOR_ADDRESS = "terra1zgrx9jjqrfye8swykfgmd6hpde60j0nszzupp9" as string;
+  BLUNA_PAIR_CONTRACT = "terra1esle9h9cjeavul53dqqws047fpwdhj6tynj5u4" as string;
+  LOCKDROP_CONTRACT = "terra1dd9kewme9pwhurvlzuvvljq5ukecft9axyej42" as string;
+  BLUNA_TERRASWAP_LP_CONTRACT = "terra1tj4pavqjqjfm0wh73sh7yy9m4uq3m2cpmgva6n" as string;
 
   /**
    * Currency constants
