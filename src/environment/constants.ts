@@ -14,6 +14,8 @@ class Environment extends DevelopmentEnvironment {
   // Index signature to allow index access of properties
   // see https://basarat.gitbook.io/typescript/type-system/index-signatures#declaring-an-index-signature
   [index: string]: any;
+  // Flag set to true if production.ts is missing any variables
+  checkIsProdMissingVars: boolean = false;
   // Current instance
   private static instance: Environment;
 
@@ -30,8 +32,12 @@ class Environment extends DevelopmentEnvironment {
     // Check if we have any variables defined in development, but not in
     // production
     for (const baseVariable of baseVariables) {
+      // If variable starts with "check", we don't validate it's existance in prod
+      // as it is used in safety checks
+      if (baseVariable.slice(0, 5) === "check") continue;
       if (!productionVariables.includes(baseVariable)) {
-        console.error(`Variable "${baseVariable} not defined in production environment`);
+        console.error(`Variable "${baseVariable}" not defined in production environment`);
+        this.checkIsProdMissingVars = true;
       }
     }
     // If we're running in production, overwrite values from the production
@@ -41,6 +47,15 @@ class Environment extends DevelopmentEnvironment {
         this[productionVariable] = productionEnvironment[productionVariable];
       }
     }
+  }
+
+  /**
+   * Checks if production constants are missing any variables
+   *
+   * @returns true is any variables are missing, false otherwise
+   */
+  public hasMissingVariables(): boolean {
+    return this.checkIsProdMissingVars;
   }
 
   /**
