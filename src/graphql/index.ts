@@ -20,7 +20,6 @@ export const schema = makeExecutableSchema({
 const apolloServer = new ApolloServer({
   schema,
   context: async () => {
-    console.log(constants.ASTRO_TOKEN);
     if (db == null) {
       if (constants.MONGODB_URL == null) {
         return;
