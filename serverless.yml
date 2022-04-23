@@ -12,74 +12,80 @@ provider:
   name: aws
   runtime: nodejs14.x
   lambdaHashingVersion: 20201221
-  environment:
-    START_BLOCK_HEIGHT: ${env:START_BLOCK_HEIGHT}
-    TERRA_LCD: ${env:TERRA_LCD}
-    TERRA_HIVE: ${env:TERRA_HIVE}
-    TERRA_CHAIN_ID: ${env:TERRA_CHAIN_ID}
 
 functions:
   aggregator:
+    enabled: '"${env:ENABLE_FUNCTION_AGGREGATOR}" == "true"'
     handler: src/aggregator/index.run
     events:
       - schedule: rate(5 minutes)
     timeout: 295 # in seconds
     environment:
       MONGODB_URL: ${env:MONGODB_URL_RW}
+
   aggregatorHourly:
+    enabled: '"${env:ENABLE_FUNCTION_AGGREGATOR_HOURLY}" == "true"'
     handler: src/aggregatorHourly/index.run
     events:
       - schedule: rate(1 hour)
     timeout: 295 # in seconds
     environment:
       MONGODB_URL: ${env:MONGODB_URL_RW}
+
   collector:
+    enabled: '"${env:ENABLE_FUNCTION_COLLECTOR}" == "true"'
     handler: src/collector/index.run
     events:
       - schedule: rate(8 minutes)
     timeout: 475 # in seconds
     environment:
       MONGODB_URL: ${env:MONGODB_URL_RW}
+
   collectorHourly:
+    enabled: '"${env:ENABLE_FUNCTION_COLLECTOR_HOURLY}" == "true"'
     handler: src/collectorHourly/index.run
     events:
       - schedule: rate(1 hour)
     timeout: 475 # in seconds
     environment:
       MONGODB_URL: ${env:MONGODB_URL_RW}
+
   snapshot-bot:
+    enabled: '"${env:ENABLE_FUNCTION_SNAPSHOT_BOT}" == "true"'
     handler: src/bot/stat-snapshotter/index.run
     events:
       - schedule: rate(5 minutes)
     timeout: 55 # in seconds
     environment:
       MONGODB_URL: ${env:MONGODB_URL_RW}
+
   governance-proposal-collector:
+    enabled: '"${env:ENABLE_FUNCTION_GOVERNANCE_PROPOSAL_COLLECTOR}" == "true"'
     handler: src/governance/index.run
     events:
       - schedule: rate(1 minute)
     timeout: 55 # in seconds
     environment:
       MONGODB_URL: ${env:MONGODB_URL_RW}
-      GOVERNANCE_ASSEMBLY: "terra109039nj38vnzyryqvcjctdh33r4qlq5dmrzqn0"
+
   governance-state-transition-bot: # TODO change to prod values
+    enabled: '"${env:ENABLE_FUNCTION_GOVERNANCE_STATE_TRANSITION_BOT}" == "true"'
     handler: src/bot/governance-state-transition-bot/index.run
     events:
       - schedule: rate(1 minute)
     timeout: 30 # in seconds
     environment:
       MONGODB_URL: ${env:MONGODB_URL_RW}
-      TERRA_CHAIN_ID: "bombay-12"
-      TERRA_LCD: "https://bombay-lcd.terra.dev"
-      TERRA_HIVE: "https://testnet-hive.terra.dev/graphql"
-      GOVERNANCE_ASSEMBLY: "terra109039nj38vnzyryqvcjctdh33r4qlq5dmrzqn0"
+
   slack-bot-backend-stats:
-    enabled: '"${env:NODE_ENV}" == "production"'
+    enabled: '"${env:ENABLE_FUNCTION_SLACK_BOT_BACKEND_STATS}" == "true"'
     handler: src/bot/slack-bot-backend-stats/index.run
     events:
       - schedule: rate(5 minutes)
     timeout: 20 # in seconds
+
   graphql:
+    enabled: '"${env:ENABLE_FUNCTION_GRAPHQL}" == "true"'
     handler: src/graphql/index.run
     events:
       - http:
