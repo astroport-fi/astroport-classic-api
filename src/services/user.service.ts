@@ -74,7 +74,7 @@ export async function getVotingPower(address: string): Promise<VotingPower> {
  */
 export async function getAllTokenHoldings(address: string): Promise<UserTokenHolding[]> {
   initHive(constants.TERRA_HIVE_ENDPOINT);
-  initLCD(constants.TERRA_LCD, constants.TERRA_CHAIN_ID);
+  initLCD(constants.TERRA_LCD_ENDPOINT, constants.TERRA_CHAIN_ID);
 
   const userTokens: UserTokenHolding[] = [];
 

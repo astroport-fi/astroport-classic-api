@@ -23,7 +23,7 @@ export async function run(
   context.callbackWaitsForEmptyEventLoop = false;
 
   await connectToDatabase();
-  await initHive(constants.TERRA_HIVE_ENDPOINT); // TODO change
+  await initHive(constants.TERRA_HIVE_ENDPOINT);
 
   try {
     const start = new Date().getTime();
