@@ -1,7 +1,7 @@
-import { BLOCKS_PER_YEAR, GENERATOR_ADDRESS } from "../../constants";
 import { getContractConfig, getContractStore, getGeneratorPoolInfo } from "../../lib/terra";
 import { formatSchedules, generateScheduleType } from "./helpers";
 import { ProxyAddressInfo } from "../../types/contracts";
+import constants from "../../environment/constants";
 
 /**
  * Gets all proxy addresses from generator contract
@@ -10,11 +10,11 @@ import { ProxyAddressInfo } from "../../types/contracts";
  * @returns a Map with pairAddress -> TokenInformation
  */
 export const getProxyAddressesInfo = async (): Promise<Map<string, ProxyAddressInfo>> => {
-  const generatorConfig = await getContractConfig(GENERATOR_ADDRESS as string);
+  const generatorConfig = await getContractConfig(constants.GENERATOR_ADDRESS as string);
   const totalAllocPoint = generatorConfig?.total_alloc_point;
   const rewardProxyAddresses: string[] = generatorConfig?.allowed_reward_proxies;
   const tokensPerBlock = generatorConfig?.tokens_per_block;
-  const totalTokensPerYear = (tokensPerBlock * BLOCKS_PER_YEAR) / 10 ** 6;
+  const totalTokensPerYear = (tokensPerBlock * constants.BLOCKS_PER_YEAR) / 10 ** 6;
   const proxyAddressesInfo = new Map<string, ProxyAddressInfo>();
 
   await Promise.all(

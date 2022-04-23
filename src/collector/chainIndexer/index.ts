@@ -1,14 +1,11 @@
 import { createPairLogFinders, createSwapLogFinder } from "../logFinder";
 import { createPairIndexer } from "./createPairIndex";
-import { FACTORY_ADDRESS } from "../../constants";
-import { Pair } from "../../types";
-import { TxHistoryIndexer } from "./txHistoryIndexer";
 import { findProtocolRewardEmissions } from "./findProtocolRewardEmissions";
-import { PriceV2 } from "../../types/priceV2.type";
 import { findXAstroFees } from "./findXAstroFees";
 import { voteLogFinder } from "../logFinder/voteLogFinder";
 import { voteIndexer } from "./voteIndexer";
 import { getProxyAddressesInfo } from "../proxyAddresses";
+import constants from "../../environment/constants";
 
 /**
  * Indexes transactions for a single block
@@ -33,7 +30,7 @@ export async function runIndexers(txs: any, height: number): Promise<void> {
         if (event.attributes.length < 1800) {
           // createPair
           try {
-            const createPairLF = createPairLogFinders(FACTORY_ADDRESS);
+            const createPairLF = createPairLogFinders(constants.FACTORY_ADDRESS);
             const createPairLogFounds = createPairLF(event);
             if (createPairLogFounds.length > 0) {
               await createPairIndexer(createPairLogFounds, timestamp, txHash);

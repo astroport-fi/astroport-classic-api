@@ -1,7 +1,6 @@
-import { Pair, TxHistoryTransformed } from "../../types";
+import { TxHistoryTransformed } from "../../types";
 import { ReturningLogFinderResult } from "@terra-money/log-finder";
 import { getUSTSwapValue } from "../helpers";
-import { PoolVolume } from "../../models/pool_volume.model";
 import { PriceV2 } from "../../types/priceV2.type";
 
 /**
@@ -16,8 +15,8 @@ import { PriceV2 } from "../../types/priceV2.type";
 export async function TxHistoryIndexer(
   priceMap: Map<string, PriceV2>,
   founds: ReturningLogFinderResult<TxHistoryTransformed | undefined>[],
-  poolVolumeMap: Map<string, number>)
-: Promise<void> {
+  poolVolumeMap: Map<string, number>
+): Promise<void> {
   for (const logFound of founds) {
     const transformed = logFound.transformed;
     if (transformed) {
@@ -25,7 +24,7 @@ export async function TxHistoryIndexer(
         // get UST value of swap (from asset)
         const val: number = getUSTSwapValue(transformed, priceMap);
 
-        poolVolumeMap.set(transformed.pair, (poolVolumeMap.get(transformed.pair) || 0) + val)
+        poolVolumeMap.set(transformed.pair, (poolVolumeMap.get(transformed.pair) || 0) + val);
       }
     }
   }

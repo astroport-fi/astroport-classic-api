@@ -7,7 +7,6 @@ import {
 
 import { initHive, initLCD } from "../lib/terra";
 import { connectToDatabase } from "../modules/db";
-import { TERRA_CHAIN_ID, TERRA_HIVE, TERRA_LCD } from "../constants";
 
 import { getHistoricPrices30d, getPrices } from "../services/priceV2.service";
 import { priceListToMap } from "../collector/helpers";
@@ -15,6 +14,7 @@ import { aggregateXAstroFees30d } from "./aggregateXAstroFees30d";
 import { aggregateXAstroFees30dChange } from "./aggregateXAstroFees30dChange";
 import { aggregateXAstroFees365d } from "./aggregateXAstroFees365d";
 import { aggregateXAstroFeesMonthly } from "./aggregateXAstroFeesMonthly";
+import constants from "../environment/constants";
 
 bluebird.config({
   longStackTraces: true,
@@ -29,8 +29,8 @@ export async function run(
   context.callbackWaitsForEmptyEventLoop = false;
 
   await connectToDatabase();
-  await initHive(TERRA_HIVE);
-  await initLCD(TERRA_LCD, TERRA_CHAIN_ID);
+  await initHive(constants.TERRA_HIVE_ENDPOINT);
+  await initLCD(constants.TERRA_LCD_ENDPOINT, constants.TERRA_CHAIN_ID);
 
   const prices = await getPrices();
   const priceMap = priceListToMap(prices);

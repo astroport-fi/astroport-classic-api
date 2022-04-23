@@ -1,6 +1,5 @@
 import { createWithdrawLogFinder } from "../logFinder";
 import { PoolProtocolReward } from "../../models/pool_protocol_reward.model";
-import { getProxyAddressesInfo } from "../proxyAddresses";
 import { ProxyAddressInfo } from "../../types/contracts";
 
 export async function findProtocolRewardEmissions(

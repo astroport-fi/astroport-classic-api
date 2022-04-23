@@ -1,9 +1,9 @@
 import { BigNumber } from "bignumber.js";
 
-import { DECIMALS } from "../constants";
+import constants from "../environment/constants";
 
 BigNumber.config({
-  DECIMAL_PLACES: DECIMALS,
+  DECIMAL_PLACES: constants.DECIMALS,
   ROUNDING_MODE: BigNumber.ROUND_DOWN,
 });
 

@@ -1,19 +1,50 @@
+import { CoingeckoValues } from "../types/coingecko_values.type";
+
 /**
  * DevelopmentEnvironment defines constants to be used as the base setup,
  * specifically for development
  */
-export interface CoingeckoValues {
-  source: string;
-  address: string;
-  currency: string;
-}
 export class DevelopmentEnvironment {
-  DECIMALS = 6;
-  TERRA_LCD = process.env.TERRA_LCD as string;
-  TERRA_HIVE = process.env.TERRA_HIVE as string;
+  /**
+   * From .env
+   */
   TERRA_CHAIN_ID = process.env.TERRA_CHAIN_ID as string;
-  START_BLOCK_HEIGHT = Number(process.env.START_BLOCK_HEIGHT);
+  TERRA_LCD_ENDPOINT = process.env.TERRA_LCD as string;
+  TERRA_HIVE_ENDPOINT = process.env.TERRA_HIVE as string;
+  COINGECKO_API_KEY = process.env.COINGECKO_API_KEY as string;
   MONGODB_URL = process.env.MONGODB_URL as string;
+
+  START_BLOCK_HEIGHT = Number(process.env.START_BLOCK_HEIGHT);
+
+  /**
+   * Operational constants
+   */
+
+  // Maximum amount of blocks to collect during an indexer invocation
+  CHAIN_COLLECT_BATCH_SIZE = 150;
+  // Whether to notify Slack when a fee swap happens
+  ENABLE_FEE_SWAP_NOTIFICATION = process.env.ENABLE_FEE_SWAP_NOTIFICATION == "true";
+  ENABLE_DEBUG: boolean = true;
+  ENABLE_GRAPHQL_INTROSPECTION: boolean = true;
+
+  /**
+   * Time constants
+   */
+  BLOCKS_PER_YEAR = 5256000; // assumes 6s block times
+  BLOCKS_PER_DAY = this.BLOCKS_PER_YEAR / 365;
+  SECONDS_PER_YEAR = 60 * 60 * 24 * 365;
+
+  /**
+   * Astroport specific
+   */
+
+  // TODO get from pair registration
+  // fees basis points.  30 = 0.3%, 5 = 0.05%
+  FEES = new Map<string, number>([
+    ["xyk", 20],
+    ["stable", 2.5],
+  ]);
+
   GENERATOR_ADDRESS = process.env.GENERATOR_ADDRESS as string;
   BLUNA_PAIR_CONTRACT = process.env.BLUNA_PAIR_CONTRACT as string;
   LOCKDROP_CONTRACT = process.env.LOCKDROP_CONTRACT as string;
@@ -23,24 +54,24 @@ export class DevelopmentEnvironment {
   MAKER_FEE_COLLECTOR_SEED = process.env.MAKER_FEE_COLLECTOR_SEED as string;
   // trigger collect on this address
   MAKER_CONTRACT = process.env.MAKER_CONTRACT as string;
-  // whether to notify slack when a fee swap happens
-  ENABLE_FEE_SWAP_NOTIFICATION = process.env.ENABLE_FEE_SWAP_NOTIFICATION == "true";
 
-  // governance
+  // Governance
   // seed for wallet that triggers governance state transitions
   GOVERNANCE_TRIGGER_BOT_SEED = process.env.GOVERNANCE_TRIGGER_BOT_SEED as string;
   // trigger messages on this address
   GOVERNANCE_ASSEMBLY = process.env.GOVERNANCE_ASSEMBLY as string;
 
-  // TODO testnet values
+  // Governance addresses
   GOV_XASTRO = "terra1yufp7cv85qrxrx56ulpfgstt2gxz905fgmysq0" as string;
   GOV_BUILDER_UNLOCK = "terra1hccg0cfrcu0nr4zgt5urmcgam9v88peg9s7h6j" as string;
   GOV_VXASTRO = "terra1pqr02fx4ulc2mzws7xlqh8hpwqx2ls5m4fk62j" as string;
 
+  // Astroport tokens
   ASTRO_TOKEN = "terra1xj49zyqrwpv5k928jwfpfy2ha668nwdgkwlrg3" as string;
   XASTRO_TOKEN = "terra14lpnyzc9z4g3ugr4lhm8s4nle0tq8vcltkhzh7" as string;
   VXASTRO_TOKEN = null;
 
+  // Astroport contracts
   BUILDER_UNLOCK = "terra1fh27l8h4s0tfx9ykqxq5efq4xx88f06x6clwmr" as string;
   MULTISIG = "terra1c7m6j8ya58a2fkkptn8fgudx8sqjqvc8azq0ex" as string;
   ASSEMBLY_TREASURY = "terra16m3runusa9csfev7ymj62e8lnswu8um29k5zky" as string;
@@ -51,14 +82,10 @@ export class DevelopmentEnvironment {
   MAKER_ADDRESS = "terra12u7hcmpltazmmnq0fvyl225usn3fy6qqlp05w0" as string;
   XASTRO_STAKING_ADDRESS = "terra1f68wt2ch3cx2g62dxtc8v68mkdh5wchdgdjwz7" as string;
 
-  BLOCKS_PER_YEAR = 5256000; // assumes 6s block times
-  BLOCKS_PER_DAY = this.BLOCKS_PER_YEAR / 365;
-  SECONDS_PER_YEAR = 60 * 60 * 24 * 365;
-
-  // maximum amount of blocks to collect during an indexer invocation
-  CHAIN_COLLECT_BATCH_SIZE = 150;
-
-  COINGECKO_API_KEY = process.env.COINGECKO_API_KEY as string;
+  /**
+   * Currency constants
+   */
+  DECIMALS = 6;
 
   // TODO - switch to table
   // map pair address to token abbreviation
@@ -82,45 +109,6 @@ export class DevelopmentEnvironment {
     ["terra19wauh79y42u5vt62c5adt2g5h4exgh26t3rpds", "MARS"],
     ["terra13yftwgefkggq3u627gphq98s6ufwh9u85h5kmg", "ORNE"],
     ["terra1k8lvj3w7dxzd6zlyptcj086gfwms422xkqjmzx", "SAYVE"],
-  ]);
-
-  // TODO get from pair registration
-  // fees basis points.  30 = 0.3%, 5 = 0.05%
-  FEES = new Map<string, number>([
-    ["xyk", 20],
-    ["stable", 2.5],
-  ]);
-
-  /**
-   * PoolCollect constants
-   */
-
-  // orion, wormhole
-  POOLS_WITH_8_DIGIT_REWARD_TOKENS = new Set<string>([
-    "terra1mxyp5z27xxgmv70xpqjk7jvfq54as9dfzug74m", // orion ust
-    "terra1gxjjrer8mywt4020xdl5e5x7n6ncn6w38gjzae", // stLUNA luna
-    "terra18dq84qfpz267xuu0k47066svuaez9hr4xvwlex", // stSOL ust
-    "terra1edurrzv6hhd8u48engmydwhvz8qzmhhuakhwj3", // stETH ust
-    "terra16jaryra6dgfvkd3gqr5tcpy3p2s37stpa9sk7s", // wAVAX luna
-    "terra1tehmd65kyleuwuf3a362mhnupkpza29vd86sml", // wbWBNB luna
-    "terra1m32zs8725j9jzvva7zmytzasj392wpss63j2v0", // weWETH luna
-    "terra16e5tgdxre44gvmjuu3ulsa64kc6eku4972yjp3", // wsSOL luna
-    "terra1wr07qcmfqz2vxhcfr6k8xv8eh5es7u9mv2z07x", // wMATIC luna
-    // 'terra1cevdyd0gvta3h79uh5t47kk235rvn42gzf0450', // whUSDC UST
-    "terra1szt6cq52akhmzcqw5jhkw3tvdjtl4kvyk3zkhx", // whBUSD UST
-    // 'terra1qmxkqcgcgq8ch72k6kwu3ztz6fh8tx2xd76ws7', // avUSDC UST
-    // 'terra1cc6kqk0yl25hdpr5llxmx62mlyfdl7n0rwl3hq', // soUSDC UST
-    // 'terra1x0ulpvp6m46c5j7t40nj24mjp900954ys2jsnu', // weUSDC UST
-    "terra1mv04l9m4xc6fntxnty265rsqpnn0nk8aq0c9ge", // wgOHM UST
-    "terra1476fucrvu5tuga2nx28r3fctd34xhksc2gckgf",
-    "terra1repcset8dt8z9wm5s6x77n3sjg8hduem9tntd6", // wLDO stLUNA
-  ]);
-
-  // pools that externally fetch rewards, like LDO for wormhole
-  EXTERNALLY_FETCHED_REWARDS = new Set<string>([
-    "terra1gxjjrer8mywt4020xdl5e5x7n6ncn6w38gjzae", // stluna luna
-    "terra18dq84qfpz267xuu0k47066svuaez9hr4xvwlex", // stsol ust
-    "terra1edurrzv6hhd8u48engmydwhvz8qzmhhuakhwj3", // steth ust
   ]);
 
   // tokens that have 8 digits
@@ -159,6 +147,38 @@ export class DevelopmentEnvironment {
         currency: "USD",
       },
     ],
+  ]);
+
+  /**
+   * PoolCollect constants
+   */
+
+  // orion, wormhole
+  POOLS_WITH_8_DIGIT_REWARD_TOKENS = new Set<string>([
+    "terra1mxyp5z27xxgmv70xpqjk7jvfq54as9dfzug74m", // orion ust
+    "terra1gxjjrer8mywt4020xdl5e5x7n6ncn6w38gjzae", // stLUNA luna
+    "terra18dq84qfpz267xuu0k47066svuaez9hr4xvwlex", // stSOL ust
+    "terra1edurrzv6hhd8u48engmydwhvz8qzmhhuakhwj3", // stETH ust
+    "terra16jaryra6dgfvkd3gqr5tcpy3p2s37stpa9sk7s", // wAVAX luna
+    "terra1tehmd65kyleuwuf3a362mhnupkpza29vd86sml", // wbWBNB luna
+    "terra1m32zs8725j9jzvva7zmytzasj392wpss63j2v0", // weWETH luna
+    "terra16e5tgdxre44gvmjuu3ulsa64kc6eku4972yjp3", // wsSOL luna
+    "terra1wr07qcmfqz2vxhcfr6k8xv8eh5es7u9mv2z07x", // wMATIC luna
+    // 'terra1cevdyd0gvta3h79uh5t47kk235rvn42gzf0450', // whUSDC UST
+    "terra1szt6cq52akhmzcqw5jhkw3tvdjtl4kvyk3zkhx", // whBUSD UST
+    // 'terra1qmxkqcgcgq8ch72k6kwu3ztz6fh8tx2xd76ws7', // avUSDC UST
+    // 'terra1cc6kqk0yl25hdpr5llxmx62mlyfdl7n0rwl3hq', // soUSDC UST
+    // 'terra1x0ulpvp6m46c5j7t40nj24mjp900954ys2jsnu', // weUSDC UST
+    "terra1mv04l9m4xc6fntxnty265rsqpnn0nk8aq0c9ge", // wgOHM UST
+    "terra1476fucrvu5tuga2nx28r3fctd34xhksc2gckgf",
+    "terra1repcset8dt8z9wm5s6x77n3sjg8hduem9tntd6", // wLDO stLUNA
+  ]);
+
+  // pools that externally fetch rewards, like LDO for wormhole
+  EXTERNALLY_FETCHED_REWARDS = new Set<string>([
+    "terra1gxjjrer8mywt4020xdl5e5x7n6ncn6w38gjzae", // stluna luna
+    "terra18dq84qfpz267xuu0k47066svuaez9hr4xvwlex", // stsol ust
+    "terra1edurrzv6hhd8u48engmydwhvz8qzmhhuakhwj3", // steth ust
   ]);
 
   // temporary pair whitelist for prices/pools until we

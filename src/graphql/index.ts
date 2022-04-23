@@ -3,9 +3,9 @@ import { makeExecutableSchema } from "@graphql-tools/schema";
 import { DateTimeResolver } from "graphql-scalars";
 import mongoose from "mongoose";
 
-import { MONGODB_URL } from "../constants";
 import { typeDefs } from "./typeDefs";
 import { resolvers } from "./resolvers";
+import constants from "../environment/constants";
 
 let db: any = null;
 
@@ -20,8 +20,9 @@ export const schema = makeExecutableSchema({
 const apolloServer = new ApolloServer({
   schema,
   context: async () => {
+    console.log(constants.ASTRO_TOKEN);
     if (db == null) {
-      if (MONGODB_URL == null) {
+      if (constants.MONGODB_URL == null) {
         return;
       }
 
@@ -29,7 +30,7 @@ const apolloServer = new ApolloServer({
         console.log("connecting to mongo");
 
         const options: mongoose.ConnectOptions = {};
-        db = await mongoose.connect(MONGODB_URL, options);
+        db = await mongoose.connect(constants.MONGODB_URL, options);
       } catch (e) {
         console.log("--->error while connecting via graphql context (db)", e);
       }
@@ -37,7 +38,8 @@ const apolloServer = new ApolloServer({
 
     return { db };
   },
-  debug: false,
+  debug: constants.ENABLE_DEBUG,
+  introspection: constants.ENABLE_GRAPHQL_INTROSPECTION,
 });
 
 export const run = apolloServer.createHandler();

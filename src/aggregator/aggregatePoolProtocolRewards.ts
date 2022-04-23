@@ -1,10 +1,10 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import { getLastHeight } from "../services";
-import { TERRA_CHAIN_ID } from "../constants";
 import { PoolProtocolReward } from "../models/pool_protocol_reward.model";
 import { PoolProtocolRewardVolume24h } from "../models/pool_protocol_reward_volume_24hr.model";
 import { ProxyAddressInfo } from "../types/contracts";
+import constants from "../environment/constants";
 
 dayjs.extend(utc);
 
@@ -13,7 +13,7 @@ dayjs.extend(utc);
  * Update the pool_volume_24hr table TODO
  */
 
-const chainId = TERRA_CHAIN_ID;
+const chainId = constants.TERRA_CHAIN_ID;
 const BLOCKS_PER_YEAR = 4656810;
 
 export async function aggregatePoolProtocolRewards(

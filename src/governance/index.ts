@@ -5,9 +5,10 @@ import {
   APIGatewayProxyResult,
 } from "aws-lambda";
 
-import { initHive, initLCD } from "../lib/terra";
+import { initHive } from "../lib/terra";
 import { connectToDatabase } from "../modules/db";
 import { governanceProposalCollect } from "./governanceProposalCollect";
+import constants from "../environment/constants";
 
 bluebird.config({
   longStackTraces: true,
@@ -22,7 +23,7 @@ export async function run(
   context.callbackWaitsForEmptyEventLoop = false;
 
   await connectToDatabase();
-  await initHive("https://testnet-hive.terra.dev/graphql"); // TODO change
+  await initHive(constants.TERRA_HIVE_ENDPOINT); // TODO change
 
   try {
     const start = new Date().getTime();

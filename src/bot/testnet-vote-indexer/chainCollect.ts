@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import { CHAIN_COLLECT_BATCH_SIZE } from "../../constants";
+import constants from "../../environment/constants";
 import { getTxBlock } from "../../lib/terra";
 import { runIndexers } from "./chainIndexer";
 import { getBlock, updateBlock } from "./testnetIndexerHelpers";
@@ -18,7 +18,11 @@ export async function chainCollect(): Promise<void> {
 
   const lastHeight = collectedBlock.hiveHeight;
 
-  for (let height = lastHeight + 1; height <= lastHeight + CHAIN_COLLECT_BATCH_SIZE; height++) {
+  for (
+    let height = lastHeight + 1;
+    height <= lastHeight + constants.CHAIN_COLLECT_BATCH_SIZE;
+    height++
+  ) {
     console.log("Current height: " + height);
     const block = await getTxBlock(height);
     if (!block) {

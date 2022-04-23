@@ -1,19 +1,12 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import { getLastHeight } from "../services";
-import {
-  ASTRO_TOKEN,
-  BLOCKS_PER_DAY,
-  BLOCKS_PER_YEAR,
-  TERRA_CHAIN_ID,
-  TOKENS_WITH_8_DIGITS,
-  XASTRO_STAKING_ADDRESS,
-} from "../constants";
 import { xAstroFee } from "../models/xastro_fee.model";
 import { PriceV2 } from "../types/priceV2.type";
 import { getContractStore, getLatestBlock } from "../lib/terra";
 import { xAstroFeeStat } from "../models/xastro_fee_stat.model";
 import { xAstroFeeStatHistory } from "../models/xastro_fee_stat_history.model";
+import constants from "../environment/constants";
 
 dayjs.extend(utc);
 
@@ -31,8 +24,8 @@ export async function aggregateXAstroFees30dChange(
   const latestHeight = Number(height);
 
   // get block height 60 days ago
-  const endBlockHeight = latestHeight - Math.floor(BLOCKS_PER_DAY * 30);
-  const startBlockHeight = endBlockHeight - Math.floor(BLOCKS_PER_DAY * 30);
+  const endBlockHeight = latestHeight - Math.floor(constants.BLOCKS_PER_DAY * 30);
+  const startBlockHeight = endBlockHeight - Math.floor(constants.BLOCKS_PER_DAY * 30);
 
   // sum up 30d of xastro_fees for previous period
   const previous_30d_of_fees = await xAstroFee.find({
@@ -48,7 +41,7 @@ export async function aggregateXAstroFees30dChange(
     if (price != null) {
       let amount = fee.volume;
       // normalize amount
-      if (TOKENS_WITH_8_DIGITS.has(fee.token)) {
+      if (constants.TOKENS_WITH_8_DIGITS.has(fee.token)) {
         amount /= 100;
       }
 

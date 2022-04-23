@@ -1,12 +1,6 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import {
-  ENABLE_FEE_SWAP_NOTIFICATION,
-  GOV_BUILDER_UNLOCK,
-  GOV_VXASTRO,
-  GOV_XASTRO,
-  GOVERNANCE_ASSEMBLY,
-} from "../constants";
+
 import { Proposal } from "../models/proposal.model";
 import { getProposals, getTotalVotingPowerAt } from "../lib/terra";
 import { getProposals as getSavedProposals, saveProposals } from "../services/proposal.service";
@@ -14,6 +8,7 @@ import { proposalListToMap } from "../collector/helpers";
 import axios from "axios";
 import { generate_post_fields } from "./slackHelpers";
 import { ProposalState, update_proposal_timestamps } from "./proposalStateMachine";
+import constants from "../environment/constants";
 
 dayjs.extend(utc);
 
@@ -28,8 +23,8 @@ const WEBHOOK_URL =
   "https://hooks.slack.com/services/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";
 
 export async function governanceProposalCollect(): Promise<void> {
-  console.log("ENABLE_FEE_SWAP_NOTIFICATION: " + ENABLE_FEE_SWAP_NOTIFICATION)
-  console.log(ENABLE_FEE_SWAP_NOTIFICATION == true)
+  console.log("ENABLE_FEE_SWAP_NOTIFICATION: " + constants.ENABLE_FEE_SWAP_NOTIFICATION);
+  console.log(constants.ENABLE_FEE_SWAP_NOTIFICATION == true);
 
   // get proposals from db
   const savedProposals = await getSavedProposals();
@@ -41,7 +36,7 @@ export async function governanceProposalCollect(): Promise<void> {
   let offset = 0;
 
   while (continue_querying) {
-    const proposal_batch = await getProposals(GOVERNANCE_ASSEMBLY, BATCH_SIZE, offset);
+    const proposal_batch = await getProposals(constants.GOVERNANCE_ASSEMBLY, BATCH_SIZE, offset);
     proposals = proposals.concat(proposal_batch);
 
     continue_querying = proposal_batch.length >= BATCH_SIZE;
@@ -60,8 +55,8 @@ export async function governanceProposalCollect(): Promise<void> {
       // check if existing proposal has changed status, voters
       const saved = savedProposalMap.get(Number(proposal.proposal_id));
 
-      if(saved.state == "Hidden" || saved.state == "Expired") {
-        continue
+      if (saved.state == "Hidden" || saved.state == "Expired") {
+        continue;
       }
 
       if (
@@ -77,15 +72,15 @@ export async function governanceProposalCollect(): Promise<void> {
       proposal.total_voting_power = await getTotalVotingPowerAt(
         proposal.start_block - 1,
         proposal.start_time,
-        GOV_XASTRO,
-        GOV_BUILDER_UNLOCK,
-        GOV_VXASTRO
+        constants.GOV_XASTRO,
+        constants.GOV_BUILDER_UNLOCK,
+        constants.GOV_VXASTRO
       );
 
       new_proposals.push(proposal);
 
       // notify slack for mainnet
-      if(ENABLE_FEE_SWAP_NOTIFICATION) {
+      if (constants.ENABLE_FEE_SWAP_NOTIFICATION) {
         await notifySlack(
           "*New on-chain governance proposal: #" + proposal.proposal_id + "*",
           "https://apeboard.finance/dashboard/" + proposal.submitter,

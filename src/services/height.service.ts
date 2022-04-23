@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { START_BLOCK_HEIGHT } from "../constants";
+import constants from "../environment/constants";
 import { Height } from "../models";
 
 export async function getLastHeight(chainId: string): Promise<any> {
@@ -8,7 +8,7 @@ export async function getLastHeight(chainId: string): Promise<any> {
   if (heights.length == 0) {
     const newHeight = new Height({
       chainId,
-      value: START_BLOCK_HEIGHT,
+      value: constants.START_BLOCK_HEIGHT,
     });
 
     return newHeight.save();

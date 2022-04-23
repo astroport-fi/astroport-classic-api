@@ -1,11 +1,11 @@
 import { getContractStore, initHive } from "../../../src/lib/terra";
-import { ASTRO_TOKEN, ASTRO_UST_PAIR, BUILDER_UNLOCK, MULTISIG } from "../../../src/constants";
 import { expect } from "chai";
+import constants from "../../../src/environment/constants";
 
-const builder_unlock_contract = BUILDER_UNLOCK!;
-const multisig = MULTISIG!;
-const astro_token = ASTRO_TOKEN!;
-const astro_ust_pair = ASTRO_UST_PAIR!;
+const builder_unlock_contract = constants.BUILDER_UNLOCK!;
+const multisig = constants.MULTISIG!;
+const astro_token = constants.ASTRO_TOKEN!;
+const astro_ust_pair = constants.ASTRO_UST_PAIR!;
 
 describe("Hive tests", function () {
   describe("Get Supply Stats Happy Path", function () {

@@ -1,7 +1,7 @@
 import { BatchRequestDocument, gql, GraphQLClient } from "graphql-request";
 import { PriceV2 } from "../../types/priceV2.type";
-import { GOVERNANCE_ASSEMBLY, TOKENS_WITH_8_DIGITS, GENERATOR_ADDRESS } from "../../constants";
 import { PoolInfo, TokenInfo } from "../../types/hive.type";
+import constants from "../../environment/constants";
 
 export let hive: GraphQLClient;
 
@@ -292,7 +292,7 @@ export async function getPairLiquidity(
       const address = asset?.info?.token?.contract_addr;
       let amount = asset?.amount / 1000000;
 
-      if (TOKENS_WITH_8_DIGITS.has(address)) {
+      if (constants.TOKENS_WITH_8_DIGITS.has(address)) {
         amount = amount / 100;
       }
 
@@ -400,7 +400,7 @@ export async function getAssemblyConfig() {
       }
     `,
     {
-      assembly: GOVERNANCE_ASSEMBLY,
+      assembly: constants.GOVERNANCE_ASSEMBLY,
     }
   );
 
@@ -439,7 +439,7 @@ export const getGeneratorPoolInfo = async (contract: string): Promise<PoolInfo |
           }
         }
       `,
-      { contract: contract, generator: GENERATOR_ADDRESS }
+      { contract: contract, generator: constants.GENERATOR_ADDRESS }
     );
     return response?.wasm?.contractQuery;
   } catch (e) {

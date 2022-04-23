@@ -1,5 +1,5 @@
 import { LogFinderRule } from "@terra-money/log-finder";
-import { GOVERNANCE_ASSEMBLY, MAKER_ADDRESS } from "../../constants";
+import constants from "../../environment/constants";
 
 export function createPairRule(factoryAddress: string): LogFinderRule {
   return {
@@ -31,7 +31,7 @@ export function xAstroCW20FeeRule(): LogFinderRule {
       ["contract_address"],
       ["action", "transfer"],
       ["from"],
-      ["to", MAKER_ADDRESS],
+      ["to", constants.MAKER_ADDRESS],
       ["amount"],
     ],
   };
@@ -76,7 +76,7 @@ export function governanceVoteRule(): LogFinderRule {
   return {
     type: "wasm",
     attributes: [
-      ["contract_address", GOVERNANCE_ASSEMBLY],
+      ["contract_address", constants.GOVERNANCE_ASSEMBLY],
       ["action", "cast_vote"],
       ["proposal_id"],
       ["voter"],

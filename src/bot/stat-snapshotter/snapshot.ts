@@ -4,11 +4,11 @@ import { xAstroFeeStat } from "../../models/xastro_fee_stat.model";
 import { PriceV2 } from "../../models/price_v2.model";
 import { Snapshot } from "../../models/snapshot.model.ts";
 import { getBlock, getPools, getSupply } from "../../services";
-import { TERRA_CHAIN_ID } from "../../constants";
+import constants from "../../environment/constants";
 
 export async function snapshot(): Promise<void> {
   // get all info
-  const height = await getBlock(TERRA_CHAIN_ID);
+  const height = await getBlock(constants.TERRA_CHAIN_ID);
   const pool = await getPools({});
   const stat = await AstroportStat.find();
   const price = await PriceV2.find();

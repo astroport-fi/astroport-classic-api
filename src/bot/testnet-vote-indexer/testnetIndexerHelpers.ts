@@ -1,6 +1,5 @@
 import { TestnetHeight } from "./testnetHeight.model";
 import { TestnetBlock } from "./testnetBlock.model";
-import { START_BLOCK_HEIGHT } from "../../constants";
 import { Block } from "../../models";
 
 export async function createHeight(chainId: string, value: number, createdAt: any): Promise<any> {

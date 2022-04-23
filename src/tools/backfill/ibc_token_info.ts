@@ -1,11 +1,11 @@
 import { connectToDatabase } from "../../modules/db";
-import { IBC_DENOM_MAP, TERRA_CHAIN_ID, TERRA_LCD } from "../../constants";
 import { Token } from "../../models";
 import { getIBCDenom, initLCD } from "../../lib/terra";
+import constants from "../../environment/constants";
 
 export async function backfillIBCTokens() {
   try {
-    initLCD(TERRA_LCD, TERRA_CHAIN_ID);
+    initLCD(constants.TERRA_LCD_ENDPOINT, constants.TERRA_CHAIN_ID);
     await connectToDatabase();
     // Find all tokens starting with ibc
     const tokens = await Token.find({
@@ -16,8 +16,8 @@ export async function backfillIBCTokens() {
     for (const token of tokens) {
       const denom = await getIBCDenom(token.tokenAddr);
 
-      token.name = IBC_DENOM_MAP.get(denom)?.name || denom;
-      token.symbol = IBC_DENOM_MAP.get(denom)?.symbol || token.tokenAddr;
+      token.name = constants.IBC_DENOM_MAP.get(denom)?.name || denom;
+      token.symbol = constants.IBC_DENOM_MAP.get(denom)?.symbol || token.tokenAddr;
 
       await token.save();
     }

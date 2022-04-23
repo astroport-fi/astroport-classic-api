@@ -1,9 +1,9 @@
+import constants from "../environment/constants";
 import { getChainBlock, getLatestBlock } from "../lib/terra";
-import { TERRA_CHAIN_ID, TERRA_HIVE, TERRA_LCD } from "../constants";
 import { createHeight, getLastHeight } from "../services";
 
 const columbus4EndHeight = 4_724_000;
-const chainId = TERRA_CHAIN_ID;
+const chainId = constants.TERRA_CHAIN_ID;
 
 const waitFor = (ms: number) => new Promise((r) => setTimeout(r, ms));
 

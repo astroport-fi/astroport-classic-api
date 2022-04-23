@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { MONGODB_URL } from "../constants";
+import constants from "../environment/constants";
 
 // mongoose.Promise = global.Promise;
 // let isConnected: number;
@@ -27,7 +27,7 @@ import { MONGODB_URL } from "../constants";
 //   await database.connection.close();
 // };
 
-if (!MONGODB_URL) {
+if (!constants.MONGODB_URL) {
   throw new Error("Please define the MONGODB_URL environment variable inside .env");
 }
 
@@ -60,7 +60,7 @@ export const connectToDatabase = async (): Promise<void> => {
 
     console.log("=> using new database connection");
 
-    cached.promise = mongoose.connect(MONGODB_URL, opts).then((mongoose) => {
+    cached.promise = mongoose.connect(constants.MONGODB_URL, opts).then((mongoose) => {
       db = mongoose;
       return mongoose;
     });
