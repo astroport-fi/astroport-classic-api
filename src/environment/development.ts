@@ -3,6 +3,8 @@ import { CoingeckoValues } from "../types/coingecko_values.type";
 /**
  * DevelopmentEnvironment defines constants to be used as the base setup,
  * specifically for development
+ *
+ * Contract / address values defined here are for testnet
  */
 export class DevelopmentEnvironment {
   /**
@@ -26,9 +28,9 @@ export class DevelopmentEnvironment {
   START_BLOCK_HEIGHT = 5968589;
 
   // Chain config
-  TERRA_CHAIN_ID = "columbus-5";
-  TERRA_LCD_ENDPOINT = "https://lcd-terra.everstake.one/";
-  TERRA_HIVE_ENDPOINT = "https://hive-terra.everstake.one/graphql";
+  TERRA_CHAIN_ID = "bombay-12";
+  TERRA_LCD_ENDPOINT = "https://bombay-lcd.terra.dev/";
+  TERRA_HIVE_ENDPOINT = "https://testnet-hive.terra.dev/graphql";
   // Maximum amount of blocks to collect during an indexer invocation
   CHAIN_COLLECT_BATCH_SIZE = 150;
   // Whether to notify Slack when a fee swap happens
@@ -63,29 +65,34 @@ export class DevelopmentEnvironment {
 
   // Governance addresses
   GOV_XASTRO = "terra1yufp7cv85qrxrx56ulpfgstt2gxz905fgmysq0" as string;
-  GOV_BUILDER_UNLOCK = "terra1hccg0cfrcu0nr4zgt5urmcgam9v88peg9s7h6j" as string;
+  GOV_BUILDER_UNLOCK = "terra1hccg0cfrcu0nr4zgt5urmcgam9v88peg9s7h6j" as string; // TODO: Get testnet value, this seems incorrect
   GOV_VXASTRO = "terra1pqr02fx4ulc2mzws7xlqh8hpwqx2ls5m4fk62j" as string;
 
   // Astroport tokens
-  ASTRO_TOKEN = "terra1xj49zyqrwpv5k928jwfpfy2ha668nwdgkwlrg3" as string;
-  XASTRO_TOKEN = "terra14lpnyzc9z4g3ugr4lhm8s4nle0tq8vcltkhzh7" as string;
+  ASTRO_TOKEN = "terra1jqcw39c42mf7ngq4drgggakk3ymljgd3r5c3r5" as string;
+  XASTRO_TOKEN = "terra1yufp7cv85qrxrx56ulpfgstt2gxz905fgmysq0" as string;
   VXASTRO_TOKEN = null;
 
   // Astroport contracts
-  BUILDER_UNLOCK = "terra1fh27l8h4s0tfx9ykqxq5efq4xx88f06x6clwmr" as string;
-  MULTISIG = "terra1c7m6j8ya58a2fkkptn8fgudx8sqjqvc8azq0ex" as string;
-  ASSEMBLY_TREASURY = "terra16m3runusa9csfev7ymj62e8lnswu8um29k5zky" as string;
-  ASTRO_UST_PAIR = "terra1l7xu2rl3c7qmtx3r5sd2tz25glf6jh8ul7aag7" as string;
-  VESTING_ADDRESS = "terra1hncazf652xa0gpcwupxfj6k4kl4k4qg64yzjyf" as string;
+  BUILDER_UNLOCK = "terra1fh27l8h4s0tfx9ykqxq5efq4xx88f06x6clwmr" as string; // TODO: Get testnet value
+  MULTISIG = "terra1vp629527wwvm9kxqsgn4fx2plgs4j5un0ea5yu" as string;
+  ASSEMBLY_TREASURY = "terra1dp83pv9kfw27wflsdpj8ewjuzasssaw9lvnqnt" as string;
+  ASTRO_UST_PAIR = "terra1ec0fnjk2u6mms05xyyrte44jfdgdaqnx0upesr" as string;
+  VESTING_ADDRESS = "terra1g73et67yraz33vtwtg8c7q39gq50z2q92dz822" as string; // TODO: Get testnet value
 
-  FACTORY_ADDRESS = "terra1fnywlw4edny3vw44x04xd67uzkdqluymgreu7g" as string;
-  MAKER_ADDRESS = "terra12u7hcmpltazmmnq0fvyl225usn3fy6qqlp05w0" as string;
-  XASTRO_STAKING_ADDRESS = "terra1f68wt2ch3cx2g62dxtc8v68mkdh5wchdgdjwz7" as string;
+  FACTORY_ADDRESS = "terra15jsahkaf9p0qu8ye873p0u5z6g07wdad0tdq43" as string;
+  MAKER_ADDRESS = "terra14906rw2kyu50cdw25x0uymkrlqtgqxjemdfd0n" as string;
+  XASTRO_STAKING_ADDRESS = "terra1h2smqfg9lmemewwde9a4vf8fcp6z8666kxdhzh" as string;
 
-  GENERATOR_ADDRESS = "terra1zgrx9jjqrfye8swykfgmd6hpde60j0nszzupp9" as string;
+  GENERATOR_ADDRESS = "terra1gjm7d9nmewn27qzrvqyhda8zsfl40aya7tvaw5" as string;
   BLUNA_PAIR_CONTRACT = "terra1esle9h9cjeavul53dqqws047fpwdhj6tynj5u4" as string;
   LOCKDROP_CONTRACT = "terra1dd9kewme9pwhurvlzuvvljq5ukecft9axyej42" as string;
   BLUNA_TERRASWAP_LP_CONTRACT = "terra1tj4pavqjqjfm0wh73sh7yy9m4uq3m2cpmgva6n" as string;
+
+  /**
+   * Testing addresses
+   */
+  TEST_WALLET_ADDRESS = "terra1tqugzusjp3cegnd5uq7a3zpz7sn0d78pmkts9m" as string;
 
   /**
    * Currency constants

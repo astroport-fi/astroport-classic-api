@@ -4,6 +4,8 @@ import { CoingeckoValues } from "../types/coingecko_values.type";
  * ProductionEnvironment defines constants to be used in production,
  * all values defined here will overwrite matching values in
  * DevelopmentEnvironment
+ *
+ * Contract / address values defined here are for mainnet
  */
 export class ProductionEnvironment {
   // Index signature to allow index access of properties
@@ -60,14 +62,14 @@ export class ProductionEnvironment {
   ]);
 
   // trigger collect on this address
-  MAKER_CONTRACT = "terra14906rw2kyu50cdw25x0uymkrlqtgqxjemdfd0n";
+  MAKER_CONTRACT = "terra12u7hcmpltazmmnq0fvyl225usn3fy6qqlp05w0";
 
   // Governance
   // Trigger messages on this address
-  GOVERNANCE_ASSEMBLY = "terra109039nj38vnzyryqvcjctdh33r4qlq5dmrzqn0";
+  GOVERNANCE_ASSEMBLY = "terra1sq9ppsvt4k378wwhvm2vyfg7kqrhtve8p0n3a6";
 
   // Governance addresses
-  GOV_XASTRO = "terra1yufp7cv85qrxrx56ulpfgstt2gxz905fgmysq0" as string;
+  GOV_XASTRO = "terra14lpnyzc9z4g3ugr4lhm8s4nle0tq8vcltkhzh7" as string;
   GOV_BUILDER_UNLOCK = "terra1hccg0cfrcu0nr4zgt5urmcgam9v88peg9s7h6j" as string;
   GOV_VXASTRO = "terra1pqr02fx4ulc2mzws7xlqh8hpwqx2ls5m4fk62j" as string;
 
@@ -88,9 +90,14 @@ export class ProductionEnvironment {
   XASTRO_STAKING_ADDRESS = "terra1f68wt2ch3cx2g62dxtc8v68mkdh5wchdgdjwz7" as string;
 
   GENERATOR_ADDRESS = "terra1zgrx9jjqrfye8swykfgmd6hpde60j0nszzupp9" as string;
-  BLUNA_PAIR_CONTRACT = "terra1esle9h9cjeavul53dqqws047fpwdhj6tynj5u4" as string;
-  LOCKDROP_CONTRACT = "terra1dd9kewme9pwhurvlzuvvljq5ukecft9axyej42" as string;
-  BLUNA_TERRASWAP_LP_CONTRACT = "terra1tj4pavqjqjfm0wh73sh7yy9m4uq3m2cpmgva6n" as string;
+  BLUNA_PAIR_CONTRACT = "" as string;
+  LOCKDROP_CONTRACT = "terra1627ldjvxatt54ydd3ns6xaxtd68a2vtyu7kakj" as string;
+  BLUNA_TERRASWAP_LP_CONTRACT = "terra1jxazgm67et0ce260kvrpfv50acuushpjsz2y0p" as string;
+
+  /**
+   * Testing addresses
+   */
+  TEST_WALLET_ADDRESS = "not-provided" as string;
 
   /**
    * Currency constants
