@@ -71,7 +71,7 @@ export class ProductionEnvironment {
   // Governance addresses
   GOV_XASTRO = "terra14lpnyzc9z4g3ugr4lhm8s4nle0tq8vcltkhzh7" as string;
   GOV_BUILDER_UNLOCK = "terra1hccg0cfrcu0nr4zgt5urmcgam9v88peg9s7h6j" as string;
-  GOV_VXASTRO = "terra1pqr02fx4ulc2mzws7xlqh8hpwqx2ls5m4fk62j" as string;
+  GOV_VXASTRO = null;
 
   // Astroport tokens
   ASTRO_TOKEN = "terra1xj49zyqrwpv5k928jwfpfy2ha668nwdgkwlrg3" as string;
@@ -83,7 +83,7 @@ export class ProductionEnvironment {
   MULTISIG = "terra1c7m6j8ya58a2fkkptn8fgudx8sqjqvc8azq0ex" as string;
   ASSEMBLY_TREASURY = "terra16m3runusa9csfev7ymj62e8lnswu8um29k5zky" as string;
   ASTRO_UST_PAIR = "terra1l7xu2rl3c7qmtx3r5sd2tz25glf6jh8ul7aag7" as string;
-  VESTING_ADDRESS = "terra1hncazf652xa0gpcwupxfj6k4kl4k4qg64yzjyf" as string;
+  VESTING_ADDRESS = "terra1hncazf652xa0gpcwupxfj6k4kl4k4qg64yzjyf" as string; // TODO: Unclear is this is the correct address
 
   FACTORY_ADDRESS = "terra1fnywlw4edny3vw44x04xd67uzkdqluymgreu7g" as string;
   MAKER_ADDRESS = "terra12u7hcmpltazmmnq0fvyl225usn3fy6qqlp05w0" as string;
