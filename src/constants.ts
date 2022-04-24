@@ -69,6 +69,7 @@ export const TOKEN_ADDRESS_MAP = new Map<string, string>([
   ["terra19wauh79y42u5vt62c5adt2g5h4exgh26t3rpds", "MARS"],
   ["terra13yftwgefkggq3u627gphq98s6ufwh9u85h5kmg", "ORNE"],
   ["terra1k8lvj3w7dxzd6zlyptcj086gfwms422xkqjmzx", "SAYVE"],
+
 ]);
 
 // TODO get from pair registration
