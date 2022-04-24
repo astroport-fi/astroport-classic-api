@@ -18,6 +18,7 @@
     "eslint": "eslint --quiet --max-warnings 0 --ext .tsx --ext .ts --ext .js --ext .jsx .",
     "prettier": "prettier --list-different '**/*.{ts,tsx,js,jsx,json,css,md}'",
     "test": "mocha",
+    "test-dev": "./node_modules/dotenv-cli/cli.js -e .env.dev mocha",
     "test-watch": "mocha --watch",
     "typescript": "tsc --noEmit"
   },
@@ -54,6 +55,7 @@
     "@types/lodash": "^4.14.170",
     "@types/mongodb": "^3.6.19",
     "@typescript-eslint/eslint-plugin": "4.28.2",
+    "dotenv-cli": "^5.1.0",
     "eslint": "7.30.0",
     "eslint-config-typescript": "^3.0.0",
     "jest": "^27.0.6",
