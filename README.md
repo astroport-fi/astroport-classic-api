@@ -1,14 +1,83 @@
 # Astroport API
 
-### Development
+## Setting up development environment
 
-- npm install
-- npm run dev
+### Setup
 
-Adding new env variables (non-secrets)
+Install packages
 
-- add to .env.development or .env.production
-- add to serverless.yml - provider.environment.NEW_ENV_VAR
+```
+npm install
+```
+
+Copy .env.sample to .env for local development, by default only the GraphQL function is enabled
+
+```
+cp .env.sample .env
+```
+
+Local Mongodb setup
+
+**Dump development database**
+
+```
+mongodump --uri mongodb+srv://<username>:<password>@<dev-cluster-host.net>/astroport --out astroport.dev
+```
+
+**Restore development database locally**
+
+```
+mongorestore -d astroport ./astroport.dev/astroport -h 127.0.0.1 --port 27050
+```
+
+### Running functions
+
+```
+npm run dev
+```
+
+### Running tests
+
+With a local `.env`
+
+```
+npm run test
+```
+
+Without a local `.env`
+
+```
+npm run test-dev
+```
+
+### Adding constants
+
+All non-secret constants must be defined in `src/environment/development.ts`
+and `src/environment/production.ts`
+
+If something _needs_ to be read from environment variables, add it to
+`.env.dev` and `.env.prod` and use `process.env.VAR_NAME` in constants to
+read it in
+
+### Adding secrets
+
+Secrets must be defined in GitHub and added to `.env.dev` and `.env.prod`
+at build time using the following
+
+```
+echo -e 'NEW_SECRET="${{ secrets.NEW_SECRET_NAME }}"' >> .env.{dev,prod}
+```
+
+After adding it, they must be defined in `src/environment/development.ts`
+and `src/environment/production.ts` using `process.env.VAR_NAME`
+
+### Testnet wallet
+
+A testnet wallet with limited funds is available for tests. Just drop a message
+in [Slack #backend-internal](https://astrochad.slack.com/archives/C03B289KPDX)
+to get access to the wallet
+
+## Other configuration options
 
 ### Running unit tests
 
@@ -22,14 +91,3 @@ Adding new env variables (non-secrets)
 - Mocha config
   - environment variables: DOTENV_CONFIG_PATH=.env.local
   - extra mocha options : --require ts-node/register --require dotenv/config --timeout 60000
-
-### Adding new env variables (non-secrets)
-
-- add to .env.development or .env.production
-- add to serverless.yml - provider.environment.NEW_ENV_VAR
-
-### Adding new env variables (secrets)
-
-- add to github secrets
-- echo -e 'NEW_SECRET="${{ secrets.NEW_SECRET_NAME }}"' >> .env
-- add to constants
