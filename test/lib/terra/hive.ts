@@ -9,13 +9,14 @@ import constants from "../../../src/environment/constants";
 
 describe("Hive", function () {
   it("fetches alloc points", async () => {
-    const poolInfo = await getGeneratorPoolInfo("terra1cspx9menzglmn7xt3tcn8v8lg6gu9r50d7lnve");
+    // https://terrasco.pe/testnet/contracts/terra1zv9uhshhuw6yr4m95nx54cpl0g4ahska5uwfv8
+    const poolInfo = await getGeneratorPoolInfo("terra1zv9uhshhuw6yr4m95nx54cpl0g4ahska5uwfv8");
     expect(poolInfo?.alloc_point).to.be.a("string");
     expect(poolInfo).to.haveOwnProperty("accumulated_rewards_per_share");
   });
 
-  it("fetches contract config", async () => {
-    const config = await getContractConfig("terra1vtqv4j5v04x5ka5f84v9zuvt604u2rsqhjnpk8");
+  it("fetches contract config (proxy)", async () => {
+    const config = await getContractConfig("terra1rmm3uh3ddrzxv5wfpcxt5vqvnel5r6dnjeng6t");
     expect(config).to.haveOwnProperty("pair_addr");
     expect(config).to.haveOwnProperty("generator_contract_addr");
   });
