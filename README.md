@@ -16,15 +16,15 @@ Copy .env.sample to .env for local development, by default only the GraphQL func
 cp .env.sample .env
 ```
 
-Local Mongodb setup
+### Local Mongodb setup
 
-**Dump development database**
+Dump development database
 
 ```
 mongodump --uri mongodb+srv://<username>:<password>@<dev-cluster-host.net>/astroport --out astroport.dev
 ```
 
-**Restore development database locally**
+Restore development database locally
 
 ```
 mongorestore -d astroport ./astroport.dev/astroport -h 127.0.0.1 --port 27050
@@ -74,8 +74,8 @@ and `src/environment/production.ts` using `process.env.VAR_NAME`
 ### Testnet wallet
 
 A testnet wallet with limited funds is available for tests. Just drop a message
-in [Slack #backend-internal](https://astrochad.slack.com/archives/C03B289KPDX)
-to get access to the wallet
+in the [Slack #backend-internal](https://astrochad.slack.com/archives/C03B289KPDX)
+channel to get access to the wallet
 
 ## Other configuration options
 
