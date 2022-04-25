@@ -34,7 +34,7 @@ export class DevelopmentEnvironment {
   // Maximum amount of blocks to collect during an indexer invocation
   CHAIN_COLLECT_BATCH_SIZE = 150;
   // Whether to notify Slack when a fee swap happens
-  ENABLE_FEE_SWAP_NOTIFICATION = "false";
+  ENABLE_FEE_SWAP_NOTIFICATION: boolean = false;
   ENABLE_DEBUG: boolean = true;
   ENABLE_GRAPHQL_INTROSPECTION: boolean = true;
 
