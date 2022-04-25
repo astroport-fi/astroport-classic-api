@@ -3,9 +3,14 @@ import { formatSchedules, generateScheduleType } from "./helpers";
 import { ProxyAddressInfo } from "../../types/contracts";
 import constants from "../../environment/constants";
 
-interface AddressType {
+enum AddressType {
+  pair = "pair",
+  proxy = "proxy",
+}
+
+interface RewardAddress {
   address: string;
-  type: string;
+  type: AddressType;
 }
 
 /**
@@ -19,20 +24,20 @@ interface AddressType {
 export const getProxyAddressesInfo = async (): Promise<Map<string, ProxyAddressInfo>> => {
   const generatorConfig = await getContractConfig(constants.GENERATOR_ADDRESS as string);
   const totalAllocPoint = generatorConfig?.total_alloc_point;
-  const fetchedProxyAddresses: AddressType[] = generatorConfig?.allowed_reward_proxies.map(
+  const fetchedProxyAddresses: RewardAddress[] = generatorConfig?.allowed_reward_proxies.map(
     (i: any) => ({
       address: i,
-      type: "proxy",
+      type: AddressType.proxy,
     })
   );
 
-  const rewardAddresses: AddressType[] = [
+  const rewardAddresses: RewardAddress[] = [
     ...fetchedProxyAddresses,
     // adding pair addresses that receive astro rewards
     // these are not in allowed_reward_proxies
-    { address: constants.BLUNA_LUNA_PAIR, type: "pair" },
-    { address: constants.ASTRO_UST_PAIR, type: "pair" },
-    { address: constants.LUNA_UST_PAIR, type: "pair" },
+    { address: constants.BLUNA_LUNA_PAIR, type: AddressType.pair },
+    { address: constants.ASTRO_UST_PAIR, type: AddressType.pair },
+    { address: constants.LUNA_UST_PAIR, type: AddressType.pair },
   ];
 
   const tokensPerBlock = generatorConfig?.tokens_per_block;
@@ -48,13 +53,13 @@ export const getProxyAddressesInfo = async (): Promise<Map<string, ProxyAddressI
       let proxyAddress;
 
       try {
-        if (item.type === "proxy") {
+        if (item.type === AddressType.proxy) {
           addressConfig = await getContractConfig(item.address);
           lpTokenAddr = addressConfig?.lp_token_addr;
           rewardContractAddr = addressConfig?.reward_contract_addr;
           pairAddress = addressConfig?.pair_addr;
           proxyAddress = item.address;
-        } else if (item.type === "pair") {
+        } else if (item.type === AddressType.pair) {
           addressConfig = await getContractStore(item.address, JSON.parse('{"pair": { }}'));
           lpTokenAddr = addressConfig?.liquidity_token;
           pairAddress = item.address;
@@ -96,7 +101,10 @@ export const getProxyAddressesInfo = async (): Promise<Map<string, ProxyAddressI
         distribution_schedule: { values: schedule, type },
       };
 
-      proxyAddressesInfo.set(pairAddress, tokenInfo);
+      //mostly for testnet check, one address in testnet has no information;
+      if (pairAddress) {
+        proxyAddressesInfo.set(pairAddress, tokenInfo);
+      }
     })
   );
 
