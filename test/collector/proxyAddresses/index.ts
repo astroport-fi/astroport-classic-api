@@ -1,10 +1,5 @@
-import "dotenv/config";
 import { expect } from "chai";
-import {
-  formatSchedules,
-  generateScheduleType,
-} from "../../../src/collector/proxyAddresses/helpers";
-import { ProxyAddressInfo, ScheduleType } from "../../../src/types/contracts";
+import { ProxyAddressInfo } from "../../../src/types/contracts";
 import { getProxyAddressesInfo } from "../../../src/collector/proxyAddresses";
 import constants from "../../../src/environment/constants";
 

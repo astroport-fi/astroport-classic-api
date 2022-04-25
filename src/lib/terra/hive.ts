@@ -251,8 +251,7 @@ export async function getContractStore<T>(address: string, query: JSON): Promise
 
     return response.wasm.contractQuery;
   } catch (e) {
-    console.log(address, query);
-    console.log("Error fetching contract store: ");
+    console.log("Error fetching contract store: ", e);
     return null;
   }
 }

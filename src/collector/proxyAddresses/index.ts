@@ -9,11 +9,10 @@ interface AddressType {
 }
 
 /**
- * Gets proxy addresses from generator contract
- * adds pair contracts that receive rewards but are
- * not in generator reward proxy.
- * Gets reward information. and values required to calculate
- * native calculate apr, and Astro Apr.
+ * Gets proxy addresses from generator contract.
+ * adds pair contracts that receive rewards but are not in generator's reward proxy address list.
+ * Gets reward information and values required to calculate both native calculate apr, and Astro Apr.
+ *
  *
  * @returns a Map with pairAddress -> TokenInformation
  */
