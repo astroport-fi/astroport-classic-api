@@ -43,7 +43,7 @@ export type Schedules = {
 
 export interface ProxyAddressInfo {
   factory: string;
-  proxy: string;
+  proxy?: string;
   pool: string;
   token: string; //reward_token_addr
   lpToken: string; //lp_token_addr

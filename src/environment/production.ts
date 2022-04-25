@@ -75,6 +75,8 @@ export class ProductionEnvironment {
   MULTISIG = "terra1c7m6j8ya58a2fkkptn8fgudx8sqjqvc8azq0ex" as string;
   ASSEMBLY_TREASURY = "terra16m3runusa9csfev7ymj62e8lnswu8um29k5zky" as string;
   ASTRO_UST_PAIR = "terra1l7xu2rl3c7qmtx3r5sd2tz25glf6jh8ul7aag7" as string;
+  LUNA_UST_PAIR = "terra1m6ywlgn6wrjuagcmmezzz2a029gtldhey5k552" as string;
+  BLUNA_LUNA_PAIR = "terra1j66jatn3k50hjtg2xemnjm8s7y8dws9xqa5y8w" as string;
   VESTING_ADDRESS = "terra1hncazf652xa0gpcwupxfj6k4kl4k4qg64yzjyf" as string; // TODO: Unclear is this is the correct address
 
   FACTORY_ADDRESS = "terra1fnywlw4edny3vw44x04xd67uzkdqluymgreu7g" as string;

@@ -70,6 +70,8 @@ export class DevelopmentEnvironment {
   MULTISIG = "terra1vp629527wwvm9kxqsgn4fx2plgs4j5un0ea5yu" as string;
   ASSEMBLY_TREASURY = "terra1dp83pv9kfw27wflsdpj8ewjuzasssaw9lvnqnt" as string;
   ASTRO_UST_PAIR = "terra1ec0fnjk2u6mms05xyyrte44jfdgdaqnx0upesr" as string;
+  LUNA_UST_PAIR = "terra1e49fv4xm3c2znzpxmxs0z2z6y74xlwxspxt38s" as string;
+  BLUNA_LUNA_PAIR = "terra1esle9h9cjeavul53dqqws047fpwdhj6tynj5u4" as string;
   VESTING_ADDRESS = "terra1g73et67yraz33vtwtg8c7q39gq50z2q92dz822" as string;
 
   FACTORY_ADDRESS = "terra15jsahkaf9p0qu8ye873p0u5z6g07wdad0tdq43" as string;
