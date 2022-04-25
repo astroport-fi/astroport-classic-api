@@ -1,11 +1,11 @@
 import { connectToDatabase } from "../../modules/db";
-import { FACTORY_ADDRESS, TERRA_CHAIN_ID, TERRA_HIVE, TERRA_LCD } from "../../constants";
 import { getTxBlockBatch, initHive, initLCD } from "../../lib/terra";
 import { findXAstroFees } from "../../collector/chainIndexer/findXAstroFees";
 import { createPairLogFinders } from "../../collector/logFinder";
 import { createPairIndexer } from "../../collector/chainIndexer/createPairIndex";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import constants from "../../environment/constants";
 
 dayjs.extend(utc);
 
@@ -15,8 +15,8 @@ dayjs.extend(utc);
  * @returns
  */
 export async function backfillxAstroFeesAndPairsTokens() {
-  initHive(TERRA_HIVE);
-  initLCD(TERRA_LCD, TERRA_CHAIN_ID);
+  initHive(constants.TERRA_HIVE_ENDPOINT);
+  initLCD(constants.TERRA_LCD_ENDPOINT, constants.TERRA_CHAIN_ID);
   await connectToDatabase();
 
   const startBlock = 5839180; // First fees collected 2021-12-27T09:54:10.828Z
@@ -69,7 +69,7 @@ export async function backfillxAstroFeesAndPairsTokens() {
               // In case a pair exists, it will still attempt to create the tokens
               // Duplicates are avoided through Mongo indexes
               try {
-                const createPairLF = createPairLogFinders(FACTORY_ADDRESS);
+                const createPairLF = createPairLogFinders(constants.FACTORY_ADDRESS);
                 const createPairLogFounds = createPairLF(event);
                 if (createPairLogFounds.length > 0) {
                   await createPairIndexer(createPairLogFounds, timestamp, txHash);

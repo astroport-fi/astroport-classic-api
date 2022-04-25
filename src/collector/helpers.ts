@@ -1,14 +1,14 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import { TERRA_CHAIN_ID, TOKENS_WITH_8_DIGITS } from "../constants";
 import { getHeightByDate } from "../services";
 import { Pair } from "../types";
 import { Proposal } from "../models/proposal.model";
 import { PriceV2 } from "../types/priceV2.type";
+import constants from "../environment/constants";
 
 dayjs.extend(utc);
 
-const chainId = TERRA_CHAIN_ID;
+const chainId = constants.TERRA_CHAIN_ID;
 
 export async function getHeightsFromDate(
   date: string,
@@ -91,7 +91,7 @@ export function getUSTSwapValue(transformed: any, priceMap: Map<string, PriceV2>
 
   let result = (price_ust * amount) / 1000000;
 
-  if (TOKENS_WITH_8_DIGITS.has(denom)) {
+  if (constants.TOKENS_WITH_8_DIGITS.has(denom)) {
     result /= 100;
   }
 

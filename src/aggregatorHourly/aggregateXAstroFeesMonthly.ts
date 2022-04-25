@@ -1,10 +1,11 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import { TOKENS_WITH_8_DIGITS } from "../constants";
+
 import { xAstroFee } from "../models/xastro_fee.model";
 import { PriceV2 } from "../types/priceV2.type";
 import { getLatestBlock } from "../lib/terra";
 import { xAstroFeeStatMonth } from "../models/xastro_fee_stat_month.model";
+import constants from "../environment/constants";
 
 dayjs.extend(utc);
 
@@ -42,7 +43,7 @@ export async function aggregateXAstroFeesMonthly(priceMap: Map<string, PriceV2>)
     if (price != null) {
       let amount = fee.volume;
       // normalize amount
-      if (TOKENS_WITH_8_DIGITS.has(fee.token)) {
+      if (constants.TOKENS_WITH_8_DIGITS.has(fee.token)) {
         amount /= 100;
       }
 

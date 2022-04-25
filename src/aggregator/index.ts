@@ -7,7 +7,6 @@ import {
 
 import { initHive, initLCD } from "../lib/terra";
 import { connectToDatabase } from "../modules/db";
-import { TERRA_CHAIN_ID, TERRA_HIVE, TERRA_LCD } from "../constants";
 
 import { aggregatePoolVolume } from "./aggregatePoolVolume";
 import { aggregatePoolProtocolRewards } from "./aggregatePoolProtocolRewards";
@@ -22,6 +21,7 @@ import { aggregateXAstroFees } from "./aggregateXAstroFees";
 import { aggregateVotes } from "./aggregateVotes";
 import { aggregateXAstroFees7d } from "./aggregateXAstroFees7d";
 import { getProxyAddressesInfo } from "../collector/proxyAddresses";
+import constants from "../environment/constants";
 
 bluebird.config({
   longStackTraces: true,
@@ -36,8 +36,8 @@ export async function run(
   context.callbackWaitsForEmptyEventLoop = false;
 
   await connectToDatabase();
-  await initHive(TERRA_HIVE);
-  await initLCD(TERRA_LCD, TERRA_CHAIN_ID);
+  await initHive(constants.TERRA_HIVE_ENDPOINT);
+  await initLCD(constants.TERRA_LCD_ENDPOINT, constants.TERRA_CHAIN_ID);
 
   const pairs = await getPairs();
 

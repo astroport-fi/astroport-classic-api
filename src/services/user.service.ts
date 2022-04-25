@@ -1,16 +1,3 @@
-import {
-  BLUNA_PAIR_CONTRACT,
-  BLUNA_TERRASWAP_LP_CONTRACT,
-  BUILDER_UNLOCK,
-  FACTORY_ADDRESS,
-  GENERATOR_ADDRESS,
-  LOCKDROP_CONTRACT,
-  TERRA_CHAIN_ID,
-  TERRA_HIVE,
-  TERRA_LCD,
-  VXASTRO_TOKEN,
-  XASTRO_TOKEN,
-} from "../constants";
 import { initLCD, lcd } from "../lib/terra";
 import {
   getBuilderAllocationForWallet,
@@ -31,6 +18,7 @@ import { getPairs } from "./pair.service";
 import { getPriceByTokenAddress } from "./priceV2.service";
 import { getToken, getTokens } from "./token.service";
 import { BlunaPendingRewards, LockUpInfoList } from "../types/user.type";
+import constants from "../environment/constants";
 
 /**
  * Calculate this wallet's voting power at this moment
@@ -44,13 +32,13 @@ import { BlunaPendingRewards, LockUpInfoList } from "../types/user.type";
  * @returns The voting power of the wallet
  */
 export async function getVotingPower(address: string): Promise<VotingPower> {
-  initHive(TERRA_HIVE);
+  initHive(constants.TERRA_HIVE_ENDPOINT);
 
   // Voting power from xAstro holdings
-  const xAstroBalance = await getTokenHolding(XASTRO_TOKEN, address);
+  const xAstroBalance = await getTokenHolding(constants.XASTRO_TOKEN, address);
 
   // Voting power from builder unlock
-  const builderAllocation = await getBuilderAllocationForWallet(BUILDER_UNLOCK, address);
+  const builderAllocation = await getBuilderAllocationForWallet(constants.BUILDER_UNLOCK, address);
 
   let builderTotal = 0;
   if (builderAllocation) {
@@ -61,9 +49,9 @@ export async function getVotingPower(address: string): Promise<VotingPower> {
 
   // Voting power from vxAstro holdings
   let vxAstroVotingPower = 0;
-  if (VXASTRO_TOKEN) {
+  if (constants.VXASTRO_TOKEN) {
     // When vxAstro launches, we just need to define the contract address
-    vxAstroVotingPower = await getvxAstroVotingPower(VXASTRO_TOKEN, address);
+    vxAstroVotingPower = await getvxAstroVotingPower(constants.VXASTRO_TOKEN, address);
   }
 
   const votingPower: VotingPower = {
@@ -85,8 +73,8 @@ export async function getVotingPower(address: string): Promise<VotingPower> {
  * @returns The holdings of address
  */
 export async function getAllTokenHoldings(address: string): Promise<UserTokenHolding[]> {
-  initHive(TERRA_HIVE);
-  initLCD(TERRA_LCD, TERRA_CHAIN_ID);
+  initHive(constants.TERRA_HIVE_ENDPOINT);
+  initLCD(constants.TERRA_LCD_ENDPOINT, constants.TERRA_CHAIN_ID);
 
   const userTokens: UserTokenHolding[] = [];
 
@@ -175,8 +163,8 @@ function sliceIntoChunks<T = any>(arr: T[], chunkSize: number) {
  */
 export const getUserStakedLpTokens = async (address: string): Promise<UserLpToken[]> => {
   //TODO reuse connection between requests
-  await initHive(TERRA_HIVE);
-  const factoryConfig = await getContractConfig(FACTORY_ADDRESS);
+  await initHive(constants.TERRA_HIVE_ENDPOINT);
+  const factoryConfig = await getContractConfig(constants.FACTORY_ADDRESS);
   const pairs = await getPairs();
 
   const pairLpTokens: { liquidityToken: string }[] = pairs.map(({ liquidityToken }) => ({
@@ -188,7 +176,7 @@ export const getUserStakedLpTokens = async (address: string): Promise<UserLpToke
   const stakedBalances: { [key: string]: any }[] = (
     await Promise.all(
       addressesChunks.map(async (chunk) => {
-        return await getStakedBalances(chunk, address, GENERATOR_ADDRESS);
+        return await getStakedBalances(chunk, address, constants.GENERATOR_ADDRESS);
       })
     )
   ).reduce((accumulator, items) => ({ ...accumulator, ...items }));
@@ -233,23 +221,23 @@ export const getUserStakedLpTokens = async (address: string): Promise<UserLpToke
  */
 export const getBlunaUstRewards = async (address: string): Promise<number> => {
   //TODO reuse connection between requests
-  await initHive(TERRA_HIVE);
+  await initHive(constants.TERRA_HIVE_ENDPOINT);
   const bLunaRewardsResponse: BlunaPendingRewards | null = await getContractStore(
-    BLUNA_PAIR_CONTRACT,
+    constants.BLUNA_PAIR_CONTRACT,
     JSON.parse(`{"pending_reward": { "user": "${address}" }}`)
   );
   const bLunaPendingRewards = bLunaRewardsResponse?.amount || "0";
 
   //check lockupList for bluna terraswap pool_address
   const lockUpList: LockUpInfoList | null = await getContractStore(
-    LOCKDROP_CONTRACT,
+    constants.LOCKDROP_CONTRACT,
     JSON.parse(`{"user_info_with_lockups_list": { "address": "${address}" }}`)
   );
 
   let lockUpDuration = undefined;
   if (lockUpList) {
     for (const item of lockUpList.lockup_infos) {
-      if (item.pool_address === BLUNA_TERRASWAP_LP_CONTRACT) {
+      if (item.pool_address === constants.BLUNA_TERRASWAP_LP_CONTRACT) {
         lockUpDuration = item.duration;
         break;
       }
@@ -260,8 +248,8 @@ export const getBlunaUstRewards = async (address: string): Promise<number> => {
   if (lockUpDuration) {
     const response = await getLockDropRewards({
       userAddress: address,
-      lockDropContract: LOCKDROP_CONTRACT,
-      blunaTerraswapLp: BLUNA_TERRASWAP_LP_CONTRACT,
+      lockDropContract: constants.LOCKDROP_CONTRACT,
+      blunaTerraswapLp: constants.BLUNA_TERRASWAP_LP_CONTRACT,
       duration: lockUpDuration,
     });
     // console.log(response);

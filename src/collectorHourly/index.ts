@@ -7,9 +7,9 @@ import {
 
 import { initHive, initLCD } from "../lib/terra";
 import { connectToDatabase } from "../modules/db";
-import { TERRA_CHAIN_ID, TERRA_HIVE, TERRA_LCD } from "../constants";
 import { getPairs } from "../services";
 import { priceCollectV230d } from "./priceIndexer/priceCollectV2_30d";
+import constants from "../environment/constants";
 
 bluebird.config({
   longStackTraces: true,
@@ -24,9 +24,9 @@ export async function run(
   context.callbackWaitsForEmptyEventLoop = false;
 
   await connectToDatabase();
-  await initHive(TERRA_HIVE);
+  await initHive(constants.TERRA_HIVE_ENDPOINT);
 
-  await initLCD(TERRA_LCD, TERRA_CHAIN_ID);
+  await initLCD(constants.TERRA_LCD_ENDPOINT, constants.TERRA_CHAIN_ID);
 
   // get pairs
   // map contract_address -> pair

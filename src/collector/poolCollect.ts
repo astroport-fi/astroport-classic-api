@@ -2,15 +2,6 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import { getGeneratorPoolInfo, getLatestBlock, getPairLiquidity } from "../lib/terra";
 import { getPairs } from "../services";
-import {
-  ASTRO_TOKEN,
-  CoingeckoValues,
-  EXTERNAL_TOKENS,
-  FEES,
-  PAIRS_WHITELIST,
-  POOLS_WITH_8_DIGIT_REWARD_TOKENS,
-  TOKEN_ADDRESS_MAP,
-} from "../constants";
 import { insertPoolTimeseries } from "../services/pool_timeseries.service";
 import { PoolTimeseries } from "../models/pool_timeseries.model";
 import { getPrices } from "../services/priceV2.service";
@@ -21,6 +12,8 @@ import { PoolProtocolRewardVolume24h } from "../models/pool_protocol_reward_volu
 import { fetchExternalTokenPrice } from "./coingecko/client";
 import { calculateThirdPartyApr } from "./chainIndexer/calculateApr";
 import { getProxyAddressesInfo } from "./proxyAddresses";
+import constants from "../environment/constants";
+import { CoingeckoValues } from "../types/coingecko_values.type";
 
 dayjs.extend(utc);
 
@@ -59,12 +52,12 @@ export async function poolCollect(): Promise<void> {
   const priceMap = new Map(pricesRaw.map((price) => [price.token_address, price]));
 
   // generator rewards
-  const astro_price = priceMap.get(ASTRO_TOKEN)?.price_ust as number;
+  const astro_price = priceMap.get(constants.ASTRO_TOKEN)?.price_ust as number;
   const { height } = await getLatestBlock();
 
   for (const pair of pairs) {
     // TODO remove after batching
-    if (!PAIRS_WHITELIST.has(pair.contractAddr)) {
+    if (!constants.PAIRS_WHITELIST.has(pair.contractAddr)) {
       continue;
     }
 
@@ -89,12 +82,12 @@ export async function poolCollect(): Promise<void> {
     const dayVolume = dayVolumeMap.get(pair.contractAddr) ?? 0; // in UST
     const weekVolume = weekVolumeMap.get(pair.contractAddr) ?? 0;
 
-    const trading_fee_bp = FEES.get(pool_type) ?? 20; // basis points
+    const trading_fee_bp = constants.FEES.get(pool_type) ?? 20; // basis points
     const trading_fee_perc = trading_fee_bp / 10000; // percentage
 
     result.timestamp = dayjs().valueOf();
     result.metadata.pool_type = pool_type;
-    result.metadata.trading_fee_rate_bp = FEES.get(pool_type);
+    result.metadata.trading_fee_rate_bp = constants.FEES.get(pool_type);
     result.metadata.pool_address = pair.contractAddr;
     result.metadata.lp_address = pair.liquidityToken;
     result.metadata.pool_liquidity = pool_liquidity;
@@ -110,8 +103,8 @@ export async function poolCollect(): Promise<void> {
     };
 
     // TODO - temporary solution
-    if (TOKEN_ADDRESS_MAP.get(pair.contractAddr)) {
-      result.metadata.token_symbol = TOKEN_ADDRESS_MAP.get(pair.contractAddr);
+    if (constants.TOKEN_ADDRESS_MAP.get(pair.contractAddr)) {
+      result.metadata.token_symbol = constants.TOKEN_ADDRESS_MAP.get(pair.contractAddr);
     }
 
     // trading fees
@@ -144,7 +137,7 @@ export async function poolCollect(): Promise<void> {
     let decimals = 6;
 
     // 8 digits for wormhole, orion TODO
-    if (POOLS_WITH_8_DIGIT_REWARD_TOKENS.has(pair.contractAddr)) {
+    if (constants.POOLS_WITH_8_DIGIT_REWARD_TOKENS.has(pair.contractAddr)) {
       protocolRewards24h = protocolRewards24h / 100;
       protocolRewards7d = protocolRewards7d / 100;
       decimals = 8;
@@ -161,8 +154,8 @@ export async function poolCollect(): Promise<void> {
     let nativeTokenPrice = 0;
     if (priceMap.has(rewardToken)) {
       nativeTokenPrice = priceMap.get(rewardToken)?.price_ust as number;
-    } else if (EXTERNAL_TOKENS.has(rewardToken as string)) {
-      const { source, address, currency } = EXTERNAL_TOKENS.get(
+    } else if (constants.EXTERNAL_TOKENS.has(rewardToken as string)) {
+      const { source, address, currency } = constants.EXTERNAL_TOKENS.get(
         rewardToken as string
       ) as CoingeckoValues;
       nativeTokenPrice = await fetchExternalTokenPrice(source, address, currency);
@@ -186,12 +179,10 @@ export async function poolCollect(): Promise<void> {
     if (isNaN(nativeTokenPrice)) {
       nativeTokenPrice = 0;
     }
-    result.metadata.fees.native.day = nativeApr * pool_liquidity / 365; // 24 hour fee amount, not rate
+    result.metadata.fees.native.day = (nativeApr * pool_liquidity) / 365; // 24 hour fee amount, not rate
 
     // note: can overflow to Infinity
-    if (
-      Math.pow(1 + result.metadata.fees.native.day / pool_liquidity, 365) - 1 != Infinity
-    ) {
+    if (Math.pow(1 + result.metadata.fees.native.day / pool_liquidity, 365) - 1 != Infinity) {
       result.metadata.fees.native.apy =
         Math.pow(1 + result.metadata.fees.native.day / pool_liquidity, 365) - 1;
     } else {

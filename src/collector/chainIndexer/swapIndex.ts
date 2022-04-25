@@ -1,13 +1,7 @@
-import { createPairLogFinders, createSwapLogFinder } from "../logFinder";
-import { createPairIndexer } from "./createPairIndex";
-import { FACTORY_ADDRESS } from "../../constants";
+import { createSwapLogFinder } from "../logFinder";
 import { Pair } from "../../types";
 import { TxHistoryIndexer } from "./txHistoryIndexer";
-import { findProtocolRewardEmissions } from "./findProtocolRewardEmissions";
 import { PriceV2 } from "../../types/priceV2.type";
-import { findXAstroFees } from "./findXAstroFees";
-import { voteLogFinder } from "../logFinder/voteLogFinder";
-import { voteIndexer } from "./voteIndexer";
 import { PoolVolume } from "../../models/pool_volume.model";
 
 /**

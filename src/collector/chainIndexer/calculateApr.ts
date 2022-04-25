@@ -1,5 +1,5 @@
-import { BLOCKS_PER_YEAR, SECONDS_PER_YEAR } from "../../constants";
 // import { DISTRIBUTION_SCHEDULES, Schedules } from "../../data/distributionSchedules";
+import constants from "../../environment/constants";
 import { Schedules, ScheduleType } from "../../types/contracts";
 
 interface CalculateApr {
@@ -43,7 +43,10 @@ export const calculateThirdPartyApr = ({
   const schedule = getSchedule(schedules, latestBlock);
   if (!schedule) return 0;
   const [start, end, totalEmission] = schedule;
-  const multiplyBy = schedules?.type === ScheduleType.UnixTime ? SECONDS_PER_YEAR : BLOCKS_PER_YEAR;
+  const multiplyBy =
+    schedules?.type === ScheduleType.UnixTime
+      ? constants.SECONDS_PER_YEAR
+      : constants.BLOCKS_PER_YEAR;
   const tokensPerTime = parseInt(totalEmission) / (end - start);
   const totalTokensPerYear = (multiplyBy * tokensPerTime) / 10 ** decimals;
   return (totalTokensPerYear * tokenPrice) / totalValueLocked;

@@ -4,9 +4,9 @@ import { PriceGraphEdge } from "./price_graph_edge";
 import { getBlock } from "../../services";
 import { getPricesFromPool } from "../../modules/terra";
 import { getPool } from "../../lib/terra";
-import { PAIRS_WHITELIST } from "../../constants";
 import { getExchangeRate } from "./util";
 import { PriceV2 } from "../../models/price_v2.model";
+import constants from "../../environment/constants";
 
 /**
  * created unweighted directed graph
@@ -60,7 +60,7 @@ export async function indexPrices(
   // add price (edges)
   for (const pair of pairs) {
     // TODO remove after batching
-    if (!PAIRS_WHITELIST.has(pair.contractAddr)) {
+    if (!constants.PAIRS_WHITELIST.has(pair.contractAddr)) {
       continue;
     }
 

@@ -9,8 +9,8 @@ import { ScheduleType } from "../../../src/types/contracts";
 describe("findXAstroFees", function () {
   it("Should get XAstroFees event from transfer log", async () => {
     const event = await getEvent(
-      7347001,
-      "70BD4D64467FAD9631EC4A42AAC59F9D833105ACF9F6C4F62E9E96C1491D9EF3",
+      8767872,
+      "051E4F5E7146DAD071AD774243AE21D1F32986427CD039140982C2426B274B83",
       "wasm"
     );
     const astroNativeFeeLogFinder = createAstroNativeFeeLogFinder();

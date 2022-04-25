@@ -4,7 +4,7 @@ import { getLastHeight } from "../services";
 import { PoolVolume } from "../models/pool_volume.model";
 import { PoolVolume7d } from "../models/pool_volume_7d.model";
 import { Pair } from "../types";
-import { BLOCKS_PER_YEAR, TERRA_CHAIN_ID } from "../constants";
+import constants from "../environment/constants";
 
 dayjs.extend(utc);
 
@@ -15,11 +15,11 @@ dayjs.extend(utc);
 
 export async function poolVolume7dCollect(pairs: Pair[]): Promise<void> {
   // get latest block height
-  const latestHeight = await getLastHeight(TERRA_CHAIN_ID);
+  const latestHeight = await getLastHeight(constants.TERRA_CHAIN_ID);
   console.log("latest height: " + latestHeight.value);
 
   // get block height 7d ago
-  const startBlockHeight = latestHeight.value - Math.floor(BLOCKS_PER_YEAR / 52);
+  const startBlockHeight = latestHeight.value - Math.floor(constants.BLOCKS_PER_YEAR / 52);
   // const startBlockHeight = await getHeightByDate(
   //   chainId,
   //   dayjs().utc().subtract(1, 'y').toISOString());

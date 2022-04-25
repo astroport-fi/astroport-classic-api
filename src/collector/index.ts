@@ -7,7 +7,6 @@ import {
 
 import { initHive, initLCD } from "../lib/terra";
 import { connectToDatabase, disconnectDatabase } from "../modules/db";
-import { TERRA_CHAIN_ID, TERRA_HIVE, TERRA_LCD } from "../constants";
 import { heightCollect } from "./heightCollect";
 import { chainCollect } from "./chainCollect";
 import { supplyCollect } from "./supplyCollect";
@@ -17,6 +16,7 @@ import { pairListToMap, priceListToMap } from "./helpers";
 import { priceCollectV2 } from "./priceIndexer/priceCollectV2";
 import { externalPriceCollect } from "./externalPriceCollect";
 import { getPrices } from "../services/priceV2.service";
+import constants from "../environment/constants";
 
 bluebird.config({
   longStackTraces: true,
@@ -31,9 +31,9 @@ export async function run(
   context.callbackWaitsForEmptyEventLoop = false;
 
   await connectToDatabase();
-  await initHive(TERRA_HIVE);
+  await initHive(constants.TERRA_HIVE_ENDPOINT);
 
-  await initLCD(TERRA_LCD, TERRA_CHAIN_ID);
+  await initLCD(constants.TERRA_LCD_ENDPOINT, constants.TERRA_CHAIN_ID);
 
   // get pairs
   // map contract_address -> pair

@@ -5,12 +5,12 @@ import {
   APIGatewayProxyResult,
 } from "aws-lambda";
 import { initLCD, getLatestBlock, initHive } from "../../lib/terra";
-import { TERRA_CHAIN_ID, TERRA_HIVE, TERRA_LCD } from "../../constants";
 
 import { gql, GraphQLClient } from "graphql-request";
 import axios from "axios";
 import { generate_post_fields } from "./slackHelpers";
 import { get_ust_balance } from "./helpers";
+import constants from "../../environment/constants";
 
 bluebird.config({
   longStackTraces: true,
@@ -39,8 +39,8 @@ export async function run(
       keepalive: true,
     });
 
-    await initLCD(TERRA_LCD, TERRA_CHAIN_ID);
-    await initHive(TERRA_HIVE);
+    await initLCD(constants.TERRA_LCD_ENDPOINT, constants.TERRA_CHAIN_ID);
+    await initHive(constants.TERRA_HIVE_ENDPOINT);
 
     // blocks
     const devHeightRaw = await dev.request(
