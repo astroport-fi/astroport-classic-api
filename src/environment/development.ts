@@ -25,12 +25,12 @@ export class DevelopmentEnvironment {
    */
 
   // Indexer start
-  START_BLOCK_HEIGHT = 5968589;
+  START_BLOCK_HEIGHT = 5900001;
 
   // Chain config
   TERRA_CHAIN_ID = "bombay-12";
-  TERRA_LCD_ENDPOINT = "https://bombay-lcd.terra.dev/";
-  TERRA_HIVE_ENDPOINT = "https://testnet-hive.terra.dev/graphql";
+  TERRA_LCD_ENDPOINT = "https://lcd-terra-test.everstake.one/";
+  TERRA_HIVE_ENDPOINT = "https://hive-terra-test.everstake.one/graphql";
   // Maximum amount of blocks to collect during an indexer invocation
   CHAIN_COLLECT_BATCH_SIZE = 150;
   // Whether to notify Slack when a fee swap happens
@@ -56,29 +56,21 @@ export class DevelopmentEnvironment {
     ["stable", 2.5],
   ]);
 
-  // trigger collect on this address
-  MAKER_CONTRACT = "terra14906rw2kyu50cdw25x0uymkrlqtgqxjemdfd0n";
-
   // Governance
   // Trigger messages on this address
   GOVERNANCE_ASSEMBLY = "terra109039nj38vnzyryqvcjctdh33r4qlq5dmrzqn0";
 
-  // Governance addresses
-  GOV_XASTRO = "terra1yufp7cv85qrxrx56ulpfgstt2gxz905fgmysq0" as string;
-  GOV_BUILDER_UNLOCK = "terra1hccg0cfrcu0nr4zgt5urmcgam9v88peg9s7h6j" as string; // TODO: Get testnet value, this seems incorrect
-  GOV_VXASTRO = "terra1pqr02fx4ulc2mzws7xlqh8hpwqx2ls5m4fk62j" as string;
-
   // Astroport tokens
   ASTRO_TOKEN = "terra1jqcw39c42mf7ngq4drgggakk3ymljgd3r5c3r5" as string;
   XASTRO_TOKEN = "terra1yufp7cv85qrxrx56ulpfgstt2gxz905fgmysq0" as string;
-  VXASTRO_TOKEN = null;
+  VXASTRO_TOKEN = "terra1pqr02fx4ulc2mzws7xlqh8hpwqx2ls5m4fk62j" as string;
 
   // Astroport contracts
-  BUILDER_UNLOCK = "terra1fh27l8h4s0tfx9ykqxq5efq4xx88f06x6clwmr" as string; // TODO: Get testnet value
+  BUILDER_UNLOCK = "terra1hccg0cfrcu0nr4zgt5urmcgam9v88peg9s7h6j" as string;
   MULTISIG = "terra1vp629527wwvm9kxqsgn4fx2plgs4j5un0ea5yu" as string;
   ASSEMBLY_TREASURY = "terra1dp83pv9kfw27wflsdpj8ewjuzasssaw9lvnqnt" as string;
   ASTRO_UST_PAIR = "terra1ec0fnjk2u6mms05xyyrte44jfdgdaqnx0upesr" as string;
-  VESTING_ADDRESS = "terra1g73et67yraz33vtwtg8c7q39gq50z2q92dz822" as string; // TODO: Get testnet value
+  VESTING_ADDRESS = "terra1g73et67yraz33vtwtg8c7q39gq50z2q92dz822" as string;
 
   FACTORY_ADDRESS = "terra15jsahkaf9p0qu8ye873p0u5z6g07wdad0tdq43" as string;
   MAKER_ADDRESS = "terra14906rw2kyu50cdw25x0uymkrlqtgqxjemdfd0n" as string;

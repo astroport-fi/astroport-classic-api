@@ -39,7 +39,7 @@ export class ProductionEnvironment {
   // Maximum amount of blocks to collect during an indexer invocation
   CHAIN_COLLECT_BATCH_SIZE = 150;
   // Whether to notify Slack when a fee swap happens
-  ENABLE_FEE_SWAP_NOTIFICATION = "false";
+  ENABLE_FEE_SWAP_NOTIFICATION = "true";
   ENABLE_DEBUG: boolean = true;
   ENABLE_GRAPHQL_INTROSPECTION: boolean = true;
 
@@ -61,17 +61,9 @@ export class ProductionEnvironment {
     ["stable", 2.5],
   ]);
 
-  // trigger collect on this address
-  MAKER_CONTRACT = "terra12u7hcmpltazmmnq0fvyl225usn3fy6qqlp05w0";
-
   // Governance
   // Trigger messages on this address
   GOVERNANCE_ASSEMBLY = "terra1sq9ppsvt4k378wwhvm2vyfg7kqrhtve8p0n3a6";
-
-  // Governance addresses
-  GOV_XASTRO = "terra14lpnyzc9z4g3ugr4lhm8s4nle0tq8vcltkhzh7" as string;
-  GOV_BUILDER_UNLOCK = "terra1hccg0cfrcu0nr4zgt5urmcgam9v88peg9s7h6j" as string;
-  GOV_VXASTRO = null;
 
   // Astroport tokens
   ASTRO_TOKEN = "terra1xj49zyqrwpv5k928jwfpfy2ha668nwdgkwlrg3" as string;

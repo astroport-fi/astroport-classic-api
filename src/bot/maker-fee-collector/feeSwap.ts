@@ -28,7 +28,7 @@ export async function swap(): Promise<void> {
   for (const swap_sublist of EXECUTE_MSGS) {
     const msg = new MsgExecuteContract(
       wallet.key.accAddress,
-      constants.MAKER_CONTRACT,
+      constants.MAKER_ADDRESS,
       swap_sublist
     );
 

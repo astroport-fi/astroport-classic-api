@@ -72,9 +72,9 @@ export async function governanceProposalCollect(): Promise<void> {
       proposal.total_voting_power = await getTotalVotingPowerAt(
         proposal.start_block - 1,
         proposal.start_time,
-        constants.GOV_XASTRO,
-        constants.GOV_BUILDER_UNLOCK,
-        constants.GOV_VXASTRO
+        constants.XASTRO_TOKEN,
+        constants.BUILDER_UNLOCK,
+        constants.VXASTRO_TOKEN
       );
 
       new_proposals.push(proposal);
