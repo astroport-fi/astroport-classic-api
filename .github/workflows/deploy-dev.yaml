@@ -37,10 +37,10 @@ jobs:
       - name: Install NPM dependencies
         #npm ci works better to match package-lock
         run: npm ci
-      - name: Copy env file for test
-        run: cp .env.dev .env
+      # - name: Copy env file for test
+      #   run: cp .env.dev .env
       - name: Run Test
-        run: npm run test
+        run: npm run test-dev
 
       # Optional
       #- name: Build assets
