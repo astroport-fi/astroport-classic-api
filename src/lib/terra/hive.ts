@@ -208,29 +208,34 @@ export async function getLatestBlock(): Promise<{
 export async function getChainBlock(height: number): Promise<{
   height: number;
   time: string;
-}> {
-  const response = await hive.request(
-    gql`
-      query ($height: Int!) {
-        tendermint {
-          blockInfo(height: $height) {
-            block {
-              header {
-                height
-                time
+} | null> {
+  try {
+    const response = await hive.request(
+      gql`
+        query ($height: Int!) {
+          tendermint {
+            blockInfo(height: $height) {
+              block {
+                header {
+                  height
+                  time
+                }
               }
             }
           }
         }
-      }
-    `,
-    { height }
-  );
+      `,
+      { height }
+    );
 
-  return {
-    height: +response?.tendermint?.blockInfo?.block?.header?.height,
-    time: response?.tendermint?.blockInfo?.block?.header?.time,
-  };
+    return {
+      height: +response?.tendermint?.blockInfo?.block?.header?.height,
+      time: response?.tendermint?.blockInfo?.block?.header?.time,
+    };
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
 }
 
 export async function getContractStore<T>(address: string, query: JSON): Promise<T | null> {
