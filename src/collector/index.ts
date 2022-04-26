@@ -5,8 +5,6 @@ import {
   APIGatewayProxyResult,
 } from "aws-lambda";
 
-import { initHive, initLCD } from "../lib/terra";
-import { connectToDatabase, disconnectDatabase } from "../modules/db";
 import { heightCollect } from "./heightCollect";
 import { chainCollect } from "./chainCollect";
 import { supplyCollect } from "./supplyCollect";
@@ -16,7 +14,8 @@ import { pairListToMap, priceListToMap } from "./helpers";
 import { priceCollectV2 } from "./priceIndexer/priceCollectV2";
 import { externalPriceCollect } from "./externalPriceCollect";
 import { getPrices } from "../services/priceV2.service";
-import constants from "../environment/constants";
+
+import { lambdaHandlerWrapper } from "../lib/handler-wrapper";
 
 bluebird.config({
   longStackTraces: true,
@@ -24,26 +23,18 @@ bluebird.config({
 });
 global.Promise = bluebird as any;
 
-export async function run(
-  _: APIGatewayProxyEvent,
-  context: APIGatewayAuthorizerResultContext
-): Promise<APIGatewayProxyResult> {
-  context.callbackWaitsForEmptyEventLoop = false;
+export const run = lambdaHandlerWrapper(
+  async (
+    _: APIGatewayProxyEvent,
+    context: APIGatewayAuthorizerResultContext
+  ): Promise<APIGatewayProxyResult> => {
+    context.callbackWaitsForEmptyEventLoop = false;
+    const pairs = await getPairs();
+    const pairMap = pairListToMap(pairs);
 
-  await connectToDatabase();
-  await initHive(constants.TERRA_HIVE_ENDPOINT);
+    const prices = await getPrices();
+    const priceMap = priceListToMap(prices);
 
-  await initLCD(constants.TERRA_LCD_ENDPOINT, constants.TERRA_CHAIN_ID);
-
-  // get pairs
-  // map contract_address -> pair
-  const pairs = await getPairs();
-  const pairMap = pairListToMap(pairs);
-
-  const prices = await getPrices();
-  const priceMap = priceListToMap(prices);
-
-  try {
     const start = new Date().getTime();
 
     console.log("Indexing height...");
@@ -66,15 +57,11 @@ export async function run(
     await chainCollect(pairMap, priceMap);
 
     console.log("Total time elapsed: " + (new Date().getTime() - start) / 1000);
-  } catch (e) {
-    await disconnectDatabase();
-    throw new Error("Error while running indexer: " + e);
-  }
 
-  await disconnectDatabase();
-
-  return {
-    statusCode: 200,
-    body: "collected",
-  };
-}
+    return {
+      statusCode: 200,
+      body: "collected",
+    };
+  },
+  { errorMessage: "Error while running indexer: ", successMessage: "collected" }
+);
