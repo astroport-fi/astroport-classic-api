@@ -31,7 +31,7 @@ export const lambdaHandlerWrapper =
     handler: (
       event: APIGatewayProxyEvent,
       context: APIGatewayAuthorizerResultContext
-    ) => Promise<APIGatewayProxyResult>,
+    ) => Promise<void>,
     parameters?: Parameters
   ) =>
   async (
@@ -50,6 +50,7 @@ export const lambdaHandlerWrapper =
     } = parameters ?? {};
 
     try {
+      //Main handler content
       await handler(event, context);
     } catch (err) {
       if (disconnectDbWhenError) {

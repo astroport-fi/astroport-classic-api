@@ -24,10 +24,7 @@ bluebird.config({
 global.Promise = bluebird as any;
 
 export const run = lambdaHandlerWrapper(
-  async (
-    _: APIGatewayProxyEvent,
-    context: APIGatewayAuthorizerResultContext
-  ): Promise<APIGatewayProxyResult> => {
+  async (_: APIGatewayProxyEvent, context: APIGatewayAuthorizerResultContext): Promise<void> => {
     context.callbackWaitsForEmptyEventLoop = false;
     const pairs = await getPairs();
     const pairMap = pairListToMap(pairs);
@@ -57,11 +54,6 @@ export const run = lambdaHandlerWrapper(
     await chainCollect(pairMap, priceMap);
 
     console.log("Total time elapsed: " + (new Date().getTime() - start) / 1000);
-
-    return {
-      statusCode: 200,
-      body: "collected",
-    };
   },
   { errorMessage: "Error while running indexer: ", successMessage: "collected" }
 );
