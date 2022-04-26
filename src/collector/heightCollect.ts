@@ -42,8 +42,9 @@ export async function heightCollect(): Promise<void> {
     if (chainBlock) {
       const { height: value, time } = chainBlock;
       await createHeight({ chainId, value, createdAt: time });
+      await waitFor(1000);
+    } else {
+      break;
     }
-
-    await waitFor(1000);
   }
 }
