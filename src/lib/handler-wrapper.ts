@@ -7,9 +7,11 @@ import constants from "../environment/constants";
 import { connectToDatabase, disconnectDatabase } from "../modules/db";
 import { initHive, initLCD } from "./terra";
 
-interface Messages {
+interface Parameters {
   errorMessage?: string;
   successMessage?: string;
+  disconnectDbWhenFinished?: boolean;
+  disconnectDbWhenError?: boolean;
 }
 
 /**
@@ -20,7 +22,8 @@ interface Messages {
  *
  *
  * @param handler The full lambda handler being wrapped
- * @param messages {errorMessage , successMessage} are optional parameters for handling error and success
+ * @param parameters  are optional parameters for handling errors, success and disconnecting database
+ * when functions error or finalize.
  * @returns a wrapped version of lambda handler with error handling and initial connections
  */
 export const lambdaHandlerWrapper =
@@ -29,7 +32,7 @@ export const lambdaHandlerWrapper =
       event: APIGatewayProxyEvent,
       context: APIGatewayAuthorizerResultContext
     ) => Promise<APIGatewayProxyResult>,
-    messages?: Messages
+    parameters?: Parameters
   ) =>
   async (
     event: APIGatewayProxyEvent,
@@ -39,20 +42,26 @@ export const lambdaHandlerWrapper =
     await initHive(constants.TERRA_HIVE_ENDPOINT);
     await initLCD(constants.TERRA_LCD_ENDPOINT, constants.TERRA_CHAIN_ID);
 
-    const { errorMessage, successMessage } = messages ?? {
-      errorMessage: "Error while running indexer: ",
-      successMessage: "collected",
-    };
+    const {
+      errorMessage = "Error while running indexer: ",
+      successMessage = "collected",
+      disconnectDbWhenError = true,
+      disconnectDbWhenFinished = true,
+    } = parameters ?? {};
 
     try {
       await handler(event, context);
     } catch (err) {
-      await disconnectDatabase();
+      if (disconnectDbWhenError) {
+        await disconnectDatabase();
+      }
       //TODO use a better error logging service?
       throw new Error(errorMessage + err);
     }
 
-    await disconnectDatabase();
+    if (disconnectDbWhenFinished) {
+      await disconnectDatabase();
+    }
 
     return {
       statusCode: 200,
