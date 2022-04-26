@@ -9,7 +9,7 @@
 # Learn more: https://maxkostinevich.com/blog/how-to-deploy-serverless-applications-using-github-actions/
 #
 
-name: Test Dev
+name: Deploy Dev
 on:
   push:
     branches:
@@ -38,6 +38,7 @@ jobs:
         #npm ci works better to match package-lock
         run: npm ci
       - name: Run Test
+        run: cp .env.dev .env
         run: npm run test
 
       # Optional

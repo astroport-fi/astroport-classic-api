@@ -7,7 +7,7 @@ module.exports = {
   diff: true,
   extension: ["ts"],
   package: "./package.json",
-  timeout: 10000,
+  timeout: 15000,
   "watch-files": ["test/**/*.ts", "src/services/*.ts"],
   spec: ["test/**/*.ts"],
   recursive: true,
