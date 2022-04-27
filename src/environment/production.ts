@@ -256,6 +256,9 @@ export class ProductionEnvironment {
     "terra1ngs0xlmxan6ktqwtcj8c2l2ddp3z00wpxt43vr", // osmo-ust
     "terra12k8d0uzrgcqn4ge4k8ntr4aaycpwunz7pu2umj", // scrt-ust
     "terra14rnschsdlllt00yk8fxvxmcqgzhme3cx06t2x4", // atom-ust
+    "terra1myl709y74vrdcyuxy6g9wv5l2sgah4e9lstnwe", // bETH-ust
+    "terra1gj2l0vrna4g73e0500hexzyy444g46vre3eaa3", // whSD-ust
+    "terra13xz77zwk9jvulch92uwzuk3astcp0uvymh7f2p", // bATOM-ust
   ]);
 
   // TODO - This should be queried from each token's native chain in future
