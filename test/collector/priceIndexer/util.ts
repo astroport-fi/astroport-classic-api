@@ -1,18 +1,18 @@
 import mongoose from "mongoose";
 import { initHive } from "../../../src/lib/terra";
-import { MONGODB_URL, TERRA_HIVE } from "../../../src/constants";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import { PriceGraphNode } from "../../../src/collector/priceIndexer/price_graph_node";
 import { getExchangeRate } from "../../../src/collector/priceIndexer/util";
 import * as assert from "assert";
+import constants from "../../../src/environment/constants";
 
 dayjs.extend(utc);
 
 describe("Exchange Rate Graph tests", function () {
   beforeEach(async function () {
-    await mongoose.connect(MONGODB_URL);
-    await initHive(TERRA_HIVE);
+    await mongoose.connect(constants.MONGODB_URL);
+    await initHive(constants.TERRA_HIVE_ENDPOINT);
   });
 
   describe("Exchange rate happy path", function () {

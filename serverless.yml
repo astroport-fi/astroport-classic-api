@@ -3,80 +3,89 @@ useDotenv: true
 variablesResolutionMode: 20210326
 
 plugins:
-  - serverless-offline
   - serverless-dotenv-plugin
   - serverless-plugin-typescript
+  - serverless-plugin-conditional-functions
+  - serverless-offline
 
 provider:
   name: aws
   runtime: nodejs14.x
   lambdaHashingVersion: 20201221
-  environment:
-    DECIMALS: ${env:DECIMALS}
-    START_BLOCK_HEIGHT: ${env:START_BLOCK_HEIGHT}
-    TERRA_LCD: ${env:TERRA_LCD}
-    TERRA_HIVE: ${env:TERRA_HIVE}
-    TERRA_MANTLE: ${env:TERRA_MANTLE}
-    TERRA_CHAIN_ID: ${env:TERRA_CHAIN_ID}
 
 functions:
   aggregator:
+    enabled: '"${env:ENABLE_FUNCTION_AGGREGATOR}" == "true"'
     handler: src/aggregator/index.run
     events:
-      - schedule: rate(10 minutes)
-    timeout: 595 # in seconds
+      - schedule: rate(5 minutes)
+    timeout: 295 # in seconds
     environment:
       MONGODB_URL: ${env:MONGODB_URL_RW}
+
   aggregatorHourly:
+    enabled: '"${env:ENABLE_FUNCTION_AGGREGATOR_HOURLY}" == "true"'
     handler: src/aggregatorHourly/index.run
     events:
       - schedule: rate(1 hour)
     timeout: 295 # in seconds
     environment:
       MONGODB_URL: ${env:MONGODB_URL_RW}
+
   collector:
+    enabled: '"${env:ENABLE_FUNCTION_COLLECTOR}" == "true"'
     handler: src/collector/index.run
     events:
-      - schedule: rate(5 minutes)
-    timeout: 595 # in seconds
+      - schedule: rate(8 minutes)
+    timeout: 475 # in seconds
     environment:
       MONGODB_URL: ${env:MONGODB_URL_RW}
+
   collectorHourly:
+    enabled: '"${env:ENABLE_FUNCTION_COLLECTOR_HOURLY}" == "true"'
     handler: src/collectorHourly/index.run
     events:
       - schedule: rate(1 hour)
     timeout: 475 # in seconds
     environment:
       MONGODB_URL: ${env:MONGODB_URL_RW}
+
   snapshot-bot:
+    enabled: '"${env:ENABLE_FUNCTION_SNAPSHOT_BOT}" == "true"'
     handler: src/bot/stat-snapshotter/index.run
     events:
       - schedule: rate(5 minutes)
     timeout: 55 # in seconds
     environment:
       MONGODB_URL: ${env:MONGODB_URL_RW}
+
   governance-proposal-collector:
+    enabled: '"${env:ENABLE_FUNCTION_GOVERNANCE_PROPOSAL_COLLECTOR}" == "true"'
     handler: src/governance/index.run
     events:
       - schedule: rate(1 minute)
     timeout: 55 # in seconds
     environment:
       MONGODB_URL: ${env:MONGODB_URL_RW}
-      GOVERNANCE_ASSEMBLY: "terra1sq9ppsvt4k378wwhvm2vyfg7kqrhtve8p0n3a6"
+
   governance-state-transition-bot:
+    enabled: '"${env:ENABLE_FUNCTION_GOVERNANCE_STATE_TRANSITION_BOT}" == "true"'
     handler: src/bot/governance-state-transition-bot/index.run
     events:
       - schedule: rate(1 minute)
-    timeout: 55 # in seconds
+    timeout: 30 # in seconds
     environment:
       MONGODB_URL: ${env:MONGODB_URL_RW}
-      GOVERNANCE_ASSEMBLY: "terra1sq9ppsvt4k378wwhvm2vyfg7kqrhtve8p0n3a6"
-  maker-fee-collector:
-    handler: src/bot/maker-fee-collector/index.run
+
+  slack-bot-backend-stats:
+    enabled: '"${env:ENABLE_FUNCTION_SLACK_BOT_BACKEND_STATS}" == "true"'
+    handler: src/bot/slack-bot-backend-stats/index.run
     events:
-      - schedule: rate(6 hours)
+      - schedule: rate(5 minutes)
     timeout: 20 # in seconds
+
   graphql:
+    enabled: '"${env:ENABLE_FUNCTION_GRAPHQL}" == "true"'
     handler: src/graphql/index.run
     events:
       - http:
@@ -91,7 +100,6 @@ functions:
       MONGODB_URL: ${env:MONGODB_URL_R}
 
 custom:
-  environment: ${file(.env)}
   serverlessPluginTypescript:
     tsConfigFileLocation: "./tsconfig.serverless.json"
   serverless-offline:

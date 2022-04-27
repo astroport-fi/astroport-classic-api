@@ -6,12 +6,8 @@ import {
   MnemonicKey,
   MsgExecuteContract,
 } from "@terra-money/terra.js";
-import {
-  GOVERNANCE_ASSEMBLY,
-  GOVERNANCE_TRIGGER_BOT_SEED,
-  TERRA_CHAIN_ID,
-  TERRA_LCD,
-} from "../../constants";
+import constants from "../../environment/constants";
+
 import { Proposal } from "../../models/proposal.model";
 
 // active -> passed/rejected
@@ -63,18 +59,22 @@ export async function expire_proposal(proposals: any[]): Promise<void> {
 
 export async function assembly_msg(message: any): Promise<void> {
   const mk = new MnemonicKey({
-    mnemonic: GOVERNANCE_TRIGGER_BOT_SEED,
+    mnemonic: constants.GOVERNANCE_TRIGGER_BOT_SEED,
   });
 
   const terra = new LCDClient({
-    URL: TERRA_LCD,
-    chainID: TERRA_CHAIN_ID,
+    URL: constants.TERRA_LCD_ENDPOINT,
+    chainID: constants.TERRA_CHAIN_ID,
   });
 
   const wallet = terra.wallet(mk);
 
   // create a message to a maker contract
-  const executeMsg = new MsgExecuteContract(wallet.key.accAddress, GOVERNANCE_ASSEMBLY, message);
+  const executeMsg = new MsgExecuteContract(
+    wallet.key.accAddress,
+    constants.GOVERNANCE_ASSEMBLY,
+    message
+  );
 
   const options: CreateTxOptions = {
     msgs: [executeMsg],

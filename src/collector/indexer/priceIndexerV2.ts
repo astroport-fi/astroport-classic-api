@@ -1,6 +1,6 @@
 import { fetchExternalTokenPrice } from "../coingecko/client";
 import { PriceV2 } from "../../models/price_v2.model";
-import { EXTERNAL_TOKENS } from "../../constants";
+import constants from "../../environment/constants";
 
 /**
  *
@@ -9,7 +9,7 @@ import { EXTERNAL_TOKENS } from "../../constants";
 export async function priceIndexerV2(blockHeight: number): Promise<void> {
   // TODO fetch pair prices
 
-  for (const [terraAddress, value] of EXTERNAL_TOKENS.entries()) {
+  for (const [terraAddress, value] of constants.EXTERNAL_TOKENS.entries()) {
     try {
       const tokenPrice = await fetchExternalTokenPrice(value.source, value.address, value.currency);
 

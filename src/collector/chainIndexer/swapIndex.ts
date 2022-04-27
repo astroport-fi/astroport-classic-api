@@ -1,13 +1,7 @@
-import { createPairLogFinders, createSwapLogFinder } from "../logFinder";
-import { createPairIndexer } from "./createPairIndex";
-import { FACTORY_ADDRESS } from "../../constants";
+import { createSwapLogFinder } from "../logFinder";
 import { Pair } from "../../types";
 import { TxHistoryIndexer } from "./txHistoryIndexer";
-import { findProtocolRewardEmissions } from "./findProtocolRewardEmissions";
 import { PriceV2 } from "../../types/priceV2.type";
-import { findXAstroFees } from "./findXAstroFees";
-import { voteLogFinder } from "../logFinder/voteLogFinder";
-import { voteIndexer } from "./voteIndexer";
 import { PoolVolume } from "../../models/pool_volume.model";
 
 /**
@@ -23,9 +17,8 @@ export async function runSwapIndexer(
   pairMap: Map<string, Pair>,
   priceMap: Map<string, PriceV2>
 ): Promise<void> {
-
   // maps pool addresses to their UST volume for this block
-  const poolVolumeMap = new Map<string, number>()
+  const poolVolumeMap = new Map<string, number>();
 
   for (const tx of txs) {
     const Logs = tx.logs;
@@ -60,18 +53,21 @@ export async function runSwapIndexer(
   }
 
   // db operations
-  const dbOps: Promise<any>[] = []
+  const dbOps: Promise<any>[] = [];
 
   poolVolumeMap.forEach((volume: number, pool: string) => {
     dbOps.push(
       PoolVolume.create({
         poolAddress: pool,
         block: height,
-        volume: volume
+        volume: volume,
       })
-    )
-  })
+    );
+  });
 
-  await Promise.all(dbOps)
-
+  try {
+    await Promise.all(dbOps);
+  } catch (e) {
+    console.log("failed to create pool volume", e);
+  }
 }

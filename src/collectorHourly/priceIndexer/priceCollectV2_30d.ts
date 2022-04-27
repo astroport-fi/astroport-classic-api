@@ -1,9 +1,9 @@
 import { Pair } from "../../types";
 import { getBlock } from "../../services";
-import { BLOCKS_PER_DAY } from "../../constants";
 import { PriceV2_30d } from "../../models/price_v2_30d.model";
 import { indexPrices } from "../../collector/priceIndexer/priceCollectV2";
 import { PriceGraphNode } from "../../collector/priceIndexer/price_graph_node";
+import constants from "../../environment/constants";
 
 /**
  * priceCollectV230d collects historic (specifically 30 days ago)
@@ -12,9 +12,9 @@ import { PriceGraphNode } from "../../collector/priceIndexer/price_graph_node";
  * @returns
  */
 export async function priceCollectV230d(pairs: Pair[]): Promise<void> {
-  const block = await getBlock("columbus-5");
+  const block = await getBlock(constants.TERRA_CHAIN_ID);
   // We need prices from 30 days ago, so we go back by that number of blocks
-  const height = block.hiveHeight - BLOCKS_PER_DAY * 30;
+  const height = block.hiveHeight - constants.BLOCKS_PER_DAY * 30;
   // get/calculate prices
   const prices = await indexPrices(pairs, height);
   // update prices

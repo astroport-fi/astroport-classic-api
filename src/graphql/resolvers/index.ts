@@ -17,7 +17,12 @@ import { getVotes } from "../../services/vote.service";
 import GraphQLJSON from "graphql-type-json";
 import { getSnapshots } from "../../services/snapshot.service";
 import { Pool } from "../../types/pool.type";
-import { getAllTokenHoldings, getVotingPower } from "../../services/user.service";
+import {
+  getAllTokenHoldings,
+  getVotingPower,
+  getBlunaUstRewards,
+  getUserStakedLpTokens,
+} from "../../services/user.service";
 import { User } from "../../types/user.type";
 import { parseResolveInfo } from "../../lib/graphql-parse-resolve-info";
 
@@ -93,6 +98,7 @@ export const resolvers = {
       // parseResolveInfo helps us determine which fields were requested
       // and aids in skipping long-running fields if not requested
       const resolvedInfo: any = parseResolveInfo(resolveInfo);
+
       if (!resolvedInfo) {
         // Unable to parse the query
         return user;
@@ -109,7 +115,21 @@ export const resolvers = {
         user.tokens = await getAllTokenHoldings(address);
       }
 
+      // was pending_rewards requested?
+      // to be extended with other pending rewards
+      if (resolvedInfo.fieldsByTypeName.User.pending_rewards) {
+        const bluna_ust_rewards = await getBlunaUstRewards(address);
+        user.pending_rewards = {
+          bluna_ust: bluna_ust_rewards,
+        };
+      }
+
+      // Was staked_lp_tokens requested?
+      if (resolvedInfo.fieldsByTypeName.User.staked_lp_tokens) {
+        user.staked_lp_tokens = await getUserStakedLpTokens(address);
+      }
+
       return user;
-    }
+    },
   },
 };

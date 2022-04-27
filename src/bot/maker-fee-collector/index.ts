@@ -6,8 +6,8 @@ import {
 } from "aws-lambda";
 
 import { initHive, initLCD } from "../../lib/terra";
-import { TERRA_CHAIN_ID, TERRA_HIVE, TERRA_LCD } from "../../constants";
 import { swap } from "./feeSwap";
+import constants from "../../environment/constants";
 
 bluebird.config({
   longStackTraces: true,
@@ -21,8 +21,8 @@ export async function run(
 ): Promise<APIGatewayProxyResult> {
   context.callbackWaitsForEmptyEventLoop = false;
 
-  await initHive(TERRA_HIVE);
-  await initLCD(TERRA_LCD, TERRA_CHAIN_ID);
+  await initHive(constants.TERRA_HIVE_ENDPOINT);
+  await initLCD(constants.TERRA_LCD_ENDPOINT, constants.TERRA_CHAIN_ID);
 
   try {
     const start = new Date().getTime();

@@ -8,7 +8,7 @@ module.exports = {
   extension: ["ts"],
   package: "./package.json",
   timeout: 10000,
-  "watch-files": ["test/**/*.ts"],
+  "watch-files": ["test/**/*.ts", "src/services/*.ts"],
   spec: ["test/**/*.ts"],
   recursive: true,
   require: ["ts-node/register", "test/hook.ts"],

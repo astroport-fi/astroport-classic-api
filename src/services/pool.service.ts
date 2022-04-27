@@ -1,3 +1,4 @@
+import constants from "../environment/constants";
 import { Pool } from "../models/pool.model";
 import {
   Pool as PoolType,
@@ -6,7 +7,6 @@ import {
   fieldsObj,
   GetPools,
 } from "../types/pool.type";
-import { TOKEN_ADDRESS_MAP } from "../constants";
 
 export async function getPool(address: string): Promise<any> {
   const pool = await Pool.findOne({ "metadata.pool_address": address });
@@ -51,7 +51,7 @@ export async function getPools({
 
 export function transformPoolModelToPoolType(model: any): PoolType {
   // TODO remove
-  const symbol = TOKEN_ADDRESS_MAP.get(model.metadata.pool_address);
+  const symbol = constants.TOKEN_ADDRESS_MAP.get(model.metadata.pool_address);
 
   return {
     timestamp: model.timestamp,

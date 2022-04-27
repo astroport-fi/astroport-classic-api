@@ -5,10 +5,10 @@ import {
   APIGatewayProxyResult,
 } from "aws-lambda";
 
-import { initHive, initLCD } from "../lib/terra";
+import { initHive } from "../lib/terra";
 import { connectToDatabase } from "../modules/db";
 import { governanceProposalCollect } from "./governanceProposalCollect";
-import { TERRA_HIVE } from "../constants";
+import constants from "../environment/constants";
 
 bluebird.config({
   longStackTraces: true,
@@ -23,7 +23,7 @@ export async function run(
   context.callbackWaitsForEmptyEventLoop = false;
 
   await connectToDatabase();
-  await initHive(TERRA_HIVE);
+  await initHive(constants.TERRA_HIVE_ENDPOINT);
 
   try {
     const start = new Date().getTime();

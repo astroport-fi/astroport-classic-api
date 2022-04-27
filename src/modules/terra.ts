@@ -1,6 +1,6 @@
+import constants from "../environment/constants";
 import { num } from "../lib/num";
 import { getStableswapRelativePrice } from "../lib/terra";
-import { TOKENS_WITH_8_DIGITS } from "../constants";
 
 export const isNative = (token: string): boolean => {
   return token.slice(0, 6) !== "terra1" && token.slice(0, 3) !== "ibc";
@@ -61,7 +61,7 @@ export const getPricesFromPool = async (
   const { token1, token2 } = getAssetAmountsInPool(pool, token_1_address);
 
   if (pool_type == "stable") {
-    const amount = TOKENS_WITH_8_DIGITS.has(token_1_address) ? 100000000 : 1000000;
+    const amount = constants.TOKENS_WITH_8_DIGITS.has(token_1_address) ? 100000000 : 1000000;
 
     let token1_price = await getStableswapRelativePrice(
       pool_address,
@@ -69,7 +69,7 @@ export const getPricesFromPool = async (
       String(amount)
     );
 
-    if (TOKENS_WITH_8_DIGITS.has(token1)) {
+    if (constants.TOKENS_WITH_8_DIGITS.has(token1)) {
       token1_price *= 100;
     }
 
@@ -86,7 +86,7 @@ export const getPricesFromPool = async (
     // xyk
 
     // TODO test for when both tokens have 8 decimals
-    if (TOKENS_WITH_8_DIGITS.has(token_1_address)) {
+    if (constants.TOKENS_WITH_8_DIGITS.has(token_1_address)) {
       const _f1 = num(token2).div(token1).multipliedBy(100).toFixed(6);
       const _f2 = num(token1).div(token2).div(100).toFixed(6);
       return {

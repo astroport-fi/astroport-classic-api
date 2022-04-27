@@ -1,18 +1,11 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import { getLastHeight } from "../services";
-import {
-  ASTRO_TOKEN,
-  BLOCKS_PER_YEAR,
-  TERRA_CHAIN_ID,
-  TOKENS_WITH_8_DIGITS,
-  XASTRO_STAKING_ADDRESS,
-} from "../constants";
 import { xAstroFee } from "../models/xastro_fee.model";
 import { PriceV2 } from "../types/priceV2.type";
 import { getContractStore, getLatestBlock } from "../lib/terra";
 import { xAstroFeeStat } from "../models/xastro_fee_stat.model";
 import { xAstroFeeStatHistory } from "../models/xastro_fee_stat_history.model";
+import constants from "../environment/constants";
 
 dayjs.extend(utc);
 
@@ -29,14 +22,14 @@ export async function aggregateXAstroFees30d(priceMap: Map<string, PriceV2>): Pr
   const latestHeight = Number(height);
 
   // get block height 30 days ago
-  const startBlockHeight = latestHeight - Math.floor(BLOCKS_PER_YEAR / 12);
+  const startBlockHeight = latestHeight - Math.floor(constants.BLOCKS_PER_YEAR / 12);
 
   // sum up the last 30d of xastro_fees
   const _30d_of_fees = await xAstroFee.find({
     block: { $gt: startBlockHeight, $lt: latestHeight },
   });
 
-  const astro_price = priceMap.get(ASTRO_TOKEN)?.price_ust as number;
+  const astro_price = priceMap.get(constants.ASTRO_TOKEN)?.price_ust as number;
 
   let _30d_fees_ust = 0;
   let fees_with_no_price_count = 0;
@@ -47,7 +40,7 @@ export async function aggregateXAstroFees30d(priceMap: Map<string, PriceV2>): Pr
     if (price != null) {
       let amount = fee.volume;
       // normalize amount
-      if (TOKENS_WITH_8_DIGITS.has(fee.token)) {
+      if (constants.TOKENS_WITH_8_DIGITS.has(fee.token)) {
         amount /= 100;
       }
 
@@ -65,8 +58,8 @@ export async function aggregateXAstroFees30d(priceMap: Map<string, PriceV2>): Pr
 
   // calculate apr, apy
   let total_astro_staked = await getContractStore(
-    ASTRO_TOKEN,
-    JSON.parse('{"balance": { "address": "' + XASTRO_STAKING_ADDRESS + '" }}')
+    constants.ASTRO_TOKEN,
+    JSON.parse('{"balance": { "address": "' + constants.XASTRO_STAKING_ADDRESS + '" }}')
   );
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment

@@ -6,8 +6,7 @@ import {
 } from "aws-lambda";
 
 import { initHive, initLCD } from "../lib/terra";
-import { connectToDatabase } from "../modules/db";
-import { TERRA_CHAIN_ID, TERRA_HIVE, TERRA_LCD } from "../constants";
+import { connectToDatabase, disconnectDatabase } from "../modules/db";
 import { heightCollect } from "./heightCollect";
 import { chainCollect } from "./chainCollect";
 import { supplyCollect } from "./supplyCollect";
@@ -17,6 +16,7 @@ import { pairListToMap, priceListToMap } from "./helpers";
 import { priceCollectV2 } from "./priceIndexer/priceCollectV2";
 import { externalPriceCollect } from "./externalPriceCollect";
 import { getPrices } from "../services/priceV2.service";
+import constants from "../environment/constants";
 
 bluebird.config({
   longStackTraces: true,
@@ -31,9 +31,9 @@ export async function run(
   context.callbackWaitsForEmptyEventLoop = false;
 
   await connectToDatabase();
-  await initHive(TERRA_HIVE);
+  await initHive(constants.TERRA_HIVE_ENDPOINT);
 
-  await initLCD(TERRA_LCD, TERRA_CHAIN_ID);
+  await initLCD(constants.TERRA_LCD_ENDPOINT, constants.TERRA_CHAIN_ID);
 
   // get pairs
   // map contract_address -> pair
@@ -67,8 +67,11 @@ export async function run(
 
     console.log("Total time elapsed: " + (new Date().getTime() - start) / 1000);
   } catch (e) {
+    await disconnectDatabase();
     throw new Error("Error while running indexer: " + e);
   }
+
+  await disconnectDatabase();
 
   return {
     statusCode: 200,

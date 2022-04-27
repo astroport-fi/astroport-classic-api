@@ -1,7 +1,7 @@
 import { BatchRequestDocument, gql, GraphQLClient } from "graphql-request";
 import { PriceV2 } from "../../types/priceV2.type";
-import { GOVERNANCE_ASSEMBLY, TOKENS_WITH_8_DIGITS, GENERATOR_ADDRESS } from "../../constants";
 import { PoolInfo, TokenInfo } from "../../types/hive.type";
+import constants from "../../environment/constants";
 
 export let hive: GraphQLClient;
 
@@ -92,31 +92,6 @@ export async function getTokenInfo(tokenAddr: string): Promise<TokenInfo | null>
   }
 }
 
-export async function getPairMessages(txHash: string) {
-  try {
-    const response = await hive.request(
-      gql`
-        query ($txHash: String!) {
-          tx {
-            txInfo(txHash: $txHash) {
-              tx {
-                body {
-                  messages
-                }
-              }
-            }
-          }
-        }
-      `,
-      { txHash }
-    );
-    return response?.tx?.txInfo?.tx?.body.messages;
-  } catch (e) {
-    console.log("Error fetching transaction messages: ", e);
-    return [];
-  }
-}
-
 export async function getTxBlock(height: number) {
   try {
     const response = await hive.request(
@@ -150,6 +125,59 @@ export async function getTxBlock(height: number) {
   }
 }
 
+/**
+ * Fetch transactions by height in batches
+ *
+ * If the caller requires the block height for the blocks returned, it is
+ * available in tx.height
+ *
+ * @param height The height to start at
+ * @param blockCount The amount of blocks to retrieve in a single batch, defaults to 20
+ * @returns The transactions for all blocks retrieved
+ */
+export async function getTxBlockBatch(height: number, blockCount: number = 20) {
+  const queries: BatchRequestDocument[] = [];
+  for (let workingHeight = height; workingHeight <= height + blockCount; workingHeight++) {
+    queries.push({
+      document: gql`
+        query ($height: Float!) {
+          tx {
+            byHeight(height: $height) {
+              height
+              timestamp
+              height
+              txhash
+              logs {
+                msg_index
+                events {
+                  type
+                  attributes {
+                    key
+                    value
+                  }
+                }
+              }
+            }
+          }
+        }
+      `,
+      variables: { height: workingHeight },
+    });
+  }
+  // Collection of transactions for each block
+  const blocksTxs = [];
+  try {
+    const responses = await hive.batchRequests(queries);
+    for (const [index, item] of responses.entries()) {
+      blocksTxs.push(item.data.tx.byHeight);
+    }
+  } catch (e) {
+    // If we fail, return null to ensure we handle the failure
+    return null;
+  }
+  return blocksTxs;
+}
+
 export async function getLatestBlock(): Promise<{
   height: number;
   time: string;
@@ -180,29 +208,34 @@ export async function getLatestBlock(): Promise<{
 export async function getChainBlock(height: number): Promise<{
   height: number;
   time: string;
-}> {
-  const response = await hive.request(
-    gql`
-      query ($height: Int!) {
-        tendermint {
-          blockInfo(height: $height) {
-            block {
-              header {
-                height
-                time
+} | null> {
+  try {
+    const response = await hive.request(
+      gql`
+        query ($height: Int!) {
+          tendermint {
+            blockInfo(height: $height) {
+              block {
+                header {
+                  height
+                  time
+                }
               }
             }
           }
         }
-      }
-    `,
-    { height }
-  );
+      `,
+      { height }
+    );
 
-  return {
-    height: +response?.tendermint?.blockInfo?.block?.header?.height,
-    time: response?.tendermint?.blockInfo?.block?.header?.time,
-  };
+    return {
+      height: +response?.tendermint?.blockInfo?.block?.header?.height,
+      time: response?.tendermint?.blockInfo?.block?.header?.time,
+    };
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
 }
 
 export async function getContractStore<T>(address: string, query: JSON): Promise<T | null> {
@@ -264,7 +297,7 @@ export async function getPairLiquidity(
       const address = asset?.info?.token?.contract_addr;
       let amount = asset?.amount / 1000000;
 
-      if (TOKENS_WITH_8_DIGITS.has(address)) {
+      if (constants.TOKENS_WITH_8_DIGITS.has(address)) {
         amount = amount / 100;
       }
 
@@ -372,7 +405,7 @@ export async function getAssemblyConfig() {
       }
     `,
     {
-      assembly: GOVERNANCE_ASSEMBLY,
+      assembly: constants.GOVERNANCE_ASSEMBLY,
     }
   );
 
@@ -411,7 +444,7 @@ export const getGeneratorPoolInfo = async (contract: string): Promise<PoolInfo |
           }
         }
       `,
-      { contract: contract, generator: GENERATOR_ADDRESS }
+      { contract: contract, generator: constants.GENERATOR_ADDRESS }
     );
     return response?.wasm?.contractQuery;
   } catch (e) {
@@ -588,6 +621,112 @@ export const getvxAstroVotingPower = async (
     );
     return +response?.wasm?.contractQuery.voting_power;
   } catch (e) {
+    return 0;
+  }
+};
+
+/**
+ * Fetches staked balances from multiple generators at a time in one hive query
+ * the request maps out multiple queries with a unique key here liquidityToken is
+ * the key.
+ *
+ * @example
+ *
+ * `
+ * {
+ * terra1cxmdyn5srv8uwvhgz5ckqf28zf8c7uwyz08f2j: wasm { },
+ * terra1m24f7k4g66gnh9f7uncp32p722v0kyt3q4l3u5: wasm { },
+ * terra1gxqhpka432v9zqktvkney2anvpx5kem7ws0g60: wasm { }
+ * }
+ * `
+ *
+ * @param pairs pair object with { liquidityToken } addresses
+ * @param address user address to check for staked lp tokens
+ * @param generator astro generator contract
+ * @returns The voting power of the user
+ */
+export const getStakedBalances = async (
+  pairs: { liquidityToken: string }[],
+  address: any,
+  generator: any
+) => {
+  try {
+    const request = gql`
+    {
+      ${pairs.map(({ liquidityToken }) => {
+        return `
+        ${liquidityToken}: wasm {
+            contractQuery(
+              contractAddress: "${generator}"
+              query: {
+                deposit: {
+                  lp_token: "${liquidityToken}"
+                  user: "${address}"
+                }
+              }
+            )
+          }
+        `;
+      })}
+    }
+`;
+
+    const response = await hive.request(request);
+    return response;
+  } catch (e) {
+    console.log(e);
+    return [];
+  }
+};
+
+/**
+ * Retrieves rewards from lockdrop contract
+ *
+ * @param lockDropContract Address for lockdrop rewards
+ * @param userAddress user whose address is being checked for.
+ * @param blunaTerraswapLp terraswap lp address
+ * @param duration number of weeks locked
+ * @returns rewards
+ */
+export const getLockDropRewards = async ({
+  lockDropContract,
+  userAddress,
+  blunaTerraswapLp,
+  duration,
+}: {
+  lockDropContract: string;
+  userAddress: string;
+  blunaTerraswapLp: string;
+  duration?: number;
+}): Promise<number> => {
+  try {
+    const response = await hive.request(
+      gql`
+        query (
+          $userAddress: String!
+          $lockDropContract: String!
+          $blunaTerraswapLp: String!
+          $duration: Int!
+        ) {
+          wasm {
+            contractQuery(
+              contractAddress: $lockDropContract
+              query: {
+                pending_asset_reward: {
+                  user_address: $userAddress
+                  terraswap_lp_token: $blunaTerraswapLp
+                  duration: $duration
+                }
+              }
+            )
+          }
+        }
+      `,
+      { lockDropContract, userAddress, blunaTerraswapLp, duration }
+    );
+    return +response?.wasm?.contractQuery?.amount;
+  } catch (e) {
+    console.log(e);
     return 0;
   }
 };

@@ -1,5 +1,5 @@
 import { ReturningLogFinderResult } from "@terra-money/log-finder";
-import { IBC_DENOM_MAP } from "../../constants";
+import constants from "../../environment/constants";
 import { getIBCDenom, getPairMessages, getTokenInfo } from "../../lib/terra";
 import { Token } from "../../models";
 import { isIBCToken } from "../../modules/terra";
@@ -17,16 +17,16 @@ export const generateDescription = async (
   if (isIBCToken(address1)) {
     const denom = await getIBCDenom(address1);
     token1 = {
-      name: IBC_DENOM_MAP.get(denom)?.name,
-      symbol: IBC_DENOM_MAP.get(denom)?.symbol,
+      name: constants.IBC_DENOM_MAP.get(denom)?.name,
+      symbol: constants.IBC_DENOM_MAP.get(denom)?.symbol,
     };
   }
 
   if (isIBCToken(address2)) {
     const denom = await getIBCDenom(address2);
-    token1 = {
-      name: IBC_DENOM_MAP.get(denom)?.name,
-      symbol: IBC_DENOM_MAP.get(denom)?.symbol,
+    token2 = {
+      name: constants.IBC_DENOM_MAP.get(denom)?.name,
+      symbol: constants.IBC_DENOM_MAP.get(denom)?.symbol,
     };
   }
 
@@ -58,10 +58,6 @@ export async function createPairIndexer(
   // createPair
   for (const logFound of founds) {
     const transformed = logFound.transformed;
-
-    const messages = await getPairMessages(txHash);
-    const pair_type = messages.find(() => true)?.execute_msg?.create_pair?.pair_type || {};
-    const type = Object.keys(pair_type).find(() => true);
 
     if (transformed) {
       const messages = await getPairMessages(txHash);
