@@ -1,4 +1,6 @@
 import { Proposal } from "../models/proposal.model";
+import { Vote } from "../models/vote.model";
+import { aggregateVotesCount } from "./vote.service";
 
 const SECONDS_PER_BLOCK = 6.2;
 
@@ -8,7 +10,20 @@ export async function getProposals(): Promise<any[]> {
 }
 
 export async function getProposal(proposal_id: string): Promise<any> {
-  const proposal = await Proposal.findOne({ proposal_id: proposal_id });
+  const proposal: any = await Proposal.findOne({ proposal_id: proposal_id });
+
+  if (proposal) {
+    const votesCount = await aggregateVotesCount(proposal_id);
+    if (votesCount) {
+      // use aggregated values first, if any return null default back to proposal values
+      proposal.votes_for = votesCount?.for.votes_for || proposal.votes_for;
+      proposal.votes_for_power = votesCount?.for.votes_for_power || proposal.votes_for_power;
+      proposal.votes_against = votesCount?.against.votes_against || proposal.votes_against;
+      proposal.votes_against_power =
+        votesCount?.against.votes_against_power || proposal.votes_against_power;
+    }
+  }
+
   return proposal;
 }
 
@@ -49,9 +64,8 @@ export async function saveProposals(proposals: any[]): Promise<any> {
   }
 }
 
-
 export async function hide_proposals(stale_passed_proposals: any[]): Promise<any> {
-  for(const proposal of stale_passed_proposals) {
+  for (const proposal of stale_passed_proposals) {
     await Proposal.updateOne(
       {
         proposal_id: Number(proposal.proposal_id),
