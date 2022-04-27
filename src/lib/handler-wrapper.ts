@@ -10,6 +10,7 @@ import { initHive, initLCD } from "./terra";
 interface Parameters {
   errorMessage?: string;
   successMessage?: string;
+  initDatabaseConnection?: boolean;
   disconnectDbWhenFinished?: boolean;
   disconnectDbWhenError?: boolean;
 }
@@ -22,45 +23,51 @@ interface Parameters {
  *
  *
  * @param handler The full lambda handler being wrapped
- * @param parameters  are optional parameters for handling errors, success and disconnecting database
- * when functions error or finalize.
+ * @param parameters an optional object for granular configuration
+ * @param {string} [parameters.successMessage = "Error while running indexer: "] message displayed when lambda finalizes execution.
+ * @param {string} [parameters.errorMessage = "collected"] message displayed when lambda finalizes execution.
+ * @param {string} [parameters.initDatabaseConnection = true] some lambdas not using database connection can pass this as false, which will disable
+ * disconnection as well, when this is passed, disconnect parameters are not required.
+ * @param {string} [parameters.disconnectDbWhenError = true] Disconnect when an error is thrown.
+ * @param {string} [parameters.disconnectDbWhenFinished = true] Disconnect at the end of execution.
+ *
  * @returns a wrapped version of lambda handler with error handling and initial connections
  */
 export const lambdaHandlerWrapper =
-  (
-    handler: (
-      event: APIGatewayProxyEvent,
-      context: APIGatewayAuthorizerResultContext
-    ) => Promise<void>,
-    parameters?: Parameters
-  ) =>
+  (handler: (event: APIGatewayProxyEvent) => Promise<void>, parameters?: Parameters) =>
   async (
     event: APIGatewayProxyEvent,
     context: APIGatewayAuthorizerResultContext
   ): Promise<APIGatewayProxyResult> => {
-    await connectToDatabase();
-    await initHive(constants.TERRA_HIVE_ENDPOINT);
-    await initLCD(constants.TERRA_LCD_ENDPOINT, constants.TERRA_CHAIN_ID);
+    context.callbackWaitsForEmptyEventLoop = false;
 
     const {
       errorMessage = "Error while running indexer: ",
       successMessage = "collected",
       disconnectDbWhenError = true,
       disconnectDbWhenFinished = true,
+      initDatabaseConnection = true,
     } = parameters ?? {};
+
+    if (initDatabaseConnection) {
+      await connectToDatabase();
+    }
+
+    await initHive(constants.TERRA_HIVE_ENDPOINT);
+    await initLCD(constants.TERRA_LCD_ENDPOINT, constants.TERRA_CHAIN_ID);
 
     try {
       //Main handler content
-      await handler(event, context);
+      await handler(event);
     } catch (err) {
-      if (disconnectDbWhenError) {
+      if (initDatabaseConnection && disconnectDbWhenError) {
         await disconnectDatabase();
       }
       //TODO use a better error logging service?
       throw new Error(errorMessage + err);
     }
 
-    if (disconnectDbWhenFinished) {
+    if (initDatabaseConnection && disconnectDbWhenFinished) {
       await disconnectDatabase();
     }
 

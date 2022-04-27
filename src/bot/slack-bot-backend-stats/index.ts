@@ -1,16 +1,11 @@
 import bluebird from "bluebird";
-import {
-  APIGatewayAuthorizerResultContext,
-  APIGatewayProxyEvent,
-  APIGatewayProxyResult,
-} from "aws-lambda";
-import { initLCD, getLatestBlock, initHive } from "../../lib/terra";
+import { getLatestBlock } from "../../lib/terra";
 
 import { gql, GraphQLClient } from "graphql-request";
 import axios from "axios";
 import { generate_post_fields } from "./slackHelpers";
 import { get_ust_balance } from "./helpers";
-import constants from "../../environment/constants";
+import { lambdaHandlerWrapper } from "../../lib/handler-wrapper";
 
 bluebird.config({
   longStackTraces: true,
@@ -23,13 +18,8 @@ const PROD_URL = "https://api.astroport.fi/graphql";
 const SLACK_WEBHOOK =
   "https://hooks.slack.com/services/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";
 
-export async function run(
-  _: APIGatewayProxyEvent,
-  context: APIGatewayAuthorizerResultContext
-): Promise<APIGatewayProxyResult> {
-  context.callbackWaitsForEmptyEventLoop = false;
-
-  try {
+export const run = lambdaHandlerWrapper(
+  async (): Promise<void> => {
     const dev = new GraphQLClient(DEV_URL, {
       timeout: 5000,
       keepalive: true,
@@ -38,9 +28,6 @@ export async function run(
       timeout: 5000,
       keepalive: true,
     });
-
-    await initLCD(constants.TERRA_LCD_ENDPOINT, constants.TERRA_CHAIN_ID);
-    await initHive(constants.TERRA_HIVE_ENDPOINT);
 
     // blocks
     const devHeightRaw = await dev.request(
@@ -137,12 +124,9 @@ export async function run(
     };
 
     await axios.post(SLACK_WEBHOOK, post_fields, config);
-  } catch (e) {
-    throw new Error("Error while running bots: " + e);
+  },
+  {
+    errorMessage: "Error while running bots: ",
+    successMessage: "Ran bots",
   }
-
-  return {
-    statusCode: 200,
-    body: "Ran bots",
-  };
-}
+);

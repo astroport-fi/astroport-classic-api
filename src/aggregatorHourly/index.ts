@@ -1,12 +1,4 @@
 import bluebird from "bluebird";
-import {
-  APIGatewayAuthorizerResultContext,
-  APIGatewayProxyEvent,
-  APIGatewayProxyResult,
-} from "aws-lambda";
-
-import { initHive, initLCD } from "../lib/terra";
-import { connectToDatabase } from "../modules/db";
 
 import { getHistoricPrices30d, getPrices } from "../services/priceV2.service";
 import { priceListToMap } from "../collector/helpers";
@@ -14,7 +6,8 @@ import { aggregateXAstroFees30d } from "./aggregateXAstroFees30d";
 import { aggregateXAstroFees30dChange } from "./aggregateXAstroFees30dChange";
 import { aggregateXAstroFees365d } from "./aggregateXAstroFees365d";
 import { aggregateXAstroFeesMonthly } from "./aggregateXAstroFeesMonthly";
-import constants from "../environment/constants";
+
+import { lambdaHandlerWrapper } from "../lib/handler-wrapper";
 
 bluebird.config({
   longStackTraces: true,
@@ -22,23 +15,14 @@ bluebird.config({
 });
 global.Promise = bluebird as any;
 
-export async function run(
-  _: APIGatewayProxyEvent,
-  context: APIGatewayAuthorizerResultContext
-): Promise<APIGatewayProxyResult> {
-  context.callbackWaitsForEmptyEventLoop = false;
+export const run = lambdaHandlerWrapper(
+  async (): Promise<void> => {
+    const prices = await getPrices();
+    const priceMap = priceListToMap(prices);
 
-  await connectToDatabase();
-  await initHive(constants.TERRA_HIVE_ENDPOINT);
-  await initLCD(constants.TERRA_LCD_ENDPOINT, constants.TERRA_CHAIN_ID);
+    const prices_30d = await getHistoricPrices30d();
+    const priceMap_30d = priceListToMap(prices_30d);
 
-  const prices = await getPrices();
-  const priceMap = priceListToMap(prices);
-
-  const prices_30d = await getHistoricPrices30d();
-  const priceMap_30d = priceListToMap(prices_30d);
-
-  try {
     console.log("Running hourly aggregator...");
 
     console.log("Aggregating 30d xAstro fees...");
@@ -54,12 +38,9 @@ export async function run(
     await aggregateXAstroFeesMonthly(priceMap);
 
     console.log("Done aggregating");
-  } catch (e) {
-    throw new Error("Error while running aggregator: " + e);
+  },
+  {
+    successMessage: "aggregated",
+    errorMessage: "Error while running aggregator: ",
   }
-
-  return {
-    statusCode: 200,
-    body: "aggregated",
-  };
-}
+);

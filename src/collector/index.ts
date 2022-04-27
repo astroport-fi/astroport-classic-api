@@ -1,9 +1,4 @@
 import bluebird from "bluebird";
-import {
-  APIGatewayAuthorizerResultContext,
-  APIGatewayProxyEvent,
-  APIGatewayProxyResult,
-} from "aws-lambda";
 
 import { heightCollect } from "./heightCollect";
 import { chainCollect } from "./chainCollect";
@@ -24,8 +19,7 @@ bluebird.config({
 global.Promise = bluebird as any;
 
 export const run = lambdaHandlerWrapper(
-  async (_: APIGatewayProxyEvent, context: APIGatewayAuthorizerResultContext): Promise<void> => {
-    context.callbackWaitsForEmptyEventLoop = false;
+  async (): Promise<void> => {
     const pairs = await getPairs();
     const pairMap = pairListToMap(pairs);
 

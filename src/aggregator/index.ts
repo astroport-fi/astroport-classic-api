@@ -1,12 +1,4 @@
 import bluebird from "bluebird";
-import {
-  APIGatewayAuthorizerResultContext,
-  APIGatewayProxyEvent,
-  APIGatewayProxyResult,
-} from "aws-lambda";
-
-import { initHive, initLCD } from "../lib/terra";
-import { connectToDatabase } from "../modules/db";
 
 import { aggregatePoolVolume } from "./aggregatePoolVolume";
 import { aggregatePoolProtocolRewards } from "./aggregatePoolProtocolRewards";
@@ -21,7 +13,7 @@ import { aggregateXAstroFees } from "./aggregateXAstroFees";
 import { aggregateVotes } from "./aggregateVotes";
 import { aggregateXAstroFees7d } from "./aggregateXAstroFees7d";
 import { getProxyAddressesInfo } from "../collector/proxyAddresses";
-import constants from "../environment/constants";
+import { lambdaHandlerWrapper } from "../lib/handler-wrapper";
 
 bluebird.config({
   longStackTraces: true,
@@ -29,22 +21,13 @@ bluebird.config({
 });
 global.Promise = bluebird as any;
 
-export async function run(
-  _: APIGatewayProxyEvent,
-  context: APIGatewayAuthorizerResultContext
-): Promise<APIGatewayProxyResult> {
-  context.callbackWaitsForEmptyEventLoop = false;
+export const run = lambdaHandlerWrapper(
+  async (): Promise<void> => {
+    const pairs = await getPairs();
 
-  await connectToDatabase();
-  await initHive(constants.TERRA_HIVE_ENDPOINT);
-  await initLCD(constants.TERRA_LCD_ENDPOINT, constants.TERRA_CHAIN_ID);
+    const prices = await getPrices();
+    const priceMap = priceListToMap(prices);
 
-  const pairs = await getPairs();
-
-  const prices = await getPrices();
-  const priceMap = priceListToMap(prices);
-
-  try {
     const generatorProxyContracts = await getProxyAddressesInfo();
 
     console.log("Aggregating pool_volume_24h...");
@@ -75,12 +58,9 @@ export async function run(
     await aggregateVotes();
 
     console.log("Done aggregating");
-  } catch (e) {
-    throw new Error("Error while running aggregator: " + e);
+  },
+  {
+    successMessage: "aggregated",
+    errorMessage: "Error while running aggregator: ",
   }
-
-  return {
-    statusCode: 200,
-    body: "aggregated",
-  };
-}
+);
