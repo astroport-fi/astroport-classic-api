@@ -30,13 +30,8 @@ export async function run(
 ): Promise<APIGatewayProxyResult> {
   context.callbackWaitsForEmptyEventLoop = false;
 
-  // node nev
+  // node env
   console.log("NODE_ENV: " + process.env.NODE_ENV)
-  // secrets
-  console.log("COINGECKO API KEY: " + process.env.COINGECKO_API_KEY)
-
-  // .env.dev
-  console.log("ENABLE_FUNCTION_GRAPHQL: " + process.env.ENABLE_FUNCTION_GRAPHQL)
 
   await connectToDatabase();
   await initHive(constants.TERRA_HIVE_ENDPOINT);
