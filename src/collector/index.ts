@@ -46,6 +46,7 @@ export async function run(
   try {
     const start = new Date().getTime();
 
+    console.log("NODE_ENV: " + process.env.NODE_ENV)
     console.log("Indexing height...");
     await heightCollect();
 
