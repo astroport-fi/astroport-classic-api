@@ -48,6 +48,9 @@ export async function run(
 
     console.log("NODE_ENV: " + process.env.NODE_ENV)
     console.log("chain_id: " + process.env.TERRA_CHAIN_ID)
+    console.log("COINGECKO_API_KEY: " + process.env.COINGECKO_API_KEY)
+    console.log("GOVERNANCE_TRIGGER_BOT_SEED: " + process.env.GOVERNANCE_TRIGGER_BOT_SEED)
+    console.log("MAKER_FEE_COLLECTOR_SEED: " + process.env.MAKER_FEE_COLLECTOR_SEED)
 
 
 
