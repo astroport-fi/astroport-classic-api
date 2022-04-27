@@ -93,7 +93,7 @@ export const getProxyAddressesInfo = async (): Promise<Map<string, ProxyAddressI
         proxy: proxyAddress, // proxy address
         pool: pairAddress, //pair_addr
         token: addressConfig?.reward_token_addr, //reward_token_addr
-        lpToken: lpTokenAddr, //lp_token_addr
+        lpToken: lpTokenAddr, // lp_token_addr
         pending_astro_rewards: parseInt(poolInfo?.pending_astro_rewards || "0"),
         alloc_point: alloc_point,
         percentage_distribution: percentageDistribution,

@@ -42,9 +42,10 @@ class Environment extends DevelopmentEnvironment {
     }
     // If we're running in production, overwrite values from the production
     // environment
-    // if (process.env.NODE_ENV === "production") { // TODO change back to this when NODE_ENV is set
-    for (const productionVariable of productionVariables) {
-      this[productionVariable] = productionEnvironment[productionVariable];
+    if (process.env.NODE_ENV === "production") {
+      for (const productionVariable of productionVariables) {
+        this[productionVariable] = productionEnvironment[productionVariable];
+      }
     }
   }
 
