@@ -16,11 +16,11 @@ export async function getProposal(proposal_id: string): Promise<any> {
     const votesCount = await aggregateVotesCount(proposal_id);
     if (votesCount) {
       // use aggregated values first, if any return null default back to proposal values
-      proposal.votes_for = votesCount?.for.votes_for || proposal.votes_for;
-      proposal.votes_for_power = votesCount?.for.votes_for_power || proposal.votes_for_power;
-      proposal.votes_against = votesCount?.against.votes_against || proposal.votes_against;
+      proposal.votes_for = votesCount?.for?.votes_for || proposal.votes_for;
+      proposal.votes_for_power = votesCount?.for?.votes_for_power || proposal.votes_for_power;
+      proposal.votes_against = votesCount?.against?.votes_against || proposal.votes_against;
       proposal.votes_against_power =
-        votesCount?.against.votes_against_power || proposal.votes_against_power;
+        votesCount?.against?.votes_against_power || proposal.votes_against_power;
     }
   }
 
