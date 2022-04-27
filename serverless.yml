@@ -12,8 +12,6 @@ provider:
   name: aws
   runtime: nodejs14.x
   lambdaHashingVersion: 20201221
-  environment:
-    NODE_ENV: 'prod'
 
 functions:
   aggregator:
@@ -70,7 +68,7 @@ functions:
     environment:
       MONGODB_URL: ${env:MONGODB_URL_RW}
 
-  governance-state-transition-bot:
+  governance-state-transition-bot: # TODO change to prod values
     enabled: '"${env:ENABLE_FUNCTION_GOVERNANCE_STATE_TRANSITION_BOT}" == "true"'
     handler: src/bot/governance-state-transition-bot/index.run
     events:

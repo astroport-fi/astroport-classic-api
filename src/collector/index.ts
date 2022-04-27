@@ -30,6 +30,14 @@ export async function run(
 ): Promise<APIGatewayProxyResult> {
   context.callbackWaitsForEmptyEventLoop = false;
 
+  // node nev
+  console.log("NODE_ENV: " + process.env.NODE_ENV)
+  // secrets
+  console.log("COINGECKO API KEY: " + process.env.COINGECKO_API_KEY)
+
+  // .env.dev
+  console.log("ENABLE_FUNCTION_GRAPHQL: " + process.env.ENABLE_FUNCTION_GRAPHQL)
+
   await connectToDatabase();
   await initHive(constants.TERRA_HIVE_ENDPOINT);
 
@@ -45,14 +53,6 @@ export async function run(
 
   try {
     const start = new Date().getTime();
-
-    console.log("NODE_ENV: " + process.env.NODE_ENV)
-    console.log("chain_id: " + process.env.TERRA_CHAIN_ID)
-    console.log("COINGECKO_API_KEY: " + process.env.COINGECKO_API_KEY)
-    console.log("GOVERNANCE_TRIGGER_BOT_SEED: " + process.env.GOVERNANCE_TRIGGER_BOT_SEED)
-    console.log("MAKER_FEE_COLLECTOR_SEED: " + process.env.MAKER_FEE_COLLECTOR_SEED)
-
-
 
     console.log("Indexing height...");
     await heightCollect();

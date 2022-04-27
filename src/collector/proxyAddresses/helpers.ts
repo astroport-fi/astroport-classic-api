@@ -51,8 +51,6 @@ export const formatSchedules = (
         [63093600, 94629600, "5146800000000"],
         [94629600, 126165600, "2573400000000"],
       ];
-    } else {
-      // console.log("Distribution schedule not found");
     }
   } else {
     const singleSchedule = distributionSchedule.find(() => true);
