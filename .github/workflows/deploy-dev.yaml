@@ -38,8 +38,8 @@ jobs:
       - name: Install NPM dependencies
         #npm ci works better to match package-lock
         run: npm ci
-      # - name: Copy env file for test
-      #   run: cp .env.dev .env
+      - name: Run Linter
+        run: npm run eslint
       - name: Run Test
         run: npm run test-dev
 
