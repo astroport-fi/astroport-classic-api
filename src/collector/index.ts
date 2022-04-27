@@ -47,6 +47,10 @@ export async function run(
     const start = new Date().getTime();
 
     console.log("NODE_ENV: " + process.env.NODE_ENV)
+    console.log("chain_id: " + process.env.TERRA_CHAIN_ID)
+
+
+
     console.log("Indexing height...");
     await heightCollect();
 

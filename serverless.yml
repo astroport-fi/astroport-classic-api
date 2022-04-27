@@ -12,6 +12,8 @@ provider:
   name: aws
   runtime: nodejs14.x
   lambdaHashingVersion: 20201221
+  environment:
+    NODE_ENV: 'production'
 
 functions:
   aggregator:
