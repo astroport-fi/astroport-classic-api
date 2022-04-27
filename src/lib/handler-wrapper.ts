@@ -22,14 +22,16 @@ interface Parameters {
  * init connections, and similar try catch blocks.
  *
  *
- * @param handler The full lambda handler being wrapped
+ * @param handler The main lambda function being wrapped, can optionally receive event and context from wrapper.
+ * @example
+ *
  * @param parameters an optional object for granular configuration
  * @param {string} [parameters.successMessage = "Error while running indexer: "] message displayed when lambda finalizes execution.
  * @param {string} [parameters.errorMessage = "collected"] message displayed when lambda finalizes execution.
- * @param {string} [parameters.initDatabaseConnection = true] some lambdas not using database connection can pass this as false, which will disable
+ * @param {boolean} [parameters.initDatabaseConnection = true] some lambdas not using database connection can pass this as false, which will disable
  * disconnection as well, when this is passed, disconnect parameters are not required.
- * @param {string} [parameters.disconnectDbWhenError = true] Disconnect when an error is thrown.
- * @param {string} [parameters.disconnectDbWhenFinished = true] Disconnect at the end of execution.
+ * @param {boolean} [parameters.disconnectDbWhenError = true]
+ * @param {boolean} [parameters.disconnectDbWhenFinished = true]
  *
  * @returns a wrapped version of lambda handler with error handling and initial connections
  */
