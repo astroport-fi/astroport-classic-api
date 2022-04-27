@@ -36,7 +36,13 @@ interface Parameters {
  * @returns a wrapped version of lambda handler with error handling and initial connections
  */
 export const lambdaHandlerWrapper =
-  (handler: (event: APIGatewayProxyEvent) => Promise<void>, parameters?: Parameters) =>
+  (
+    handler: (
+      event: APIGatewayProxyEvent,
+      context: APIGatewayAuthorizerResultContext
+    ) => Promise<void>,
+    parameters?: Parameters
+  ) =>
   async (
     event: APIGatewayProxyEvent,
     context: APIGatewayAuthorizerResultContext
@@ -60,7 +66,7 @@ export const lambdaHandlerWrapper =
 
     try {
       //Main handler content
-      await handler(event);
+      await handler(event, context);
     } catch (err) {
       if (initDatabaseConnection && disconnectDbWhenError) {
         await disconnectDatabase();
