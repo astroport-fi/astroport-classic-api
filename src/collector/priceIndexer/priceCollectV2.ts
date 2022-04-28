@@ -21,7 +21,7 @@ const PAIR_BATCH_SIZE = 10;
  * @param pairs
  */
 export async function priceCollectV2(pairs: Pair[]): Promise<void> {
-  const block = await getBlock("columbus-5");
+  const block = await getBlock(constants.TERRA_CHAIN_ID);
   const height = block.hiveHeight;
   // get/calculate prices
   const prices = await indexPrices(pairs, height);
