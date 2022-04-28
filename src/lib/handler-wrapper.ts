@@ -23,7 +23,6 @@ interface Parameters {
  *
  *
  * @param handler The main lambda function being wrapped, can optionally receive event and context from wrapper.
- * @example
  *
  * @param parameters an optional object for granular configuration
  * @param {string} [parameters.successMessage = "Error while running indexer: "] message displayed when lambda finalizes execution.
@@ -84,19 +83,3 @@ export const lambdaHandlerWrapper =
       body: successMessage || "",
     };
   };
-
-//Can be used for APIGW Responses
-// export const buildResponse = (
-//   statusCode: number,
-//   body: PlainObject
-// ): {
-//   statusCode: number;
-//   headers: PlainObject;
-//   body: string;
-// } => ({
-//   statusCode,
-//   headers: {
-//     "Content-Type": "application/json",
-//   },
-//   body: JSON.stringify(body),
-// });

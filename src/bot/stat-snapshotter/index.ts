@@ -19,6 +19,6 @@ export const run = lambdaHandlerWrapper(
   },
   {
     successMessage: "Archived",
-    errorMessage: "Error while swapping maker fees: ",
+    errorMessage: "Error while collecting a snapshot: ",
   }
 );

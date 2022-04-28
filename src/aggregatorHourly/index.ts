@@ -41,6 +41,6 @@ export const run = lambdaHandlerWrapper(
   },
   {
     successMessage: "aggregated",
-    errorMessage: "Error while running aggregator: ",
+    errorMessage: "Error while running hourly aggregator: ",
   }
 );

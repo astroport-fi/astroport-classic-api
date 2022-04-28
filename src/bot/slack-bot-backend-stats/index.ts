@@ -126,7 +126,7 @@ export const run = lambdaHandlerWrapper(
     await axios.post(SLACK_WEBHOOK, post_fields, config);
   },
   {
-    errorMessage: "Error while running bots: ",
+    errorMessage: "Error while running slack-bot-backend-stats: ",
     successMessage: "Ran bots",
   }
 );
