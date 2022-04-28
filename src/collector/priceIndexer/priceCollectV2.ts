@@ -2,8 +2,8 @@ import { Pair } from "../../types";
 import { PriceGraphNode } from "./price_graph_node";
 import { PriceGraphEdge } from "./price_graph_edge";
 import { getBlock } from "../../services";
-import { getAssetAmountsInPool, getPricesFromPool, isNative } from "../../modules/terra";
-import { batchQuery, getPool } from "../../lib/terra";
+import { getPricesFromPool, isNative } from "../../modules/terra";
+import { batchQuery } from "../../lib/terra";
 import { batchItems, getExchangeRate } from "./util";
 import { PriceV2 } from "../../models/price_v2.model";
 import { BatchQuery } from "../../types/hive.type";
@@ -82,6 +82,7 @@ export async function indexPrices(
         },
       });
 
+      // For stableswap pools add a query to get the relative price
       if (pair.type === "stable") {
         const amount: number = constants.TOKENS_WITH_8_DIGITS.has(pair.token1)
           ? 100000000
