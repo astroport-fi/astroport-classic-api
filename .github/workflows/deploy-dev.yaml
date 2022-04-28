@@ -15,6 +15,7 @@ on:
     branches:
       # - develop
       - ASTRO-1736-add-ci-cd-in-the-api-repository
+
 jobs:
   deploy-dev:
     runs-on: ubuntu-latest
@@ -36,7 +37,7 @@ jobs:
           echo -e 'MAKER_FEE_COLLECTOR_SEED="${{ secrets.MAKER_FEE_COLLECTOR_SEED }}"' >> .env.dev
           echo -e 'GOVERNANCE_TRIGGER_BOT_SEED="${{ secrets.GOVERNANCE_TRIGGER_BOT_SEED }}"' >> .env.dev
       - name: Install NPM dependencies
-        #npm ci works better to match package-lock
+        # ci works better to match package-lock, this avoids and future package mismatch between local and deployed.
         run: npm ci
       - name: Run Linter
         run: npm run eslint

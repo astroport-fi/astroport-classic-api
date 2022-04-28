@@ -1,7 +1,7 @@
 import { expect } from "chai";
 
-import { calculateThirdPartyApr } from "../../../src/collector/chainIndexer/calculateApr";
-import { ScheduleType } from "../../../src/types/contracts";
+import { calculateThirdPartyApr } from "collector/chainIndexer/calculateApr";
+import { ScheduleType } from "types/contracts";
 
 describe("calculateThirdPartyApr", function () {
   it("Should calculate apr and return a number", async () => {
