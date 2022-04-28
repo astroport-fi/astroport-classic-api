@@ -62,7 +62,8 @@ export async function indexPrices(
 
   // pairBatchSize determines the amount of pairs put into a Hive query batch
   // 30 is a sane value to balance potential query failures and performance
-  const pairBatchSize = 30;
+  // Starting with 10 to check Hive possible performance issues
+  const pairBatchSize = 10;
   const pairsBatches = batchItems(activePairs, pairBatchSize);
   for (const pairBatch of pairsBatches) {
     const queries: BatchQuery[] = [];
