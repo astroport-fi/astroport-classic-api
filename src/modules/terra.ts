@@ -49,7 +49,8 @@ export const getPricesFromPool = async (
   pool_address: string,
   token_1_address: string,
   _token_2_address: string,
-  pool_type: string
+  pool_type: string,
+  token1_price: number = 0
 ) => {
   if (pool == null || token_1_address == null) {
     return {
@@ -63,11 +64,14 @@ export const getPricesFromPool = async (
   if (pool_type == "stable") {
     const amount = constants.TOKENS_WITH_8_DIGITS.has(token_1_address) ? 100000000 : 1000000;
 
-    let token1_price = await getStableswapRelativePrice(
-      pool_address,
-      token_1_address,
-      String(amount)
-    );
+    // If the token price has already been determined, we don't need to do it again
+    if (token1_price === 0) {
+      token1_price = await getStableswapRelativePrice(
+        pool_address,
+        token_1_address,
+        String(amount)
+      );
+    }
 
     if (constants.TOKENS_WITH_8_DIGITS.has(token1)) {
       token1_price *= 100;
