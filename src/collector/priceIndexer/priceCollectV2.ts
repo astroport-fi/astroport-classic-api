@@ -9,6 +9,11 @@ import { PriceV2 } from "../../models/price_v2.model";
 import { BatchQuery } from "../../types/hive.type";
 import constants from "../../environment/constants";
 
+// PAIR_BATCH_SIZE determines the amount of pairs put into a Hive query batch
+// 30 is a sane value to balance potential query failures and performance
+// Starting with 10 to check Hive possible performance issues
+const PAIR_BATCH_SIZE = 10;
+
 /**
  * created unweighted directed graph
  * tokens are nodes, edges contain exchange rate
@@ -60,11 +65,7 @@ export async function indexPrices(
     }
   }
 
-  // pairBatchSize determines the amount of pairs put into a Hive query batch
-  // 30 is a sane value to balance potential query failures and performance
-  // Starting with 10 to check Hive possible performance issues
-  const pairBatchSize = 10;
-  const pairsBatches = batchItems(activePairs, pairBatchSize);
+  const pairsBatches = batchItems(activePairs, PAIR_BATCH_SIZE);
   for (const pairBatch of pairsBatches) {
     const queries: BatchQuery[] = [];
     for (const pair of pairBatch) {

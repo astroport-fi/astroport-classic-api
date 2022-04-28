@@ -24,16 +24,16 @@ dayjs.extend(utc);
  * Update the pool_timeseries table
  */
 
+// PAIR_BATCH_SIZE determines the amount of pairs put into a Hive query batch
+// 30 is a sane value to balance potential query failures and performance
+// Starting with 10 to check Hive possible performance issues
+const PAIR_BATCH_SIZE = 10;
+
 const poolTimeseriesResult: any[] = [];
 
 // TODO this file is a mess, refactor
 // TODO this file is still a mess, but at least it's a fast mess for now
 export async function poolCollect(): Promise<void> {
-  // pairBatchSize determines the amount of pairs put into a Hive query batch
-  // 30 is a sane value to balance potential query failures and performance
-  // Starting with 10 to check Hive possible performance issues
-  const pairBatchSize = 10;
-
   // Get all pairs
   const pairs = await getPairs();
   const generatorProxyContracts = await getProxyAddressesInfo();
@@ -65,7 +65,7 @@ export async function poolCollect(): Promise<void> {
   const { height } = await getLatestBlock();
 
   // Construct the batch requests and compile the results
-  const pairsBatches = batchItems(pairs, pairBatchSize);
+  const pairsBatches = batchItems(pairs, PAIR_BATCH_SIZE);
   for (const pairBatch of pairsBatches) {
     const queries: BatchQuery[] = [];
     for (const pair of pairBatch) {
