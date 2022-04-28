@@ -84,6 +84,13 @@ functions:
       - schedule: rate(5 minutes)
     timeout: 20 # in seconds
 
+  maker-fee-collector:
+    enabled: '"${env:ENABLE_FUNCTION_MAKER_FEE_COLLECTOR}" == "true"'
+    handler: src/bot/maker-fee-collector/index.run
+    events:
+      - schedule: rate(6 hours)
+    timeout: 20 # in seconds
+
   graphql:
     enabled: '"${env:ENABLE_FUNCTION_GRAPHQL}" == "true"'
     handler: src/graphql/index.run
