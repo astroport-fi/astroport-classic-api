@@ -13,8 +13,7 @@ name: Deploy Dev
 on:
   push:
     branches:
-      # - develop
-      - ASTRO-1736-add-ci-cd-in-the-api-repository
+      - develop
 
 jobs:
   deploy-dev:
@@ -43,12 +42,11 @@ jobs:
         run: npm run eslint
       - name: Run Test
         run: npm run test-dev
-
       # Optional
       #- name: Build assets
       #  run: npm run assets-dev
-      # - name: Deploy Lambda functions
-      #   run: sls deploy -s dev
+      - name: Deploy Lambda functions
+        run: sls deploy -s dev
     # Optional (to use with serverless-finch serverless plugin)
     #- name: Deploy assets to S3
     #  run: sls client deploy --no-delete-contents --no-confirm -s dev
