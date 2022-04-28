@@ -16,6 +16,7 @@ import { CoingeckoValues } from "../types/coingecko_values.type";
 import { Pair } from "../types";
 import { BatchQuery } from "../types/hive.type";
 import constants from "../environment/constants";
+import { batchItems } from "./priceIndexer/util";
 
 dayjs.extend(utc);
 
@@ -32,14 +33,6 @@ export async function poolCollect(): Promise<void> {
   // 30 is a sane value to balance potential query failures and performance
   // Starting with 10 to check Hive possible performance issues
   const pairBatchSize = 10;
-
-  // batchItems batches Pair[] into chunks
-  const batchItems = (items: Pair[]) =>
-    items.reduce((batches: Pair[][], item: Pair, index) => {
-      const batch = Math.floor(index / pairBatchSize);
-      batches[batch] = ([] as Pair[]).concat(batches[batch] || [], item);
-      return batches;
-    }, []);
 
   // Get all pairs
   const pairs = await getPairs();
@@ -72,7 +65,7 @@ export async function poolCollect(): Promise<void> {
   const { height } = await getLatestBlock();
 
   // Construct the batch requests and compile the results
-  const pairsBatches = batchItems(pairs);
+  const pairsBatches = batchItems(pairs, pairBatchSize);
   for (const pairBatch of pairsBatches) {
     const queries: BatchQuery[] = [];
     for (const pair of pairBatch) {
