@@ -1,6 +1,5 @@
 import { Proposal } from "../models/proposal.model";
-import { Vote } from "../models/vote.model";
-import { aggregateVotesCount } from "./vote.service";
+import { Proposal as ProposalDocument } from "../types";
 
 const SECONDS_PER_BLOCK = 6.2;
 
@@ -9,21 +8,8 @@ export async function getProposals(): Promise<any[]> {
   return proposals;
 }
 
-export async function getProposal(proposal_id: string): Promise<any> {
-  const proposal: any = await Proposal.findOne({ proposal_id: proposal_id });
-
-  if (proposal) {
-    const votesCount = await aggregateVotesCount(proposal_id);
-    if (votesCount) {
-      // use aggregated values first, if any return null default back to proposal values
-      proposal.votes_for = votesCount?.for?.votes_for || proposal.votes_for;
-      proposal.votes_for_power = votesCount?.for?.votes_for_power || proposal.votes_for_power;
-      proposal.votes_against = votesCount?.against?.votes_against || proposal.votes_against;
-      proposal.votes_against_power =
-        votesCount?.against?.votes_against_power || proposal.votes_against_power;
-    }
-  }
-
+export async function getProposal(proposal_id: string): Promise<ProposalDocument | null> {
+  const proposal = await Proposal.findOne<ProposalDocument>({ proposal_id: proposal_id });
   return proposal;
 }
 

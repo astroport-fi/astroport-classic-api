@@ -9,6 +9,7 @@ import axios from "axios";
 import { generate_post_fields } from "./slackHelpers";
 import { ProposalState, update_proposal_timestamps } from "./proposalStateMachine";
 import constants from "../environment/constants";
+import { aggregateVotesCount } from "../services/vote.service";
 
 dayjs.extend(utc);
 
@@ -97,6 +98,8 @@ export async function governanceProposalCollect(): Promise<void> {
 
   // save updated proposal states, dates, votes
   for (const updated of updated_proposals) {
+    const votesCount = await aggregateVotesCount(updated.proposal_id);
+
     await Proposal.updateOne(
       {
         proposal_id: Number(updated.proposal_id),
@@ -110,6 +113,11 @@ export async function governanceProposalCollect(): Promise<void> {
           expired: updated.expired,
           votes_for_power: updated.for_power,
           votes_against_power: updated.against_power,
+          //Aggregated Values
+          votes_against_counted: votesCount?.against?.votes_against,
+          votes_against_power_counted: votesCount?.against?.votes_against_power,
+          votes_for_counted: votesCount?.for?.votes_for,
+          votes_for_power_counted: votesCount?.for?.votes_for_power,
         },
       }
     );
