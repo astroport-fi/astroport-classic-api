@@ -15,7 +15,7 @@ class Environment extends DevelopmentEnvironment {
   // see https://basarat.gitbook.io/typescript/type-system/index-signatures#declaring-an-index-signature
   [index: string]: any;
   // Flag set to true if production.ts is missing any variables
-  checkIsProdMissingVars: boolean = false;
+  checkIsProdMissingVars = false;
   // Current instance
   private static instance: Environment;
 

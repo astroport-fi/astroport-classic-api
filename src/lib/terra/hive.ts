@@ -135,7 +135,7 @@ export async function getTxBlock(height: number) {
  * @param blockCount The amount of blocks to retrieve in a single batch, defaults to 20
  * @returns The transactions for all blocks retrieved
  */
-export async function getTxBlockBatch(height: number, blockCount: number = 20) {
+export async function getTxBlockBatch(height: number, blockCount = 20) {
   const queries: BatchRequestDocument[] = [];
   for (let workingHeight = height; workingHeight <= height + blockCount; workingHeight++) {
     queries.push({
@@ -288,6 +288,7 @@ export async function getPairLiquidity(
       const address = asset?.info?.native_token?.denom;
       const amount = asset?.amount / 1000000;
       if (priceMap.has(address)) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         liquidity += priceMap.get(address).price_ust * amount;
       } else {
@@ -302,6 +303,8 @@ export async function getPairLiquidity(
       }
 
       if (priceMap.has(address)) {
+        //TODO fix typescript error, remove ignore
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         liquidity += priceMap.get(address).price_ust * amount;
       } else {
@@ -357,9 +360,9 @@ export async function getStableswapRelativePrice(
 export async function getTotalVotingPowerAt(
   block: number,
   time: number,
-  xastro: string = "terra1yufp7cv85qrxrx56ulpfgstt2gxz905fgmysq0", // TODO testnet addresses remove
-  builder: string = "terra1hccg0cfrcu0nr4zgt5urmcgam9v88peg9s7h6j",
-  vxastro: string = "terra1pqr02fx4ulc2mzws7xlqh8hpwqx2ls5m4fk62j"
+  xastro = "terra1yufp7cv85qrxrx56ulpfgstt2gxz905fgmysq0", // TODO testnet addresses remove
+  builder = "terra1hccg0cfrcu0nr4zgt5urmcgam9v88peg9s7h6j",
+  vxastro = "terra1pqr02fx4ulc2mzws7xlqh8hpwqx2ls5m4fk62j"
 ) {
   const response = await hive.request(
     gql`
@@ -513,7 +516,7 @@ export const getTokenHolding = async (
 export const getCW20TokenHoldings = async (
   tokenContracts: string[],
   walletAddress: string,
-  batchSize: number = 30
+  batchSize = 30
 ): Promise<Map<string, number>> => {
   // Break tokenContacts into batches of batchSize
   const batchItems = (items: string[]) =>
