@@ -40,7 +40,6 @@ export const run = lambdaHandlerWrapper(
       `
     );
     const devHeight = devHeightRaw?.block?.height;
-    const latestHeight = (await getLatestBlock()).height;
     const prodHeightRaw = await prod.request(
       gql`
         query {
@@ -51,8 +50,8 @@ export const run = lambdaHandlerWrapper(
       `
     );
     const prodHeight = prodHeightRaw?.block?.height;
-
     // stats
+
     const dayFeesRaw = await prod.request(
       gql`
         query {
@@ -62,6 +61,12 @@ export const run = lambdaHandlerWrapper(
         }
       `
     );
+    const latestProdHeight = (await getLatestBlock()).height;
+    const latestDevHeightRaw = await axios.get("https://lcd-terra-test.everstake.one/blocks/latest")
+    const latestDevHeight = latestDevHeightRaw?.data?.block?.header?.height
+
+
+
     const dayFees = dayFeesRaw?.staking?._24h_fees_ust;
 
     // bots
@@ -85,17 +90,17 @@ export const run = lambdaHandlerWrapper(
     message += "|         Blocks         |\n";
     message += "--------------------------\n";
 
-    message += "Realtime     : " + latestHeight + "\n";
+    message += "Realtime     : " + latestDevHeight + "\n";
     message += "Dev          : " + devHeight + "\n";
-    message += "Blocks behind: " + (latestHeight - devHeight) + "\n";
+    message += "Blocks behind: " + (latestDevHeight - devHeight) + "\n";
     message +=
-      "Hours behind : " + Math.round(((latestHeight - devHeight) / 600) * 100) / 100 + "\n";
+      "Hours behind : " + Math.round(((latestProdHeight - devHeight) / 600) * 100) / 100 + "\n";
     message += "\n";
-    message += "Realtime     : " + latestHeight + "\n";
+    message += "Realtime     : " + latestProdHeight + "\n";
     message += "Prod         : " + prodHeight + "\n";
-    message += "Blocks behind: " + (latestHeight - prodHeight) + "\n";
+    message += "Blocks behind: " + (latestProdHeight - prodHeight) + "\n";
     message +=
-      "Hours behind : " + Math.round(((latestHeight - prodHeight) / 600) * 100) / 100 + "\n\n";
+      "Hours behind : " + Math.round(((latestProdHeight - prodHeight) / 600) * 100) / 100 + "\n\n";
     message += "--------------------------\n";
     message += "|          Stats         |\n";
     message += "--------------------------\n";
