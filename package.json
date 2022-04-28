@@ -68,7 +68,8 @@
     "serverless-plugin-conditional-functions": "^1.0.7",
     "serverless-plugin-typescript": "^2.1.0",
     "ts-loader": "^9.2.6",
-    "ts-node": "^10.4.0"
+    "ts-node": "^10.4.0",
+    "tsconfig-paths": "^3.14.1"
   },
   "prettier": {
     "singleQuote": false,
