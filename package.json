@@ -15,7 +15,7 @@
     "database:clean": "rimraf mongodb_data",
     "database": "mkdir -p mongodb_data/rs0-0 ; mongod --dbpath=mongodb_data/rs0-0 --replSet rs0 --port 27050 --oplogSize 128 --profile=1 --slowms=1",
     "database:init": "mongo --port 27050 tools/init-mongodb-rs.js",
-    "eslint": "eslint --quiet --max-warnings 0 --ext .ts --ext .js .",
+    "eslint": "eslint --quiet --ext .ts --ext .js .",
     "prettier": "prettier --list-different '**/*.{ts,tsx,js,jsx,json,css,md}'",
     "test": "mocha",
     "test-dev": "./node_modules/dotenv-cli/cli.js -e .env.dev mocha",
