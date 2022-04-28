@@ -35,7 +35,7 @@ export const generateScheduleType = (schedules: Schedules["values"] = []): Sched
  */
 export const formatSchedules = (
   distributionSchedule: any[] | undefined,
-  rewardConfig: { mars_token?: string; mirror_token?: string }
+  rewardConfig: { mars_token?: string; mirror_token?: string } = {}
 ): Schedules["values"] => {
   let schedule = [];
   //temporary for contracts with no clear distribution schedule to be fetched in one query
@@ -44,15 +44,13 @@ export const formatSchedules = (
     if (rewardConfig?.mars_token) {
       schedule = [[1646650800, 1678186800, "10000000000000"]];
       //TODO temporary values for mirror token
-    } else if (Object.keys(rewardConfig).includes("mirror_token")) {
+    } else if (rewardConfig && Object.keys(rewardConfig).includes("mirror_token")) {
       schedule = [
         [21600, 31557600, "20587500000000"],
         [31557600, 63093600, "10293700000000"],
         [63093600, 94629600, "5146800000000"],
         [94629600, 126165600, "2573400000000"],
       ];
-    } else {
-      console.log("Distribution schedule not found");
     }
   } else {
     const singleSchedule = distributionSchedule.find(() => true);

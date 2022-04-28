@@ -8,7 +8,12 @@ export async function findProtocolRewardEmissions(
   generatorProxyContracts: Map<string, ProxyAddressInfo>
 ): Promise<void> {
   const poolTotal = new Map<string, any>();
+
   for (const value of generatorProxyContracts.values()) {
+    if (!value.proxy) {
+      continue;
+    }
+
     const withdrawLogFinder = createWithdrawLogFinder(
       generatorProxyContracts,
       value.token,
