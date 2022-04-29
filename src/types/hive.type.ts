@@ -27,3 +27,11 @@ export interface TokenInfo {
   total_supply: string;
   address: string;
 }
+
+/**
+ * BatchQuery is an abstraction for sending multiple requests to Hive in a batch
+ */
+export interface BatchQuery {
+  query: string;
+  variables: any;
+}

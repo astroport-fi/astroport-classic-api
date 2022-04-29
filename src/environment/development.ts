@@ -25,7 +25,8 @@ export class DevelopmentEnvironment {
    */
 
   // Indexer start
-  START_BLOCK_HEIGHT = 5900001;
+  // Block of first create_pair on bombay-12, 12/22
+  START_BLOCK_HEIGHT = 7098193;
 
   // Chain config
   TERRA_CHAIN_ID = "bombay-12";

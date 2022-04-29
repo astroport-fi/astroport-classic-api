@@ -1,3 +1,4 @@
+import { Pair } from "../../types";
 import { PriceGraphEdge } from "./price_graph_edge";
 import { PriceGraphNode } from "./price_graph_node";
 import { Queue } from "./Queue";
@@ -72,3 +73,17 @@ export function getExchangeRate(
 
   return maxExchangeRate;
 }
+
+/**
+ * batchItems batches items of type T into batchSize chunks
+ *
+ * @param items The items to split into chunks
+ * @param pairBatchSize The maximum size of each chunk
+ * @returns The batches
+ */
+export const batchItems = <T>(items: T[], batchSize: number = 10) =>
+  items.reduce((batches: T[][], item: T, index) => {
+    const batch = Math.floor(index / batchSize);
+    batches[batch] = ([] as T[]).concat(batches[batch] || [], item);
+    return batches;
+  }, []);

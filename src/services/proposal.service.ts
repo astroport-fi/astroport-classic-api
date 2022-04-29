@@ -1,4 +1,5 @@
 import { Proposal } from "../models/proposal.model";
+import { Proposal as ProposalDocument } from "../types";
 
 const SECONDS_PER_BLOCK = 6.2;
 
@@ -7,8 +8,8 @@ export async function getProposals(): Promise<any[]> {
   return proposals;
 }
 
-export async function getProposal(proposal_id: string): Promise<any> {
-  const proposal = await Proposal.findOne({ proposal_id: proposal_id });
+export async function getProposal(proposal_id: string): Promise<ProposalDocument | null> {
+  const proposal = await Proposal.findOne<ProposalDocument>({ proposal_id: proposal_id });
   return proposal;
 }
 
@@ -49,9 +50,8 @@ export async function saveProposals(proposals: any[]): Promise<any> {
   }
 }
 
-
 export async function hide_proposals(stale_passed_proposals: any[]): Promise<any> {
-  for(const proposal of stale_passed_proposals) {
+  for (const proposal of stale_passed_proposals) {
     await Proposal.updateOne(
       {
         proposal_id: Number(proposal.proposal_id),

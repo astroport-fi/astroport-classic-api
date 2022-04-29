@@ -14,6 +14,10 @@ export type Proposal = {
   votes_against: number;
   votes_for_power: number;
   votes_against_power: number;
+  votes_for_counted: number;
+  votes_against_counted: number;
+  votes_for_power_counted: number;
+  votes_against_power_counted: number;
   total_voting_power: number;
   title: string;
   description: string;
