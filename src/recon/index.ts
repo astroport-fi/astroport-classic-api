@@ -14,6 +14,7 @@ import { voteIndexer } from "../collector/chainIndexer/voteIndexer";
 import { findProtocolRewardEmissions } from "../collector/chainIndexer/findProtocolRewardEmissions";
 import { findXAstroFees } from "../collector/chainIndexer/findXAstroFees";
 import { getProxyAddressesInfo } from "../collector/proxyAddresses";
+import { BlockRecon } from "../types/block_recon.type";
 
 dayjs.extend(utc);
 
@@ -23,9 +24,15 @@ bluebird.config({
 });
 global.Promise = bluebird as any;
 
-const BATCH_SIZE = 5;
+const BATCH_SIZE = 10;
 const RECON_PREV_HOURS = 1;
 
+/**
+ * The Recon service checks for any missing events from current
+ * height - blocks since specific timeframe
+ *
+ * It checks for pairs, tokens, votes, rewards and fees
+ */
 export const run = async () => {
   // export const run = lambdaHandlerWrapper(
   //   async (): Promise<void> => {
@@ -49,144 +56,157 @@ export const run = async () => {
   // const startBlock = endBlockHeight - constants.BLOCKS_PER_HOUR * RECON_PREV_HOURS;
   // const totalBlocks = endBlockHeight - startBlock;
 
-  const startBlock = 7098190;
-  const endBlockHeight = 7098290;
+  // const startBlock = 7098190; // For all other testing mainnet
+  // const endBlockHeight = 7208190; // For all other testing mainnet
+
+  const startBlock = 7209321; // For votes on mainnet
+  // const endBlockHeight = 7209421; // For votes on mainnet
+  const endBlockHeight = 7209421; // For votes on mainnet
+  // const endBlockHeight = 7309321; // For votes on mainnet
+
   const totalBlocks = endBlockHeight - startBlock;
 
   let blocksToProcess = totalBlocks;
-  try {
-    console.log(
-      `Recon blocks from ${startBlock} to ${endBlockHeight} (${totalBlocks} total blocks)`
-    );
 
-    // Fetching blocks in batches
-    let totalBlocksProcessed = 0;
-    let blocksPerBatch = BATCH_SIZE;
-    const backfillStartTime: any = new Date();
-    for (let height = startBlock; height < endBlockHeight; height += blocksPerBatch) {
-      const startTime: any = new Date();
+  console.log(`Recon blocks from ${startBlock} to ${endBlockHeight} (${totalBlocks} total blocks)`);
 
-      // Reduce batch to not surpass endblock
-      if (height + blocksPerBatch > endBlockHeight) {
-        blocksPerBatch = endBlockHeight - height;
-      }
-      console.log("Fetching blocks", height, blocksPerBatch);
-      const blocks = await getTxBlockBatch(height, blocksPerBatch);
-      if (!blocks) {
-        console.log(`Unable to retrieve blocks at height ${height}`);
-        process.exit(1);
-      }
+  // Fetching blocks in batches
+  let totalBlocksProcessed = 0;
+  let blocksPerBatch = BATCH_SIZE;
+  const blockRecons: BlockRecon[] = [];
+  for (let height = startBlock; height < endBlockHeight; height += blocksPerBatch) {
+    // Reduce batch to not surpass endblock
+    if (height + blocksPerBatch > endBlockHeight) {
+      blocksPerBatch = endBlockHeight - height;
+    }
+    console.log("Fetching blocks", height, blocksPerBatch);
+    const blocks = await getTxBlockBatch(height, blocksPerBatch);
+    if (!blocks) {
+      console.log(`Unable to retrieve blocks at height ${height}`);
+      process.exit(1);
+    }
 
-      // For each block retrieved, loop over all transactions
-      for (const block of blocks) {
-        for (const tx of block) {
-          const Logs = tx.logs;
-          const timestamp = tx.timestamp;
-          const txHash = tx.txhash;
+    // For each block retrieved, loop over all transactions
+    for (const block of blocks) {
+      const blockRecon: BlockRecon = {
+        block: 0,
+        pairs: [],
+        votes: [],
+        rewards: [],
+        fees: [],
+      };
+      for (const tx of block) {
+        const Logs = tx.logs;
+        const timestamp = tx.timestamp;
+        const txHash = tx.txhash;
 
-          for (const log of Logs) {
-            const events = log.events;
-            for (const event of events) {
-              // for spam tx
-              if (event.attributes.length < 1800) {
-                // Fetch pairs to ensure all pairs exist in collection
-                // In case a pair exists, it will still attempt to create the tokens
-                // Duplicates are avoided through Mongo indexes
-                try {
-                  const createPairLF = createPairLogFinders(constants.FACTORY_ADDRESS);
-                  const createPairLogFounds = createPairLF(event);
-                  if (createPairLogFounds.length > 0) {
-                    const created = await createPairIndexer(createPairLogFounds, timestamp, txHash);
-                    console.log("Created Pair/Tokens", created.length);
-                    if (created.length > 0) {
-                      for (const item of created) {
-                        console.log(item.pair);
-                        console.log(item.tokens);
-                      }
-                    }
-                  }
-                } catch (e) {
-                  console.log("Error during createPair: " + e);
-                }
+        // height isn't available on block when fetching batches
+        blockRecon.block = tx.height;
 
-                // Fetch votes to ensure all votes are accounted for
-                // In case a vote exists it will not be inserted
-                // Duplicates are avoided through Mongo indexes specifically the
-                // votes.voter+proposal_id+block index in this case
-                try {
-                  const voteLF = voteLogFinder();
-                  const voteLogFounds = voteLF(event);
-                  if (voteLogFounds.length > 0) {
-                    const created = await voteIndexer(voteLogFounds, timestamp, height, txHash);
-                    if (created.length > 0) {
-                      console.log("Votes indexed", created.length);
-                    }
-                  }
-                } catch (e) {
-                  console.log("Error while indexing votes: " + e);
-                }
-
-                // TODO: We need an index on pool_protocol_rewards
-                // consisting of pool+token+block
-                try {
-                  const created = await findProtocolRewardEmissions(
-                    event,
-                    height,
-                    generatorProxyContracts
-                  );
+        for (const log of Logs) {
+          const events = log.events;
+          for (const event of events) {
+            // for spam tx
+            if (event.attributes.length < 1800) {
+              // Fetch pairs to ensure all pairs exist in collection
+              // Duplicates are avoided through Mongo indexes, specifically
+              // pairs.contractAddr and tokens.tokenAddr
+              try {
+                const createPairLF = createPairLogFinders(constants.FACTORY_ADDRESS);
+                const createPairLogFounds = createPairLF(event);
+                if (createPairLogFounds.length > 0) {
+                  const created = await createPairIndexer(createPairLogFounds, timestamp, txHash);
                   if (created.length > 0) {
-                    console.log("Rewards indexed", created.length);
+                    blockRecon.pairs = created;
                   }
-                } catch (e) {
-                  console.log("Error during findProtocolRewardEmissions: " + e);
                 }
+              } catch (e) {
+                // Not printing duplicate insert errors
+                // console.log("Error during createPair: " + e);
+              }
 
-                try {
-                  // Log xAstro fees sent to maker
-                  // Duplicates are avoided through Mongo indexes specifically the
-                  // xastro_fee.block+token+volume index in this case
-                  const created = await findXAstroFees(event, height);
+              // Fetch votes to ensure all votes are accounted for
+              // Duplicates are avoided through Mongo indexes specifically the
+              // votes.voter+proposal_id+block index in this case
+              try {
+                const voteLF = voteLogFinder();
+                const voteLogFounds = voteLF(event);
+                if (voteLogFounds.length > 0) {
+                  const created = await voteIndexer(voteLogFounds, timestamp, height, txHash);
                   if (created.length > 0) {
-                    console.log("Fees indexed", created.length);
+                    blockRecon.votes = created;
                   }
-                } catch (e) {
-                  console.log("Error during findXAstroFees: " + e);
                 }
+              } catch (e) {
+                // Not printing duplicate insert errors
+                // console.log("Error while indexing votes: " + e);
+              }
+
+              // Fetch protocol rewards
+              // TODO: We need an index on pool_protocol_rewards
+              // consisting of pool+token+block+volume
+              try {
+                const created = await findProtocolRewardEmissions(
+                  event,
+                  height,
+                  generatorProxyContracts
+                );
+                if (created.length > 0) {
+                  blockRecon.rewards = created;
+                }
+              } catch (e) {
+                // Not printing duplicate insert errors
+                // console.log("Error during findProtocolRewardEmissions: " + e);
+              }
+
+              // Log xAstro fees sent to maker
+              // Duplicates are avoided through Mongo indexes specifically the
+              // xastro_fee.block+token+volume index in this case
+              try {
+                const created = await findXAstroFees(event, height);
+                if (created.length > 0) {
+                  blockRecon.fees = created;
+                }
+              } catch (e) {
+                // Not printing duplicate insert errors
+                // console.log("Error during findXAstroFees: " + e);
               }
             }
           }
         }
       }
-
-      // // Basic progress printed every 200 blocks, basic performance printed
-      // // every batchSize blocks
-      // totalBlocksProcessed += batchSize;
-      // const endTime: any = new Date();
-      // const elapsedBatch = endTime - startTime;
-      // const elapsedTotal = endTime - backfillStartTime;
-      // console.log(
-      //   `${height} Processed ${batchSize} blocks (${elapsedBatch.toFixed(3)} ms / ${(
-      //     elapsedBatch / batchSize
-      //   ).toFixed(3)} ms per block)`
-      // );
-      // blocksToProcess -= batchSize;
-      // // Report every 200 blocks
-      // if (totalBlocksProcessed % 200 === 0) {
-      //   const averageRatePerBlockSeconds = elapsedTotal / totalBlocksProcessed / 1000;
-      //   console.log(
-      //     `Total time: ${(elapsedTotal / 1000 / 60).toFixed(
-      //       3
-      //     )} minutes. Blocks remaining: ${blocksToProcess}, estimated time: ${(
-      //       (blocksToProcess * averageRatePerBlockSeconds) /
-      //       60
-      //     ).toFixed(3)} minutes`
-      //   );
-      // }
+      // Only add if any missed events were found
+      if (
+        blockRecon.pairs.length ||
+        blockRecon.votes.length ||
+        blockRecon.rewards.length ||
+        blockRecon.fees.length
+      ) {
+        blockRecons.push(blockRecon);
+      }
     }
-  } catch (error) {
-    console.log("Unable to recon blocks");
-    console.log(error);
-    return;
+  }
+
+  if (blockRecons.length > 0) {
+    console.log("RECON ENVETS BLOCK COUNT:", blockRecons.length);
+
+    let totalPairs = 0;
+    let totalVotes = 0;
+    let totalRewards = 0;
+    let totalFees = 0;
+    for (const blockRecon of blockRecons) {
+      totalPairs += blockRecon.pairs.length;
+      totalVotes += blockRecon.votes.length;
+      totalRewards += blockRecon.rewards.length;
+      totalFees += blockRecon.fees.length;
+    }
+
+    console.log("totalPairs", totalPairs);
+    console.log("totalVotes", totalVotes);
+    console.log("totalRewards", totalRewards);
+    console.log("totalFees", totalFees);
+
+    // TODO: Push result to slack
   }
 
   console.log("Total time elapsed: " + (new Date().getTime() - start) / 1000);
