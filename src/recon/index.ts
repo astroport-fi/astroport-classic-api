@@ -5,6 +5,7 @@ import { createPairIndexer } from "../collector/chainIndexer/createPairIndex";
 import { createPairLogFinders } from "../collector/logFinder";
 import constants from "../environment/constants";
 
+import axios from "axios";
 import { lambdaHandlerWrapper } from "../lib/handler-wrapper";
 import { getTxBlockBatch, initHive, initLCD } from "../lib/terra";
 import { connectToDatabase } from "../modules/db";
@@ -26,6 +27,8 @@ global.Promise = bluebird as any;
 
 const BATCH_SIZE = 10;
 const RECON_PREV_HOURS = 1;
+
+const SLACK_WEBHOOK = "INSERT SLACK WEBHOOK ADDRESS";
 
 /**
  * The Recon service checks for any missing events from current
@@ -57,21 +60,21 @@ export const run = async () => {
   // const totalBlocks = endBlockHeight - startBlock;
 
   // const startBlock = 7098190; // For all other testing mainnet
+  // const endBlockHeight = 7098210; // For all other testing mainnet
   // const endBlockHeight = 7208190; // For all other testing mainnet
 
   const startBlock = 7209321; // For votes on mainnet
-  // const endBlockHeight = 7209421; // For votes on mainnet
   const endBlockHeight = 7209421; // For votes on mainnet
+  // const endBlockHeight = 7209341; // For votes on mainnet
   // const endBlockHeight = 7309321; // For votes on mainnet
 
-  const totalBlocks = endBlockHeight - startBlock;
-
-  let blocksToProcess = totalBlocks;
-
-  console.log(`Recon blocks from ${startBlock} to ${endBlockHeight} (${totalBlocks} total blocks)`);
+  console.log(
+    `Recon blocks from ${startBlock} to ${endBlockHeight} (${
+      endBlockHeight - startBlock
+    } total blocks)`
+  );
 
   // Fetching blocks in batches
-  let totalBlocksProcessed = 0;
   let blocksPerBatch = BATCH_SIZE;
   const blockRecons: BlockRecon[] = [];
   for (let height = startBlock; height < endBlockHeight; height += blocksPerBatch) {
@@ -79,7 +82,7 @@ export const run = async () => {
     if (height + blocksPerBatch > endBlockHeight) {
       blocksPerBatch = endBlockHeight - height;
     }
-    console.log("Fetching blocks", height, blocksPerBatch);
+    console.log(`Recon height ${height} (batch size ${blocksPerBatch})`);
     const blocks = await getTxBlockBatch(height, blocksPerBatch);
     if (!blocks) {
       console.log(`Unable to retrieve blocks at height ${height}`);
@@ -187,26 +190,75 @@ export const run = async () => {
     }
   }
 
+  // Check if any events were missed, and if any are found, push to Slack
   if (blockRecons.length > 0) {
-    console.log("RECON ENVETS BLOCK COUNT:", blockRecons.length);
-
     let totalPairs = 0;
+    let totalTokens = 0;
     let totalVotes = 0;
     let totalRewards = 0;
     let totalFees = 0;
     for (const blockRecon of blockRecons) {
-      totalPairs += blockRecon.pairs.length;
+      for (const pair of blockRecon.pairs) {
+        totalPairs += pair.pair ? 1 : 0;
+        totalTokens += pair.tokens ? pair.tokens.length : 0;
+      }
       totalVotes += blockRecon.votes.length;
       totalRewards += blockRecon.rewards.length;
       totalFees += blockRecon.fees.length;
     }
 
-    console.log("totalPairs", totalPairs);
-    console.log("totalVotes", totalVotes);
-    console.log("totalRewards", totalRewards);
-    console.log("totalFees", totalFees);
+    // Construct Slack message and push
+    let message = "```";
+    message += "--------------------------\n";
+    message += "|      Events missed     |\n";
+    message += "--------------------------\n";
 
-    // TODO: Push result to slack
+    message += `Missed events found across ${blockRecons.length} block${
+      blockRecons.length != 1 ? "s" : ""
+    }\n`;
+    message += "Pairs                 : " + totalPairs + "\n";
+    message += "Tokens                : " + totalTokens + "\n";
+    message += "Votes                 : " + totalVotes + "\n";
+    message += "Protocol rewards      : " + totalRewards + "\n";
+    message += "xAstro fees           : " + totalFees + "\n";
+    message += "\n";
+    if (totalPairs > 0) {
+      message += "Pairs\n";
+    }
+    for (const blockRecon of blockRecons) {
+      for (const pair of blockRecon.pairs) {
+        if (pair.pair) {
+          message += ` Contract Address: ${pair.pair.contractAddr}\n`;
+        }
+        if (pair.tokens) {
+          for (const token of pair.tokens) {
+            message += `  Token Address: ${token.tokenAddr}\n`;
+          }
+        }
+      }
+    }
+    message += "```";
+
+    const post_fields = {
+      blocks: [
+        {
+          type: "section",
+          text: {
+            type: "mrkdwn",
+            text: message,
+          },
+        },
+      ],
+    };
+
+    let config = {
+      headers: {
+        "Content-Type": "application/json",
+        charset: "utf-8",
+      },
+    };
+
+    await axios.post(SLACK_WEBHOOK, post_fields, config);
   }
 
   console.log("Total time elapsed: " + (new Date().getTime() - start) / 1000);
