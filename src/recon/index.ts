@@ -26,246 +26,230 @@ bluebird.config({
 global.Promise = bluebird as any;
 
 const BATCH_SIZE = 10;
-const RECON_PREV_HOURS = 1;
+const RECON_PREVIOUS_HOURS = 2;
 
 const SLACK_WEBHOOK = "INSERT SLACK WEBHOOK ADDRESS";
 
 /**
- * The Recon service checks for any missing events from current
- * height - blocks since specific timeframe
+ * The Recon service checks for any missing events based on the last indexed
+ * block and RECON_PREVIOUS_HOURS
  *
  * It checks for pairs, tokens, votes, rewards and fees
  */
-export const run = async () => {
-  // export const run = lambdaHandlerWrapper(
-  //   async (): Promise<void> => {
-  const start = new Date().getTime();
+export const run = lambdaHandlerWrapper(
+  async (): Promise<void> => {
+    const start = new Date().getTime();
 
-  console.log("Starting block recon...");
+    console.log("Starting block recon...");
 
-  initHive(constants.TERRA_HIVE_ENDPOINT);
-  initLCD(constants.TERRA_LCD_ENDPOINT, constants.TERRA_CHAIN_ID);
-  await connectToDatabase();
+    initHive(constants.TERRA_HIVE_ENDPOINT);
+    initLCD(constants.TERRA_LCD_ENDPOINT, constants.TERRA_CHAIN_ID);
+    await connectToDatabase();
 
-  const generatorProxyContracts = await getProxyAddressesInfo();
+    const generatorProxyContracts = await getProxyAddressesInfo();
 
-  // Determine the block to start from and end at for the recon
-  // based on the amount of hours we want to recon
-  const lastBlock = await getLastHeight(constants.TERRA_CHAIN_ID);
-  // const endBlockHeight = lastBlock.value;
-  // console.log("ENDBLOCK", endBlockHeight);
-  // console.log("constants.BLOCKS_PER_HOUR", constants.BLOCKS_PER_HOUR);
-  // console.log("RECON_PREV_HOURS", RECON_PREV_HOURS);
-  // const startBlock = endBlockHeight - constants.BLOCKS_PER_HOUR * RECON_PREV_HOURS;
-  // const totalBlocks = endBlockHeight - startBlock;
+    // Determine the block to start from and end at for the recon
+    // based on the amount of hours we want to recon
+    // We always end at the last indexed height as to not front-run the
+    // indexer itself
+    const lastBlock = await getLastHeight(constants.TERRA_CHAIN_ID);
+    const endBlockHeight = lastBlock.value;
+    const startBlock = endBlockHeight - constants.BLOCKS_PER_HOUR * RECON_PREVIOUS_HOURS;
 
-  // const startBlock = 7098190; // For all other testing mainnet
-  // const endBlockHeight = 7098210; // For all other testing mainnet
-  // const endBlockHeight = 7208190; // For all other testing mainnet
+    console.log(
+      `Recon blocks from ${startBlock} to ${endBlockHeight} (${
+        endBlockHeight - startBlock
+      } total blocks)`
+    );
 
-  const startBlock = 7209321; // For votes on mainnet
-  const endBlockHeight = 7209421; // For votes on mainnet
-  // const endBlockHeight = 7209341; // For votes on mainnet
-  // const endBlockHeight = 7309321; // For votes on mainnet
+    // Fetching blocks in batches
+    let blocksPerBatch = BATCH_SIZE;
+    const blockRecons: BlockRecon[] = [];
+    for (let height = startBlock; height < endBlockHeight; height += blocksPerBatch) {
+      // Reduce batch to not surpass endblock
+      if (height + blocksPerBatch > endBlockHeight) {
+        blocksPerBatch = endBlockHeight - height;
+      }
+      console.log(`Recon height ${height} (batch size ${blocksPerBatch})`);
+      const blocks = await getTxBlockBatch(height, blocksPerBatch);
+      if (!blocks) {
+        console.log(`Unable to retrieve blocks at height ${height}`);
+        process.exit(1);
+      }
 
-  console.log(
-    `Recon blocks from ${startBlock} to ${endBlockHeight} (${
-      endBlockHeight - startBlock
-    } total blocks)`
-  );
+      // For each block retrieved, loop over all transactions
+      for (const block of blocks) {
+        const blockRecon: BlockRecon = {
+          block: 0,
+          pairs: [],
+          votes: [],
+          rewards: [],
+          fees: [],
+        };
+        for (const tx of block) {
+          const Logs = tx.logs;
+          const timestamp = tx.timestamp;
+          const txHash = tx.txhash;
 
-  // Fetching blocks in batches
-  let blocksPerBatch = BATCH_SIZE;
-  const blockRecons: BlockRecon[] = [];
-  for (let height = startBlock; height < endBlockHeight; height += blocksPerBatch) {
-    // Reduce batch to not surpass endblock
-    if (height + blocksPerBatch > endBlockHeight) {
-      blocksPerBatch = endBlockHeight - height;
-    }
-    console.log(`Recon height ${height} (batch size ${blocksPerBatch})`);
-    const blocks = await getTxBlockBatch(height, blocksPerBatch);
-    if (!blocks) {
-      console.log(`Unable to retrieve blocks at height ${height}`);
-      process.exit(1);
-    }
+          // height isn't available on block when fetching batches
+          blockRecon.block = tx.height;
 
-    // For each block retrieved, loop over all transactions
-    for (const block of blocks) {
-      const blockRecon: BlockRecon = {
-        block: 0,
-        pairs: [],
-        votes: [],
-        rewards: [],
-        fees: [],
-      };
-      for (const tx of block) {
-        const Logs = tx.logs;
-        const timestamp = tx.timestamp;
-        const txHash = tx.txhash;
-
-        // height isn't available on block when fetching batches
-        blockRecon.block = tx.height;
-
-        for (const log of Logs) {
-          const events = log.events;
-          for (const event of events) {
-            // for spam tx
-            if (event.attributes.length < 1800) {
-              // Fetch pairs to ensure all pairs exist in collection
-              // Duplicates are avoided through Mongo indexes, specifically
-              // pairs.contractAddr and tokens.tokenAddr
-              try {
-                const createPairLF = createPairLogFinders(constants.FACTORY_ADDRESS);
-                const createPairLogFounds = createPairLF(event);
-                if (createPairLogFounds.length > 0) {
-                  const created = await createPairIndexer(createPairLogFounds, timestamp, txHash);
-                  if (created.length > 0) {
-                    blockRecon.pairs = created;
+          for (const log of Logs) {
+            const events = log.events;
+            for (const event of events) {
+              // for spam tx
+              if (event.attributes.length < 1800) {
+                // Fetch pairs to ensure all pairs exist in collection
+                // Duplicates are avoided through Mongo indexes, specifically
+                // pairs.contractAddr and tokens.tokenAddr
+                try {
+                  const createPairLF = createPairLogFinders(constants.FACTORY_ADDRESS);
+                  const createPairLogFounds = createPairLF(event);
+                  if (createPairLogFounds.length > 0) {
+                    const created = await createPairIndexer(createPairLogFounds, timestamp, txHash);
+                    if (created.length > 0) {
+                      blockRecon.pairs = created;
+                    }
                   }
+                } catch (e) {
+                  // Not printing duplicate insert errors
+                  // console.log("Error during createPair: " + e);
                 }
-              } catch (e) {
-                // Not printing duplicate insert errors
-                // console.log("Error during createPair: " + e);
-              }
 
-              // Fetch votes to ensure all votes are accounted for
-              // Duplicates are avoided through Mongo indexes specifically the
-              // votes.voter+proposal_id+block index in this case
-              try {
-                const voteLF = voteLogFinder();
-                const voteLogFounds = voteLF(event);
-                if (voteLogFounds.length > 0) {
-                  const created = await voteIndexer(voteLogFounds, timestamp, height, txHash);
-                  if (created.length > 0) {
-                    blockRecon.votes = created;
+                // Fetch votes to ensure all votes are accounted for
+                // Duplicates are avoided through Mongo indexes specifically the
+                // votes.voter+proposal_id+block index in this case
+                try {
+                  const voteLF = voteLogFinder();
+                  const voteLogFounds = voteLF(event);
+                  if (voteLogFounds.length > 0) {
+                    const created = await voteIndexer(voteLogFounds, timestamp, height, txHash);
+                    if (created.length > 0) {
+                      blockRecon.votes = created;
+                    }
                   }
+                } catch (e) {
+                  // Not printing duplicate insert errors
+                  // console.log("Error while indexing votes: " + e);
                 }
-              } catch (e) {
-                // Not printing duplicate insert errors
-                // console.log("Error while indexing votes: " + e);
-              }
 
-              // Fetch protocol rewards
-              // TODO: We need an index on pool_protocol_rewards
-              // consisting of pool+token+block+volume
-              try {
-                const created = await findProtocolRewardEmissions(
-                  event,
-                  height,
-                  generatorProxyContracts
-                );
-                if (created.length > 0) {
-                  blockRecon.rewards = created;
+                // Fetch protocol rewards
+                // Duplicates are avoided through Mongo indexes specifically the
+                // pool+token+block+volume index in this case
+                try {
+                  const created = await findProtocolRewardEmissions(
+                    event,
+                    height,
+                    generatorProxyContracts
+                  );
+                  if (created.length > 0) {
+                    blockRecon.rewards = created;
+                  }
+                } catch (e) {
+                  // Not printing duplicate insert errors
+                  // console.log("Error during findProtocolRewardEmissions: " + e);
                 }
-              } catch (e) {
-                // Not printing duplicate insert errors
-                // console.log("Error during findProtocolRewardEmissions: " + e);
-              }
 
-              // Log xAstro fees sent to maker
-              // Duplicates are avoided through Mongo indexes specifically the
-              // xastro_fee.block+token+volume index in this case
-              try {
-                const created = await findXAstroFees(event, height);
-                if (created.length > 0) {
-                  blockRecon.fees = created;
+                // Log xAstro fees sent to maker
+                // Duplicates are avoided through Mongo indexes specifically the
+                // xastro_fee.block+token+volume index in this case
+                try {
+                  const created = await findXAstroFees(event, height);
+                  if (created.length > 0) {
+                    blockRecon.fees = created;
+                  }
+                } catch (e) {
+                  // Not printing duplicate insert errors
+                  // console.log("Error during findXAstroFees: " + e);
                 }
-              } catch (e) {
-                // Not printing duplicate insert errors
-                // console.log("Error during findXAstroFees: " + e);
               }
             }
           }
         }
-      }
-      // Only add if any missed events were found
-      if (
-        blockRecon.pairs.length ||
-        blockRecon.votes.length ||
-        blockRecon.rewards.length ||
-        blockRecon.fees.length
-      ) {
-        blockRecons.push(blockRecon);
-      }
-    }
-  }
-
-  // Check if any events were missed, and if any are found, push to Slack
-  if (blockRecons.length > 0) {
-    let totalPairs = 0;
-    let totalTokens = 0;
-    let totalVotes = 0;
-    let totalRewards = 0;
-    let totalFees = 0;
-    for (const blockRecon of blockRecons) {
-      for (const pair of blockRecon.pairs) {
-        totalPairs += pair.pair ? 1 : 0;
-        totalTokens += pair.tokens ? pair.tokens.length : 0;
-      }
-      totalVotes += blockRecon.votes.length;
-      totalRewards += blockRecon.rewards.length;
-      totalFees += blockRecon.fees.length;
-    }
-
-    // Construct Slack message and push
-    let message = "```";
-    message += "--------------------------\n";
-    message += "|      Events missed     |\n";
-    message += "--------------------------\n";
-
-    message += `Missed events found across ${blockRecons.length} block${
-      blockRecons.length != 1 ? "s" : ""
-    }\n`;
-    message += "Pairs                 : " + totalPairs + "\n";
-    message += "Tokens                : " + totalTokens + "\n";
-    message += "Votes                 : " + totalVotes + "\n";
-    message += "Protocol rewards      : " + totalRewards + "\n";
-    message += "xAstro fees           : " + totalFees + "\n";
-    message += "\n";
-    if (totalPairs > 0) {
-      message += "Pairs\n";
-    }
-    for (const blockRecon of blockRecons) {
-      for (const pair of blockRecon.pairs) {
-        if (pair.pair) {
-          message += ` Contract Address: ${pair.pair.contractAddr}\n`;
+        // Only add if any missed events were found
+        if (
+          blockRecon.pairs.length ||
+          blockRecon.votes.length ||
+          blockRecon.rewards.length ||
+          blockRecon.fees.length
+        ) {
+          blockRecons.push(blockRecon);
         }
-        if (pair.tokens) {
-          for (const token of pair.tokens) {
-            message += `  Token Address: ${token.tokenAddr}\n`;
+      }
+    }
+
+    // Check if any events were missed, and if any are found, push to Slack
+    if (blockRecons.length > 0) {
+      let totalPairs = 0;
+      let totalTokens = 0;
+      let totalVotes = 0;
+      let totalRewards = 0;
+      let totalFees = 0;
+      for (const blockRecon of blockRecons) {
+        for (const pair of blockRecon.pairs) {
+          totalPairs += pair.pair ? 1 : 0;
+          totalTokens += pair.tokens ? pair.tokens.length : 0;
+        }
+        totalVotes += blockRecon.votes.length;
+        totalRewards += blockRecon.rewards.length;
+        totalFees += blockRecon.fees.length;
+      }
+
+      // Construct Slack message and push
+      let message = "```";
+      message += "--------------------------\n";
+      message += "|      Events missed     |\n";
+      message += "--------------------------\n";
+
+      message += `Missed events found across ${blockRecons.length} block${
+        blockRecons.length != 1 ? "s" : ""
+      }\n`;
+      message += "Pairs                 : " + totalPairs + "\n";
+      message += "Tokens                : " + totalTokens + "\n";
+      message += "Votes                 : " + totalVotes + "\n";
+      message += "Protocol rewards      : " + totalRewards + "\n";
+      message += "xAstro fees           : " + totalFees + "\n";
+      message += "\n";
+      if (totalPairs > 0) {
+        message += "Pairs\n";
+      }
+      for (const blockRecon of blockRecons) {
+        for (const pair of blockRecon.pairs) {
+          if (pair.pair) {
+            message += ` Contract Address: ${pair.pair.contractAddr}\n`;
+          }
+          if (pair.tokens) {
+            for (const token of pair.tokens) {
+              message += `  Token Address: ${token.tokenAddr}\n`;
+            }
           }
         }
       }
-    }
-    message += "```";
+      message += "```";
 
-    const post_fields = {
-      blocks: [
-        {
-          type: "section",
-          text: {
-            type: "mrkdwn",
-            text: message,
+      const post_fields = {
+        blocks: [
+          {
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text: message,
+            },
           },
+        ],
+      };
+
+      let config = {
+        headers: {
+          "Content-Type": "application/json",
+          charset: "utf-8",
         },
-      ],
-    };
+      };
 
-    let config = {
-      headers: {
-        "Content-Type": "application/json",
-        charset: "utf-8",
-      },
-    };
+      await axios.post(SLACK_WEBHOOK, post_fields, config);
+    }
 
-    await axios.post(SLACK_WEBHOOK, post_fields, config);
-  }
-
-  console.log("Total time elapsed: " + (new Date().getTime() - start) / 1000);
-};
-// { errorMessage: "Error while running recon: ", successMessage: "recon success" }
-// );
-
-run().then(() => {
-  console.log("DONE!");
-});
+    console.log("Total time elapsed (s): " + (new Date().getTime() - start) / 1000);
+  },
+  { errorMessage: "Error while running recon: ", successMessage: "recon success" }
+);
