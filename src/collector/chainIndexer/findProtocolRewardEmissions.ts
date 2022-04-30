@@ -1,12 +1,13 @@
 import { createWithdrawLogFinder } from "../logFinder";
 import { PoolProtocolReward } from "../../models/pool_protocol_reward.model";
+import { PoolProtocolReward as PoolProtocolRewardType } from "../../types/pool_protocol_reward.type";
 import { ProxyAddressInfo } from "../../types/contracts";
 
 export async function findProtocolRewardEmissions(
   event: any,
   height: number,
   generatorProxyContracts: Map<string, ProxyAddressInfo>
-): Promise<void> {
+): Promise<PoolProtocolRewardType[]> {
   const poolTotal = new Map<string, any>();
 
   for (const value of generatorProxyContracts.values()) {
@@ -43,9 +44,10 @@ export async function findProtocolRewardEmissions(
   }
 
   // save to db
+  const rewardsIndexed: PoolProtocolRewardType[] = [];
   for (const [key, value] of poolTotal) {
     try {
-      await PoolProtocolReward.create({
+      const createdReward = await PoolProtocolReward.create({
         pool: value.pool,
         factory: value.factory,
         proxy: value.proxy,
@@ -54,8 +56,12 @@ export async function findProtocolRewardEmissions(
         block: height,
         volume: value.value,
       });
+      if (createdReward) {
+        rewardsIndexed.push(createdReward);
+      }
     } catch (e) {
       console.log("Failed to create pool protocol rewards:", e);
     }
   }
+  return rewardsIndexed;
 }
