@@ -3,6 +3,7 @@ import { PriceV2 } from "../../types/priceV2.type";
 import { BatchQuery, PoolInfo, TokenInfo } from "../../types/hive.type";
 import constants from "../../environment/constants";
 import { isIBCToken, isNative } from "../../modules/terra";
+import { getIBCDenom, initLCD } from "./lcd";
 
 export let hive: GraphQLClient;
 
@@ -87,17 +88,19 @@ export async function getTokenInfo(tokenAddr: string): Promise<TokenInfo | null>
     return {
       address: tokenAddr,
       decimals: 6, // Native tokens have 6 decimals
-      name: constants.NATIVE_TOKEN_SYMBOLS.get(tokenAddr)?.name,
-      symbol: constants.NATIVE_TOKEN_SYMBOLS.get(tokenAddr)?.symbol,
+      name: constants.NATIVE_TOKEN_SYMBOLS.get(tokenAddr)?.name || tokenAddr,
+      symbol: constants.NATIVE_TOKEN_SYMBOLS.get(tokenAddr)?.symbol || tokenAddr,
       total_supply: "",
     };
   }
   if (isIBCToken(tokenAddr)) {
+    initLCD(constants.TERRA_LCD_ENDPOINT, constants.TERRA_CHAIN_ID);
+    const denom = await getIBCDenom(tokenAddr);
     return {
       address: tokenAddr,
       decimals: 6, // IBC tokens are treated as native and have 6 decimals
-      name: constants.IBC_DENOM_MAP.get(tokenAddr)?.name,
-      symbol: constants.IBC_DENOM_MAP.get(tokenAddr)?.symbol,
+      name: constants.IBC_DENOM_MAP.get(denom)?.name || denom,
+      symbol: constants.IBC_DENOM_MAP.get(denom)?.symbol || tokenAddr,
       total_supply: "",
     };
   }
