@@ -91,6 +91,13 @@ functions:
       - schedule: rate(6 hours)
     timeout: 20 # in seconds
 
+  recon-collector:
+    enabled: '"${env:ENABLE_FUNCTION_RECON}" == "true"'
+    handler: src/recon/index.run
+    events:
+      - schedule: rate(2 hours)
+    timeout: 180 # in seconds
+
   graphql:
     enabled: '"${env:ENABLE_FUNCTION_GRAPHQL}" == "true"'
     handler: src/graphql/index.run
