@@ -26,7 +26,7 @@ bluebird.config({
 global.Promise = bluebird as any;
 
 const BATCH_SIZE = 10;
-const RECON_PREVIOUS_HOURS = 2;
+const RECON_PREVIOUS_HOURS = 3;
 
 const SLACK_WEBHOOK =
   "https://hooks.slack.com/services/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";
