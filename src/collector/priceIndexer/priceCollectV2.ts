@@ -37,10 +37,7 @@ export async function priceCollectV2(pairs: Pair[]): Promise<void> {
  * @param height The height of the chain to work at
  * @returns The prices for the pairs
  */
-export async function indexPrices(
-  pairs: Pair[],
-  height: number = 0
-): Promise<Map<string, PriceGraphNode>> {
+export async function indexPrices(pairs: Pair[], height = 0): Promise<Map<string, PriceGraphNode>> {
   // map token addresses to nodes
   const nodes = new Map<string, PriceGraphNode>();
   // adjacency list - maps token address to a node's edges

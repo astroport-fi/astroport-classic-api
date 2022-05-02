@@ -121,7 +121,7 @@ export const run = lambdaHandlerWrapper(
 
     const post_fields = generate_post_fields(message);
 
-    let config = {
+    const config = {
       headers: {
         "Content-Type": "application/json",
         charset: "utf-8",

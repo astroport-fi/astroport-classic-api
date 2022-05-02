@@ -8,7 +8,6 @@ describe("getProxyAddressesInfo", function () {
 
   before(async () => {
     addressesInfo = await getProxyAddressesInfo();
-    // console.log(addressesInfo);
   });
 
   it("checks for bluna-luna Astro rewards", () => {

@@ -1,10 +1,10 @@
 import { expect } from "chai";
 import fs from "fs";
 
-import { calculateThirdPartyApr } from "../../../src/collector/chainIndexer/calculateApr";
-import { createAstroNativeFeeLogFinder } from "../../../src/collector/logFinder/createAstroNativeFeeLogFinder";
-import { getTxBlock } from "../../../src/lib/terra";
-import { ScheduleType } from "../../../src/types/contracts";
+import { calculateThirdPartyApr } from "collector/chainIndexer/calculateApr";
+import { createAstroNativeFeeLogFinder } from "collector/logFinder/createAstroNativeFeeLogFinder";
+import { getTxBlock } from "lib/terra";
+import { ScheduleType } from "types/contracts";
 
 describe("findXAstroFees", function () {
   it("Should get XAstroFees event from transfer log", async () => {
