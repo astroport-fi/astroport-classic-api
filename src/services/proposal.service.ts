@@ -1,7 +1,7 @@
 import { Proposal } from "../models/proposal.model";
 import { Proposal as ProposalDocument } from "../types";
 
-const SECONDS_PER_BLOCK = 6.2;
+const SECONDS_PER_BLOCK = 6.5;
 
 export async function getProposals(): Promise<any[]> {
   const proposals = await Proposal.find().sort({ proposal_id: -1 });
