@@ -235,6 +235,10 @@ export async function poolCollect(): Promise<void> {
             result.metadata.fees.native.apy = 0;
           }
           if (isNaN(result.metadata.fees.native.apy)) result.metadata.fees.native.apy = 0.0;
+          if (isNaN(result.metadata.fees.native.day)) result.metadata.fees.native.day = 0.0;
+          if (isNaN(result.metadata.fees.native.estimated_apr)) {
+            result.metadata.fees.native.estimated_apr = 0.0;
+          }
 
           let pairAllocPoint = 0;
 
