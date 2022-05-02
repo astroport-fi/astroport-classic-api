@@ -240,7 +240,7 @@ export const run = lambdaHandlerWrapper(
         ],
       };
 
-      let config = {
+      const config = {
         headers: {
           "Content-Type": "application/json",
           charset: "utf-8",
