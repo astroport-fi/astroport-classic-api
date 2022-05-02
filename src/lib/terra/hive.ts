@@ -2,6 +2,8 @@ import { BatchRequestDocument, gql, GraphQLClient } from "graphql-request";
 import { PriceV2 } from "../../types/priceV2.type";
 import { BatchQuery, PoolInfo, TokenInfo } from "../../types/hive.type";
 import constants from "../../environment/constants";
+import { isIBCToken, isNative } from "../../modules/terra";
+import { getIBCDenom, initLCD } from "./lcd";
 
 export let hive: GraphQLClient;
 
@@ -73,7 +75,36 @@ export const getProposals = async (contract: string, limit = 100, offset = 0): P
   }
 };
 
+/**
+ * getTokenInfo retrieves metadata for the given token address. Supports
+ * native and IBC tokens
+ *
+ * @param tokenAddr The token, native or IBC address
+ * @returns Metadata for the token
+ */
 export async function getTokenInfo(tokenAddr: string): Promise<TokenInfo | null> {
+  // Check for native and IBC tokens first
+  if (isNative(tokenAddr)) {
+    return {
+      address: tokenAddr,
+      decimals: 6, // Native tokens have 6 decimals
+      name: constants.NATIVE_TOKEN_SYMBOLS.get(tokenAddr)?.name || tokenAddr,
+      symbol: constants.NATIVE_TOKEN_SYMBOLS.get(tokenAddr)?.symbol || tokenAddr,
+      total_supply: "",
+    };
+  }
+  if (isIBCToken(tokenAddr)) {
+    initLCD(constants.TERRA_LCD_ENDPOINT, constants.TERRA_CHAIN_ID);
+    const denom = await getIBCDenom(tokenAddr);
+    return {
+      address: tokenAddr,
+      decimals: 6, // IBC tokens are treated as native and have 6 decimals
+      name: constants.IBC_DENOM_MAP.get(denom)?.name || denom,
+      symbol: constants.IBC_DENOM_MAP.get(denom)?.symbol || tokenAddr,
+      total_supply: "",
+    };
+  }
+  // Continue for CW20 tokens
   try {
     const response = await hive.request(
       gql`
