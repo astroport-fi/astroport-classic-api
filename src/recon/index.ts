@@ -28,7 +28,8 @@ global.Promise = bluebird as any;
 const BATCH_SIZE = 10;
 const RECON_PREVIOUS_HOURS = 2;
 
-const SLACK_WEBHOOK = "INSERT SLACK WEBHOOK ADDRESS";
+const SLACK_WEBHOOK =
+  "https://hooks.slack.com/services/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";
 
 /**
  * The Recon service checks for any missing events based on the last indexed
