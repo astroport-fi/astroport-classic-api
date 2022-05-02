@@ -4,6 +4,7 @@ import { getIBCDenom, getPairMessages, getTokenInfo } from "../../lib/terra";
 import { Token } from "../../models";
 import { isIBCToken } from "../../modules/terra";
 import { createPair, createToken } from "../../services";
+import { PairIndexedResult } from "../../types";
 import { TokenInfo } from "../../types/hive.type";
 
 // description for full text search
@@ -54,7 +55,8 @@ export async function createPairIndexer(
   }>[],
   timestamp: number,
   txHash: string
-): Promise<void> {
+): Promise<PairIndexedResult[]> {
+  const indexed: PairIndexedResult[] = [];
   // createPair
   for (const logFound of founds) {
     const transformed = logFound.transformed;
@@ -73,9 +75,32 @@ export async function createPairIndexer(
         transformed.token2
       );
 
-      await createPair({ ...transformed, createdAt: timestamp, type, description });
-      await createToken(token1Info as TokenInfo);
-      await createToken(token2Info as TokenInfo);
+      const createdTokens: any[] = [];
+      const createdPair = await createPair({
+        ...transformed,
+        createdAt: timestamp,
+        type,
+        description,
+      });
+
+      let createdToken = await createToken(token1Info as TokenInfo);
+      if (createdToken) {
+        createdTokens.push(createdToken);
+      }
+
+      createdToken = await createToken(token2Info as TokenInfo);
+      if (createdToken) {
+        createdTokens.push(createdToken);
+      }
+
+      // Only add if the pair was created or either of the tokens
+      if (createdPair || createdTokens.length > 0) {
+        indexed.push({
+          pair: createdPair,
+          tokens: createdTokens,
+        });
+      }
     }
   }
+  return indexed;
 }

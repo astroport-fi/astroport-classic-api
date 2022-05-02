@@ -48,6 +48,7 @@ export class ProductionEnvironment {
    */
   BLOCKS_PER_YEAR = 5256000; // assumes 6s block times
   BLOCKS_PER_DAY = this.BLOCKS_PER_YEAR / 365;
+  BLOCKS_PER_HOUR = this.BLOCKS_PER_DAY / 24;
   SECONDS_PER_YEAR = 60 * 60 * 24 * 365;
 
   /**

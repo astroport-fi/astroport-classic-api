@@ -1,9 +1,10 @@
 import { xAstroFee } from "../../models/xastro_fee.model";
+import { xAstroFee as xAstroFeeType } from "../../types/xastro_fee.type";
 import { createAstroCW20FeeLogFinder } from "../logFinder/createAstroCW20FeeLogFinder";
 import { createAstroNativeFeeLogFinder } from "../logFinder/createAstroNativeFeeLogFinder";
 import { XAstroFeeTransformed } from "../../types";
 
-export async function findXAstroFees(event: any, height: number): Promise<void> {
+export async function findXAstroFees(event: any, height: number): Promise<xAstroFeeType[]> {
   const blockFees = new Set<XAstroFeeTransformed>();
 
   // get cw20 rewards
@@ -41,15 +42,20 @@ export async function findXAstroFees(event: any, height: number): Promise<void> 
   }
 
   // save to db
+  const fees: xAstroFeeType[] = [];
   for (const fee of blockFees) {
     try {
-      await xAstroFee.create({
+      const createdFee = await xAstroFee.create({
         token: fee.token,
         volume: fee.amount,
         block: height,
       });
+      if (createdFee) {
+        fees.push(createdFee);
+      }
     } catch (e) {
       // console.log("Error finding xastro fees: " + e)
     }
   }
+  return fees;
 }
