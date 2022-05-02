@@ -50,7 +50,7 @@ export const getPricesFromPool = async (
   token_1_address: string,
   _token_2_address: string,
   pool_type: string,
-  token1_price: number = 0
+  token1_price = 0
 ) => {
   if (pool == null || token_1_address == null) {
     return {
