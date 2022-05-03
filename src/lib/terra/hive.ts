@@ -4,6 +4,7 @@ import { BatchQuery, PoolInfo, TokenInfo } from "../../types/hive.type";
 import constants from "../../environment/constants";
 import { isIBCToken, isNative } from "../../modules/terra";
 import { getIBCDenom, initLCD } from "./lcd";
+import { captureFunctionException } from "../error-handlers";
 
 export let hive: GraphQLClient;
 
@@ -264,7 +265,9 @@ export async function getChainBlock(height: number): Promise<{
       time: response?.tendermint?.blockInfo?.block?.header?.time,
     };
   } catch (e) {
-    console.log(e);
+    await captureFunctionException(e, {
+      name: "getChainBlock",
+    });
     return null;
   }
 }
@@ -722,7 +725,9 @@ export const getStakedBalances = async (
     const response = await hive.request(request);
     return response;
   } catch (e) {
-    console.log(e);
+    await captureFunctionException(e, {
+      name: "getStakedBalances",
+    });
     return [];
   }
 };
@@ -774,7 +779,9 @@ export const getLockDropRewards = async ({
     );
     return +response?.wasm?.contractQuery?.amount;
   } catch (e) {
-    console.log(e);
+    await captureFunctionException(e, {
+      name: "getLockDropRewards",
+    });
     return 0;
   }
 };
@@ -804,7 +811,9 @@ export async function batchQuery(queries: BatchQuery[]): Promise<any[] | null> {
     queryResponses = await hive.batchRequests(requests);
   } catch (e) {
     // If we fail, return null to ensure we handle the failure
-    console.log(e);
+    await captureFunctionException(e, {
+      name: "batchQuery",
+    });
     return null;
   }
   return queryResponses;

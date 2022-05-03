@@ -1,3 +1,4 @@
+import { captureFunctionException } from "../lib/error-handlers";
 import { Proposal } from "../models/proposal.model";
 import { Proposal as ProposalDocument } from "../types";
 
@@ -46,6 +47,9 @@ export async function saveProposals(proposals: any[]): Promise<any> {
     await Proposal.insertMany(results);
     return results;
   } catch (e) {
+    await captureFunctionException(e, {
+      name: "proposal.service.ts/saveProposals",
+    });
     console.log(e);
   }
 }

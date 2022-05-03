@@ -6,6 +6,7 @@ import { createPairIndexer } from "../../collector/chainIndexer/createPairIndex"
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import constants from "../../environment/constants";
+import { captureFunctionException } from "../../lib/error-handlers";
 
 dayjs.extend(utc);
 
@@ -109,7 +110,10 @@ export async function backfillxAstroFeesAndPairsTokens() {
     }
   } catch (error) {
     console.log("----- Unable to update backfill xAstro fees and pairs");
-    console.log(error);
+    await captureFunctionException(error, {
+      name: "backfillxAstroFeesAndPairsTokens",
+      message: "----- Unable to update backfill xAstro fees and pairs",
+    });
     return;
   }
 

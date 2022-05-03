@@ -2,11 +2,14 @@ import {
   APIGatewayAuthorizerResultContext,
   APIGatewayProxyEvent,
   APIGatewayProxyResult,
+  Context,
 } from "aws-lambda";
 import constants from "../environment/constants";
 import { connectToDatabase, disconnectDatabase } from "../modules/db";
 import { initHive, initLCD } from "./terra";
+import { captureException, setContext, flush, AWSLambda } from "@sentry/serverless";
 
+import { captureLambdaException } from "./error-handlers";
 interface Parameters {
   errorMessage?: string;
   successMessage?: string;
@@ -70,7 +73,7 @@ export const lambdaHandlerWrapper =
       if (initDatabaseConnection && disconnectDbWhenError) {
         await disconnectDatabase();
       }
-      //TODO use a better error logging service?
+      await captureLambdaException(err, 200, context);
       throw new Error(errorMessage + err);
     }
 
