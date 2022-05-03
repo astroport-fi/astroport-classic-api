@@ -1,3 +1,4 @@
+import { captureFunctionException } from "../lib/error-handlers";
 import { Pair } from "../models";
 
 export async function getPairs(): Promise<any[]> {
@@ -15,6 +16,9 @@ export async function createPair(options: any): Promise<any> {
     const pair = await Pair.create(options);
     return pair;
   } catch (e) {
-    console.log(e);
+    await captureFunctionException(e, {
+      name: "pair.service.ts/createPair",
+      message: "Failed to create Pair",
+    });
   }
 }

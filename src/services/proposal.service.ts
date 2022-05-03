@@ -50,7 +50,6 @@ export async function saveProposals(proposals: any[]): Promise<any> {
     await captureFunctionException(e, {
       name: "proposal.service.ts/saveProposals",
     });
-    console.log(e);
   }
 }
 

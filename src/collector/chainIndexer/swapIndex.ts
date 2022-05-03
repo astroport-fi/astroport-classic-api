@@ -73,6 +73,5 @@ export async function runSwapIndexer(
       name: "CREATE_POOL_VOLUME",
       message: "failed to create pool volume",
     });
-    console.log("failed to create pool volume", e);
   }
 }

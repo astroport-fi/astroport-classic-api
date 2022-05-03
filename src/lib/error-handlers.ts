@@ -12,6 +12,15 @@ interface ExceptionConfig {
   message?: string;
 }
 
+/**
+ * captures errors thrown by functions
+ *
+ * @param error The error thrown.
+ * @param config Object with optional extra configuration.
+ * @param config.name identifier of the error that will appear in Sentry besides error object name.
+ * @param config.message extra information that will be added in error context.
+ * @param flushTimeout Maximum time in ms sentry should wait to flush its event queue.
+ */
 export const captureFunctionException = async (
   error: Error,
   config?: ExceptionConfig,
@@ -29,14 +38,24 @@ export const captureFunctionException = async (
   await flush(flushTimeout);
 };
 
+/**
+ * captures errors thrown that end lambda function execution.
+ * captures function information, including cloudwatch log link,
+ * lambda name and parameters. Sends the error to sentry.
+ *
+ * @param error The error thrown.
+ * @param flushTimeout Maximum time in ms sentry should wait to flush its event queue.
+ * @param context lambda context object
+ */
 export const captureLambdaException = async (
   error: Error,
   flushTimeout = 2000,
   context: APIGatewayAuthorizerResultContext
 ): Promise<void> => {
   captureException(error, (scope) => {
+    //We add additional information needed to debug the error
     scope.setTransactionName(context?.functionName as string);
-
+    scope.setTag("url", `awslambda:///${context.functionName}`);
     scope.setContext("environment", { name: process.env.NODE_ENV });
 
     scope.setContext("runtime", {

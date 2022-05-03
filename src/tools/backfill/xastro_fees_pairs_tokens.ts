@@ -112,7 +112,7 @@ export async function backfillxAstroFeesAndPairsTokens() {
     console.log("----- Unable to update backfill xAstro fees and pairs");
     await captureFunctionException(error, {
       name: "backfillxAstroFeesAndPairsTokens",
-      message: "----- Unable to update backfill xAstro fees and pairs",
+      message: "Unable to update backfill xAstro fees and pairs",
     });
     return;
   }

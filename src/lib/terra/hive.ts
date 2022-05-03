@@ -266,7 +266,7 @@ export async function getChainBlock(height: number): Promise<{
     };
   } catch (e) {
     await captureFunctionException(e, {
-      name: "getChainBlock",
+      name: "hive.ts/getChainBlock",
     });
     return null;
   }
@@ -290,7 +290,11 @@ export async function getContractStore<T>(address: string, query: JSON): Promise
 
     return response.wasm.contractQuery;
   } catch (e) {
-    console.log("Error fetching contract store: ", e);
+    // console.log("Error fetching contract store: ", e);
+    await captureFunctionException(e, {
+      name: "hive.ts/getContractStore",
+      message: "Error fetching contract store",
+    });
     return null;
   }
 }
@@ -726,7 +730,7 @@ export const getStakedBalances = async (
     return response;
   } catch (e) {
     await captureFunctionException(e, {
-      name: "getStakedBalances",
+      name: "hive.ts/getStakedBalances",
     });
     return [];
   }
@@ -780,7 +784,7 @@ export const getLockDropRewards = async ({
     return +response?.wasm?.contractQuery?.amount;
   } catch (e) {
     await captureFunctionException(e, {
-      name: "getLockDropRewards",
+      name: "hive.ts/getLockDropRewards",
     });
     return 0;
   }
@@ -812,7 +816,7 @@ export async function batchQuery(queries: BatchQuery[]): Promise<any[] | null> {
   } catch (e) {
     // If we fail, return null to ensure we handle the failure
     await captureFunctionException(e, {
-      name: "batchQuery",
+      name: "hive.ts/batchQuery",
     });
     return null;
   }
