@@ -75,6 +75,5 @@ module.exports = {
     "react/prop-types": 0,
     "react/static-property-placement": 0,
     "no-ternary": 0,
-    "no-console": true,
   },
 };
