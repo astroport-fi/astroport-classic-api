@@ -383,8 +383,7 @@ export async function getTotalVotingPowerAt(
   // TODO double check numbers for prod
   return (
     Number(response?.x?.contractQuery) +
-    Number(response?.builder?.contractQuery?.remaining_astro_tokens) +
-    Number(response?.vx?.contractQuery?.voting_power) / 1000000
+    Number(response?.builder?.contractQuery?.remaining_astro_tokens)
   );
 }
 
