@@ -70,7 +70,7 @@ export async function poolCollect(): Promise<void> {
     const queries: BatchQuery[] = [];
     for (const pair of pairBatch) {
       const proxyInfo = generatorProxyContracts.get(pair.contractAddr);
-      let lpTokenAddress = proxyInfo?.lpToken;
+      const lpTokenAddress = proxyInfo?.lpToken;
 
       // Add liquidity query
       queries.push({
@@ -111,7 +111,7 @@ export async function poolCollect(): Promise<void> {
       if (responses) {
         // responseIndex is tracked separately because some pairs have
         // an additional generator response
-        let responseIndex: number = 0;
+        let responseIndex = 0;
 
         // Remap responses to the original queries for this batch
         for (let i = 0; i < pairBatch.length; i++) {
@@ -234,9 +234,14 @@ export async function poolCollect(): Promise<void> {
           } else {
             result.metadata.fees.native.apy = 0;
           }
+          if (isNaN(result.metadata.fees.native.apr)) result.metadata.fees.native.apr = 0.0;
           if (isNaN(result.metadata.fees.native.apy)) result.metadata.fees.native.apy = 0.0;
+          if (isNaN(result.metadata.fees.native.day)) result.metadata.fees.native.day = 0.0;
+          if (isNaN(result.metadata.fees.native.estimated_apr)) {
+            result.metadata.fees.native.estimated_apr = 0.0;
+          }
 
-          let pairAllocPoint: number = 0;
+          let pairAllocPoint = 0;
 
           // We only need to handle alloc_point and proxy addresses if there
           // is a proxy for this pair

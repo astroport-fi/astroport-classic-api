@@ -81,7 +81,7 @@ export function getExchangeRate(
  * @param pairBatchSize The maximum size of each chunk
  * @returns The batches
  */
-export const batchItems = <T>(items: T[], batchSize: number = 10) =>
+export const batchItems = <T>(items: T[], batchSize = 10) =>
   items.reduce((batches: T[][], item: T, index) => {
     const batch = Math.floor(index / batchSize);
     batches[batch] = ([] as T[]).concat(batches[batch] || [], item);

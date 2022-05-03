@@ -4,10 +4,10 @@ import { getProposal } from "../../src/services/proposal.service";
 describe("services/proposal.service", function () {
   describe("getProposal", function () {
     let proposal: any;
-    const proposalId = "11";
+    const proposalId = 11;
 
     before(async () => {
-      proposal = await getProposal(proposalId);
+      proposal = await getProposal(String(proposalId));
       // console.log(proposal);
     });
 

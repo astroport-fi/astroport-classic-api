@@ -9,3 +9,11 @@ export type Pair = {
   reward_proxy_address: string;
   description: string;
 };
+
+/**
+ * PairIndexedResult reports the information indexed by createPairIndex
+ */
+export type PairIndexedResult = {
+  pair?: Pair;
+  tokens?: any[];
+};

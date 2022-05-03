@@ -119,14 +119,14 @@ export async function indexPrices(pairs: Pair[], height = 0): Promise<Map<string
       if (responses) {
         // responseIndex is tracked separately because some pairs have
         // an additional pricing response
-        let responseIndex: number = 0;
+        let responseIndex = 0;
         // Remap responses to the original queries for this batch
         for (let i = 0; i < pairBatch.length; i++) {
           const pair = pairBatch[i];
           const pool = responses[responseIndex].data.wasm.contractQuery;
           const pool_type: string = pair.type;
           // For stable pools we fetched additional information
-          let stableSwapRelativePrice: number = 0;
+          let stableSwapRelativePrice = 0;
           if (pool_type === "stable") {
             // Move the response index on by one to capture the second query result
             responseIndex++;
