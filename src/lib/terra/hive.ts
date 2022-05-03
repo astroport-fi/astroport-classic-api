@@ -357,14 +357,14 @@ export async function getStableswapRelativePrice(
 // TODO add vxastro to query
 export async function getTotalVotingPowerAt(
   block: number,
-  time: number,
+  _time: number,
   xastro: string,
   builder: string,
   _vxastro: string
 ) {
   const response = await hive.request(
     gql`
-      query ($block: Int!, $time: Int!, $xastro: String!, $builder: String!, $vxastro: String!) {
+      query ($block: Int!, $xastro: String!, $builder: String!) {
         x: wasm {
           contractQuery(contractAddress: $xastro, query: { total_supply_at: { block: $block } })
         }
@@ -375,7 +375,6 @@ export async function getTotalVotingPowerAt(
     `,
     {
       block: block,
-      time: time,
       xastro: xastro,
       builder: builder
     }
