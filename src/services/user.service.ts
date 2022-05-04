@@ -119,20 +119,21 @@ export async function getAllTokenHoldings(address: string): Promise<UserTokenHol
   const holdings = await getCW20TokenHoldings(cw20Tokens, address);
   for (const [address, holding] of holdings) {
     const token = capturedTokens.find((token) => token.tokenAddr === address);
-    if (holding > 0) {
-      let tokenPrice = 0.0;
-      const price = await getPriceByTokenAddress(token.tokenAddr);
-      if (price) {
-        tokenPrice = price.price_ust;
-      }
 
-      const amount = holding / 10 ** token.decimals;
-      userTokens.push({
-        token,
-        amount,
-        valueUST: amount * tokenPrice,
-      });
+    // By request from frontend, we now return all tokens on Astroport and not
+    // just those that the user holds
+    let tokenPrice = 0.0;
+    const price = await getPriceByTokenAddress(token.tokenAddr);
+    if (price) {
+      tokenPrice = price.price_ust;
     }
+
+    const amount = holding / 10 ** token.decimals;
+    userTokens.push({
+      token,
+      amount,
+      valueUST: amount * tokenPrice,
+    });
   }
   return userTokens;
 }
