@@ -123,9 +123,11 @@ export async function getAllTokenHoldings(address: string): Promise<UserTokenHol
     // By request from frontend, we now return all tokens on Astroport and not
     // just those that the user holds
     let tokenPrice = 0.0;
-    const price = await getPriceByTokenAddress(token.tokenAddr);
-    if (price) {
-      tokenPrice = price.price_ust;
+    if (holding > 0) {
+      const price = await getPriceByTokenAddress(token.tokenAddr);
+      if (price) {
+        tokenPrice = price.price_ust;
+      }
     }
 
     const amount = holding / 10 ** token.decimals;
