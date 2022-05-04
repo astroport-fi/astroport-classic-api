@@ -4,28 +4,16 @@ import { batchQuery, getContractStore } from "../lib/terra";
 import { getTokenOrCreate } from "./token.service";
 import { num } from "../lib/num";
 import BigNumber from "bignumber.js";
-
-export type AssetInfo = CW20AssetInfo | NativeAssetInfo;
-export type CW20AssetInfo = { token: { contract_addr: string } };
-export type NativeAssetInfo = { native_token: { denom: string } };
-
-export type Route = {
-  contract_addr: string;
-  from: string;
-  to: string;
-  type: string;
-};
-
-export interface PoolAssets {
-  info: AssetInfo;
-  amount: string;
-}
-
-export interface SwapSimulate {
-  return_amount: string;
-  spread_amount: string;
-  commission_amount: string;
-}
+import {
+  Route,
+  AssetInfo,
+  SwapSimulate,
+  PoolAssets,
+  PoolAmounts,
+  PairResponse,
+  TokenGraphEdge,
+  TokenGraphAdjacencyList,
+} from "../types/swap.service.type";
 
 export const toAssetInfo = (token: string): AssetInfo => {
   if (isNative(token)) {
@@ -65,9 +53,6 @@ export const getPoolsAssets = async (pools: string[]): Promise<PoolAssets[][]> =
   return response?.map((i) => i?.data?.wasm?.contractQuery?.assets) as PoolAssets[][];
 };
 
-interface PoolAmounts {
-  [key: string]: number;
-}
 export const assetAmountsInPool = (assets: any): PoolAmounts => {
   return assets.reduce((prev: any, a: any) => {
     const key = getTokenDenom(a.info);
@@ -210,25 +195,7 @@ export const priceImpactStable = async (
   }
 };
 
-//Below are exported For testing purposes
-export type PairResponse = {
-  asset_infos: [string, string];
-  /** Pair contract address */
-  contract_addr: string;
-  /** LP contract address (not lp minter cw20 token) */
-  liquidity_token: string;
-  pair_type: string;
-};
-
-type TokenGraphEdge = {
-  pair: PairResponse;
-  token: string;
-};
-
-export type TokenGraphAdjacencyList = {
-  [token: string]: Set<TokenGraphEdge>;
-};
-
+//Below functions are exported For testing purposes
 export const pairsToRoute = (pairs: PairResponse[], from: string): Route[] => {
   return pairs.reduce<Route[]>((routes, pair, i) => {
     const tokens = pair.asset_infos;
