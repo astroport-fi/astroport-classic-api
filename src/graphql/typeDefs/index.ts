@@ -290,6 +290,13 @@ export const typeDefs = /* GraphQL */ `
     ASC
   }
 
+  input Route {
+    from: String
+    to: String
+    contract_addr: String
+    type: String
+  }
+
   # The "Query" type lists all of the available queries that
   # clients can execute, along with the return type for each.
   type Query {
@@ -313,5 +320,6 @@ export const typeDefs = /* GraphQL */ `
     tokens: [Token]
     votes(proposal_id: String!, choice: String, offset: Int, limit: Int): [Vote]
     user(address: String!): User
+    price_impact(routes: [Route!]!, amount: String!): String
   }
 `;

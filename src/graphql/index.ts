@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 import { typeDefs } from "./typeDefs";
 import { resolvers } from "./resolvers";
 import constants from "../environment/constants";
+import { initHive, initLCD } from "../lib/terra";
 
 let db: any = null;
 
@@ -27,7 +28,8 @@ const apolloServer = new ApolloServer({
 
       try {
         console.log("connecting to mongo");
-
+        await initLCD(constants.TERRA_LCD_ENDPOINT, constants.TERRA_CHAIN_ID);
+        await initHive(constants.TERRA_HIVE_ENDPOINT);
         const options: mongoose.ConnectOptions = {};
         db = await mongoose.connect(constants.MONGODB_URL, options);
       } catch (e) {
