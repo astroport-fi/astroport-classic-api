@@ -1,67 +1,57 @@
 import { expect } from "chai";
 import {
   getSwapRoute,
-  PairResponse,
   pairsToGraph,
   priceImpact,
   priceImpactMultiSwap,
 } from "services/swap.service";
-import { getPairs, getPools } from "../../src/services";
-import { PoolSortFields } from "../../src/types/pool.type";
+import { getPairs, getPools } from "services";
+import { PoolSortFields } from "types/pool.type";
+import { PairResponse } from "types/swap.service.type";
 
-// These test are run with prod data
-// Current dev indexed data not enough to test these
-// uncomment when develop data has been fully indexed
 describe("services/swap.service", function () {
   let tokenGraph: any;
 
-  // before(async () => {
-  //   console.log("sstart");
-  //   const pairs = (await getPairs()) || [];
-  //   console.log(pairs.length);
-  //   const pairMap: PairResponse[] = pairs?.map((i) => ({
-  //     pair_type: i.type,
-  //     liquidity_token: i.liquidityToken,
-  //     contract_addr: i.contractAddr,
-  //     asset_infos: [i.token1, i.token2],
-  //   }));
-  //   if (pairMap.length === 0) return;
-  //   tokenGraph = pairsToGraph(pairMap);
-  // });
-
-  it("will be tested with more data", async () => {
-    expect(true);
+  before(async () => {
+    const pairs = (await getPairs()) || [];
+    const pairMap: PairResponse[] = pairs?.map((i) => ({
+      pair_type: i.type,
+      liquidity_token: i.liquidityToken,
+      contract_addr: i.contractAddr,
+      asset_infos: [i.token1, i.token2],
+    }));
+    if (pairMap.length === 0) return;
+    tokenGraph = pairsToGraph(pairMap);
   });
 
-  // it("gets price multi swap price impact", async () => {
-  //   //orion to wsol
-  //   const swapRoute = getSwapRoute({
-  //     tokenGraph,
-  //     from: "terra1mddcdx0ujx89f38gu7zspk2r2ffdl5enyz2u03",
-  //     to: "terra190tqwgqx7s8qrknz6kckct7v607cu068gfujpk",
-  //   });
+  it("gets single pool price impact", async () => {
+    //Astro to ust
+    const swapRoute = getSwapRoute({
+      tokenGraph,
+      from: "terra1jqcw39c42mf7ngq4drgggakk3ymljgd3r5c3r5",
+      to: "uusd",
+    });
+    expect(swapRoute?.length).to.be.eq(1);
+    if (swapRoute?.length === 1) {
+      const swapImpact = await priceImpact(swapRoute, "1000");
+      expect(swapImpact).to.be.a("number");
+    }
+  });
 
-  //   if (!swapRoute) return;
-  //   console.log(swapRoute);
-  //   expect(swapRoute?.length).to.be.greaterThan(1);
-  //   if (swapRoute?.length > 1) {
-  //     const swapImpact = await priceImpactMultiSwap(swapRoute, "1000");
-  //     expect(swapImpact).to.be.a("number");
-  //   }
-  // });
+  it("gets price multi swap price impact", async () => {
+    //Astro to ANC
+    const swapRoute = getSwapRoute({
+      tokenGraph,
+      from: "terra1jqcw39c42mf7ngq4drgggakk3ymljgd3r5c3r5",
+      to: "terra1747mad58h0w4y589y3sk84r5efqdev9q4r02pc",
+    });
 
-  // it("gets single pool price impact", async () => {
-  //   // console.log(tokenGraph);
-  //   const swapRoute = getSwapRoute({
-  //     tokenGraph,
-  //     from: "terra1mddcdx0ujx89f38gu7zspk2r2ffdl5enyz2u03",
-  //     to: "uusd",
-  //   });
-  //   console.log(swapRoute);
-  //   expect(swapRoute?.length).to.be.eq(1);
-  //   if (swapRoute?.length === 1) {
-  //     const swapImpact = await priceImpact(swapRoute, "1000");
-  //     expect(swapImpact).to.be.a("number");
-  //   }
-  // });
+    if (!swapRoute) return;
+    expect(swapRoute?.length).to.be.greaterThan(1);
+    if (swapRoute?.length > 1) {
+      const swapImpact = await priceImpactMultiSwap(swapRoute, "1000");
+      // console.log(swapImpact);
+      expect(swapImpact).to.be.a("number");
+    }
+  });
 });
