@@ -63,14 +63,6 @@ export async function governanceProposalCollect(): Promise<void> {
 
       await notify_slack_no_quorum(proposal);
 
-      await notifySlack({
-        intro: "*New on-chain governance proposal: #" + proposal.proposal_id + "*",
-        wallet_link: "https://apeboard.finance/dashboard/" + proposal.submitter,
-        title: proposal.title,
-        description: proposal.description,
-        link: proposal.link,
-      });
-
       if (
         proposal.status != saved.state ||
         Number(proposal.for_power) != Number(saved.votes_for_power) ||
