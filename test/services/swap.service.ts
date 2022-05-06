@@ -5,8 +5,7 @@ import {
   priceImpact,
   priceImpactMultiSwap,
 } from "services/swap.service";
-import { getPairs, getPools } from "services";
-import { PoolSortFields } from "types/pool.type";
+import { getPairs } from "services";
 import { PairResponse } from "types/swap.service.type";
 
 describe("services/swap.service", function () {
@@ -24,7 +23,7 @@ describe("services/swap.service", function () {
     tokenGraph = pairsToGraph(pairMap);
   });
 
-  it("gets xyk single pool price impact", async () => {
+  it("gets xyk type, single pool price impact", async () => {
     //Astro to ust
     const swapRoute = getSwapRoute({
       tokenGraph,
@@ -38,7 +37,7 @@ describe("services/swap.service", function () {
     }
   });
 
-  it("gets xyk price multi swap price impact", async () => {
+  it("gets xyk type, multi pool price impact", async () => {
     //Astro to ANC
     const swapRoute = getSwapRoute({
       tokenGraph,
@@ -54,7 +53,7 @@ describe("services/swap.service", function () {
     }
   });
 
-  it("gets stable single pool price impact", async () => {
+  it("gets stable type, single pool price impact", async () => {
     //bLuna to luna
     const swapRoute = getSwapRoute({
       tokenGraph,
@@ -64,13 +63,12 @@ describe("services/swap.service", function () {
     expect(swapRoute?.length).to.be.eq(1);
     if (swapRoute?.length === 1) {
       const swapImpact = await priceImpact(swapRoute, "1000");
-      // console.log(swapImpact);
       expect(swapImpact).to.be.a("number");
     }
   });
 
-  // it("gets stable price multi swap price impact", async () => {
-  //   //Astro to ANC
+  // it("gets stable type, multi pool price impact", async () => {
+  //   //stLuna to bLuna
   //   const swapRoute = getSwapRoute({
   //     tokenGraph,
   //     from: "terra1e42d7l5z5u53n7g990ry24tltdphs9vugap8cd",
@@ -87,4 +85,6 @@ describe("services/swap.service", function () {
   //     expect(swapImpact).to.be.a("number");
   //   }
   // });
+
+  //get multi swap impact with mixed types
 });

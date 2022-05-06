@@ -1,7 +1,7 @@
 import { getTokenDenom, isNative } from "../modules/terra";
 import { BatchQuery } from "../types/hive.type";
-import { batchQuery, getContractStore } from "../lib/terra";
-import { getTokenOrCreate } from "./token.service";
+import { batchQuery, getContractStore, getTokenInfo } from "../lib/terra";
+import { getToken } from "./token.service";
 import { num } from "../lib/num";
 import BigNumber from "bignumber.js";
 import {
@@ -20,6 +20,20 @@ export const toAssetInfo = (token: string): AssetInfo => {
     return { native_token: { denom: token } };
   }
   return { token: { contract_addr: token } };
+};
+
+const getTokenData = async (tokenAddr: string): Promise<any> => {
+  const token = await getToken(tokenAddr);
+  if (token) {
+    return token;
+  }
+  try {
+    const tokenInfo = await getTokenInfo(tokenAddr);
+    return tokenInfo;
+  } catch (e) {
+    console.log(e);
+  }
+  return null;
 };
 
 export const simulateSwap = async (route: Route, amount: string): Promise<SwapSimulate> => {
@@ -86,6 +100,7 @@ export const priceImpactMultiSwap = async (
   const poolsAssets = (await getPoolsAssets(swapRoutes.map((i) => i.contract_addr))) || [];
   let nextSwapInputAmount = Number(inputAmount);
   const impacts = [];
+
   for (const [i, route] of swapRoutes.entries()) {
     let priceImpactResponse;
 
@@ -118,8 +133,8 @@ export const priceImpactXYK = async (
     const amounts = assetAmountsInPool(poolAsset);
     const fromAmount = amounts[route.from];
     const toAmount = amounts[route.to];
-    const fromInfo = await getTokenOrCreate(route.from);
-    const toInfo = await getTokenOrCreate(route.to);
+    const fromInfo = await getTokenData(route.from);
+    const toInfo = await getTokenData(route.to);
     const fromDecimals = fromInfo?.decimals;
     const toDecimals = toInfo?.decimals;
     const amount = (inputAmount * 10 ** fromDecimals).toString();
@@ -153,8 +168,8 @@ export const priceImpactStable = async (
 ): Promise<{ impact: number; nextAmount: number } | null> => {
   if (!route) return null;
   try {
-    const fromInfo = await getTokenOrCreate(route.from);
-    const toInfo = await getTokenOrCreate(route.to);
+    const fromInfo = await getTokenData(route.from);
+    const toInfo = await getTokenData(route.to);
     const fromDecimals = fromInfo?.decimals;
     const toDecimals = toInfo?.decimals;
     const amount = num(inputAmount)
