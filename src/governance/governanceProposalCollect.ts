@@ -2,12 +2,12 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 
 import { Proposal } from "../models/proposal.model";
-import { getProposals, getTotalVotingPowerAt } from "../lib/terra";
+import { getContractStore, getProposals, getTotalVotingPowerAt } from "../lib/terra";
 import { getProposals as getSavedProposals, saveProposals } from "../services/proposal.service";
 import { proposalListToMap } from "../collector/helpers";
 import axios from "axios";
 import { generate_post_fields } from "./slackHelpers";
-import { ProposalState, update_proposal_timestamps } from "./proposalStateMachine";
+import { update_proposal_timestamps } from "./proposalStateMachine";
 import constants from "../environment/constants";
 import { aggregateVotesCount } from "../services/vote.service";
 
@@ -58,6 +58,67 @@ export async function governanceProposalCollect(): Promise<void> {
 
       if (saved.state == "Hidden" || saved.state == "Expired") {
         continue;
+      }
+
+      //notify comms-assembly channel if 24 hours left and quorum not reached.
+      const endTime = new Date(saved.end_timestamp).getTime();
+      const now = new Date().getTime();
+      const timeLeft = endTime - now;
+      const _24Hours_Milliseconds = 86400000;
+
+      if (
+        //time left is less than 24 hours.
+        timeLeft < _24Hours_Milliseconds &&
+        //notification has not been sent yet.
+        // making sure this only happens once
+        !saved?.notifications?.hit_quorum
+      ) {
+        // get required quorum
+        const res = await getContractStore<{ proposal_required_quorum: string }>(
+          constants.GOVERNANCE_ASSEMBLY,
+          JSON.parse('{"config": {}}')
+        );
+        const proposal_required_quorum = Number(res?.proposal_required_quorum ?? "0.1");
+        const current_quorum =
+          (saved.votes_for_power + saved.votes_against_power) / saved.total_voting_power;
+
+        if (current_quorum < proposal_required_quorum && constants.ENABLE_FEE_SWAP_NOTIFICATION) {
+          //send notification
+          await notifySlack(
+            "*Proposal Quorum has Not been reached for: #" + proposal.proposal_id + "*",
+            "https://apeboard.finance/dashboard/" + proposal.submitter,
+            proposal.title,
+            proposal.description,
+            proposal.link
+          );
+
+          //update sent notification, this will only happen once if less than 24 hours and quorum has not been reached.
+          //next iteration will have notifications.hit_quorum as true, otherwise notification will be sent every minute.
+          try {
+            await Proposal.updateOne(
+              {
+                proposal_id: Number(saved.proposal_id),
+              },
+              {
+                $set: {
+                  notifications: { hit_quorum: true },
+                },
+              }
+            );
+          } catch (e) {
+            console.log(e);
+          }
+        }
+      }
+
+      if (constants.ENABLE_FEE_SWAP_NOTIFICATION) {
+        await notifySlack(
+          "*New on-chain governance proposal: #" + proposal.proposal_id + "*",
+          "https://apeboard.finance/dashboard/" + proposal.submitter,
+          proposal.title,
+          proposal.description,
+          proposal.link
+        );
       }
 
       if (
