@@ -99,7 +99,6 @@ export const priceImpactMultiSwap = async (
 
     if (!priceImpactResponse) continue;
     const { impact, nextAmount } = priceImpactResponse;
-    // console.log(impact, nextAmount);
     nextSwapInputAmount = nextAmount;
     impacts.push(impact);
   }
@@ -158,7 +157,10 @@ export const priceImpactStable = async (
     const toInfo = await getTokenOrCreate(route.to);
     const fromDecimals = fromInfo?.decimals;
     const toDecimals = toInfo?.decimals;
-    const amount = (inputAmount * 10 ** fromDecimals).toString();
+    const amount = num(inputAmount)
+      .times(10 ** fromDecimals)
+      .dp(0, 1)
+      .toString();
 
     const [data, dataB] = await Promise.all([
       // swap simulation
