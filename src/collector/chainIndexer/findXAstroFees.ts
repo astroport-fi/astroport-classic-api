@@ -3,8 +3,13 @@ import { xAstroFee as xAstroFeeType } from "../../types/xastro_fee.type";
 import { createAstroCW20FeeLogFinder } from "../logFinder/createAstroCW20FeeLogFinder";
 import { createAstroNativeFeeLogFinder } from "../logFinder/createAstroNativeFeeLogFinder";
 import { XAstroFeeTransformed } from "../../types";
+import { PriceV2 } from "../../types/priceV2.type";
 
-export async function findXAstroFees(event: any, height: number): Promise<xAstroFeeType[]> {
+export async function findXAstroFees(
+  event: any,
+  height: number,
+  priceMap: Map<string, PriceV2>
+): Promise<xAstroFeeType[]> {
   const blockFees = new Set<XAstroFeeTransformed>();
 
   // get cw20 rewards
@@ -44,12 +49,16 @@ export async function findXAstroFees(event: any, height: number): Promise<xAstro
   // save to db
   const fees: xAstroFeeType[] = [];
   for (const fee of blockFees) {
+    const price = priceMap.get(fee.token)?.price_ust ?? 0;
+
     try {
-      const createdFee = await xAstroFee.create({
+      const createdFee = await xAstroFee.create<xAstroFeeType>({
         token: fee.token,
         volume: fee.amount,
         block: height,
+        volume_ust: fee.amount * price,
       });
+
       if (createdFee) {
         fees.push(createdFee);
       }

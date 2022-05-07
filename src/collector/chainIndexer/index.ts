@@ -7,6 +7,8 @@ import { voteIndexer } from "./voteIndexer";
 import { getProxyAddressesInfo } from "../proxyAddresses";
 import constants from "../../environment/constants";
 import { ProxyAddressInfo } from "../../types/contracts";
+import { getPrices } from "../../services/priceV2.service";
+import { priceListToMap } from "../../collector/helpers";
 
 /**
  * Indexes transactions for a single block
@@ -17,6 +19,8 @@ import { ProxyAddressInfo } from "../../types/contracts";
  */
 export async function runIndexers(txs: any, height: number): Promise<void> {
   const generatorProxyContracts = await getProxyAddressesInfo();
+  const prices = await getPrices();
+  const priceMap = priceListToMap(prices);
 
   for (const tx of txs) {
     const Logs = tx.logs;
@@ -60,7 +64,7 @@ export async function runIndexers(txs: any, height: number): Promise<void> {
 
           try {
             // xAstro fees sent to maker
-            await findXAstroFees(event, height);
+            await findXAstroFees(event, height, priceMap);
           } catch (e) {
             console.log("Error during findXAstroFees: " + e);
           }
@@ -84,6 +88,8 @@ export async function runIndexersWithProxies(
   height: number,
   generatorProxyContracts: Map<string, ProxyAddressInfo>
 ): Promise<void> {
+  const prices = await getPrices();
+  const priceMap = priceListToMap(prices);
   for (const tx of txs) {
     const Logs = tx.logs;
     const timestamp = tx.timestamp;
@@ -126,7 +132,7 @@ export async function runIndexersWithProxies(
 
           try {
             // xAstro fees sent to maker
-            await findXAstroFees(event, height);
+            await findXAstroFees(event, height, priceMap);
           } catch (e) {
             console.log("Error during findXAstroFees: " + e);
           }
