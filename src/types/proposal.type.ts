@@ -25,4 +25,7 @@ export type Proposal = {
   messages: string | null;
   submitter: string;
   submitter_tokens_submitted: number;
+  notifications: {
+    hit_quorum: boolean;
+  };
 };

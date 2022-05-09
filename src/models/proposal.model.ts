@@ -109,6 +109,12 @@ const proposalSchema: Schema<ProposalDocument> = new Schema(
       type: Schema.Types.Number,
       required: false,
     },
+    notifications: {
+      hit_quorum: {
+        type: Schema.Types.Boolean,
+        required: false,
+      },
+    },
   },
   {
     timestamps: true,
