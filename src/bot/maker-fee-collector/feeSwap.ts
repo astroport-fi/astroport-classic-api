@@ -57,7 +57,7 @@ export async function swap(): Promise<void> {
 
       await axios.post(SLACK_WEBHOOK, post_fields, config);
 
-      await waitFor(1000);
+      await waitFor(8000);
     } catch (e) {
       await captureFunctionException(e, {
         name: "maker-fee-collector/feeSwap/swap",
