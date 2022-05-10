@@ -6,6 +6,8 @@ import { createPairIndexer } from "../../collector/chainIndexer/createPairIndex"
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import constants from "../../environment/constants";
+import { getPrices } from "../../services/priceV2.service";
+import { priceListToMap } from "../../collector/helpers";
 import { captureFunctionException } from "../../lib/error-handlers";
 
 dayjs.extend(utc);
@@ -19,6 +21,9 @@ export async function backfillxAstroFeesAndPairsTokens() {
   initHive(constants.TERRA_HIVE_ENDPOINT);
   initLCD(constants.TERRA_LCD_ENDPOINT, constants.TERRA_CHAIN_ID);
   await connectToDatabase();
+
+  const prices = await getPrices();
+  const priceMap = priceListToMap(prices);
 
   const startBlock = 5839180; // First fees collected 2021-12-27T09:54:10.828Z
   // const startBlock = 5650000; // 2021-12-12T17:12:36.085Z
@@ -61,7 +66,7 @@ export async function backfillxAstroFeesAndPairsTokens() {
             for (const event of events) {
               try {
                 // Log xAstro fees sent to maker
-                await findXAstroFees(event, tx.height);
+                await findXAstroFees(event, tx.height, priceMap);
               } catch (e) {
                 console.log("Error during findXAstroFees: " + e);
               }

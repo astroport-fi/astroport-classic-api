@@ -31,6 +31,9 @@ export async function aggregateXAstroFees7d(priceMap: Map<string, PriceV2>): Pro
 
   const astro_price = priceMap.get(constants.ASTRO_TOKEN)?.price_ust as number;
 
+  //total week fees using volume_ust
+  const _7d_fees_ust_counted = week_of_fees.reduce((acc, fee) => acc + fee.volume_ust, 0);
+
   let _7d_fees_ust = 0;
   let fees_with_no_price_count = 0;
 
@@ -78,6 +81,7 @@ export async function aggregateXAstroFees7d(priceMap: Map<string, PriceV2>): Pro
     _7d_fees_ust: _7d_fees_ust,
     _7d_apr: _7d_apr,
     _7d_apy: _7d_apy,
+    _7d_fees_ust_counted,
   });
 
   await xAstroFeeStat.updateOne(
@@ -88,6 +92,7 @@ export async function aggregateXAstroFees7d(priceMap: Map<string, PriceV2>): Pro
         _7d_fees_ust: _7d_fees_ust,
         _7d_apr: _7d_apr,
         _7d_apy: _7d_apy,
+        _7d_fees_ust_counted,
       },
     },
     { upsert: true }

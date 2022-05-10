@@ -12,6 +12,12 @@ const xAstroFeeSchema: Schema = new Schema(
       required: true,
       trim: true,
     },
+    volume_ust: {
+      type: Schema.Types.Number,
+      required: true,
+      trim: true,
+      default: 0,
+    },
     token: {
       type: Schema.Types.String,
       required: true,

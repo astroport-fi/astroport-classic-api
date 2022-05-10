@@ -9,13 +9,15 @@ import axios from "axios";
 import { lambdaHandlerWrapper } from "../lib/handler-wrapper";
 import { getTxBlockBatch, initHive, initLCD } from "../lib/terra";
 import { connectToDatabase } from "../modules/db";
-import { getHeight, getLastHeight } from "../services";
+import { getLastHeight } from "../services";
 import { voteLogFinder } from "../collector/logFinder/voteLogFinder";
 import { voteIndexer } from "../collector/chainIndexer/voteIndexer";
 import { findProtocolRewardEmissions } from "../collector/chainIndexer/findProtocolRewardEmissions";
 import { findXAstroFees } from "../collector/chainIndexer/findXAstroFees";
 import { getProxyAddressesInfo } from "../collector/proxyAddresses";
 import { BlockRecon } from "../types/block_recon.type";
+import { getPrices } from "../services/priceV2.service";
+import { priceListToMap } from "../collector/helpers";
 
 dayjs.extend(utc);
 
@@ -39,6 +41,8 @@ const SLACK_WEBHOOK =
  */
 export const run = lambdaHandlerWrapper(
   async (): Promise<void> => {
+    const prices = await getPrices();
+    const priceMap = priceListToMap(prices);
     const start = new Date().getTime();
 
     console.log("Starting block recon...");
@@ -155,7 +159,7 @@ export const run = lambdaHandlerWrapper(
                 // Duplicates are avoided through Mongo indexes specifically the
                 // xastro_fee.block+token+volume index in this case
                 try {
-                  const created = await findXAstroFees(event, height);
+                  const created = await findXAstroFees(event, height, priceMap);
                   if (created.length > 0) {
                     blockRecon.fees = created;
                   }

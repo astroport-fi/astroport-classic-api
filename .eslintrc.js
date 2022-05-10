@@ -75,5 +75,6 @@ module.exports = {
     "react/prop-types": 0,
     "react/static-property-placement": 0,
     "no-ternary": 0,
+    // "no-unused-vars": ["error", { vars: "all", args: "after-used", ignoreRestSiblings: false }],
   },
 };
