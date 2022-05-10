@@ -2,6 +2,7 @@ import { connectToDatabase } from "../../modules/db";
 import { Token } from "../../models";
 import { getIBCDenom, initLCD } from "../../lib/terra";
 import constants from "../../environment/constants";
+import { captureFunctionException } from "../../lib/error-handlers";
 
 export async function backfillIBCTokens() {
   try {
@@ -22,8 +23,10 @@ export async function backfillIBCTokens() {
       await token.save();
     }
   } catch (error) {
-    console.log("----- Unable to update IBC tokens");
-    console.log(error);
+    await captureFunctionException(error, {
+      name: "ibc_token_info.ts/backfillBCTokens",
+      message: "Unable to update IBC tokens",
+    });
     return;
   }
 

@@ -1,3 +1,4 @@
+import { captureFunctionException } from "../lib/error-handlers";
 import { getContractStore } from "../lib/terra";
 import constants from "../environment/constants";
 import { Proposal } from "../models/proposal.model";
@@ -49,7 +50,9 @@ export async function saveProposals(proposals: any[]): Promise<any> {
     await Proposal.insertMany(results);
     return results;
   } catch (e) {
-    console.log(e);
+    await captureFunctionException(e, {
+      name: "proposal.service.ts/saveProposals",
+    });
   }
 }
 

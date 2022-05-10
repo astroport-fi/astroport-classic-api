@@ -33,6 +33,7 @@ jobs:
           echo -e 'COINGECKO_API_KEY="${{ secrets.COINGECKO_API_KEY }}"' >> .env.prod
           echo -e 'MAKER_FEE_COLLECTOR_SEED="${{ secrets.MAKER_FEE_COLLECTOR_SEED }}"' >> .env.prod
           echo -e 'GOVERNANCE_TRIGGER_BOT_SEED="${{ secrets.GOVERNANCE_TRIGGER_BOT_SEED }}"' >> .env.prod
+          echo -e 'SENTRY_DSN="${{ secrets.SENTRY_DSN }}"' >> .env.prod
       - name: Install NPM dependencies
         run: npm install
       # Optional

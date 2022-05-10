@@ -1,3 +1,4 @@
+import { captureFunctionException } from "../lib/error-handlers";
 import { Vote } from "../models/vote.model";
 import { AggregatedVotesResult, AggregatedVotes } from "../types/vote.type";
 
@@ -24,7 +25,9 @@ export async function createVote(options: any): Promise<any> {
     const vote = await Vote.create(options);
     return vote;
   } catch (e) {
-    console.log(e);
+    await captureFunctionException(e, {
+      name: "vote.service.ts/createVote",
+    });
   }
 }
 
