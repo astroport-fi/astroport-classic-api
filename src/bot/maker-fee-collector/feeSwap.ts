@@ -6,6 +6,7 @@ import {
 } from "../slack-bot-backend-stats/slackHelpers";
 import axios from "axios";
 import constants from "../../environment/constants";
+import { captureFunctionException } from "../../lib/error-handlers";
 
 const SLACK_WEBHOOK =
   "https://hooks.slack.com/services/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";
@@ -56,9 +57,11 @@ export async function swap(): Promise<void> {
 
       await axios.post(SLACK_WEBHOOK, post_fields, config);
 
-      await waitFor(1000);
+      await waitFor(8000);
     } catch (e) {
-      console.log(e);
+      await captureFunctionException(e, {
+        name: "maker-fee-collector/feeSwap/swap",
+      });
     }
   }
 }

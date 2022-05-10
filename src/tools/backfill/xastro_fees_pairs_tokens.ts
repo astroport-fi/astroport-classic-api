@@ -8,6 +8,7 @@ import utc from "dayjs/plugin/utc";
 import constants from "../../environment/constants";
 import { getPrices } from "../../services/priceV2.service";
 import { priceListToMap } from "../../collector/helpers";
+import { captureFunctionException } from "../../lib/error-handlers";
 
 dayjs.extend(utc);
 
@@ -114,7 +115,10 @@ export async function backfillxAstroFeesAndPairsTokens() {
     }
   } catch (error) {
     console.log("----- Unable to update backfill xAstro fees and pairs");
-    console.log(error);
+    await captureFunctionException(error, {
+      name: "backfillxAstroFeesAndPairsTokens",
+      message: "Unable to update backfill xAstro fees and pairs",
+    });
     return;
   }
 

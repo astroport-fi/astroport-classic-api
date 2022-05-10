@@ -13,7 +13,7 @@ bluebird.config({
 });
 global.Promise = bluebird as any;
 
-const DEV_URL = "https://2h8711jruf.execute-api.us-east-1.amazonaws.com/dev/graphql";
+const DEV_URL = "https://develop-api.astroport.fi/graphql";
 const PROD_URL = "https://api.astroport.fi/graphql";
 const SLACK_WEBHOOK =
   "https://hooks.slack.com/services/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";
@@ -62,10 +62,10 @@ export const run = lambdaHandlerWrapper(
       `
     );
     const latestProdHeight = (await getLatestBlock()).height;
-    const latestDevHeightRaw = await axios.get("https://lcd-terra-test.everstake.one/blocks/latest")
-    const latestDevHeight = latestDevHeightRaw?.data?.block?.header?.height
-
-
+    const latestDevHeightRaw = await axios.get(
+      "https://lcd-terra-test.everstake.one/blocks/latest"
+    );
+    const latestDevHeight = latestDevHeightRaw?.data?.block?.header?.height;
 
     const dayFees = dayFeesRaw?.staking?._24h_fees_ust;
 

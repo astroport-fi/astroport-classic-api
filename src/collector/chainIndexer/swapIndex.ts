@@ -3,6 +3,7 @@ import { Pair } from "../../types";
 import { TxHistoryIndexer } from "./txHistoryIndexer";
 import { PriceV2 } from "../../types/priceV2.type";
 import { PoolVolume } from "../../models/pool_volume.model";
+import { captureFunctionException } from "../../lib/error-handlers";
 
 /**
  * Indexes swap transactions for a single block
@@ -68,6 +69,9 @@ export async function runSwapIndexer(
   try {
     await Promise.all(dbOps);
   } catch (e) {
-    console.log("failed to create pool volume", e);
+    await captureFunctionException(e, {
+      name: "CREATE_POOL_VOLUME",
+      message: "failed to create pool volume",
+    });
   }
 }

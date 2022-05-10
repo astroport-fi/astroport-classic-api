@@ -1,5 +1,9 @@
+import { captureFunctionException } from "../lib/error-handlers";
+import { getContractStore } from "../lib/terra";
+import constants from "../environment/constants";
 import { Proposal } from "../models/proposal.model";
 import { Proposal as ProposalDocument } from "../types";
+import { notifySlack } from "../governance/slackHelpers";
 
 const SECONDS_PER_BLOCK = 6.5;
 
@@ -46,7 +50,9 @@ export async function saveProposals(proposals: any[]): Promise<any> {
     await Proposal.insertMany(results);
     return results;
   } catch (e) {
-    console.log(e);
+    await captureFunctionException(e, {
+      name: "proposal.service.ts/saveProposals",
+    });
   }
 }
 
@@ -64,3 +70,61 @@ export async function hide_proposals(stale_passed_proposals: any[]): Promise<any
     );
   }
 }
+
+/**
+ * notify comms-assembly channel if 24 hours left and quorum not reached.
+ * @param proposal the proposal to check
+ */
+export const notify_slack_no_quorum = async (proposal: ProposalDocument): Promise<void> => {
+  const endTime = new Date(proposal.end_timestamp).getTime();
+  const now = new Date().getTime();
+  const timeLeft = endTime - now;
+  const _24Hours_Milliseconds = 86400000;
+
+  if (
+    //time left is less than 24 hours.
+    timeLeft < _24Hours_Milliseconds &&
+    //notification has not been sent yet.
+    // making sure this only happens once
+    !proposal?.notifications?.hit_quorum
+  ) {
+    // get required quorum
+    const res = await getContractStore<{ proposal_required_quorum: string }>(
+      constants.GOVERNANCE_ASSEMBLY,
+      JSON.parse('{"config": {}}')
+    );
+    const proposal_required_quorum = Number(res?.proposal_required_quorum ?? "0.1");
+    const current_quorum =
+      (proposal.votes_for_power + proposal.votes_against_power) / proposal.total_voting_power;
+
+    if (current_quorum < proposal_required_quorum && constants.ENABLE_FEE_SWAP_NOTIFICATION) {
+      //send notification
+      await notifySlack({
+        intro:
+          "*24 Hours Left, Quorum has Not been reached for proposal: #" +
+          proposal.proposal_id +
+          "*",
+        title: proposal.title,
+        description: proposal.description,
+        link: proposal.link,
+      });
+
+      //update sent notification, this will only happen once if less than 24 hours and quorum has not been reached.
+      //next iteration will have notifications.hit_quorum as true, otherwise notification will be sent every minute.
+      try {
+        await Proposal.updateOne(
+          {
+            proposal_id: Number(proposal.proposal_id),
+          },
+          {
+            $set: {
+              notifications: { hit_quorum: true },
+            },
+          }
+        );
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  }
+};
