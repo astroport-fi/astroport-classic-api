@@ -29,12 +29,18 @@ jobs:
       - name: Create env file
         run: |
           echo -e 'MONGODB_URL_R="${{ secrets.DEV_MONGO_URL_R }}"' >> .env.dev
-          echo -e 'MONGODB_URL_RW="${{ secrets.DEV_MONGO_URL_RW }}"' >> .env.dev 
+          echo -e 'MONGODB_URL_RW="${{ secrets.DEV_MONGO_URL_RW }}"' >> .env.dev
+          echo -e 'MONGODB_URL="${{ secrets.DEV_MONGO_URL_RW }}"' >> .env.dev
           echo -e 'COINGECKO_API_KEY="${{ secrets.COINGECKO_API_KEY }}"' >> .env.dev
           echo -e 'MAKER_FEE_COLLECTOR_SEED="${{ secrets.MAKER_FEE_COLLECTOR_SEED }}"' >> .env.dev
           echo -e 'GOVERNANCE_TRIGGER_BOT_SEED="${{ secrets.GOVERNANCE_TRIGGER_BOT_SEED }}"' >> .env.dev
       - name: Install NPM dependencies
-        run: npm install
+        # ci works better to match package-lock, this avoids and future package mismatch between local and deployed.
+        run: npm ci
+      - name: Run Linter
+        run: npm run eslint
+      - name: Run Test
+        run: npm run test-dev
       # Optional
       #- name: Build assets
       #  run: npm run assets-dev

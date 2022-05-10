@@ -1,16 +1,11 @@
 import bluebird from "bluebird";
-import {
-  APIGatewayAuthorizerResultContext,
-  APIGatewayProxyEvent,
-  APIGatewayProxyResult,
-} from "aws-lambda";
-import { initLCD, getLatestBlock, initHive } from "../../lib/terra";
+import { getLatestBlock } from "../../lib/terra";
 
 import { gql, GraphQLClient } from "graphql-request";
 import axios from "axios";
 import { generate_post_fields } from "./slackHelpers";
 import { get_ust_balance } from "./helpers";
-import constants from "../../environment/constants";
+import { lambdaHandlerWrapper } from "../../lib/handler-wrapper";
 
 bluebird.config({
   longStackTraces: true,
@@ -23,13 +18,8 @@ const PROD_URL = "https://api.astroport.fi/graphql";
 const SLACK_WEBHOOK =
   "https://hooks.slack.com/services/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";
 
-export async function run(
-  _: APIGatewayProxyEvent,
-  context: APIGatewayAuthorizerResultContext
-): Promise<APIGatewayProxyResult> {
-  context.callbackWaitsForEmptyEventLoop = false;
-
-  try {
+export const run = lambdaHandlerWrapper(
+  async (): Promise<void> => {
     const dev = new GraphQLClient(DEV_URL, {
       timeout: 5000,
       keepalive: true,
@@ -38,9 +28,6 @@ export async function run(
       timeout: 5000,
       keepalive: true,
     });
-
-    await initLCD(constants.TERRA_LCD_ENDPOINT, constants.TERRA_CHAIN_ID);
-    await initHive(constants.TERRA_HIVE_ENDPOINT);
 
     // blocks
     const devHeightRaw = await dev.request(
@@ -53,7 +40,6 @@ export async function run(
       `
     );
     const devHeight = devHeightRaw?.block?.height;
-    const latestHeight = (await getLatestBlock()).height;
     const prodHeightRaw = await prod.request(
       gql`
         query {
@@ -64,8 +50,8 @@ export async function run(
       `
     );
     const prodHeight = prodHeightRaw?.block?.height;
-
     // stats
+
     const dayFeesRaw = await prod.request(
       gql`
         query {
@@ -75,6 +61,12 @@ export async function run(
         }
       `
     );
+    const latestProdHeight = (await getLatestBlock()).height;
+    const latestDevHeightRaw = await axios.get("https://lcd-terra-test.everstake.one/blocks/latest")
+    const latestDevHeight = latestDevHeightRaw?.data?.block?.header?.height
+
+
+
     const dayFees = dayFeesRaw?.staking?._24h_fees_ust;
 
     // bots
@@ -98,17 +90,17 @@ export async function run(
     message += "|         Blocks         |\n";
     message += "--------------------------\n";
 
-    message += "Realtime     : " + latestHeight + "\n";
+    message += "Realtime     : " + latestDevHeight + "\n";
     message += "Dev          : " + devHeight + "\n";
-    message += "Blocks behind: " + (latestHeight - devHeight) + "\n";
+    message += "Blocks behind: " + (latestDevHeight - devHeight) + "\n";
     message +=
-      "Hours behind : " + Math.round(((latestHeight - devHeight) / 600) * 100) / 100 + "\n";
+      "Hours behind : " + Math.round(((latestProdHeight - devHeight) / 600) * 100) / 100 + "\n";
     message += "\n";
-    message += "Realtime     : " + latestHeight + "\n";
+    message += "Realtime     : " + latestProdHeight + "\n";
     message += "Prod         : " + prodHeight + "\n";
-    message += "Blocks behind: " + (latestHeight - prodHeight) + "\n";
+    message += "Blocks behind: " + (latestProdHeight - prodHeight) + "\n";
     message +=
-      "Hours behind : " + Math.round(((latestHeight - prodHeight) / 600) * 100) / 100 + "\n\n";
+      "Hours behind : " + Math.round(((latestProdHeight - prodHeight) / 600) * 100) / 100 + "\n\n";
     message += "--------------------------\n";
     message += "|          Stats         |\n";
     message += "--------------------------\n";
@@ -129,7 +121,7 @@ export async function run(
 
     const post_fields = generate_post_fields(message);
 
-    let config = {
+    const config = {
       headers: {
         "Content-Type": "application/json",
         charset: "utf-8",
@@ -137,12 +129,9 @@ export async function run(
     };
 
     await axios.post(SLACK_WEBHOOK, post_fields, config);
-  } catch (e) {
-    throw new Error("Error while running bots: " + e);
+  },
+  {
+    errorMessage: "Error while running slack-bot-backend-stats: ",
+    successMessage: "Ran bots",
   }
-
-  return {
-    statusCode: 200,
-    body: "Ran bots",
-  };
-}
+);

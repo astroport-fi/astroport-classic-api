@@ -89,6 +89,7 @@ function skipField(resolveInfo: GraphQLResolveInfo, { directives = [] }: Selecti
 
 export function getAliasFromResolveInfo(resolveInfo: GraphQLResolveInfo): string {
   const asts: ReadonlyArray<FieldNode> =
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore Property 'fieldASTs' does not exist on type 'GraphQLResolveInfo'.
     resolveInfo.fieldNodes || resolveInfo.fieldASTs;
   for (let i = 0, l = asts.length; i < l; i++) {
@@ -113,6 +114,7 @@ export function parseResolveInfo(
   options: ParseOptions = {}
 ): ResolveTree | FieldsByTypeName | null | undefined {
   const fieldNodes: ReadonlyArray<FieldNode> =
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore Property 'fieldASTs' does not exist on type 'GraphQLResolveInfo'.
     resolveInfo.fieldNodes || resolveInfo.fieldASTs;
 

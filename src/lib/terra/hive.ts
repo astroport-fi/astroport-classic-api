@@ -1,7 +1,9 @@
 import { BatchRequestDocument, gql, GraphQLClient } from "graphql-request";
 import { PriceV2 } from "../../types/priceV2.type";
-import { PoolInfo, TokenInfo } from "../../types/hive.type";
+import { BatchQuery, PoolInfo, TokenInfo } from "../../types/hive.type";
 import constants from "../../environment/constants";
+import { isIBCToken, isNative } from "../../modules/terra";
+import { getIBCDenom, initLCD } from "./lcd";
 
 export let hive: GraphQLClient;
 
@@ -73,7 +75,36 @@ export const getProposals = async (contract: string, limit = 100, offset = 0): P
   }
 };
 
+/**
+ * getTokenInfo retrieves metadata for the given token address. Supports
+ * native and IBC tokens
+ *
+ * @param tokenAddr The token, native or IBC address
+ * @returns Metadata for the token
+ */
 export async function getTokenInfo(tokenAddr: string): Promise<TokenInfo | null> {
+  // Check for native and IBC tokens first
+  if (isNative(tokenAddr)) {
+    return {
+      address: tokenAddr,
+      decimals: 6, // Native tokens have 6 decimals
+      name: constants.NATIVE_TOKEN_SYMBOLS.get(tokenAddr)?.name || tokenAddr,
+      symbol: constants.NATIVE_TOKEN_SYMBOLS.get(tokenAddr)?.symbol || tokenAddr,
+      total_supply: "",
+    };
+  }
+  if (isIBCToken(tokenAddr)) {
+    initLCD(constants.TERRA_LCD_ENDPOINT, constants.TERRA_CHAIN_ID);
+    const denom = await getIBCDenom(tokenAddr);
+    return {
+      address: tokenAddr,
+      decimals: 6, // IBC tokens are treated as native and have 6 decimals
+      name: constants.IBC_DENOM_MAP.get(denom)?.name || denom,
+      symbol: constants.IBC_DENOM_MAP.get(denom)?.symbol || tokenAddr,
+      total_supply: "",
+    };
+  }
+  // Continue for CW20 tokens
   try {
     const response = await hive.request(
       gql`
@@ -135,7 +166,7 @@ export async function getTxBlock(height: number) {
  * @param blockCount The amount of blocks to retrieve in a single batch, defaults to 20
  * @returns The transactions for all blocks retrieved
  */
-export async function getTxBlockBatch(height: number, blockCount: number = 20) {
+export async function getTxBlockBatch(height: number, blockCount = 20) {
   const queries: BatchRequestDocument[] = [];
   for (let workingHeight = height; workingHeight <= height + blockCount; workingHeight++) {
     queries.push({
@@ -262,6 +293,7 @@ export async function getContractStore<T>(address: string, query: JSON): Promise
 }
 
 // return pair liquidity in UST for a pair
+// return pair liquidity in UST for a pair
 export async function getPairLiquidity(
   address: string,
   query: JSON,
@@ -281,13 +313,28 @@ export async function getPairLiquidity(
     }
   );
 
-  let liquidity = 0;
+  const liquidity = calculatePairLiquidityFromAssets(
+    response?.wasm?.contractQuery?.assets,
+    priceMap
+  );
+  return liquidity;
+}
 
-  for (const asset of response?.wasm?.contractQuery?.assets) {
+/**
+ * Calculate the liquidity in UST based on pool assets
+ *
+ * @param assets The assets in the pool
+ * @param priceMap The map of current pricing
+ * @returns The liquidity in UST
+ */
+export function calculatePairLiquidityFromAssets(assets: any[], priceMap: Map<string, PriceV2>) {
+  let liquidity = 0;
+  for (const asset of assets) {
     if (asset?.info?.native_token) {
       const address = asset?.info?.native_token?.denom;
       const amount = asset?.amount / 1000000;
       if (priceMap.has(address)) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         liquidity += priceMap.get(address).price_ust * amount;
       } else {
@@ -302,6 +349,8 @@ export async function getPairLiquidity(
       }
 
       if (priceMap.has(address)) {
+        //TODO fix typescript error, remove ignore
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         liquidity += priceMap.get(address).price_ust * amount;
       } else {
@@ -309,7 +358,6 @@ export async function getPairLiquidity(
       }
     }
   }
-
   return liquidity;
 }
 
@@ -505,7 +553,7 @@ export const getTokenHolding = async (
 export const getCW20TokenHoldings = async (
   tokenContracts: string[],
   walletAddress: string,
-  batchSize: number = 30
+  batchSize = 30
 ): Promise<Map<string, number>> => {
   // Break tokenContacts into batches of batchSize
   const batchItems = (items: string[]) =>
@@ -722,3 +770,34 @@ export const getLockDropRewards = async ({
     return 0;
   }
 };
+
+/**
+ * Send multiple queries as on using Hive, it's a generic function to group
+ * queries together to improve performance
+ *
+ * The result it an array of responses that match the index of the original
+ * query. queries[x] has its response in queryResponses[x], where x is the index
+ * in the queries array
+ *
+ * @param queries The queries to batch together
+ * @returns The raw result of the query as an array that matches the
+ * indexes in queries, returns null if any query within the batch fails
+ */
+export async function batchQuery(queries: BatchQuery[]): Promise<any[] | null> {
+  const requests: BatchRequestDocument[] = [];
+  for (const query of queries) {
+    requests.push({
+      document: query.query,
+      variables: query.variables,
+    });
+  }
+  let queryResponses: any[] = [];
+  try {
+    queryResponses = await hive.batchRequests(requests);
+  } catch (e) {
+    // If we fail, return null to ensure we handle the failure
+    console.log(e);
+    return null;
+  }
+  return queryResponses;
+}

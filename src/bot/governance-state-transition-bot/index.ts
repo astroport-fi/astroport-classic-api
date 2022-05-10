@@ -1,15 +1,9 @@
 import bluebird from "bluebird";
-import {
-  APIGatewayAuthorizerResultContext,
-  APIGatewayProxyEvent,
-  APIGatewayProxyResult,
-} from "aws-lambda";
-import { getAssemblyConfig, getLatestBlock, initHive, initLCD } from "../../lib/terra";
+import { getAssemblyConfig, getLatestBlock } from "../../lib/terra";
 import { end_proposal_vote, execute_proposal, expire_proposal } from "./triggers";
-import mongoose from "mongoose";
 import { Proposal } from "../../models/proposal.model";
 import { hide_proposals } from "../../services/proposal.service";
-import constants from "../../environment/constants";
+import { lambdaHandlerWrapper } from "../../lib/handler-wrapper";
 
 bluebird.config({
   longStackTraces: true,
@@ -17,18 +11,8 @@ bluebird.config({
 });
 global.Promise = bluebird as any;
 
-export async function run(
-  _: APIGatewayProxyEvent,
-  context: APIGatewayAuthorizerResultContext
-): Promise<APIGatewayProxyResult> {
-  context.callbackWaitsForEmptyEventLoop = false;
-
-  await initHive(constants.TERRA_HIVE_ENDPOINT);
-  await initLCD(constants.TERRA_LCD_ENDPOINT, constants.TERRA_CHAIN_ID);
-
-  await mongoose.connect(constants.MONGODB_URL);
-
-  try {
+export const run = lambdaHandlerWrapper(
+  async (): Promise<void> => {
     const start = new Date().getTime();
 
     const { height, time } = await getLatestBlock();
@@ -74,12 +58,9 @@ export async function run(
     await expire_proposal(rejected_proposals);
 
     console.log("Total time elapsed: " + (new Date().getTime() - start) / 1000);
-  } catch (e) {
-    throw new Error("Error during governance state transition: " + e);
+  },
+  {
+    errorMessage: "Error during governance state transition: ",
+    successMessage: "Governance bot run was completed",
   }
-
-  return {
-    statusCode: 200,
-    body: "Governance bot run was completed",
-  };
-}
+);

@@ -1,12 +1,5 @@
 import bluebird from "bluebird";
-import {
-  APIGatewayAuthorizerResultContext,
-  APIGatewayProxyEvent,
-  APIGatewayProxyResult,
-} from "aws-lambda";
 
-import { initHive, initLCD } from "../lib/terra";
-import { connectToDatabase, disconnectDatabase } from "../modules/db";
 import { heightCollect } from "./heightCollect";
 import { chainCollect } from "./chainCollect";
 import { supplyCollect } from "./supplyCollect";
@@ -16,7 +9,9 @@ import { pairListToMap, priceListToMap } from "./helpers";
 import { priceCollectV2 } from "./priceIndexer/priceCollectV2";
 import { externalPriceCollect } from "./externalPriceCollect";
 import { getPrices } from "../services/priceV2.service";
-import constants from "../environment/constants";
+
+import { lambdaHandlerWrapper } from "../lib/handler-wrapper";
+import { chainCollectBatch } from "./chainCollectBatch";
 
 bluebird.config({
   longStackTraces: true,
@@ -24,34 +19,14 @@ bluebird.config({
 });
 global.Promise = bluebird as any;
 
-export async function run(
-  _: APIGatewayProxyEvent,
-  context: APIGatewayAuthorizerResultContext
-): Promise<APIGatewayProxyResult> {
-  context.callbackWaitsForEmptyEventLoop = false;
+export const run = lambdaHandlerWrapper(
+  async (): Promise<void> => {
+    const pairs = await getPairs();
+    const pairMap = pairListToMap(pairs);
 
-  // node nev
-  console.log("NODE_ENV: " + process.env.NODE_ENV)
-  // secrets
-  console.log("COINGECKO API KEY: " + process.env.COINGECKO_API_KEY)
+    const prices = await getPrices();
+    const priceMap = priceListToMap(prices);
 
-  // .env.dev
-  console.log("ENABLE_FUNCTION_GRAPHQL: " + process.env.ENABLE_FUNCTION_GRAPHQL)
-
-  await connectToDatabase();
-  await initHive(constants.TERRA_HIVE_ENDPOINT);
-
-  await initLCD(constants.TERRA_LCD_ENDPOINT, constants.TERRA_CHAIN_ID);
-
-  // get pairs
-  // map contract_address -> pair
-  const pairs = await getPairs();
-  const pairMap = pairListToMap(pairs);
-
-  const prices = await getPrices();
-  const priceMap = priceListToMap(prices);
-
-  try {
     const start = new Date().getTime();
 
     console.log("Indexing height...");
@@ -69,20 +44,18 @@ export async function run(
     console.log("Indexing pool_timeseries...");
     await poolCollect();
 
-    // blocks, pairs, tokens, pool_volume
-    console.log("Indexing chain...");
-    await chainCollect(pairMap, priceMap);
+    // In development, we use batching
+    if (process.env.NODE_ENV === "development") {
+      // blocks, pairs, tokens, pool_volume (in batches)
+      console.log("Indexing chain (batch)...");
+      await chainCollectBatch(pairMap, priceMap);
+    } else {
+      // blocks, pairs, tokens, pool_volume
+      console.log("Indexing chain...");
+      await chainCollect(pairMap, priceMap);
+    }
 
     console.log("Total time elapsed: " + (new Date().getTime() - start) / 1000);
-  } catch (e) {
-    await disconnectDatabase();
-    throw new Error("Error while running indexer: " + e);
-  }
-
-  await disconnectDatabase();
-
-  return {
-    statusCode: 200,
-    body: "collected",
-  };
-}
+  },
+  { errorMessage: "Error while running indexer: ", successMessage: "collected" }
+);

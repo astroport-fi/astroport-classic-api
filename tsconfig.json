@@ -25,6 +25,7 @@
     "isolatedModules": true,
     "module": "CommonJS",
     "lib": ["ES2019", "DOM"],
-    "target": "es6"
+    "target": "es6",
+    "baseUrl": "./src"
   }
 }

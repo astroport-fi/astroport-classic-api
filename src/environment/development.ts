@@ -25,7 +25,8 @@ export class DevelopmentEnvironment {
    */
 
   // Indexer start
-  START_BLOCK_HEIGHT = 5900001;
+  // Block of first create_pair on bombay-12, 12/22
+  START_BLOCK_HEIGHT = 7098193;
 
   // Chain config
   TERRA_CHAIN_ID = "bombay-12";
@@ -34,15 +35,16 @@ export class DevelopmentEnvironment {
   // Maximum amount of blocks to collect during an indexer invocation
   CHAIN_COLLECT_BATCH_SIZE = 150;
   // Whether to notify Slack when a fee swap happens
-  ENABLE_FEE_SWAP_NOTIFICATION: boolean = false;
-  ENABLE_DEBUG: boolean = true;
-  ENABLE_GRAPHQL_INTROSPECTION: boolean = true;
+  ENABLE_FEE_SWAP_NOTIFICATION = false;
+  ENABLE_DEBUG = true;
+  ENABLE_GRAPHQL_INTROSPECTION = true;
 
   /**
    * Time constants
    */
   BLOCKS_PER_YEAR = 5256000; // assumes 6s block times
   BLOCKS_PER_DAY = this.BLOCKS_PER_YEAR / 365;
+  BLOCKS_PER_HOUR = this.BLOCKS_PER_DAY / 24;
   SECONDS_PER_YEAR = 60 * 60 * 24 * 365;
 
   /**
@@ -282,5 +284,27 @@ export class DevelopmentEnvironment {
     ["uusd", { symbol: "UST", name: "UST" }],
     ["xrowan", { symbol: "ROWAN", name: "ROWAN" }],
     ["xust", { symbol: "UST", name: "UST" }],
+  ]);
+
+  /**
+   * NATIVE_TOKEN_SYMBOLS maps native tokens to their metadata
+   */
+  NATIVE_TOKEN_SYMBOLS = new Map<string, any>([
+    ["uluna", { symbol: "LUNA", name: "Terra Luna" }],
+    ["uusd", { symbol: "UST", name: "Terra USD" }],
+    ["ukrw", { symbol: "KRW", name: "Korean Won" }],
+    ["usdr", { symbol: "SDR", name: "SDR" }],
+    ["umnt", { symbol: "MNT", name: "Mongolian Tugrik" }],
+    ["ueur", { symbol: "EUR", name: "Euro" }],
+    ["ucny", { symbol: "CNY", name: "Chinese Yuan" }],
+    ["ujpy", { symbol: "JPY", name: "Japanese Yen" }],
+    ["ugbp", { symbol: "GBP", name: "Pound" }],
+    ["uinr", { symbol: "INR", name: "Indian Rupee" }],
+    ["ucad", { symbol: "CAD", name: "Canadian Dollar" }],
+    ["uchf", { symbol: "CHF", name: "Swiss Franc" }],
+    ["uaud", { symbol: "AUD", name: "Australian Dollar" }],
+    ["usgd", { symbol: "SGD", name: "Singapore Dollar" }],
+    ["uthb", { symbol: "THB", name: "Thai Baht" }],
+    ["uhkd", { symbol: "HKD", name: "Hong Kong Dollar" }],
   ]);
 }

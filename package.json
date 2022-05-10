@@ -15,7 +15,7 @@
     "database:clean": "rimraf mongodb_data",
     "database": "mkdir -p mongodb_data/rs0-0 ; mongod --dbpath=mongodb_data/rs0-0 --replSet rs0 --port 27050 --oplogSize 128 --profile=1 --slowms=1",
     "database:init": "mongo --port 27050 tools/init-mongodb-rs.js",
-    "eslint": "eslint --quiet --max-warnings 0 --ext .tsx --ext .ts --ext .js --ext .jsx .",
+    "eslint": "eslint --quiet --ext .ts --ext .js .",
     "prettier": "prettier --list-different '**/*.{ts,tsx,js,jsx,json,css,md}'",
     "test": "mocha",
     "test-dev": "./node_modules/dotenv-cli/cli.js -e .env.dev mocha",
@@ -55,6 +55,7 @@
     "@types/lodash": "^4.14.170",
     "@types/mongodb": "^3.6.19",
     "@typescript-eslint/eslint-plugin": "4.28.2",
+    "@typescript-eslint/parser": "^4.33.0",
     "dotenv-cli": "^5.1.0",
     "eslint": "7.30.0",
     "eslint-config-typescript": "^3.0.0",
@@ -67,7 +68,8 @@
     "serverless-plugin-conditional-functions": "^1.0.7",
     "serverless-plugin-typescript": "^2.1.0",
     "ts-loader": "^9.2.6",
-    "ts-node": "^10.4.0"
+    "ts-node": "^10.4.0",
+    "tsconfig-paths": "^3.14.1"
   },
   "prettier": {
     "singleQuote": false,
