@@ -1,4 +1,4 @@
-import { createPairLogFinders, createSwapLogFinder } from "../logFinder";
+import { createPairLogFinders } from "../logFinder";
 import { createPairIndexer } from "./createPairIndex";
 import { findProtocolRewardEmissions } from "./findProtocolRewardEmissions";
 import { findXAstroFees } from "./findXAstroFees";
