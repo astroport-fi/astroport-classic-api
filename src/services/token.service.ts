@@ -1,5 +1,6 @@
 import { Token } from "../models";
 import { TokenInfo } from "../types/hive.type";
+import { captureFunctionException } from "../lib/error-handlers";
 
 export async function getTokens(): Promise<any[]> {
   const tokens = await Token.find();
@@ -24,6 +25,8 @@ export async function createToken(tokenInfo: TokenInfo): Promise<any> {
     const token = await Token.create(options);
     return token;
   } catch (e) {
-    console.log(e);
+    await captureFunctionException(e, {
+      name: "token.service.ts/createToken",
+    });
   }
 }
