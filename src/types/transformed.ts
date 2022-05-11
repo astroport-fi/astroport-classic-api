@@ -27,3 +27,14 @@ export interface XAstroFeeTransformed {
   token: string;
   amount: number;
 }
+
+export interface XAstroMintTransformed {
+  to: string;
+  amount: number;
+}
+
+export interface vxAstroCreateLockTransformed {
+  from: string;
+  to: string;
+  amount: number;
+}

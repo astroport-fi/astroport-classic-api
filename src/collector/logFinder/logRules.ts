@@ -85,3 +85,32 @@ export function governanceVoteRule(): LogFinderRule {
     ],
   };
 }
+
+// Match xAstro mint interactions, specifically when a user enters an Astro -> xAstro
+// staking position
+export function xAstroMintRule(xAstroContractAddress: string): LogFinderRule {
+  return {
+    type: "wasm",
+    attributes: [
+      ["contract_address", xAstroContractAddress],
+      ["action", "mint"],
+      ["to"],
+      ["amount"],
+    ],
+  };
+}
+
+// Match xAstro create_lock interactions, specifically when a user creates a
+// new vxAstro lock
+export function vxAstroCreateLockRule(vxAstroContractAddress: string): LogFinderRule {
+  return {
+    type: "wasm",
+    attributes: [
+      ["from"],
+      ["to", vxAstroContractAddress],
+      ["amount"],
+      ["contract_address", vxAstroContractAddress],
+      ["action", "create_lock"],
+    ],
+  };
+}
