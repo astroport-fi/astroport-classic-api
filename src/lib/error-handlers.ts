@@ -3,7 +3,7 @@ import { captureException, flush, AWSLambda } from "@sentry/serverless";
 
 AWSLambda.init({
   dsn: process.env.SENTRY_DSN,
-  tracesSampleRate: 1.0,
+  tracesSampleRate: 0.2,
   environment: process.env.NODE_ENV,
 });
 
