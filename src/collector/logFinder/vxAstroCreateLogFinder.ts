@@ -3,6 +3,12 @@ import constants from "../../environment/constants";
 import { vxAstroCreateLockTransformed } from "../../types";
 import { vxAstroCreateLockRule } from "./logRules";
 
+/**
+ * When a user locks up their xAstro, a create_lock event is created with
+ * information about the user that took the action.
+ *
+ * This log finder extracts those interactions
+ */
 export function vxAstroCreateLockLogFinder(): ReturningLogFinderMapper<
   vxAstroCreateLockTransformed | undefined
 > {

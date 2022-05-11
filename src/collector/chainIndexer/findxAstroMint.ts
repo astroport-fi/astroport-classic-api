@@ -1,9 +1,12 @@
 import { xAstroMintLogFinder } from "../logFinder/xAstroMintLogFinder";
+import { UserGovernancePosition } from "../../models/user_governance_position.model";
 
-export async function findxAstroMint(event: any): Promise<number> {
-  // const blockFees = new Set<XAstroFeeTransformed>();
-
-  // get xAstro mint events
+/**
+ * Find mint actions taken on xAstro
+ *
+ * @param event The transaction log event
+ */
+export async function findxAstroMint(event: any): Promise<void> {
   const xastroMintLogFinder = xAstroMintLogFinder();
   const xastroMintLogFound = xastroMintLogFinder(event);
 
@@ -12,14 +15,19 @@ export async function findxAstroMint(event: any): Promise<number> {
       const transformed = found.transformed;
 
       if (transformed != null) {
-        console.log("MINT xAstro", transformed.to, transformed.amount);
-        // blockFees.add({
-        //   token: transformed.token,
-        //   amount: transformed.amount,
-        // });
+        // Found a mint event, log the user's address (transformed.to) to
+        // have their balance indexed
+        try {
+          await UserGovernancePosition.create({
+            address: transformed.to,
+          });
+        } catch (e) {
+          // No need to report duplicates, but other errors should be
+          if (e.name !== "MongoServerError" && e.code !== 11000) {
+            throw e;
+          }
+        }
       }
     }
   }
-
-  return 0;
 }
