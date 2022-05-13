@@ -690,7 +690,7 @@ export const getvxAstroVotingPower = async (
 export const getxAstroAccounts = async (
   xAstroContact: string,
   afterAddress: string,
-  limit: number = 30
+  limit = 30
 ): Promise<any[]> => {
   try {
     const response = await hive.request(
