@@ -9,6 +9,8 @@ import constants from "../../environment/constants";
 import { ProxyAddressInfo } from "../../types/contracts";
 import { getPrices } from "../../services/priceV2.service";
 import { priceListToMap } from "../../collector/helpers";
+import { findxAstroMint } from "./findxAstroMint";
+import { findvxAstroLock } from "./findvxAstroLock";
 
 /**
  * Indexes transactions for a single block
@@ -67,6 +69,20 @@ export async function runIndexers(txs: any, height: number): Promise<void> {
             await findXAstroFees(event, height, priceMap);
           } catch (e) {
             console.log("Error during findXAstroFees: " + e);
+          }
+
+          try {
+            // xAstro interaction by user
+            await findxAstroMint(event);
+          } catch (e) {
+            console.log("Error during findxAstroMint: " + e);
+          }
+
+          try {
+            // vxAstro interaction by user
+            await findvxAstroLock(event);
+          } catch (e) {
+            console.log("Error during findxAstroMint: " + e);
           }
         }
       }
