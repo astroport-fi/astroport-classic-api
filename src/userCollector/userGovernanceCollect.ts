@@ -12,7 +12,7 @@ import { batchItems } from "../collector/priceIndexer/util";
 dayjs.extend(utc);
 dayjs.extend(isoWeek);
 
-const MONGO_BATCH_SIZE = 2;
+const MONGO_BATCH_SIZE = 100;
 const HIVE_BATCH_SIZE = 30;
 
 /**
