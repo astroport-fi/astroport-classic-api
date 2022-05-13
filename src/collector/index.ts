@@ -11,7 +11,6 @@ import { externalPriceCollect } from "./externalPriceCollect";
 import { getPrices } from "../services/priceV2.service";
 
 import { lambdaHandlerWrapper } from "../lib/handler-wrapper";
-import { chainCollectBatch } from "./chainCollectBatch";
 
 bluebird.config({
   longStackTraces: true,
@@ -44,16 +43,9 @@ export const run = lambdaHandlerWrapper(
     console.log("Indexing pool_timeseries...");
     await poolCollect();
 
-    // In development, we use batching
-    if (process.env.NODE_ENV === "development") {
-      // blocks, pairs, tokens, pool_volume (in batches)
-      console.log("Indexing chain (batch)...");
-      await chainCollectBatch(pairMap, priceMap);
-    } else {
-      // blocks, pairs, tokens, pool_volume
-      console.log("Indexing chain...");
-      await chainCollect(pairMap, priceMap);
-    }
+    // blocks, pairs, tokens, pool_volume
+    console.log("Indexing chain...");
+    await chainCollect(pairMap, priceMap);
 
     console.log("Total time elapsed: " + (new Date().getTime() - start) / 1000);
   },
