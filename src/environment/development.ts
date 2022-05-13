@@ -65,7 +65,7 @@ export class DevelopmentEnvironment {
   // Astroport tokens
   ASTRO_TOKEN = "terra1jqcw39c42mf7ngq4drgggakk3ymljgd3r5c3r5" as string;
   XASTRO_TOKEN = "terra1yufp7cv85qrxrx56ulpfgstt2gxz905fgmysq0" as string;
-  VXASTRO_TOKEN = "terra1pqr02fx4ulc2mzws7xlqh8hpwqx2ls5m4fk62j" as string;
+  VXASTRO_TOKEN = "terra103u2wpkghfrnwvqhdfgg037hthmuvwjqcsgxfq" as string;
 
   // Astroport contracts
   BUILDER_UNLOCK = "terra1hccg0cfrcu0nr4zgt5urmcgam9v88peg9s7h6j" as string;
