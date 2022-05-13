@@ -1,4 +1,4 @@
-import { vxAstroCreateLockLogFinder } from "../logFinder/vxAstroCreateLogFinder";
+import { vxAstroCreateLockLogFinder } from "../logFinder/vxAstroCreateLockLogFinder";
 import { UserGovernancePosition } from "../../models/user_governance_position.model";
 
 /**

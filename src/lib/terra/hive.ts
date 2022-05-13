@@ -431,7 +431,7 @@ export async function getTotalVotingPowerAt(
     {
       block: block,
       xastro: xastro,
-      builder: builder
+      builder: builder,
     }
   );
 
