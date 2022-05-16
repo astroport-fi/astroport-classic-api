@@ -45,18 +45,15 @@ export const run = lambdaHandlerWrapper(
     await poolCollect();
 
     // In development, we use batching
-    // if (process.env.NODE_ENV === "development") {
-    // blocks, pairs, tokens, pool_volume (in batches)
-
-    // Temporarily use batching in chainCollect to catch up faster due to
-    // really slow Hive nodes
-    console.log("Indexing chain (batch)...");
-    await chainCollectBatch(pairMap, priceMap);
-    // } else {
-    //   // blocks, pairs, tokens, pool_volume
-    //   console.log("Indexing chain...");
-    //   await chainCollect(pairMap, priceMap);
-    // }
+    if (process.env.NODE_ENV === "development") {
+      // blocks, pairs, tokens, pool_volume (in batches)
+      console.log("Indexing chain (batch)...");
+      await chainCollectBatch(pairMap, priceMap);
+    } else {
+      // blocks, pairs, tokens, pool_volume
+      console.log("Indexing chain...");
+      await chainCollect(pairMap, priceMap);
+    }
 
     console.log("Total time elapsed: " + (new Date().getTime() - start) / 1000);
   },
