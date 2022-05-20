@@ -19,7 +19,7 @@ dayjs.extend(utc);
  * Push alerts about state changes
  */
 
-const BATCH_SIZE = 100;
+const BATCH_SIZE = 1;
 const WEBHOOK_URL =
   "https://hooks.slack.com/services/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";
 
