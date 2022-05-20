@@ -71,6 +71,7 @@ export const getProposals = async (contract: string, limit = 100, offset = 0): P
 
     return response?.wasm?.contractQuery?.proposal_list;
   } catch (e) {
+    console.log("Unable to fetch proposals", e);
     return [];
   }
 };
@@ -424,7 +425,7 @@ export async function getTotalVotingPowerAt(
     {
       block: block,
       xastro: xastro,
-      builder: builder
+      builder: builder,
     }
   );
 
