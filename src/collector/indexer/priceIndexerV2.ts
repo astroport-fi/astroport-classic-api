@@ -25,7 +25,24 @@ export async function priceIndexerV2(blockHeight: number): Promise<void> {
         { upsert: true }
       );
     } catch (e) {
-      console.log("Error during external price indexing: ", e);
+      // Revent to a value of 1 in case we fail to get the correct UST price
+      if (terraAddress === "uusd") {
+        console.log("Failed to get USD price from CoinGecko for UST, reverting to 1.0");
+
+        await PriceV2.updateOne(
+          { token_address: terraAddress },
+          {
+            $set: {
+              token_address: terraAddress,
+              price_ust: 1.0,
+              block_last_updated: blockHeight,
+            },
+          },
+          { upsert: true }
+        );
+      } else {
+        console.log("Error during external price indexing: ", e);
+      }
     }
   }
 }

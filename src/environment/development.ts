@@ -155,6 +155,14 @@ export class DevelopmentEnvironment {
         currency: "USD",
       },
     ],
+    [
+      "uusd", // UST
+      {
+        source: "terra",
+        address: "uusd",
+        currency: "USD",
+      },
+    ],
   ]);
 
   /**
