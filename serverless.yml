@@ -50,6 +50,15 @@ functions:
     environment:
       MONGODB_URL: ${env:MONGODB_URL_RW}
 
+  user-collector:
+    enabled: '"${env:ENABLE_FUNCTION_USER_COLLECTOR}" == "true"'
+    handler: src/userCollector/index.run
+    events:
+      - schedule: rate(1 minute)
+    timeout: 475 # in seconds
+    environment:
+      MONGODB_URL: ${env:MONGODB_URL_RW}
+
   snapshot-bot:
     enabled: '"${env:ENABLE_FUNCTION_SNAPSHOT_BOT}" == "true"'
     handler: src/bot/stat-snapshotter/index.run

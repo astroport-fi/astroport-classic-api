@@ -431,7 +431,7 @@ export async function getTotalVotingPowerAt(
     {
       block: block,
       xastro: xastro,
-      builder: builder
+      builder: builder,
     }
   );
 
@@ -669,6 +669,46 @@ export const getvxAstroVotingPower = async (
     return +response?.wasm?.contractQuery.voting_power;
   } catch (e) {
     return 0;
+  }
+};
+
+/**
+ * Retrieve addresses that have xAstro balances
+ *
+ * @param xAstroContact The address for the xAstro contract
+ * @returns A list of addresses
+ */
+
+/**
+ * Retrieve addresses that have xAstro balances
+ *
+ * @param xAstroContact The address for the xAstro contract
+ * @param afterAddress The address to start the query after for paging
+ * @param limit The maximum amount of items to return, limit to 30 in the contract
+ * @returns
+ */
+export const getxAstroAccounts = async (
+  xAstroContact: string,
+  afterAddress: string,
+  limit = 30
+): Promise<any[]> => {
+  try {
+    const response = await hive.request(
+      gql`
+        query ($xAstroContact: String!, $afterAddress: String!, $limit: Int!) {
+          wasm {
+            contractQuery(
+              contractAddress: $xAstroContact
+              query: { all_accounts: { start_after: $afterAddress, limit: $limit } }
+            )
+          }
+        }
+      `,
+      { xAstroContact, afterAddress, limit }
+    );
+    return response?.wasm?.contractQuery.accounts;
+  } catch (e) {
+    return [];
   }
 };
 
