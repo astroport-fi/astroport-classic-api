@@ -23,38 +23,38 @@ describe("findXAstroFees", function () {
   });
 });
 
-describe("findvxLock", function () {
-  it("Should get a new create_lock event for vxAstro from transfer log", async () => {
-    const event = await getEvent(
-      8974586,
-      "F5852B3A7D15C01653C1EC42233DDC1BE6B34A675B8C3C6CCD38BAA43CD3F719",
-      "wasm"
-    );
+// describe("findvxLock", function () {
+//   it("Should get a new create_lock event for vxAstro from transfer log", async () => {
+//     const event = await getEvent(
+//       8974586,
+//       "F5852B3A7D15C01653C1EC42233DDC1BE6B34A675B8C3C6CCD38BAA43CD3F719",
+//       "wasm"
+//     );
 
-    const vxastroCreateLockLogFinder = vxAstroCreateLockLogFinder();
-    const vxastroCreateLockLogFound = vxastroCreateLockLogFinder(event);
+//     const vxastroCreateLockLogFinder = vxAstroCreateLockLogFinder();
+//     const vxastroCreateLockLogFound = vxastroCreateLockLogFinder(event);
 
-    const foundLog = vxastroCreateLockLogFound.find(() => true)?.transformed;
-    expect(foundLog?.from).to.be.a("string");
-  });
-});
+//     const foundLog = vxastroCreateLockLogFound.find(() => true)?.transformed;
+//     expect(foundLog?.from).to.be.a("string");
+//   });
+// });
 
-describe("findxAstro", function () {
-  it("Should get a mint fro xAstro event from transfer log", async () => {
-    const event = await getEvent(
-      8763516,
-      "E2A576F5699EB4F45A0AEDD4EC207B57F508F934984C7E2C5294DF066FEFE79A",
-      "wasm"
-    );
+// describe("findxAstro", function () {
+//   it("Should get a mint for xAstro event from transfer log", async () => {
+//     const event = await getEvent(
+//       8763516,
+//       "E2A576F5699EB4F45A0AEDD4EC207B57F508F934984C7E2C5294DF066FEFE79A",
+//       "wasm"
+//     );
 
-    const xastroMintLogFinder = xAstroMintLogFinder();
-    const xastroMintLogFound = xastroMintLogFinder(event);
+//     const xastroMintLogFinder = xAstroMintLogFinder();
+//     const xastroMintLogFound = xastroMintLogFinder(event);
 
-    const foundLog = xastroMintLogFound.find(() => true)?.transformed;
-    expect(foundLog?.to).to.be.a("string");
-    expect(foundLog?.amount).to.be.a("number");
-  });
-});
+//     const foundLog = xastroMintLogFound.find(() => true)?.transformed;
+//     expect(foundLog?.to).to.be.a("string");
+//     expect(foundLog?.amount).to.be.a("number");
+//   });
+// });
 
 //TOD simplify and make reusable for other tests
 async function getEvent(height: number, txnHash: string, type: string) {
