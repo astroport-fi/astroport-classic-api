@@ -1,8 +1,5 @@
 import { Token } from "../models";
 import { TokenInfo } from "../types/hive.type";
-import { isIBCToken, isNative } from "../modules/terra";
-import { getIBCDenom, initLCD } from "../lib/terra";
-import constants from "../environment/constants";
 import { captureFunctionException } from "../lib/error-handlers";
 
 export async function getTokens(): Promise<any[]> {

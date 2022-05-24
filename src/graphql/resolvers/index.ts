@@ -25,6 +25,7 @@ import {
 } from "../../services/user.service";
 import { User } from "../../types/user.type";
 import { parseResolveInfo } from "../../lib/graphql-parse-resolve-info";
+import { priceImpactMultiSwap, priceImpact } from "../../services/swap.service";
 
 export const resolvers = {
   JSON: GraphQLJSON,
@@ -130,6 +131,16 @@ export const resolvers = {
       }
 
       return user;
+    },
+    price_impact: async (_: any, { routes, amount }: any) => {
+      if (routes?.length > 1) {
+        const swapImpact = await priceImpactMultiSwap(routes, amount);
+        return swapImpact;
+      } else if (routes?.length === 1) {
+        const swapImpact = await priceImpact(routes, amount);
+        return swapImpact;
+      }
+      return "0";
     },
   },
 };
