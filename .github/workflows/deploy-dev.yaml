@@ -40,8 +40,8 @@ jobs:
         run: npm ci
       - name: Run Linter
         run: npm run eslint
-      - name: Run Test
-        run: npm run test-dev
+#      - name: Run Test
+#        run: npm run test-dev
       # Optional
       #- name: Build assets
       #  run: npm run assets-dev
