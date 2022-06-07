@@ -45,16 +45,19 @@ export async function swap(): Promise<void> {
           }
         });
 
-      const post_fields = generate_link_to_txn(txhash);
+      // Only send Slack notifications when enabled
+      if (constants.ENABLE_FEE_SWAP_NOTIFICATION) {
+        const post_fields = generate_link_to_txn(txhash);
 
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-          charset: "utf-8",
-        },
-      };
+        const config = {
+          headers: {
+            "Content-Type": "application/json",
+            charset: "utf-8",
+          },
+        };
 
-      await axios.post(SLACK_WEBHOOK, post_fields, config);
+        await axios.post(SLACK_WEBHOOK, post_fields, config);
+      }
 
       await waitFor(8000);
     } catch (e) {
