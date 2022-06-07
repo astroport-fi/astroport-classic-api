@@ -58,8 +58,7 @@ export const run = lambdaHandlerWrapper(
     const startBlock = endBlockHeight - constants.BLOCKS_PER_HOUR * RECON_PREVIOUS_HOURS;
 
     console.log(
-      `Recon blocks from ${startBlock} to ${endBlockHeight} (${
-        endBlockHeight - startBlock
+      `Recon blocks from ${startBlock} to ${endBlockHeight} (${endBlockHeight - startBlock
       } total blocks)`
     );
 
@@ -202,9 +201,8 @@ export const run = lambdaHandlerWrapper(
       message += "|      Events missed     |\n";
       message += "--------------------------\n";
 
-      message += `Missed events found across ${blockRecons.length} block${
-        blockRecons.length != 1 ? "s" : ""
-      }\n`;
+      message += `Missed events found across ${blockRecons.length} block${blockRecons.length != 1 ? "s" : ""
+        }\n`;
       message += "Pairs                 : " + totalPairs + "\n";
       message += "Tokens                : " + totalTokens + "\n";
       message += "Votes                 : " + totalVotes + "\n";
@@ -228,26 +226,30 @@ export const run = lambdaHandlerWrapper(
       }
       message += "```";
 
-      const post_fields = {
-        blocks: [
-          {
-            type: "section",
-            text: {
-              type: "mrkdwn",
-              text: message,
-            },
-          },
-        ],
-      };
+      // For Terra Classic we disable Slack notifications, but we can still 
+      // print it to the log in case we want to take a look
+      console.log(message);
 
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-          charset: "utf-8",
-        },
-      };
+      // const post_fields = {
+      //   blocks: [
+      //     {
+      //       type: "section",
+      //       text: {
+      //         type: "mrkdwn",
+      //         text: message,
+      //       },
+      //     },
+      //   ],
+      // };
 
-      await axios.post(SLACK_WEBHOOK, post_fields, config);
+      // const config = {
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     charset: "utf-8",
+      //   },
+      // };
+
+      // await axios.post(SLACK_WEBHOOK, post_fields, config);
     }
 
     console.log("Total time elapsed (s): " + (new Date().getTime() - start) / 1000);
