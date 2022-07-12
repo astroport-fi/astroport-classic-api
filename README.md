@@ -81,7 +81,7 @@ channel to get access to the wallet
 
 ### Running unit tests
 
-- copy .env.development to .env.local and add MONGODB_URL="..."
+- copy .env.development to .env.local and add MONGODB_URL="...."
 - Mocha config
   - add configuration to mocharc.js, config options available [here](https://github.com/mochajs/mocha/blob/master/example/config/.mocharc.js)
   - add global hooks (that run before after all tests) in test/hook.ts
