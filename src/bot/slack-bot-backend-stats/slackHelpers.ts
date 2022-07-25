@@ -5,7 +5,7 @@ export function generate_post_fields(text: string) {
         type: "section",
         text: {
           type: "mrkdwn",
-          text: text
+          text: text,
         },
       },
     ],
@@ -15,15 +15,14 @@ export function generate_post_fields(text: string) {
 }
 
 export function generate_link_to_txn(txnhash: string) {
-
-  const link = "https://legacy.extraterrestrial.money/mainnet/tx/" + txnhash
+  const link = "https://legacy.extraterrestrial.money/mainnet/tx/" + txnhash;
   const post_fields = {
     blocks: [
       {
         type: "section",
         text: {
           type: "mrkdwn",
-          text: "Maker bot executed a buyback",
+          text: "Terra-1 Maker bot executed a buyback",
         },
       },
       {

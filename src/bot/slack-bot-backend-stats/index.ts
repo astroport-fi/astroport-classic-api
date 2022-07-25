@@ -62,10 +62,10 @@ export const run = lambdaHandlerWrapper(
       `
     );
     const latestProdHeight = (await getLatestBlock()).height;
-    const latestDevHeightRaw = await axios.get("https://lcd-terra-test.everstake.one/blocks/latest")
-    const latestDevHeight = latestDevHeightRaw?.data?.block?.header?.height
-
-
+    const latestDevHeightRaw = await axios.get(
+      "https://lcd-terra-test.everstake.one/blocks/latest"
+    );
+    const latestDevHeight = latestDevHeightRaw?.data?.block?.header?.height;
 
     const dayFees = dayFeesRaw?.staking?._24h_fees_ust;
 
@@ -86,6 +86,8 @@ export const run = lambdaHandlerWrapper(
     const daily_gas = 0.3;
 
     let message = "```";
+    message += "--------------------------\n";
+    message += "|         Terra-1        |\n";
     message += "--------------------------\n";
     message += "|         Blocks         |\n";
     message += "--------------------------\n";
