@@ -13,33 +13,17 @@ bluebird.config({
 });
 global.Promise = bluebird as any;
 
-const DEV_URL = "https://2h8711jruf.execute-api.us-east-1.amazonaws.com/dev/graphql";
-const PROD_URL = "https://api.astroport.fi/graphql";
+const PROD_URL = "https://terra1-api.astroport.fi/graphql";
 const SLACK_WEBHOOK =
   "https://hooks.slack.com/services/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";
 
 export const run = lambdaHandlerWrapper(
   async (): Promise<void> => {
-    const dev = new GraphQLClient(DEV_URL, {
-      timeout: 5000,
-      keepalive: true,
-    });
     const prod = new GraphQLClient(PROD_URL, {
       timeout: 5000,
       keepalive: true,
     });
 
-    // blocks
-    const devHeightRaw = await dev.request(
-      gql`
-        query {
-          block {
-            height
-          }
-        }
-      `
-    );
-    const devHeight = devHeightRaw?.block?.height;
     const prodHeightRaw = await prod.request(
       gql`
         query {
@@ -62,11 +46,6 @@ export const run = lambdaHandlerWrapper(
       `
     );
     const latestProdHeight = (await getLatestBlock()).height;
-    const latestDevHeightRaw = await axios.get(
-      "https://lcd-terra-test.everstake.one/blocks/latest"
-    );
-    const latestDevHeight = latestDevHeightRaw?.data?.block?.header?.height;
-
     const dayFees = dayFeesRaw?.staking?._24h_fees_ust;
 
     // bots
@@ -91,12 +70,6 @@ export const run = lambdaHandlerWrapper(
     message += "--------------------------\n";
     message += "|         Blocks         |\n";
     message += "--------------------------\n";
-
-    message += "Realtime     : " + latestDevHeight + "\n";
-    message += "Dev          : " + devHeight + "\n";
-    message += "Blocks behind: " + (latestDevHeight - devHeight) + "\n";
-    message +=
-      "Hours behind : " + Math.round(((latestProdHeight - devHeight) / 600) * 100) / 100 + "\n";
     message += "\n";
     message += "Realtime     : " + latestProdHeight + "\n";
     message += "Prod         : " + prodHeight + "\n";
