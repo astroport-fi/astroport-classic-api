@@ -50,13 +50,13 @@ export const run = lambdaHandlerWrapper(
 
     // bots
     // maker bot address - mainnet
-    const maker = "terra1lz4pz06aa3e5f70u2pcc3u754n847lk9cww05r";
-    const gov = "terra1jy093k4nsyfma0q87mhsu3p08dc4fpt4zur7hr";
+    const maker = "terra1g9gfp2he3l9gwfk66m278qj7gdk0jf03ru3kuu";
+    const gov = "terra1sjjtxe0f690nrqj6m9ht9evqfwwtrcvnjy9zav";
     const maker_bot_balance = await get_ust_balance(maker);
     const gov_bot_balance = await get_ust_balance(gov);
-    const wallet = "terra1lz4pz06aa3e5f70u2pcc3u754n847lk9cww05r";
+
     const url =
-      "https://lcd.terra.dev/cosmos/bank/v1beta1/balances/" + wallet + "/by_denom?denom=uusd";
+      "https://lcd.terra.dev/cosmos/bank/v1beta1/balances/" + maker + "/by_denom?denom=uusd";
 
     const data = await axios.get(url).then((response) => response.data);
 
