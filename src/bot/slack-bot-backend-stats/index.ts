@@ -6,6 +6,7 @@ import axios from "axios";
 import { generate_post_fields } from "./slackHelpers";
 import { get_ust_balance } from "./helpers";
 import { lambdaHandlerWrapper } from "../../lib/handler-wrapper";
+import constants from "environment/constants";
 
 bluebird.config({
   longStackTraces: true,
@@ -50,19 +51,11 @@ export const run = lambdaHandlerWrapper(
 
     // bots
     // maker bot address - mainnet
-    const maker = "terra1g9gfp2he3l9gwfk66m278qj7gdk0jf03ru3kuu";
-    const gov = "terra1sjjtxe0f690nrqj6m9ht9evqfwwtrcvnjy9zav";
+    const maker = constants.MAKER_FEE_COLLECTOR_ADDRESS;
     const maker_bot_balance = await get_ust_balance(maker);
+    // maker bot address - mainnet
+    const gov = constants.GOVERNANCE_TRIGGER_ADDRESS;
     const gov_bot_balance = await get_ust_balance(gov);
-
-    const url =
-      "https://lcd.terra.dev/cosmos/bank/v1beta1/balances/" + maker + "/by_denom?denom=uusd";
-
-    const data = await axios.get(url).then((response) => response.data);
-
-    const ust_raw = data["balance"]["amount"] as number;
-    const ust_rounded = Math.round((ust_raw / 1000000) * 100) / 100;
-    const daily_gas = 0.3;
 
     let message = "```";
     message += "--------------------------\n";

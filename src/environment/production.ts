@@ -90,6 +90,12 @@ export class ProductionEnvironment {
   BLUNA_TERRASWAP_LP_CONTRACT = "terra1jxazgm67et0ce260kvrpfv50acuushpjsz2y0p" as string;
 
   /**
+   * BOT addresses
+   */
+  MAKER_FEE_COLLECTOR_ADDRESS = "terra1g9gfp2he3l9gwfk66m278qj7gdk0jf03ru3kuu";
+  GOVERNANCE_TRIGGER_ADDRESS = "terra1sjjtxe0f690nrqj6m9ht9evqfwwtrcvnjy9zav";
+
+  /**
    * Testing addresses
    */
   TEST_WALLET_ADDRESS = "not-provided" as string;
