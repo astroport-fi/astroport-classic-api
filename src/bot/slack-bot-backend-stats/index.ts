@@ -6,7 +6,7 @@ import axios from "axios";
 import { generate_post_fields } from "./slackHelpers";
 import { get_ust_balance } from "./helpers";
 import { lambdaHandlerWrapper } from "../../lib/handler-wrapper";
-import constants from "environment/constants";
+import constants from "../../environment/constants";
 
 bluebird.config({
   longStackTraces: true,
