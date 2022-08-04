@@ -90,7 +90,7 @@ functions:
     enabled: '"${env:ENABLE_FUNCTION_MAKER_FEE_COLLECTOR}" == "true"'
     handler: src/bot/maker-fee-collector/index.run
     events:
-      - schedule: rate(6 hours)
+      - schedule: rate(1 day)
     timeout: 20 # in seconds
     environment:
       MONGODB_URL: ${env:MONGODB_URL_RW}
