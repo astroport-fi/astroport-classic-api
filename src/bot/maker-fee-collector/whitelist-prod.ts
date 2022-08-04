@@ -1,4 +1,4 @@
-import { isNative } from "modules/terra";
+import { isNative } from "../../modules/terra";
 
 // pairs to swap and distribute to xastro stakers
 // they are split up because the executemsg has a size limi
