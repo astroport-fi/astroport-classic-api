@@ -1,5 +1,5 @@
 import { Coin, LCDClient, MnemonicKey, MsgExecuteContract } from "@terra-money/terra.js";
-import { EXECUTE_MSGS } from "./whitelist-prod";
+import { generateExecuteMessages } from "./whitelist-prod";
 import {
   generate_link_to_txn,
   generate_post_fields,
@@ -24,6 +24,7 @@ export async function swap(): Promise<void> {
 
   const wallet = terra.wallet(mk);
 
+  const EXECUTE_MSGS = generateExecuteMessages();
   // create a message to a maker contract
   for (const swap_sublist of EXECUTE_MSGS) {
     const msg = new MsgExecuteContract(
