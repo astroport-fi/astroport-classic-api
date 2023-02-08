@@ -78,7 +78,7 @@ export async function assembly_msg(message: any): Promise<void> {
 
   const options: CreateTxOptions = {
     msgs: [executeMsg],
-    gasPrices: [new Coin("uusd", 0.15)],
+    gasPrices: [new Coin("uusd", 0.5)],
     memo: "",
   };
 
