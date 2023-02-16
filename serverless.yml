@@ -81,7 +81,7 @@ functions:
     enabled: '"${env:ENABLE_FUNCTION_SLACK_BOT_BACKEND_STATS}" == "true"'
     handler: src/bot/slack-bot-backend-stats/index.run
     events:
-      - schedule: rate(5 minutes)
+      - schedule: rate(4 hours)
     timeout: 20 # in seconds
     environment:
       MONGODB_URL: ${env:MONGODB_URL_R}
