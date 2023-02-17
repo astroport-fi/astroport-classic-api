@@ -19,6 +19,7 @@ export const run = lambdaHandlerWrapper(
 
     // active
     const active_proposals = await Proposal.find({ state: "Active", end_block: { $lt: height } });
+    console.log("active_proposals", active_proposals.length);
 
     // passed, rejected
     const assembly_config = await getAssemblyConfig();
@@ -35,15 +36,19 @@ export const run = lambdaHandlerWrapper(
       end_block: { $lt: execute_block, $gt: reject_block },
     });
 
+    console.log("passed_proposals", passed_proposals.length);
+
     const stale_passed_proposals = await Proposal.find({
       state: "Passed",
       end_block: { $lt: reject_block },
     });
+    console.log("stale_passed_proposals", stale_passed_proposals.length);
 
     const rejected_proposals = await Proposal.find({
       state: "Rejected",
       end_block: { $gt: reject_block },
     });
+    console.log("rejected_proposals", rejected_proposals.length);
 
     console.log("end_proposal (Active -> Passed/Rejected)");
     await end_proposal_vote(active_proposals);

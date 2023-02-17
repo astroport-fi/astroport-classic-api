@@ -24,11 +24,15 @@ export async function end_proposal_vote(proposals: any[]): Promise<void> {
 // passed -> executed
 export async function execute_proposal(proposals: any[]): Promise<void> {
   for (const proposal of proposals) {
-    await assembly_msg({
-      execute_proposal: {
-        proposal_id: proposal.proposal_id,
-      },
-    });
+    try {
+      await assembly_msg({
+        execute_proposal: {
+          proposal_id: proposal.proposal_id,
+        },
+      });
+    } catch (e) {
+      console.log(e?.response?.data?.message);
+    }
   }
 }
 
@@ -87,8 +91,8 @@ export async function assembly_msg(message: any): Promise<void> {
 
   if (isTxError(result)) {
     console.log("governance throw");
-    throw new Error(
-      `transaction failed. code: ${result.code}, codespace: ${result.codespace}, raw_log: ${result.raw_log}`
-    );
+    // throw new Error(
+    //   `transaction failed. code: ${result.code}, codespace: ${result.codespace}, raw_log: ${result.raw_log}`
+    // );
   }
 }
