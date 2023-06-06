@@ -34,8 +34,12 @@ export class ProductionEnvironment {
 
   // Chain config
   TERRA_CHAIN_ID = "columbus-5";
+  // TERRA_LCD_ENDPOINT = "https://columbus-lcd.terra.dev/";
+  // TERRA_HIVE_ENDPOINT = "https://columbus-temp-hive-g7fhf.ondigitalocean.app/graphql";
+
   TERRA_LCD_ENDPOINT = "https://columbus-lcd.terra.dev/";
-  TERRA_HIVE_ENDPOINT = "https://columbus-temp-hive-g7fhf.ondigitalocean.app/graphql";
+  TERRA_HIVE_ENDPOINT = "https://hive.terrarebels.net/graphql";
+
   // Maximum amount of blocks to collect during an indexer invocation
   CHAIN_COLLECT_BATCH_SIZE = 150;
   // Whether to notify Slack when a fee swap happens
