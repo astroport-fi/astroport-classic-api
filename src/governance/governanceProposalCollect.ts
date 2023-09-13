@@ -5,9 +5,7 @@ import { Proposal } from "../models/proposal.model";
 import { getProposals, getTotalVotingPowerAt } from "../lib/terra";
 import { getProposals as getSavedProposals, saveProposals } from "../services/proposal.service";
 import { proposalListToMap } from "../collector/helpers";
-import axios from "axios";
-import { generate_post_fields } from "./slackHelpers";
-import { ProposalState, update_proposal_timestamps } from "./proposalStateMachine";
+import { update_proposal_timestamps } from "./proposalStateMachine";
 import constants from "../environment/constants";
 import { aggregateVotesCount } from "../services/vote.service";
 
@@ -20,8 +18,6 @@ dayjs.extend(utc);
  */
 
 const BATCH_SIZE = 1;
-const WEBHOOK_URL =
-  "https://hooks.slack.com/services/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";
 
 export async function governanceProposalCollect(): Promise<void> {
   console.log("ENABLE_FEE_SWAP_NOTIFICATION: " + constants.ENABLE_FEE_SWAP_NOTIFICATION);
@@ -79,17 +75,6 @@ export async function governanceProposalCollect(): Promise<void> {
       );
 
       new_proposals.push(proposal);
-
-      // notify slack for mainnet
-      if (constants.ENABLE_FEE_SWAP_NOTIFICATION) {
-        await notifySlack(
-          "*New on-chain governance proposal: #" + proposal.proposal_id + "*",
-          "https://apeboard.finance/dashboard/" + proposal.submitter,
-          proposal.title,
-          proposal.description,
-          proposal.link
-        );
-      }
     }
   }
 
@@ -122,23 +107,4 @@ export async function governanceProposalCollect(): Promise<void> {
       }
     );
   }
-}
-
-async function notifySlack(
-  intro: string,
-  wallet_link: string,
-  title: string,
-  description: string,
-  link: string
-) {
-  const post_fields = generate_post_fields(intro, wallet_link, title, description, link);
-
-  const config = {
-    headers: {
-      "Content-Type": "application/json",
-      charset: "utf-8",
-    },
-  };
-
-  await axios.post(WEBHOOK_URL, post_fields, config);
 }

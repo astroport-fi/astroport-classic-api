@@ -15,8 +15,6 @@ bluebird.config({
 global.Promise = bluebird as any;
 
 const PROD_URL = "https://terra1-api.astroport.fi/graphql";
-const SLACK_WEBHOOK =
-  "https://hooks.slack.com/services/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";
 
 export const run = lambdaHandlerWrapper(
   async (): Promise<void> => {
@@ -95,8 +93,8 @@ export const run = lambdaHandlerWrapper(
         charset: "utf-8",
       },
     };
-
-    await axios.post(SLACK_WEBHOOK, post_fields, config);
+    // POST TO SLACK
+    // await axios.post(SLACK_WEBHOOK, post_fields, config);
   },
   {
     errorMessage: "Error while running slack-bot-backend-stats: ",

@@ -22,7 +22,7 @@ export async function astroportStatsCollect(): Promise<void> {
 
   // get astro price
   let astroPrice = await getPriceByTokenAddress(constants.ASTRO_TOKEN);
-  astroPrice = astroPrice.price_ust;
+  astroPrice = astroPrice?.price_ust || 0;
 
   // write to astroport_stats
   await AstroportStat.updateOne(

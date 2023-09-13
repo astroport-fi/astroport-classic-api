@@ -30,6 +30,10 @@ export async function aggregateXAstroFees(priceMap: Map<string, PriceV2>): Promi
   });
 
   const astro_price = priceMap.get(constants.ASTRO_TOKEN)?.price_ust as number;
+  console.log("astro_price", astro_price);
+  if (!astro_price) {
+    return;
+  }
 
   let _24h_fees_ust = 0;
   let fees_with_no_price_count = 0;
