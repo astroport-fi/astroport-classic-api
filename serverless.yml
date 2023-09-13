@@ -36,7 +36,7 @@ functions:
     enabled: '"${env:ENABLE_FUNCTION_COLLECTOR}" == "true"'
     handler: src/collector/index.run
     events:
-      - schedule: rate(2 minutes)
+      - schedule: rate(30 minutes)
     timeout: 300 # in seconds
     environment:
       MONGODB_URL: ${env:MONGODB_URL_RW}
