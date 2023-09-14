@@ -1,4 +1,8 @@
-# Astroport API
+## ⚠️ Deprecation and maintenace
+
+This repository is no longer actively maintained by Astroport. It will continue to be here on GitHub and freely available for anyone to fork and use, but we will not be actively monitoring or replying to issues and pull requests.
+
+This project was set up with [serverless framework](http://serverless.com/).
 
 ## Setting up development environment
 
@@ -22,7 +26,15 @@ Restore backup dynamodb dump.
 
 [Download Zip file](https://astroport-classic-mongodb-dump.s3.eu-west-1.amazonaws.com/astroport-classic-mongodb.zip)
 
-Unzip and follow the instructions in the readme to restore mongodb.
+Unzip and follow the instructions in the readme to restore mongodb. 
+Once you have your database running setup the following environment variables with your table name.
+
+Example for localhost:
+
+```
+MONGODB_URL_RW="mongodb://localhost:27017/astroport"
+MONGODB_URL_R="mongodb://localhost:27017/astroport"
+```
 
 ### Running functions
 
