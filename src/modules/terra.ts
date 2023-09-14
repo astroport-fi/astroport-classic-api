@@ -31,6 +31,10 @@ export const getTokenAmount = (info: any) => {
 };
 
 export const getAssetAmountsInPool = (pool: any, token: string) => {
+  if (!pool?.assets) {
+    return { token1: 0, token2: 0 };
+  }
+
   return pool.assets.reduce(
     (prev: any, a: any) => {
       const key = getTokenDenom(a.info) === token ? "token1" : "token2";

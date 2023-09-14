@@ -1,4 +1,8 @@
-# Astroport API
+## ⚠️ Deprecation and maintenace
+
+This repository is no longer actively maintained by Astroport. It will continue to be here on GitHub and freely available for anyone to fork and use, but we will not be actively monitoring or replying to issues and pull requests.
+
+This project was set up with [serverless framework](http://serverless.com/).
 
 ## Setting up development environment
 
@@ -16,18 +20,20 @@ Copy .env.sample to .env for local development, by default only the GraphQL func
 cp .env.sample .env
 ```
 
-### Local Mongodb setup
+### Mongodb setup
 
-Dump development database
+Restore backup dynamodb dump.
+
+[Download Zip file](https://astroport-classic-mongodb-dump.s3.eu-west-1.amazonaws.com/astroport-classic-mongodb.zip)
+
+Unzip and follow the instructions in the readme to restore mongodb. 
+Once you have your database running setup the following environment variables with your table name.
+
+Example for localhost:
 
 ```
-mongodump --uri mongodb+srv://<username>:<password>@<dev-cluster-host.net>/astroport --out astroport.dev
-```
-
-Restore development database locally
-
-```
-mongorestore -d astroport ./astroport.dev/astroport -h 127.0.0.1 --port 27050
+MONGODB_URL_RW="mongodb://localhost:27017/astroport"
+MONGODB_URL_R="mongodb://localhost:27017/astroport"
 ```
 
 ### Running functions
@@ -70,14 +76,6 @@ echo -e 'NEW_SECRET="${{ secrets.NEW_SECRET_NAME }}"' >> .env.{dev,prod}
 
 After adding it, they must be defined in `src/environment/development.ts`
 and `src/environment/production.ts` using `process.env.VAR_NAME`
-
-### Testnet wallet
-
-A testnet wallet with limited funds is available for tests. Just drop a message
-in the [Slack #backend-internal](https://astrochad.slack.com/archives/C03B289KPDX)
-channel to get access to the wallet
-
-## Other configuration options
 
 ### Running unit tests
 

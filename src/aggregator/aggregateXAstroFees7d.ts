@@ -30,6 +30,9 @@ export async function aggregateXAstroFees7d(priceMap: Map<string, PriceV2>): Pro
   });
 
   const astro_price = priceMap.get(constants.ASTRO_TOKEN)?.price_ust as number;
+  if (!astro_price) {
+    return;
+  }
 
   let _7d_fees_ust = 0;
   let fees_with_no_price_count = 0;

@@ -28,9 +28,6 @@ global.Promise = bluebird as any;
 const BATCH_SIZE = 10;
 const RECON_PREVIOUS_HOURS = 3;
 
-const SLACK_WEBHOOK =
-  "https://hooks.slack.com/services/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";
-
 /**
  * The Recon service checks for any missing events based on the last indexed
  * block and RECON_PREVIOUS_HOURS
@@ -246,8 +243,9 @@ export const run = lambdaHandlerWrapper(
           charset: "utf-8",
         },
       };
-
-      await axios.post(SLACK_WEBHOOK, post_fields, config);
+      //add an endpoint if you want to send notifications to slack;
+      //const SLACK_WEBHOOK_ENDPOINT = ""
+      // await axios.post(SLACK_WEBHOOK, post_fields, config);
     }
 
     console.log("Total time elapsed (s): " + (new Date().getTime() - start) / 1000);
