@@ -16,19 +16,13 @@ Copy .env.sample to .env for local development, by default only the GraphQL func
 cp .env.sample .env
 ```
 
-### Local Mongodb setup
+### Mongodb setup
 
-Dump development database
+Restore backup dynamodb dump.
 
-```
-mongodump --uri mongodb+srv://<username>:<password>@<dev-cluster-host.net>/astroport --out astroport.dev
-```
+[Download Zip file](https://astroport-classic-mongodb-dump.s3.eu-west-1.amazonaws.com/astroport-classic-mongodb.zip)
 
-Restore development database locally
-
-```
-mongorestore -d astroport ./astroport.dev/astroport -h 127.0.0.1 --port 27050
-```
+Unzip and follow the instructions in the readme to restore mongodb.
 
 ### Running functions
 
@@ -70,14 +64,6 @@ echo -e 'NEW_SECRET="${{ secrets.NEW_SECRET_NAME }}"' >> .env.{dev,prod}
 
 After adding it, they must be defined in `src/environment/development.ts`
 and `src/environment/production.ts` using `process.env.VAR_NAME`
-
-### Testnet wallet
-
-A testnet wallet with limited funds is available for tests. Just drop a message
-in the [Slack #backend-internal](https://astrochad.slack.com/archives/C03B289KPDX)
-channel to get access to the wallet
-
-## Other configuration options
 
 ### Running unit tests
 

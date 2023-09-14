@@ -70,6 +70,7 @@ export const lambdaHandlerWrapper =
       if (initDatabaseConnection && disconnectDbWhenError) {
         await disconnectDatabase();
       }
+      console.log(err);
       //TODO use a better error logging service?
       throw new Error(errorMessage + err);
     }
